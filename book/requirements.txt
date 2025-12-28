@@ -1,3 +1,7 @@
 jupyter-book
 matplotlib
 numpy
+ipykernel
+pandas
+scipy>=1.11
+matplotlib-label-lines
