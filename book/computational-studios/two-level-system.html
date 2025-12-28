@@ -1,0 +1,621 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Two-Level System Studio</title>
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;600&display=swap");
+
+      :root {
+        color-scheme: light;
+        --ink: #15212b;
+        --muted: #51606f;
+        --soft: #8c9aa8;
+        --card: #ffffff;
+        --border: #d6e1ea;
+        --accent: #0f766e;
+        --accent-2: #1d4ed8;
+        --accent-3: #f97316;
+        --highlight: #0ea5a0;
+        --shadow: 0 18px 40px rgba(15, 23, 42, 0.12);
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        font-family: "IBM Plex Sans", "Segoe UI", sans-serif;
+        color: var(--ink);
+        background:
+          radial-gradient(900px 420px at 5% -10%, #fde68a 0%, transparent 60%),
+          radial-gradient(900px 520px at 95% 0%, #bfdbfe 0%, transparent 60%),
+          linear-gradient(180deg, #f8fafc 0%, #eef2f7 60%, #f8fafc 100%);
+        min-height: 100vh;
+      }
+
+      .page {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 28px 20px 40px;
+      }
+
+      .hero {
+        padding: 28px;
+        border-radius: 24px;
+        background: var(--card);
+        box-shadow: var(--shadow);
+        border: 1px solid var(--border);
+        position: relative;
+        overflow: hidden;
+        animation: fadeUp 0.5s ease both;
+      }
+
+      .hero::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(120deg, rgba(14, 165, 160, 0.07), transparent 55%);
+        pointer-events: none;
+      }
+
+      .eyebrow {
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        font-size: 0.7rem;
+        font-weight: 600;
+        color: var(--accent);
+      }
+
+      .hero h1 {
+        margin: 12px 0 8px;
+        font-size: clamp(2rem, 3vw, 2.7rem);
+      }
+
+      .hero p {
+        margin: 0;
+        max-width: 760px;
+        color: var(--muted);
+        line-height: 1.6;
+      }
+
+      .hero-meta {
+        margin-top: 20px;
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+        gap: 12px;
+      }
+
+      .meta-card {
+        background: #f8fafc;
+        border: 1px solid #e2e8f0;
+        border-radius: 14px;
+        padding: 12px 14px;
+      }
+
+      .meta-label {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.14em;
+        color: var(--soft);
+      }
+
+      .meta-value {
+        display: block;
+        margin-top: 6px;
+        font-family: "IBM Plex Mono", ui-monospace, monospace;
+        font-size: 1rem;
+      }
+
+      .grid {
+        margin-top: 24px;
+        display: grid;
+        grid-template-columns: minmax(240px, 320px) 1fr;
+        gap: 20px;
+      }
+
+      .card {
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-radius: 20px;
+        box-shadow: var(--shadow);
+        padding: 22px;
+        animation: fadeUp 0.55s ease both;
+      }
+
+      .panel h2 {
+        font-size: 1.1rem;
+        margin: 0 0 18px;
+      }
+
+      .control {
+        margin-bottom: 18px;
+      }
+
+      .control label {
+        display: block;
+        font-weight: 600;
+        margin-bottom: 8px;
+      }
+
+      .control .helper {
+        color: var(--muted);
+        font-size: 0.85rem;
+        margin-top: 6px;
+      }
+
+      .range-row {
+        display: grid;
+        grid-template-columns: 1fr auto;
+        align-items: center;
+        gap: 12px;
+      }
+
+      input[type="range"] {
+        width: 100%;
+        accent-color: var(--accent);
+      }
+
+      .pill {
+        background: #ecfeff;
+        border: 1px solid #a5f3fc;
+        border-radius: 999px;
+        padding: 4px 10px;
+        font-family: "IBM Plex Mono", ui-monospace, monospace;
+        font-size: 0.85rem;
+        color: #0e7490;
+      }
+
+      .analysis {
+        margin-top: 18px;
+        border-top: 1px solid #e2e8f0;
+        padding-top: 16px;
+      }
+
+      .analysis h3 {
+        margin: 0 0 10px;
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.18em;
+        color: var(--accent-2);
+      }
+
+      .stat {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-size: 0.9rem;
+        margin-bottom: 8px;
+      }
+
+      .stat span:last-child {
+        font-family: "IBM Plex Mono", ui-monospace, monospace;
+        font-weight: 600;
+        color: #0f172a;
+      }
+
+      .chart-card {
+        padding: 18px 20px 16px;
+      }
+
+      .chart-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 12px;
+      }
+
+      .chart-header h3 {
+        margin: 0;
+        font-size: 1rem;
+      }
+
+      .tag {
+        background: #f1f5f9;
+        color: #475569;
+        padding: 4px 10px;
+        border-radius: 999px;
+        font-size: 0.75rem;
+      }
+
+      .chart {
+        height: 280px;
+      }
+
+      .chart-small {
+        height: 220px;
+      }
+
+      .charts {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 16px;
+      }
+
+      .charts-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+        gap: 16px;
+      }
+
+      .note {
+        margin-top: 10px;
+        font-size: 0.85rem;
+        color: var(--muted);
+        line-height: 1.5;
+      }
+
+      .warning {
+        display: none;
+        margin-top: 12px;
+        background: #fff7ed;
+        border: 1px solid #fed7aa;
+        color: #9a3412;
+        padding: 10px 12px;
+        border-radius: 10px;
+        font-size: 0.85rem;
+      }
+
+      @keyframes fadeUp {
+        from {
+          opacity: 0;
+          transform: translateY(12px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      @media (max-width: 900px) {
+        .grid {
+          grid-template-columns: 1fr;
+        }
+
+        .chart {
+          height: 240px;
+        }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        * {
+          animation: none !important;
+          transition: none !important;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="page">
+      <header class="hero">
+        <div class="eyebrow">Computational Studio</div>
+        <h1>Two-Level System</h1>
+        <p>
+          Explore how a two-level system responds as the energy gap and temperature range change. The curves update in
+          real time to reveal population shifts, the partition function, and the Schottky heat-capacity peak.
+        </p>
+        <div class="hero-meta">
+          <div class="meta-card">
+            <span class="meta-label">Model</span>
+            <span class="meta-value">E0 = 0, E1 = &Delta;E</span>
+          </div>
+          <div class="meta-card">
+            <span class="meta-label">Boltzmann Constant</span>
+            <span class="meta-value">kB = 1 (scaled)</span>
+          </div>
+          <div class="meta-card">
+            <span class="meta-label">Canonical Ensemble</span>
+            <span class="meta-value">Z = 1 + exp(-&Delta;E / kB T)</span>
+          </div>
+        </div>
+      </header>
+
+      <main class="grid">
+        <section class="panel card">
+          <h2>System Parameters</h2>
+
+          <div class="control">
+            <label for="deltaE">Energy Gap (&Delta;E)</label>
+            <div class="range-row">
+              <input type="range" id="deltaE" min="0.5" max="10" step="0.1" value="2.0" />
+              <span class="pill" id="deltaEValue">2.0</span>
+            </div>
+            <div class="helper">Difference between ground and excited state energies.</div>
+          </div>
+
+          <div class="control">
+            <label for="maxTemp">Max Temperature (T)</label>
+            <div class="range-row">
+              <input type="range" id="maxTemp" min="1" max="20" step="0.5" value="5.0" />
+              <span class="pill" id="maxTempValue">5.0</span>
+            </div>
+            <div class="helper">Range of the thermal simulation.</div>
+          </div>
+
+          <div class="control">
+            <label for="points">Resolution (points)</label>
+            <div class="range-row">
+              <input type="range" id="points" min="50" max="300" step="10" value="100" />
+              <span class="pill" id="pointsValue">100</span>
+            </div>
+            <div class="helper">Controls the density of calculated temperature points.</div>
+          </div>
+
+          <div class="analysis">
+            <h3>Schottky Analysis</h3>
+            <div class="stat">
+              <span>Peak T (simulated)</span>
+              <span id="peakSimValue">--</span>
+            </div>
+            <div class="stat">
+              <span>Peak T (theory)</span>
+              <span id="peakTheoryValue">--</span>
+            </div>
+            <div class="stat">
+              <span>Max Cv / kB</span>
+              <span id="peakCvValue">--</span>
+            </div>
+          </div>
+          <div class="warning" id="plotlyWarning">
+            Plotly did not load. Check network access or provide a local plotly.js file.
+          </div>
+        </section>
+
+        <section class="charts">
+          <div class="card chart-card">
+            <div class="chart-header">
+              <h3>Level Populations</h3>
+              <span class="tag">P vs T</span>
+            </div>
+            <div id="pop-chart" class="chart"></div>
+            <div class="note">
+              At T -> 0, the system is frozen in the ground state. At high temperature, both populations approach 0.5.
+            </div>
+          </div>
+
+          <div class="charts-grid">
+            <div class="card chart-card">
+              <div class="chart-header">
+                <h3>Heat Capacity (Cv)</h3>
+              </div>
+              <div id="heat-chart" class="chart chart-small"></div>
+              <div class="note">
+                The peak marks the temperature where the system most effectively absorbs energy.
+              </div>
+            </div>
+
+            <div class="card chart-card">
+              <div class="chart-header">
+                <h3>Partition Function (Z)</h3>
+              </div>
+              <div id="z-chart" class="chart chart-small"></div>
+              <div class="note">
+                Z counts thermally accessible states. Z -> 1 at low temperature and Z -> 2 at high temperature.
+              </div>
+            </div>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <script src="https://cdn.plot.ly/plotly-2.27.0.min.js"></script>
+    <script>
+      (() => {
+        const kB = 1.0;
+        const state = {
+          deltaE: 2.0,
+          maxTemp: 5.0,
+          points: 100,
+        };
+
+        const elements = {
+          deltaE: document.getElementById("deltaE"),
+          maxTemp: document.getElementById("maxTemp"),
+          points: document.getElementById("points"),
+          deltaEValue: document.getElementById("deltaEValue"),
+          maxTempValue: document.getElementById("maxTempValue"),
+          pointsValue: document.getElementById("pointsValue"),
+          peakSimValue: document.getElementById("peakSimValue"),
+          peakTheoryValue: document.getElementById("peakTheoryValue"),
+          peakCvValue: document.getElementById("peakCvValue"),
+          plotlyWarning: document.getElementById("plotlyWarning"),
+        };
+
+        let chartsReady = false;
+
+        const formatNumber = (value, digits) => {
+          if (!Number.isFinite(value)) {
+            return "--";
+          }
+          return value.toFixed(digits);
+        };
+
+        const computeData = () => {
+          const dataPoints = [];
+          const step = state.maxTemp / state.points;
+
+          for (let i = 1; i <= state.points; i += 1) {
+            const T = i * step;
+            const beta = 1 / (kB * T);
+            const x = beta * state.deltaE;
+            const expTerm = Math.exp(-x);
+            const Z = 1 + expTerm;
+            const P0 = 1 / Z;
+            const P1 = expTerm / Z;
+            const Cv = kB * (x * x) * expTerm / Math.pow(1 + expTerm, 2);
+
+            dataPoints.push({
+              T,
+              Z,
+              P0,
+              P1,
+              Cv,
+            });
+          }
+
+          return dataPoints;
+        };
+
+        const findPeak = (data) => {
+          if (!data.length) {
+            return null;
+          }
+          return data.reduce((max, current) => (current.Cv > max.Cv ? current : max), data[0]);
+        };
+
+        const updateStats = (peak, theoreticalPeakT) => {
+          elements.peakSimValue.textContent = peak ? `${formatNumber(peak.T, 2)} K` : "--";
+          elements.peakTheoryValue.textContent = `${formatNumber(theoreticalPeakT, 2)} K`;
+          elements.peakCvValue.textContent = peak ? formatNumber(peak.Cv, 4) : "--";
+        };
+
+        const buildLayout = (title, yTitle, shapes = []) => ({
+          title: { text: title, font: { size: 14 }, x: 0.02, xanchor: "left" },
+          margin: { t: 40, r: 24, l: 50, b: 40 },
+          paper_bgcolor: "rgba(0,0,0,0)",
+          plot_bgcolor: "rgba(0,0,0,0)",
+          font: { family: "IBM Plex Sans, sans-serif", color: "#1f2937" },
+          xaxis: {
+            title: { text: "Temperature (T)" },
+            gridcolor: "#e2e8f0",
+            zeroline: false,
+          },
+          yaxis: {
+            title: { text: yTitle },
+            gridcolor: "#e2e8f0",
+            zeroline: false,
+          },
+          legend: { orientation: "h", x: 0, y: 1.15 },
+          shapes,
+        });
+
+        const renderCharts = (data, peak) => {
+          const temps = data.map((d) => d.T);
+          const popLayout = buildLayout("Population Probabilities", "Probability", [
+            {
+              type: "line",
+              xref: "paper",
+              x0: 0,
+              x1: 1,
+              yref: "y",
+              y0: 0.5,
+              y1: 0.5,
+              line: { color: "#94a3b8", dash: "dot", width: 1 },
+            },
+          ]);
+          popLayout.yaxis.range = [0, 1];
+
+          const popTraces = [
+            {
+              x: temps,
+              y: data.map((d) => d.P0),
+              mode: "lines",
+              name: "Ground State (P0)",
+              line: { color: "#1d4ed8", width: 2 },
+            },
+            {
+              x: temps,
+              y: data.map((d) => d.P1),
+              mode: "lines",
+              name: "Excited State (P1)",
+              line: { color: "#f97316", width: 2 },
+            },
+          ];
+
+          const cvLayout = buildLayout("Heat Capacity", "Cv / kB", [
+            {
+              type: "line",
+              xref: "x",
+              x0: peak ? peak.T : 0,
+              x1: peak ? peak.T : 0,
+              yref: "paper",
+              y0: 0,
+              y1: 1,
+              line: { color: "#0ea5a0", dash: "dash", width: 2 },
+            },
+          ]);
+
+          const cvTrace = [
+            {
+              x: temps,
+              y: data.map((d) => d.Cv),
+              mode: "lines",
+              name: "Cv / kB",
+              line: { color: "#0f766e", width: 2 },
+            },
+          ];
+
+          const zLayout = buildLayout("Partition Function", "Z");
+          const zTrace = [
+            {
+              x: temps,
+              y: data.map((d) => d.Z),
+              mode: "lines",
+              name: "Z",
+              line: { color: "#475569", width: 2 },
+            },
+          ];
+
+          const config = { displayModeBar: false, responsive: true };
+
+          if (!chartsReady) {
+            Plotly.newPlot("pop-chart", popTraces, popLayout, config);
+            Plotly.newPlot("heat-chart", cvTrace, cvLayout, config);
+            Plotly.newPlot("z-chart", zTrace, zLayout, config);
+            chartsReady = true;
+          } else {
+            Plotly.react("pop-chart", popTraces, popLayout, config);
+            Plotly.react("heat-chart", cvTrace, cvLayout, config);
+            Plotly.react("z-chart", zTrace, zLayout, config);
+          }
+        };
+
+        const update = () => {
+          const data = computeData();
+          const peak = findPeak(data);
+          const theoreticalPeakT = 0.417 * state.deltaE / kB;
+          updateStats(peak, theoreticalPeakT);
+          renderCharts(data, peak);
+        };
+
+        const bindControls = () => {
+          elements.deltaE.addEventListener("input", (event) => {
+            state.deltaE = parseFloat(event.target.value);
+            elements.deltaEValue.textContent = formatNumber(state.deltaE, 1);
+            update();
+          });
+
+          elements.maxTemp.addEventListener("input", (event) => {
+            state.maxTemp = parseFloat(event.target.value);
+            elements.maxTempValue.textContent = formatNumber(state.maxTemp, 1);
+            update();
+          });
+
+          elements.points.addEventListener("input", (event) => {
+            state.points = parseInt(event.target.value, 10);
+            elements.pointsValue.textContent = state.points.toString();
+            update();
+          });
+        };
+
+        const init = () => {
+          if (!window.Plotly) {
+            elements.plotlyWarning.style.display = "block";
+            return;
+          }
+
+          elements.deltaEValue.textContent = formatNumber(state.deltaE, 1);
+          elements.maxTempValue.textContent = formatNumber(state.maxTemp, 1);
+          elements.pointsValue.textContent = state.points.toString();
+
+          bindControls();
+          update();
+        };
+
+        window.addEventListener("load", init);
+      })();
+    </script>
+  </body>
+</html>

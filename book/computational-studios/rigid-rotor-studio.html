@@ -1,0 +1,904 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Rigid Rotor Computational Studio</title>
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600&family=IBM+Plex+Mono:wght@400;600&display=swap");
+
+      :root {
+        color-scheme: light;
+        --ink: #0f172a;
+        --muted: #475569;
+        --soft: #94a3b8;
+        --card: #ffffff;
+        --border: #dbe3ea;
+        --accent: #0ea5a0;
+        --accent-dark: #0f766e;
+        --accent-warm: #f97316;
+        --shadow: 0 16px 38px rgba(15, 23, 42, 0.12);
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        font-family: "Sora", "Segoe UI", sans-serif;
+        color: var(--ink);
+        background:
+          radial-gradient(900px 420px at 6% -5%, #dbeafe 0%, transparent 60%),
+          radial-gradient(900px 520px at 95% 8%, #fef3c7 0%, transparent 55%),
+          linear-gradient(180deg, #f8fafc 0%, #edf2f7 70%, #f8fafc 100%);
+        min-height: 100vh;
+      }
+
+      .page {
+        max-width: 1220px;
+        margin: 0 auto;
+        padding: 24px 18px 40px;
+      }
+
+      .hero {
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-radius: 24px;
+        padding: 24px 28px;
+        box-shadow: var(--shadow);
+        display: flex;
+        justify-content: space-between;
+        gap: 20px;
+        align-items: flex-start;
+        position: relative;
+        overflow: hidden;
+        animation: rise 0.45s ease both;
+      }
+
+      .hero::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(120deg, rgba(14, 165, 160, 0.08), transparent 60%);
+        pointer-events: none;
+      }
+
+      .eyebrow {
+        font-size: 0.7rem;
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        color: var(--accent-dark);
+        font-weight: 600;
+      }
+
+      .hero h1 {
+        margin: 10px 0 8px;
+        font-size: clamp(2rem, 3vw, 2.7rem);
+      }
+
+      .hero p {
+        margin: 0;
+        color: var(--muted);
+        max-width: 720px;
+        line-height: 1.6;
+      }
+
+      .hero-actions {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+        gap: 10px;
+        z-index: 1;
+      }
+
+      .sigma-card {
+        background: #ecfeff;
+        border: 1px solid #a5f3fc;
+        border-radius: 16px;
+        padding: 10px 14px;
+        text-align: right;
+      }
+
+      .sigma-card span {
+        display: block;
+        font-size: 0.7rem;
+        color: var(--soft);
+        text-transform: uppercase;
+        letter-spacing: 0.18em;
+      }
+
+      .sigma-card strong {
+        font-family: "IBM Plex Mono", ui-monospace, monospace;
+        font-size: 1.2rem;
+        color: var(--accent-dark);
+      }
+
+      .info-button {
+        background: var(--accent);
+        color: white;
+        border: none;
+        border-radius: 12px;
+        padding: 8px 12px;
+        font-size: 0.85rem;
+        font-weight: 600;
+        cursor: pointer;
+        box-shadow: 0 8px 18px rgba(14, 165, 160, 0.25);
+      }
+
+      .layout {
+        margin-top: 22px;
+        display: grid;
+        grid-template-columns: minmax(280px, 340px) 1fr;
+        gap: 20px;
+      }
+
+      .card {
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-radius: 20px;
+        padding: 18px;
+        box-shadow: var(--shadow);
+        animation: rise 0.5s ease both;
+      }
+
+      .panel {
+        display: flex;
+        flex-direction: column;
+        gap: 18px;
+      }
+
+      .canvas-card {
+        background: #0f172a;
+        border-radius: 18px;
+        padding: 12px;
+        color: #e2e8f0;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .canvas-overlay {
+        position: absolute;
+        top: 12px;
+        left: 12px;
+        font-size: 0.7rem;
+        font-family: "IBM Plex Mono", ui-monospace, monospace;
+        color: rgba(226, 232, 240, 0.7);
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+      }
+
+      #rotorCanvas {
+        width: 100%;
+        height: 220px;
+        display: block;
+      }
+
+      .play-button {
+        position: absolute;
+        bottom: 12px;
+        right: 12px;
+        background: rgba(255, 255, 255, 0.18);
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        color: white;
+        border-radius: 999px;
+        padding: 6px 12px;
+        font-size: 0.75rem;
+        cursor: pointer;
+        backdrop-filter: blur(6px);
+      }
+
+      .control-group h2 {
+        margin: 0 0 12px;
+        font-size: 1.05rem;
+      }
+
+      .toggle-group {
+        display: flex;
+        background: #f1f5f9;
+        border-radius: 12px;
+        padding: 4px;
+        border: 1px solid #e2e8f0;
+      }
+
+      .toggle-group button {
+        flex: 1;
+        padding: 8px 10px;
+        border: none;
+        background: transparent;
+        color: var(--muted);
+        border-radius: 10px;
+        font-weight: 600;
+        cursor: pointer;
+      }
+
+      .toggle-group button.active {
+        background: var(--accent);
+        color: white;
+        box-shadow: 0 8px 18px rgba(14, 165, 160, 0.25);
+      }
+
+      .control {
+        margin-top: 14px;
+      }
+
+      .control label {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-size: 0.85rem;
+        font-weight: 600;
+        margin-bottom: 6px;
+      }
+
+      .control label span {
+        font-family: "IBM Plex Mono", ui-monospace, monospace;
+        color: var(--accent-dark);
+        font-size: 0.85rem;
+      }
+
+      input[type="range"] {
+        width: 100%;
+        accent-color: var(--accent);
+      }
+
+      .control .helper {
+        font-size: 0.75rem;
+        color: var(--muted);
+        margin-top: 6px;
+      }
+
+      .control.disabled {
+        opacity: 0.55;
+        pointer-events: none;
+      }
+
+      .reset-button {
+        background: transparent;
+        border: none;
+        color: var(--soft);
+        font-size: 0.8rem;
+        margin-top: 6px;
+        cursor: pointer;
+        align-self: center;
+      }
+
+      .analytics {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+      }
+
+      .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+        gap: 12px;
+      }
+
+      .stat-card {
+        background: var(--card);
+        border: 1px solid #e2e8f0;
+        border-radius: 16px;
+        padding: 12px 14px;
+      }
+
+      .stat-label {
+        font-size: 0.7rem;
+        text-transform: uppercase;
+        letter-spacing: 0.15em;
+        color: var(--soft);
+      }
+
+      .stat-value {
+        margin-top: 6px;
+        font-size: 1.1rem;
+        font-weight: 600;
+      }
+
+      .stat-value span {
+        font-size: 0.8rem;
+        color: var(--muted);
+        font-weight: 500;
+      }
+
+      .charts-grid {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 16px;
+      }
+
+      .chart-card h3 {
+        margin: 0 0 10px;
+        font-size: 1rem;
+      }
+
+      .chart {
+        height: 280px;
+      }
+
+      .warning {
+        display: none;
+        background: #fff7ed;
+        border: 1px solid #fed7aa;
+        color: #9a3412;
+        padding: 10px 12px;
+        border-radius: 10px;
+        font-size: 0.85rem;
+      }
+
+      .modal {
+        position: fixed;
+        inset: 0;
+        display: none;
+        align-items: center;
+        justify-content: center;
+        background: rgba(15, 23, 42, 0.55);
+        padding: 20px;
+        z-index: 50;
+      }
+
+      .modal.active {
+        display: flex;
+      }
+
+      .modal-content {
+        background: white;
+        border-radius: 20px;
+        max-width: 680px;
+        width: 100%;
+        padding: 20px;
+        box-shadow: var(--shadow);
+      }
+
+      .modal-content h2 {
+        margin: 0 0 10px;
+      }
+
+      .modal-content p,
+      .modal-content li {
+        color: var(--muted);
+        line-height: 1.6;
+        font-size: 0.92rem;
+      }
+
+      .modal-content ul {
+        padding-left: 18px;
+      }
+
+      .modal-close {
+        margin-top: 12px;
+        background: var(--accent);
+        border: none;
+        color: white;
+        padding: 8px 14px;
+        border-radius: 10px;
+        cursor: pointer;
+      }
+
+      @keyframes rise {
+        from {
+          opacity: 0;
+          transform: translateY(12px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      @media (max-width: 960px) {
+        .hero {
+          flex-direction: column;
+          align-items: flex-start;
+        }
+
+        .hero-actions {
+          align-items: flex-start;
+        }
+
+        .layout {
+          grid-template-columns: 1fr;
+        }
+
+        .chart {
+          height: 240px;
+        }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        * {
+          animation: none !important;
+          transition: none !important;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="page">
+      <header class="hero">
+        <div>
+          <div class="eyebrow">Computational Studio</div>
+          <h1>Rigid Rotor</h1>
+          <p>
+            Tune the molecular masses, bond length, and temperature to see how the rotational energy ladder,
+            populations, and thermodynamic quantities respond to symmetry and inertia.
+          </p>
+        </div>
+        <div class="hero-actions">
+          <div class="sigma-card">
+            <span>Symmetry Number</span>
+            <strong id="sigmaValue">&sigma; = 1</strong>
+          </div>
+          <button class="info-button" id="explainButton" type="button">Why &sigma;?</button>
+        </div>
+      </header>
+
+      <main class="layout">
+        <section class="panel card">
+          <div class="canvas-card">
+            <div class="canvas-overlay">Rotation simulation<br />speed ~ sqrt(T) / I</div>
+            <canvas id="rotorCanvas"></canvas>
+            <button class="play-button" id="playPause" type="button">Pause</button>
+          </div>
+
+          <div class="control-group">
+            <h2>Molecule Controls</h2>
+            <div class="toggle-group">
+              <button id="toggleHetero" type="button" class="active">Heteronuclear</button>
+              <button id="toggleHomo" type="button">Homonuclear</button>
+            </div>
+
+            <div class="control">
+              <label for="mass1">Mass 1 (amu) <span id="mass1Value">12</span></label>
+              <input id="mass1" type="range" min="1" max="100" step="1" value="12" />
+            </div>
+
+            <div class="control" id="mass2Control">
+              <label for="mass2">Mass 2 (amu) <span id="mass2Value">16</span></label>
+              <input id="mass2" type="range" min="1" max="100" step="1" value="16" />
+            </div>
+
+            <div class="control">
+              <label for="bondLength">Bond Length (Angstrom) <span id="bondValue">1.13</span></label>
+              <input id="bondLength" type="range" min="0.5" max="3.0" step="0.01" value="1.13" />
+            </div>
+
+            <div class="control">
+              <label for="temperature">Temperature (K) <span id="tempValue">300</span></label>
+              <input id="temperature" type="range" min="10" max="1000" step="10" value="300" />
+              <div class="helper">Higher temperature spreads population to larger J values.</div>
+            </div>
+
+            <button class="reset-button" id="resetButton" type="button">Reset defaults</button>
+          </div>
+        </section>
+
+        <section class="analytics">
+          <div class="stats-grid">
+            <div class="stat-card">
+              <div class="stat-label">Rotational Constant (B)</div>
+              <div class="stat-value" id="bValue">-- <span>cm<sup>-1</sup></span></div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-label">Characteristic Temp</div>
+              <div class="stat-value" id="thetaValue">-- <span>K</span></div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-label">Partition Function (q)</div>
+              <div class="stat-value" id="qValue">--</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-label">Molar Entropy (S)</div>
+              <div class="stat-value" id="sValue">-- <span>J/mol K</span></div>
+            </div>
+          </div>
+
+          <div class="charts-grid">
+            <div class="card chart-card">
+              <h3>Rotational Population Distribution P(J)</h3>
+              <div id="populationChart" class="chart"></div>
+            </div>
+            <div class="card chart-card">
+              <h3>Energy Levels E<sub>J</sub></h3>
+              <div id="energyChart" class="chart"></div>
+            </div>
+            <div class="warning" id="plotlyWarning">
+              Plotly did not load. Check network access or provide a local plotly.js file.
+            </div>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <div class="modal" id="explanationModal" role="dialog" aria-modal="true">
+      <div class="modal-content">
+        <h2>Symmetry &amp; the Rotor</h2>
+        <p>
+          The symmetry number &sigma; corrects for overcounting indistinguishable orientations in the rotational
+          partition function. When a molecule looks identical after a 180 degree rotation, half of the orientations are
+          duplicates.
+        </p>
+        <ul>
+          <li><strong>Heteronuclear (&sigma; = 1):</strong> All orientations are unique (example: CO).</li>
+          <li><strong>Homonuclear (&sigma; = 2):</strong> Rotating by 180 degrees returns the same configuration (example: N2).</li>
+        </ul>
+        <p>
+          Since q<sub>rot</sub> is divided by &sigma;, the entropy drops by R ln(&sigma;). For &sigma; = 2, the
+          reduction is about 5.76 J/(mol K).
+        </p>
+        <button class="modal-close" id="modalClose" type="button">Got it</button>
+      </div>
+    </div>
+
+    <script src="https://cdn.plot.ly/plotly-2.27.0.min.js"></script>
+    <script>
+      (() => {
+        const CONSTANTS = {
+          h: 6.62607015e-34,
+          kb: 1.380649e-23,
+          c: 2.99792458e10,
+          amu: 1.66053906660e-27,
+          na: 6.02214076e23,
+        };
+
+        const state = {
+          mass1: 12,
+          mass2: 16,
+          bondLength: 1.13,
+          temperature: 300,
+          isHomonuclear: false,
+          isPlaying: true,
+        };
+
+        const elements = {
+          mass1: document.getElementById("mass1"),
+          mass2: document.getElementById("mass2"),
+          bondLength: document.getElementById("bondLength"),
+          temperature: document.getElementById("temperature"),
+          mass1Value: document.getElementById("mass1Value"),
+          mass2Value: document.getElementById("mass2Value"),
+          bondValue: document.getElementById("bondValue"),
+          tempValue: document.getElementById("tempValue"),
+          mass2Control: document.getElementById("mass2Control"),
+          toggleHetero: document.getElementById("toggleHetero"),
+          toggleHomo: document.getElementById("toggleHomo"),
+          resetButton: document.getElementById("resetButton"),
+          sigmaValue: document.getElementById("sigmaValue"),
+          bValue: document.getElementById("bValue"),
+          thetaValue: document.getElementById("thetaValue"),
+          qValue: document.getElementById("qValue"),
+          sValue: document.getElementById("sValue"),
+          playPause: document.getElementById("playPause"),
+          canvas: document.getElementById("rotorCanvas"),
+          plotlyWarning: document.getElementById("plotlyWarning"),
+          explainButton: document.getElementById("explainButton"),
+          explanationModal: document.getElementById("explanationModal"),
+          modalClose: document.getElementById("modalClose"),
+        };
+
+        let chartsReady = false;
+        let physicsCache = null;
+        let rotationAngle = 0;
+        let animationId = null;
+        let canvasContext = null;
+
+        const calculateInertia = (m1Amu, m2Amu, rAngstrom) => {
+          const m1 = m1Amu * CONSTANTS.amu;
+          const m2 = m2Amu * CONSTANTS.amu;
+          const mu = (m1 * m2) / (m1 + m2);
+          const r = rAngstrom * 1e-10;
+          return mu * r * r;
+        };
+
+        const calculateB = (inertia) => (CONSTANTS.h * CONSTANTS.h) / (8 * Math.PI * Math.PI * inertia);
+
+        const joulesToWavenumbers = (energy) => energy / (CONSTANTS.h * CONSTANTS.c);
+
+        const calculateThetaRot = (bJoules) => bJoules / CONSTANTS.kb;
+
+        const calculatePhysics = () => {
+          const inertia = calculateInertia(state.mass1, state.mass2, state.bondLength);
+          const bJoules = calculateB(inertia);
+          const bCm = joulesToWavenumbers(bJoules);
+          const thetaRot = calculateThetaRot(bJoules);
+          const sigma = state.isHomonuclear ? 2 : 1;
+
+          const maxJ = 50;
+          let zSum = 0;
+          const levels = [];
+
+          for (let j = 0; j <= maxJ; j += 1) {
+            const degeneracy = 2 * j + 1;
+            const energy = bJoules * j * (j + 1);
+            const boltzmann = Math.exp(-energy / (CONSTANTS.kb * state.temperature));
+            const weightedFactor = degeneracy * boltzmann;
+            zSum += weightedFactor;
+            levels.push({
+              j,
+              energy,
+              energyCm: joulesToWavenumbers(energy),
+              population: weightedFactor,
+            });
+          }
+
+          const zRot = zSum / sigma;
+          let energyWeighted = 0;
+          levels.forEach((level) => {
+            energyWeighted += level.energy * level.population;
+          });
+          const avgEnergy = energyWeighted / zSum;
+          const sRot = CONSTANTS.kb * (Math.log(zRot) + avgEnergy / (CONSTANTS.kb * state.temperature));
+          const sMolar = sRot * CONSTANTS.na;
+
+          const dataPoints = levels.map((level) => ({
+            J: level.j,
+            energyCm: level.energyCm,
+            population: level.population / zSum,
+          }));
+
+          const maxPop = Math.max(...dataPoints.map((point) => point.population));
+
+          return {
+            inertia,
+            bCm,
+            thetaRot,
+            sigma,
+            zRot,
+            sMolar,
+            dataPoints: dataPoints.slice(0, 30),
+            maxPop,
+          };
+        };
+
+        const updateValues = () => {
+          elements.mass1Value.textContent = state.mass1.toFixed(0);
+          elements.mass2Value.textContent = state.mass2.toFixed(0);
+          elements.bondValue.textContent = state.bondLength.toFixed(2);
+          elements.tempValue.textContent = state.temperature.toFixed(0);
+          elements.sigmaValue.textContent = `\u03c3 = ${physicsCache.sigma}`;
+
+          elements.bValue.innerHTML = `${physicsCache.bCm.toFixed(2)} <span>cm<sup>-1</sup></span>`;
+          elements.thetaValue.innerHTML = `${physicsCache.thetaRot.toFixed(2)} <span>K</span>`;
+          elements.qValue.textContent = physicsCache.zRot.toFixed(2);
+          elements.sValue.innerHTML = `${physicsCache.sMolar.toFixed(2)} <span>J/mol K</span>`;
+
+          elements.toggleHetero.classList.toggle("active", !state.isHomonuclear);
+          elements.toggleHomo.classList.toggle("active", state.isHomonuclear);
+          elements.mass2Control.classList.toggle("disabled", state.isHomonuclear);
+          elements.mass2.disabled = state.isHomonuclear;
+          elements.playPause.textContent = state.isPlaying ? "Pause" : "Play";
+        };
+
+        const renderCharts = () => {
+          if (!window.Plotly) {
+            elements.plotlyWarning.style.display = "block";
+            return;
+          }
+
+          const populationData = physicsCache.dataPoints;
+          const maxPop = physicsCache.maxPop;
+          const barColors = populationData.map((point) =>
+            Math.abs(point.population - maxPop) < 1e-12 ? "#0ea5a0" : "#94a3b8"
+          );
+
+          const barTrace = {
+            x: populationData.map((point) => point.J),
+            y: populationData.map((point) => point.population),
+            type: "bar",
+            marker: { color: barColors, line: { color: "#e2e8f0", width: 1 } },
+            hovertemplate: "J=%{x}<br>P(J)=%{y:.4f}<extra></extra>",
+          };
+
+          const barLayout = {
+            margin: { t: 20, r: 20, l: 60, b: 50 },
+            paper_bgcolor: "rgba(0,0,0,0)",
+            plot_bgcolor: "rgba(0,0,0,0)",
+            font: { family: "Sora, sans-serif", color: "#0f172a" },
+            xaxis: { title: "Quantum number J", gridcolor: "#e2e8f0" },
+            yaxis: { title: "Population probability", gridcolor: "#e2e8f0" },
+          };
+
+          const energyTrace = {
+            x: populationData.map((point) => point.J),
+            y: populationData.map((point) => point.energyCm),
+            type: "scatter",
+            mode: "lines+markers",
+            line: { color: "#0f766e", width: 2 },
+            marker: { size: 6, color: "#38bdf8" },
+            hovertemplate: "J=%{x}<br>E=%{y:.2f} cm^-1<extra></extra>",
+          };
+
+          const energyLayout = {
+            margin: { t: 20, r: 20, l: 60, b: 50 },
+            paper_bgcolor: "rgba(0,0,0,0)",
+            plot_bgcolor: "rgba(0,0,0,0)",
+            font: { family: "Sora, sans-serif", color: "#0f172a" },
+            xaxis: { title: "Quantum number J", gridcolor: "#e2e8f0" },
+            yaxis: { title: "Energy (cm^-1)", gridcolor: "#e2e8f0" },
+          };
+
+          const config = { displayModeBar: false, responsive: true };
+
+          if (!chartsReady) {
+            Plotly.newPlot("populationChart", [barTrace], barLayout, config);
+            Plotly.newPlot("energyChart", [energyTrace], energyLayout, config);
+            chartsReady = true;
+          } else {
+            Plotly.react("populationChart", [barTrace], barLayout, config);
+            Plotly.react("energyChart", [energyTrace], energyLayout, config);
+          }
+        };
+
+        const resizeCanvas = () => {
+          const canvas = elements.canvas;
+          const rect = canvas.getBoundingClientRect();
+          const dpr = window.devicePixelRatio || 1;
+          canvas.width = rect.width * dpr;
+          canvas.height = rect.height * dpr;
+          canvasContext = canvas.getContext("2d");
+          canvasContext.setTransform(dpr, 0, 0, dpr, 0, 0);
+        };
+
+        const drawRotor = () => {
+          if (!canvasContext || !physicsCache) {
+            return;
+          }
+
+          const canvas = elements.canvas;
+          const width = canvas.clientWidth;
+          const height = canvas.clientHeight;
+          const centerX = width / 2;
+          const centerY = height / 2;
+
+          canvasContext.clearRect(0, 0, width, height);
+
+          const baseSpeed = 0.05;
+          const speedFactor = Math.sqrt(state.temperature) * 1e-22 / Math.sqrt(physicsCache.inertia);
+          if (state.isPlaying) {
+            rotationAngle += baseSpeed + speedFactor * 0.5;
+          }
+
+          const visualBondLength = (state.bondLength / 3) * Math.min(width, height) * 0.7;
+          const radius1 = 12 + Math.sqrt(state.mass1) * 1.2;
+          const radius2 = 12 + Math.sqrt(state.mass2) * 1.2;
+          const atom1Color = state.isHomonuclear ? "#38bdf8" : "#f97316";
+          const atom2Color = "#0ea5a0";
+
+          canvasContext.save();
+          canvasContext.translate(centerX, centerY);
+          canvasContext.rotate(rotationAngle);
+
+          canvasContext.beginPath();
+          canvasContext.moveTo(-visualBondLength / 2, 0);
+          canvasContext.lineTo(visualBondLength / 2, 0);
+          canvasContext.strokeStyle = "#94a3b8";
+          canvasContext.lineWidth = 6;
+          canvasContext.stroke();
+
+          canvasContext.beginPath();
+          canvasContext.arc(-visualBondLength / 2, 0, radius1, 0, Math.PI * 2);
+          canvasContext.fillStyle = atom1Color;
+          canvasContext.fill();
+
+          canvasContext.beginPath();
+          canvasContext.arc(visualBondLength / 2, 0, radius2, 0, Math.PI * 2);
+          canvasContext.fillStyle = atom2Color;
+          canvasContext.fill();
+
+          canvasContext.fillStyle = "white";
+          canvasContext.font = "12px Sora, sans-serif";
+          canvasContext.textAlign = "center";
+          canvasContext.textBaseline = "middle";
+
+          canvasContext.save();
+          canvasContext.translate(-visualBondLength / 2, 0);
+          canvasContext.rotate(-rotationAngle);
+          canvasContext.fillText(state.mass1.toFixed(0), 0, 0);
+          canvasContext.restore();
+
+          canvasContext.save();
+          canvasContext.translate(visualBondLength / 2, 0);
+          canvasContext.rotate(-rotationAngle);
+          canvasContext.fillText(state.mass2.toFixed(0), 0, 0);
+          canvasContext.restore();
+
+          canvasContext.restore();
+          animationId = requestAnimationFrame(drawRotor);
+        };
+
+        const updateAll = () => {
+          physicsCache = calculatePhysics();
+          updateValues();
+          renderCharts();
+        };
+
+        const bindEvents = () => {
+          elements.mass1.addEventListener("input", (event) => {
+            state.mass1 = parseFloat(event.target.value);
+            if (state.isHomonuclear) {
+              state.mass2 = state.mass1;
+              elements.mass2.value = state.mass2;
+            }
+            updateAll();
+          });
+
+          elements.mass2.addEventListener("input", (event) => {
+            state.mass2 = parseFloat(event.target.value);
+            updateAll();
+          });
+
+          elements.bondLength.addEventListener("input", (event) => {
+            state.bondLength = parseFloat(event.target.value);
+            updateAll();
+          });
+
+          elements.temperature.addEventListener("input", (event) => {
+            state.temperature = parseFloat(event.target.value);
+            updateAll();
+          });
+
+          elements.toggleHetero.addEventListener("click", () => {
+            state.isHomonuclear = false;
+            updateAll();
+          });
+
+          elements.toggleHomo.addEventListener("click", () => {
+            state.isHomonuclear = true;
+            state.mass2 = state.mass1;
+            elements.mass2.value = state.mass2;
+            updateAll();
+          });
+
+          elements.playPause.addEventListener("click", () => {
+            state.isPlaying = !state.isPlaying;
+            updateValues();
+          });
+
+          elements.resetButton.addEventListener("click", () => {
+            state.mass1 = 12;
+            state.mass2 = 16;
+            state.bondLength = 1.13;
+            state.temperature = 300;
+            state.isHomonuclear = false;
+
+            elements.mass1.value = state.mass1;
+            elements.mass2.value = state.mass2;
+            elements.bondLength.value = state.bondLength;
+            elements.temperature.value = state.temperature;
+            updateAll();
+          });
+
+          elements.explainButton.addEventListener("click", () => {
+            elements.explanationModal.classList.add("active");
+          });
+
+          elements.modalClose.addEventListener("click", () => {
+            elements.explanationModal.classList.remove("active");
+          });
+
+          elements.explanationModal.addEventListener("click", (event) => {
+            if (event.target === elements.explanationModal) {
+              elements.explanationModal.classList.remove("active");
+            }
+          });
+
+          window.addEventListener("resize", () => {
+            resizeCanvas();
+          });
+        };
+
+        const init = () => {
+          resizeCanvas();
+          bindEvents();
+          updateAll();
+          if (!window.Plotly) {
+            elements.plotlyWarning.style.display = "block";
+          }
+          drawRotor();
+        };
+
+        window.addEventListener("load", init);
+      })();
+    </script>
+  </body>
+</html>

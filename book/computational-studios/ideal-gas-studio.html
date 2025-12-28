@@ -1,0 +1,681 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Ideal Gas Computational Studio</title>
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Work+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;600&display=swap");
+
+      :root {
+        color-scheme: light;
+        --ink: #0f172a;
+        --muted: #475569;
+        --soft: #94a3b8;
+        --card: #ffffff;
+        --border: #dbe3ea;
+        --accent: #10b981;
+        --accent-warm: #f97316;
+        --shadow: 0 18px 38px rgba(15, 23, 42, 0.12);
+        --panel: #0f172a;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        font-family: "Work Sans", "Segoe UI", sans-serif;
+        color: var(--ink);
+        background:
+          radial-gradient(900px 420px at 10% -5%, #dcfce7 0%, transparent 60%),
+          radial-gradient(900px 520px at 90% 10%, #fee2e2 0%, transparent 55%),
+          linear-gradient(180deg, #f8fafc 0%, #edf2f7 70%, #f8fafc 100%);
+        min-height: 100vh;
+      }
+
+      body.hide-math .math-block {
+        display: none;
+      }
+
+      .page {
+        max-width: 1220px;
+        margin: 0 auto;
+        padding: 24px 18px 40px;
+      }
+
+      .hero {
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-radius: 24px;
+        padding: 24px 28px;
+        box-shadow: var(--shadow);
+        display: flex;
+        gap: 20px;
+        justify-content: space-between;
+        align-items: flex-start;
+        position: relative;
+        overflow: hidden;
+        animation: rise 0.45s ease both;
+      }
+
+      .hero::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(120deg, rgba(16, 185, 129, 0.08), transparent 60%);
+        pointer-events: none;
+      }
+
+      .eyebrow {
+        font-size: 0.7rem;
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        color: var(--accent);
+        font-weight: 600;
+      }
+
+      .hero h1 {
+        margin: 10px 0 8px;
+        font-size: clamp(2rem, 3vw, 2.7rem);
+      }
+
+      .hero p {
+        margin: 0;
+        color: var(--muted);
+        max-width: 720px;
+        line-height: 1.6;
+      }
+
+      .hero-actions {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+        gap: 10px;
+        z-index: 1;
+      }
+
+      .constant-chip {
+        background: #ecfdf5;
+        border: 1px solid #a7f3d0;
+        border-radius: 16px;
+        padding: 10px 14px;
+        text-align: right;
+        font-family: "IBM Plex Mono", ui-monospace, monospace;
+        font-size: 0.85rem;
+      }
+
+      .toggle-math {
+        background: var(--panel);
+        color: white;
+        border: none;
+        border-radius: 12px;
+        padding: 8px 12px;
+        font-size: 0.85rem;
+        font-weight: 600;
+        cursor: pointer;
+      }
+
+      .layout {
+        margin-top: 22px;
+        display: grid;
+        grid-template-columns: minmax(260px, 1fr) 360px;
+        gap: 20px;
+      }
+
+      .card {
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-radius: 20px;
+        padding: 18px;
+        box-shadow: var(--shadow);
+        animation: rise 0.5s ease both;
+      }
+
+      .simulation-card {
+        padding: 12px;
+      }
+
+      .simulation-shell {
+        position: relative;
+        border-radius: 16px;
+        background: #f8fafc;
+        border: 1px solid #e2e8f0;
+        overflow: hidden;
+        min-height: 340px;
+      }
+
+      #gasCanvas {
+        width: 100%;
+        height: 320px;
+        display: block;
+        cursor: crosshair;
+      }
+
+      .sim-overlay {
+        position: absolute;
+        top: 12px;
+        right: 12px;
+        background: rgba(255, 255, 255, 0.9);
+        border: 1px solid #e2e8f0;
+        padding: 10px 12px;
+        border-radius: 12px;
+        font-size: 0.75rem;
+        color: var(--muted);
+        box-shadow: 0 10px 18px rgba(15, 23, 42, 0.12);
+      }
+
+      .sim-overlay strong {
+        display: block;
+        color: var(--ink);
+        font-size: 0.9rem;
+      }
+
+      .play-button {
+        position: absolute;
+        bottom: 12px;
+        right: 12px;
+        background: var(--panel);
+        color: white;
+        border: none;
+        border-radius: 999px;
+        padding: 6px 14px;
+        font-size: 0.75rem;
+        cursor: pointer;
+      }
+
+      .controls-grid {
+        margin-top: 18px;
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: 16px;
+      }
+
+      .control-card h3 {
+        margin: 0 0 12px;
+        font-size: 0.95rem;
+      }
+
+      .control-card label {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-size: 0.85rem;
+        font-weight: 600;
+        margin-bottom: 6px;
+      }
+
+      .control-card label span {
+        font-family: "IBM Plex Mono", ui-monospace, monospace;
+        color: var(--accent);
+      }
+
+      input[type="range"] {
+        width: 100%;
+        accent-color: var(--accent);
+      }
+
+      .control-card .helper {
+        margin-top: 6px;
+        font-size: 0.75rem;
+        color: var(--muted);
+      }
+
+      .panel {
+        background: var(--panel);
+        color: #e2e8f0;
+        border: 1px solid #1f2937;
+      }
+
+      .panel h2 {
+        margin: 0 0 12px;
+        font-size: 1.1rem;
+        color: #c7d2fe;
+      }
+
+      .panel-section {
+        background: rgba(15, 23, 42, 0.8);
+        border: 1px solid rgba(148, 163, 184, 0.2);
+        border-radius: 16px;
+        padding: 12px;
+        margin-bottom: 12px;
+      }
+
+      .panel-section h3 {
+        margin: 0 0 6px;
+        font-size: 0.9rem;
+        color: #f8fafc;
+      }
+
+      .math-block {
+        font-family: "IBM Plex Mono", ui-monospace, monospace;
+        font-size: 0.75rem;
+        color: #94a3b8;
+        background: #020617;
+        padding: 8px;
+        border-radius: 10px;
+        margin-bottom: 8px;
+      }
+
+      .value-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: baseline;
+        gap: 12px;
+      }
+
+      .value-row span {
+        color: #cbd5f5;
+        font-size: 0.8rem;
+      }
+
+      .value-row strong {
+        font-size: 1.3rem;
+        color: #f8fafc;
+      }
+
+      .analysis-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 8px;
+        margin-top: 10px;
+      }
+
+      .analysis-card {
+        background: #111827;
+        border-radius: 12px;
+        padding: 10px;
+        font-size: 0.75rem;
+        color: #94a3b8;
+      }
+
+      .analysis-card strong {
+        display: block;
+        color: #f8fafc;
+        margin-top: 4px;
+      }
+
+      @keyframes rise {
+        from {
+          opacity: 0;
+          transform: translateY(12px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      @media (max-width: 980px) {
+        .layout {
+          grid-template-columns: 1fr;
+        }
+
+        .hero-actions {
+          align-items: flex-start;
+        }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        * {
+          animation: none !important;
+          transition: none !important;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="page">
+      <header class="hero">
+        <div>
+          <div class="eyebrow">Computational Studio</div>
+          <h1>Ideal Gas</h1>
+          <p>
+            Explore how particle count, temperature, and volume shift the microstate motion and thermodynamic state of
+            an ideal gas in two dimensions.
+          </p>
+        </div>
+        <div class="hero-actions">
+          <div class="constant-chip">
+            kB = 1.0<br />
+            m = 1.0
+          </div>
+          <button class="toggle-math" id="toggleMath" type="button">Hide Math</button>
+        </div>
+      </header>
+
+      <main class="layout">
+        <section>
+          <div class="card simulation-card">
+            <div class="simulation-shell">
+              <canvas id="gasCanvas"></canvas>
+              <div class="sim-overlay">
+                <div>Kinetic Energy</div>
+                <strong id="energyValue">--</strong>
+                <div style="margin-top: 6px;">Particles: <span id="countValue">--</span></div>
+              </div>
+              <button class="play-button" id="playPause" type="button">Pause</button>
+            </div>
+          </div>
+
+          <div class="controls-grid">
+            <div class="card control-card">
+              <h3>Particle Count (N)</h3>
+              <label for="particleCount">Count <span id="particleValue">50</span></label>
+              <input id="particleCount" type="range" min="1" max="200" value="50" />
+              <div class="helper">Scales internal energy and pressure linearly.</div>
+            </div>
+
+            <div class="card control-card">
+              <h3>Volume (V)</h3>
+              <label for="volume">Size <span id="volumeValue">200</span></label>
+              <input id="volume" type="range" min="100" max="800" value="200" />
+              <div class="helper">Larger volume lowers the pressure.</div>
+            </div>
+
+            <div class="card control-card">
+              <h3>Temperature (T)</h3>
+              <label for="temperature">Temp <span id="tempValue">20</span></label>
+              <input id="temperature" type="range" min="1" max="100" value="20" />
+              <div class="helper">Higher temperature increases entropy and kinetic energy.</div>
+            </div>
+          </div>
+        </section>
+
+        <aside class="card panel">
+          <h2>Thermodynamic State</h2>
+
+          <div class="panel-section">
+            <h3>Partition Function (Z)</h3>
+            <div class="math-block">
+              Z = V<sup>N</sup> / (N! &lambda;<sup>2N</sup>)<br />
+              ln(Z) = N ln(Z<sub>1</sub>) - ln(N!)
+            </div>
+            <div class="value-row">
+              <span>ln(Z)</span>
+              <strong id="lnZValue">--</strong>
+            </div>
+          </div>
+
+          <div class="panel-section">
+            <h3>Internal Energy (U)</h3>
+            <div class="math-block">
+              U = N k<sub>B</sub> T
+            </div>
+            <div class="value-row">
+              <span>Energy Units</span>
+              <strong id="uValue">--</strong>
+            </div>
+          </div>
+
+          <div class="panel-section">
+            <h3>Pressure (P)</h3>
+            <div class="math-block">
+              P = N k<sub>B</sub> T / V
+            </div>
+            <div class="value-row">
+              <span>Force / Area</span>
+              <strong id="pValue">--</strong>
+            </div>
+          </div>
+
+          <div class="panel-section">
+            <h3>Entropy (S)</h3>
+            <div class="math-block">
+              S = k<sub>B</sub> (ln Z + &beta;U)
+            </div>
+            <div class="value-row">
+              <span>J / K</span>
+              <strong id="sValue">--</strong>
+            </div>
+          </div>
+
+          <div class="panel-section">
+            <h3>Scaling Analysis</h3>
+            <div class="analysis-grid">
+              <div class="analysis-card">
+                P vs V
+                <strong id="pressureHint">--</strong>
+              </div>
+              <div class="analysis-card">
+                S vs T
+                <strong id="entropyHint">--</strong>
+              </div>
+            </div>
+          </div>
+        </aside>
+      </main>
+    </div>
+
+    <script>
+      (() => {
+        const kB = 1.0;
+        const mass = 1.0;
+        const h = 10.0;
+        const maxParticles = 200;
+        const maxVolume = 800;
+        const boxHeight = 300;
+
+        const state = {
+          isPlaying: true,
+          particleCount: 50,
+          volume: 200,
+          temperature: 20,
+        };
+
+        const elements = {
+          canvas: document.getElementById("gasCanvas"),
+          playPause: document.getElementById("playPause"),
+          particleCount: document.getElementById("particleCount"),
+          volume: document.getElementById("volume"),
+          temperature: document.getElementById("temperature"),
+          particleValue: document.getElementById("particleValue"),
+          volumeValue: document.getElementById("volumeValue"),
+          tempValue: document.getElementById("tempValue"),
+          energyValue: document.getElementById("energyValue"),
+          countValue: document.getElementById("countValue"),
+          lnZValue: document.getElementById("lnZValue"),
+          uValue: document.getElementById("uValue"),
+          pValue: document.getElementById("pValue"),
+          sValue: document.getElementById("sValue"),
+          pressureHint: document.getElementById("pressureHint"),
+          entropyHint: document.getElementById("entropyHint"),
+          toggleMath: document.getElementById("toggleMath"),
+        };
+
+        let particles = [];
+        let animationId = null;
+        let ctx = null;
+        let canvasSize = { width: 0, height: 0 };
+
+        const format = (value, digits = 2) => value.toFixed(digits);
+
+        const getBoxWidth = () => state.volume;
+
+        const initParticles = () => {
+          particles = Array.from({ length: maxParticles }, () => ({
+            x: Math.random() * getBoxWidth(),
+            y: Math.random() * boxHeight,
+            vx: (Math.random() - 0.5) * Math.sqrt(state.temperature),
+            vy: (Math.random() - 0.5) * Math.sqrt(state.temperature),
+            color: `hsl(${Math.random() * 60 + 200}, 70%, 50%)`,
+          }));
+        };
+
+        const rescaleVelocities = () => {
+          const targetSpeed = Math.sqrt(state.temperature);
+          particles.forEach((particle) => {
+            const currentSpeed = Math.sqrt(particle.vx * particle.vx + particle.vy * particle.vy) || 1;
+            const dirX = particle.vx / currentSpeed;
+            const dirY = particle.vy / currentSpeed;
+            const speed = targetSpeed * (0.8 + Math.random() * 0.4);
+            particle.vx = dirX * speed;
+            particle.vy = dirY * speed;
+          });
+        };
+
+        const clampParticles = () => {
+          const width = getBoxWidth();
+          const radius = 4;
+          particles.forEach((particle) => {
+            particle.x = Math.min(Math.max(particle.x, radius), width - radius);
+            particle.y = Math.min(Math.max(particle.y, radius), boxHeight - radius);
+          });
+        };
+
+        const resizeCanvas = () => {
+          const rect = elements.canvas.getBoundingClientRect();
+          const dpr = window.devicePixelRatio || 1;
+          canvasSize.width = rect.width * dpr;
+          canvasSize.height = rect.height * dpr;
+          elements.canvas.width = canvasSize.width;
+          elements.canvas.height = canvasSize.height;
+          ctx = elements.canvas.getContext("2d");
+        };
+
+        const draw = () => {
+          if (!ctx) {
+            return;
+          }
+
+          ctx.setTransform(1, 0, 0, 1, 0, 0);
+          ctx.clearRect(0, 0, canvasSize.width, canvasSize.height);
+
+          const scale = Math.min(canvasSize.width / maxVolume, canvasSize.height / boxHeight);
+          const offsetX = (canvasSize.width - maxVolume * scale) / 2;
+          const offsetY = (canvasSize.height - boxHeight * scale) / 2;
+          ctx.setTransform(scale, 0, 0, scale, offsetX, offsetY);
+
+          const width = getBoxWidth();
+          ctx.fillStyle = "#f8fafc";
+          ctx.fillRect(0, 0, width, boxHeight);
+          ctx.strokeStyle = "#334155";
+          ctx.lineWidth = 4;
+          ctx.strokeRect(0, 0, width, boxHeight);
+
+          const radius = 4;
+          const activeParticles = particles.slice(0, state.particleCount);
+
+          activeParticles.forEach((particle) => {
+            if (state.isPlaying) {
+              particle.x += particle.vx;
+              particle.y += particle.vy;
+
+              if (particle.x <= radius || particle.x >= width - radius) {
+                particle.vx *= -1;
+                particle.x = Math.min(Math.max(particle.x, radius), width - radius);
+              }
+              if (particle.y <= radius || particle.y >= boxHeight - radius) {
+                particle.vy *= -1;
+                particle.y = Math.min(Math.max(particle.y, radius), boxHeight - radius);
+              }
+            }
+
+            ctx.beginPath();
+            ctx.arc(particle.x, particle.y, radius, 0, Math.PI * 2);
+            ctx.fillStyle = particle.color;
+            ctx.fill();
+          });
+
+          if (state.isPlaying) {
+            animationId = requestAnimationFrame(draw);
+          }
+        };
+
+        const computeThermo = () => {
+          const lambda = h / Math.sqrt(2 * Math.PI * mass * kB * state.temperature);
+          const area = state.volume * boxHeight;
+          const z1 = area / (lambda * lambda);
+          const lnNFactorial =
+            state.particleCount > 1
+              ? state.particleCount * Math.log(state.particleCount) - state.particleCount
+              : 0;
+          const lnZ = state.particleCount * Math.log(z1) - lnNFactorial;
+          const U = state.particleCount * kB * state.temperature;
+          const F = -kB * state.temperature * lnZ;
+          const P = (state.particleCount * kB * state.temperature) / area;
+          const S = (U - F) / state.temperature;
+
+          return { lambda, lnZ, U, P, S };
+        };
+
+        const updateUI = () => {
+          elements.particleValue.textContent = state.particleCount.toFixed(0);
+          elements.volumeValue.textContent = state.volume.toFixed(0);
+          elements.tempValue.textContent = state.temperature.toFixed(0);
+          elements.countValue.textContent = state.particleCount.toFixed(0);
+
+          const thermo = computeThermo();
+          elements.energyValue.textContent = format(thermo.U);
+          elements.lnZValue.textContent = format(thermo.lnZ);
+          elements.uValue.textContent = format(thermo.U);
+          elements.pValue.textContent = thermo.P.toFixed(4);
+          elements.sValue.textContent = format(thermo.S);
+
+          elements.pressureHint.textContent = state.volume > 400 ? "Low pressure" : "High pressure";
+          elements.entropyHint.textContent = state.temperature > 50 ? "High disorder" : "Low disorder";
+
+          elements.playPause.textContent = state.isPlaying ? "Pause" : "Play";
+        };
+
+        const startAnimation = () => {
+          cancelAnimationFrame(animationId);
+          draw();
+        };
+
+        const bindEvents = () => {
+          elements.playPause.addEventListener("click", () => {
+            state.isPlaying = !state.isPlaying;
+            updateUI();
+            if (state.isPlaying) {
+              startAnimation();
+            }
+          });
+
+          elements.particleCount.addEventListener("input", (event) => {
+            state.particleCount = parseInt(event.target.value, 10);
+            updateUI();
+            draw();
+          });
+
+          elements.volume.addEventListener("input", (event) => {
+            state.volume = parseInt(event.target.value, 10);
+            clampParticles();
+            updateUI();
+            draw();
+          });
+
+          elements.temperature.addEventListener("input", (event) => {
+            state.temperature = parseInt(event.target.value, 10);
+            rescaleVelocities();
+            updateUI();
+            draw();
+          });
+
+          elements.toggleMath.addEventListener("click", () => {
+            document.body.classList.toggle("hide-math");
+            elements.toggleMath.textContent = document.body.classList.contains("hide-math")
+              ? "Show Math"
+              : "Hide Math";
+          });
+
+          window.addEventListener("resize", () => {
+            resizeCanvas();
+            draw();
+          });
+        };
+
+        const init = () => {
+          resizeCanvas();
+          initParticles();
+          updateUI();
+          bindEvents();
+          startAnimation();
+        };
+
+        window.addEventListener("load", init);
+      })();
+    </script>
+  </body>
+</html>

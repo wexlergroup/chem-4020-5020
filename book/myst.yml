@@ -1,0 +1,66 @@
+version: 1
+project:
+  title: Physical Chemistry II
+  authors:
+    - name: Robert B. Wexler
+  github: executablebooks/jupyter-book
+  bibliography:
+    - references.bib
+  exports:
+    - format: pdf
+      template: plain_latex_book
+      output: exports/book.pdf
+  toc:
+    - file: intro.md
+    - title: Module 1. Equations of State
+      children:
+        - file: chapter-01/section-01.md
+        - file: chapter-01/section-02.md
+        - file: chapter-01/section-03.md
+        - file: chapter-01/section-04.md
+        - file: chapter-01/review.md
+    - title: Module 2. Statistical Mechanics
+      children:
+        - file: chapter-02/section-01.md
+        - file: chapter-02/section-02.md
+        - file: chapter-02/section-03.md
+        - file: chapter-02/section-04.md
+        - file: chapter-02/section-05.md
+        - file: chapter-02/section-06.md
+        - file: chapter-02/section-07.md
+        - file: chapter-02/section-08.md
+        - file: chapter-02/review.md
+    - title: Module 3. First Law & Enthalpy
+      children:
+        - file: chapter-03/section-01.md
+        - file: chapter-03/section-02.md
+        - file: chapter-03/section-03.md
+        - file: chapter-03/review.md
+    - title: Module 4. Second Law & Entropy
+      children:
+        - file: chapter-04/section-01.md
+        - file: chapter-04/section-02.md
+        - file: chapter-04/section-03.md
+        - file: chapter-04/review.md
+    - title: Module 5. Third Law & Free Energy
+      children:
+        - file: chapter-05/section-01.md
+        - file: chapter-05/section-02.md
+        - file: chapter-05/section-03.md
+        - file: chapter-05/review.md
+    - title: Module 6. Phase Equilibria
+      children:
+        - file: chapter-06/section-01.md
+        - file: chapter-06/review.md
+    - title: Module 7. Chemical Equilibrium
+      children:
+        - file: chapter-07/review.md
+    - title: Appendices
+      children:
+        - file: appendices/appendix-a.md
+        - file: appendices/appendix-b.md
+site:
+  options:
+    logo: logo.png
+    folders: true
+  template: book-theme

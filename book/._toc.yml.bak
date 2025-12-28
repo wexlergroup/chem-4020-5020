@@ -1,0 +1,65 @@
+# Table of contents
+# Learn more at https://jupyterbook.org/customize/toc.html
+
+# Appendix #. NIST Chemistry WebBook
+# Appendix #. Partial Pressure
+# Appendix #. Miscellaneous Resources (e.g., the IUPAC Gold Book, Berkeley Math Bootcamp, etc.)
+
+format: jb-book
+root: intro
+parts:
+  - caption: Module 1. Equations of State
+    numbered: false
+    chapters:
+      - file: chapter-01/section-01.md
+      - file: chapter-01/section-02.md
+      - file: chapter-01/section-03.md
+      - file: chapter-01/section-04.md
+      - file: chapter-01/review.md
+  - caption: Module 2. Statistical Mechanics
+    numbered: false
+    chapters:
+      - file: chapter-02/section-01.md
+      - file: chapter-02/section-02.md
+      - file: chapter-02/section-03.md
+      - file: chapter-02/section-04.md
+      - file: chapter-02/section-05.md
+      - file: chapter-02/section-06.md
+      - file: chapter-02/section-07.md
+      - file: chapter-02/section-08.md
+      - file: chapter-02/review.md
+  - caption: Module 3. First Law & Enthalpy
+    numbered: false
+    chapters:
+      - file: chapter-03/section-01.md
+      - file: chapter-03/section-02.md
+      - file: chapter-03/section-03.md
+      - file: chapter-03/review.md
+  - caption: Module 4. Second Law & Entropy
+    numbered: false
+    chapters:
+      - file: chapter-04/section-01.md
+      - file: chapter-04/section-02.md
+      - file: chapter-04/section-03.md
+      - file: chapter-04/review.md
+  - caption: Module 5. Third Law & Free Energy
+    numbered: false
+    chapters:
+      - file: chapter-05/section-01.md
+      - file: chapter-05/section-02.md
+      - file: chapter-05/section-03.md
+      - file: chapter-05/review.md
+  - caption: Module 6. Phase Equilibria
+    numbered: false
+    chapters:
+      - file: chapter-06/section-01.md
+      - file: chapter-06/review.md
+  - caption: Module 7. Chemical Equilibrium
+    numbered: false
+    chapters:
+      - file: chapter-07/review.md
+  - caption: Appendices
+    numbered: false
+    chapters:
+      - file: appendices/appendix-a.md
+      - file: appendices/appendix-b.md

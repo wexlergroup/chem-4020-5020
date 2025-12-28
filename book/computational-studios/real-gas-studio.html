@@ -1,0 +1,746 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Real Gas Computational Studio</title>
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;600&display=swap");
+
+      :root {
+        color-scheme: light;
+        --ink: #0f172a;
+        --muted: #4b5563;
+        --soft: #94a3b8;
+        --card: #ffffff;
+        --border: #dbe3ea;
+        --accent: #0ea5a0;
+        --accent-2: #1d4ed8;
+        --accent-3: #f97316;
+        --shadow: 0 18px 40px rgba(15, 23, 42, 0.12);
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        font-family: "IBM Plex Sans", "Segoe UI", sans-serif;
+        color: var(--ink);
+        background:
+          radial-gradient(900px 420px at 8% -5%, #dbeafe 0%, transparent 60%),
+          radial-gradient(900px 520px at 96% 8%, #fef3c7 0%, transparent 55%),
+          linear-gradient(180deg, #f8fafc 0%, #eef2f7 70%, #f8fafc 100%);
+        min-height: 100vh;
+      }
+
+      .page {
+        max-width: 1220px;
+        margin: 0 auto;
+        padding: 24px 18px 40px;
+      }
+
+      .hero {
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-radius: 24px;
+        padding: 24px 28px;
+        box-shadow: var(--shadow);
+        display: flex;
+        justify-content: space-between;
+        gap: 20px;
+        align-items: flex-start;
+        position: relative;
+        overflow: hidden;
+        animation: rise 0.45s ease both;
+      }
+
+      .hero::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(120deg, rgba(14, 165, 160, 0.08), transparent 60%);
+        pointer-events: none;
+      }
+
+      .eyebrow {
+        font-size: 0.7rem;
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        color: var(--accent);
+        font-weight: 600;
+      }
+
+      .hero h1 {
+        margin: 10px 0 8px;
+        font-size: clamp(2rem, 3vw, 2.7rem);
+      }
+
+      .hero p {
+        margin: 0;
+        color: var(--muted);
+        max-width: 720px;
+        line-height: 1.6;
+      }
+
+      .hero-meta {
+        margin-top: 18px;
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+        gap: 12px;
+      }
+
+      .meta-card {
+        background: #f8fafc;
+        border: 1px solid #e2e8f0;
+        border-radius: 14px;
+        padding: 12px 14px;
+      }
+
+      .meta-label {
+        font-size: 0.7rem;
+        text-transform: uppercase;
+        letter-spacing: 0.14em;
+        color: var(--soft);
+      }
+
+      .meta-value {
+        display: block;
+        margin-top: 6px;
+        font-family: "IBM Plex Mono", ui-monospace, monospace;
+        font-size: 0.95rem;
+      }
+
+      .layout {
+        margin-top: 22px;
+        display: grid;
+        grid-template-columns: minmax(260px, 320px) 1fr;
+        gap: 20px;
+      }
+
+      .card {
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-radius: 20px;
+        padding: 20px;
+        box-shadow: var(--shadow);
+        animation: rise 0.5s ease both;
+      }
+
+      .panel h2 {
+        margin: 0 0 16px;
+        font-size: 1.1rem;
+      }
+
+      .control {
+        margin-bottom: 16px;
+      }
+
+      .control label {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-size: 0.85rem;
+        font-weight: 600;
+        margin-bottom: 6px;
+      }
+
+      .control label span {
+        font-family: "IBM Plex Mono", ui-monospace, monospace;
+        color: var(--accent-2);
+      }
+
+      input[type="range"] {
+        width: 100%;
+        accent-color: var(--accent);
+      }
+
+      .helper {
+        margin-top: 6px;
+        font-size: 0.78rem;
+        color: var(--muted);
+      }
+
+      select {
+        width: 100%;
+        padding: 8px 10px;
+        border-radius: 12px;
+        border: 1px solid #e2e8f0;
+        background: #f8fafc;
+        font-size: 0.9rem;
+      }
+
+      .toggle-list {
+        display: grid;
+        gap: 8px;
+      }
+
+      .toggle-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 8px 10px;
+        border-radius: 12px;
+        background: #f8fafc;
+        border: 1px solid #e2e8f0;
+        font-size: 0.85rem;
+      }
+
+      .toggle-row input {
+        accent-color: var(--accent-2);
+      }
+
+      .dot {
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        display: inline-block;
+        margin-right: 8px;
+      }
+
+      .subcard {
+        background: #f8fafc;
+        border: 1px solid #e2e8f0;
+        border-radius: 14px;
+        padding: 12px;
+        margin-top: 12px;
+      }
+
+      .subcard h3 {
+        margin: 0 0 8px;
+        font-size: 0.85rem;
+        text-transform: uppercase;
+        letter-spacing: 0.14em;
+        color: var(--soft);
+      }
+
+      .mono-row {
+        display: flex;
+        justify-content: space-between;
+        font-family: "IBM Plex Mono", ui-monospace, monospace;
+        font-size: 0.8rem;
+        margin-bottom: 6px;
+      }
+
+      .mono-row span:last-child {
+        color: var(--ink);
+      }
+
+      .charts {
+        display: grid;
+        gap: 16px;
+      }
+
+      .chart-card {
+        padding: 18px;
+      }
+
+      .chart-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 10px;
+      }
+
+      .chart-header h3 {
+        margin: 0;
+        font-size: 1rem;
+      }
+
+      .tag {
+        font-size: 0.75rem;
+        padding: 4px 10px;
+        border-radius: 999px;
+        background: #f1f5f9;
+        color: #475569;
+      }
+
+      .chart {
+        height: 300px;
+      }
+
+      .note {
+        margin-top: 10px;
+        font-size: 0.85rem;
+        color: var(--muted);
+        line-height: 1.5;
+      }
+
+      .analysis {
+        background: #f8fafc;
+        border: 1px solid #e2e8f0;
+        border-radius: 16px;
+        padding: 16px;
+      }
+
+      .analysis h3 {
+        margin: 0 0 8px;
+        font-size: 0.95rem;
+      }
+
+      .analysis p {
+        margin: 0;
+        color: var(--muted);
+        font-size: 0.9rem;
+        line-height: 1.6;
+      }
+
+      .warning {
+        display: none;
+        margin-top: 12px;
+        background: #fff7ed;
+        border: 1px solid #fed7aa;
+        color: #9a3412;
+        padding: 10px 12px;
+        border-radius: 10px;
+        font-size: 0.85rem;
+      }
+
+      @keyframes rise {
+        from {
+          opacity: 0;
+          transform: translateY(12px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      @media (max-width: 960px) {
+        .hero {
+          flex-direction: column;
+          align-items: flex-start;
+        }
+
+        .layout {
+          grid-template-columns: 1fr;
+        }
+
+        .chart {
+          height: 240px;
+        }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        * {
+          animation: none !important;
+          transition: none !important;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="page">
+      <header class="hero">
+        <div>
+          <div class="eyebrow">Computational Studio</div>
+          <h1>Real Gas Models</h1>
+          <p>
+            Compare ideal, van der Waals, and Peng-Robinson equations of state to see how compressibility and
+            P-V isotherms deviate near real-gas conditions.
+          </p>
+          <div class="hero-meta">
+            <div class="meta-card">
+              <span class="meta-label">Selected Gas</span>
+              <span class="meta-value" id="gasName">--</span>
+            </div>
+            <div class="meta-card">
+              <span class="meta-label">Temperature</span>
+              <span class="meta-value" id="tempDisplay">--</span>
+            </div>
+            <div class="meta-card">
+              <span class="meta-label">Max Pressure</span>
+              <span class="meta-value" id="pMaxDisplay">--</span>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <main class="layout">
+        <aside class="panel card">
+          <h2>System Controls</h2>
+
+          <div class="control">
+            <label for="gasSelect">Substance</label>
+            <select id="gasSelect"></select>
+            <div class="helper" id="gasDetails">Select a real gas to populate critical constants.</div>
+          </div>
+
+          <div class="control">
+            <label for="temperature">Temperature (K) <span id="tempValue">--</span></label>
+            <input id="temperature" type="range" min="100" max="1000" step="5" value="310" />
+          </div>
+
+          <div class="control">
+            <label for="pressure">Max Pressure (bar) <span id="pValue">--</span></label>
+            <input id="pressure" type="range" min="50" max="500" step="10" value="200" />
+          </div>
+
+          <div class="control">
+            <label>Models</label>
+            <div class="toggle-list">
+              <div class="toggle-row">
+                <span><span class="dot" style="background:#94a3b8;"></span>Ideal Gas</span>
+                <input id="toggleIdeal" type="checkbox" checked />
+              </div>
+              <div class="toggle-row">
+                <span><span class="dot" style="background:#3b82f6;"></span>Van der Waals</span>
+                <input id="toggleVdw" type="checkbox" checked />
+              </div>
+              <div class="toggle-row">
+                <span><span class="dot" style="background:#10b981;"></span>Peng-Robinson</span>
+                <input id="togglePr" type="checkbox" checked />
+              </div>
+            </div>
+          </div>
+
+          <div class="subcard" id="paramCard">
+            <h3>Computed Parameters</h3>
+            <div id="paramBody"></div>
+          </div>
+        </aside>
+
+        <section class="charts">
+          <div class="card chart-card">
+            <div class="chart-header">
+              <h3>Compressibility Factor (Z)</h3>
+              <span class="tag">Z vs Pressure</span>
+            </div>
+            <div id="zChart" class="chart"></div>
+            <div class="note">
+              Z = 1 is ideal. Z &lt; 1 indicates attractive forces dominate; Z &gt; 1 indicates repulsion.
+            </div>
+          </div>
+
+          <div class="card chart-card">
+            <div class="chart-header">
+              <h3>P-V Isotherm</h3>
+              <span class="tag">log V</span>
+            </div>
+            <div id="pvChart" class="chart"></div>
+            <div class="note">Molar volume in L/mol; pressure in bar.</div>
+          </div>
+
+          <div class="analysis" id="analysisCard">
+            <h3>Analysis</h3>
+            <p id="analysisText">--</p>
+          </div>
+
+          <div class="warning" id="plotlyWarning">
+            Plotly did not load. Check network access or provide a local plotly.js file.
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <script src="https://cdn.plot.ly/plotly-2.27.0.min.js"></script>
+    <script>
+      (() => {
+        const R = 8.314;
+
+        const GAS_PRESETS = [
+          { name: "Ideal Gas (Reference)", Tc: 0, Pc: 1, omega: 0, type: "ideal" },
+          { name: "Carbon Dioxide (CO2)", Tc: 304.13, Pc: 73.77e5, omega: 0.224, type: "real" },
+          { name: "Nitrogen (N2)", Tc: 126.2, Pc: 33.9e5, omega: 0.037, type: "real" },
+          { name: "Water Vapor (H2O)", Tc: 647.1, Pc: 220.6e5, omega: 0.344, type: "real" },
+          { name: "Methane (CH4)", Tc: 190.56, Pc: 45.99e5, omega: 0.011, type: "real" },
+          { name: "Helium (He)", Tc: 5.19, Pc: 2.27e5, omega: -0.385, type: "real" },
+        ];
+
+        const Models = {
+          ideal: {
+            getZ: () => 1.0,
+            color: "#94a3b8",
+            label: "Ideal Gas",
+          },
+          vdw: {
+            getZ: (P, T, gas) => {
+              const a = (27 * R * R * gas.Tc * gas.Tc) / (64 * gas.Pc);
+              const b = (R * gas.Tc) / (8 * gas.Pc);
+              const A = (a * P) / (R * T * R * T);
+              const B = (b * P) / (R * T);
+              const a2 = -(1 + B);
+              const a1 = A;
+              const a0 = -A * B;
+              return solveCubic(a2, a1, a0);
+            },
+            getParams: (gas) => {
+              const a = (27 * R * R * gas.Tc * gas.Tc) / (64 * gas.Pc);
+              const b = (R * gas.Tc) / (8 * gas.Pc);
+              return { a, b };
+            },
+            color: "#3b82f6",
+            label: "Van der Waals",
+          },
+          pr: {
+            getZ: (P, T, gas) => {
+              const Tr = T / gas.Tc;
+              const kappa = 0.37464 + 1.54226 * gas.omega - 0.26992 * gas.omega * gas.omega;
+              const alpha = (1 + kappa * (1 - Math.sqrt(Tr))) ** 2;
+              const a = (0.45724 * R * R * gas.Tc * gas.Tc) / gas.Pc;
+              const b = (0.07780 * R * gas.Tc) / gas.Pc;
+              const aAlpha = a * alpha;
+              const A = (aAlpha * P) / (R * T * R * T);
+              const B = (b * P) / (R * T);
+              const a2 = -(1 - B);
+              const a1 = A - 3 * B * B - 2 * B;
+              const a0 = -(A * B - B * B - B * B * B);
+              return solveCubic(a2, a1, a0);
+            },
+            getParams: (gas, T) => {
+              const Tr = T / gas.Tc;
+              const kappa = 0.37464 + 1.54226 * gas.omega - 0.26992 * gas.omega * gas.omega;
+              const alpha = (1 + kappa * (1 - Math.sqrt(Tr))) ** 2;
+              const a = (0.45724 * R * R * gas.Tc * gas.Tc) / gas.Pc;
+              const b = (0.07780 * R * gas.Tc) / gas.Pc;
+              return { a: a * alpha, b };
+            },
+            color: "#10b981",
+            label: "Peng-Robinson",
+          },
+        };
+
+        const state = {
+          gasIndex: 1,
+          temp: 310,
+          pMax: 200,
+          models: {
+            ideal: true,
+            vdw: true,
+            pr: true,
+          },
+        };
+
+        const elements = {
+          gasSelect: document.getElementById("gasSelect"),
+          temperature: document.getElementById("temperature"),
+          pressure: document.getElementById("pressure"),
+          toggleIdeal: document.getElementById("toggleIdeal"),
+          toggleVdw: document.getElementById("toggleVdw"),
+          togglePr: document.getElementById("togglePr"),
+          gasName: document.getElementById("gasName"),
+          tempDisplay: document.getElementById("tempDisplay"),
+          pMaxDisplay: document.getElementById("pMaxDisplay"),
+          tempValue: document.getElementById("tempValue"),
+          pValue: document.getElementById("pValue"),
+          gasDetails: document.getElementById("gasDetails"),
+          paramCard: document.getElementById("paramCard"),
+          paramBody: document.getElementById("paramBody"),
+          analysisText: document.getElementById("analysisText"),
+          plotlyWarning: document.getElementById("plotlyWarning"),
+        };
+
+        let chartsReady = false;
+
+        function solveCubic(a2, a1, a0) {
+          const Q = (3 * a1 - a2 * a2) / 9;
+          const Rv = (9 * a2 * a1 - 27 * a0 - 2 * a2 * a2 * a2) / 54;
+          const D = Q * Q * Q + Rv * Rv;
+
+          if (D > 0) {
+            const S = Math.cbrt(Rv + Math.sqrt(D));
+            const T = Math.cbrt(Rv - Math.sqrt(D));
+            return S + T - a2 / 3;
+          }
+          const theta = Math.acos(Rv / Math.sqrt(-Q * Q * Q));
+          const z1 = 2 * Math.sqrt(-Q) * Math.cos(theta / 3) - a2 / 3;
+          const z2 = 2 * Math.sqrt(-Q) * Math.cos((theta + 2 * Math.PI) / 3) - a2 / 3;
+          const z3 = 2 * Math.sqrt(-Q) * Math.cos((theta + 4 * Math.PI) / 3) - a2 / 3;
+          return Math.max(z1, z2, z3);
+        }
+
+        const renderParams = (gas) => {
+          if (gas.type !== "real") {
+            elements.paramBody.innerHTML = "<div class=\"helper\">Ideal reference uses Z = 1; a and b are not defined.</div>";
+            return;
+          }
+          const vdwParams = Models.vdw.getParams(gas);
+          const prParams = Models.pr.getParams(gas, state.temp);
+          elements.paramBody.innerHTML = `
+            <div class="mono-row"><span>Van der Waals a</span><span>${vdwParams.a.toFixed(3)}</span></div>
+            <div class="mono-row"><span>Van der Waals b</span><span>${(vdwParams.b * 1e5).toFixed(2)} e-5</span></div>
+            <div class="mono-row" style="margin-top:8px;"><span>Peng-Robinson a(T)</span><span>${prParams.a.toFixed(3)}</span></div>
+            <div class="mono-row"><span>Peng-Robinson b</span><span>${(prParams.b * 1e5).toFixed(2)} e-5</span></div>
+          `;
+        };
+
+        const computeData = () => {
+          const gas = GAS_PRESETS[state.gasIndex];
+          const steps = 120;
+          const pStep = (state.pMax * 1e5) / steps;
+          const datasets = {
+            ideal: { xP: [], yZ: [], xV: [], yP: [] },
+            vdw: { xP: [], yZ: [], xV: [], yP: [] },
+            pr: { xP: [], yZ: [], xV: [], yP: [] },
+          };
+
+          for (let i = 1; i <= steps; i += 1) {
+            const P = i * pStep;
+            const Pbar = P / 1e5;
+
+            Object.keys(state.models).forEach((key) => {
+              if (!state.models[key]) {
+                return;
+              }
+              let z = 1;
+              if (key !== "ideal" && gas.type === "real" && gas.Tc > 0) {
+                z = Models[key].getZ(P, state.temp, gas);
+              }
+              const v = (z * R * state.temp) / P;
+              datasets[key].xP.push(Pbar);
+              datasets[key].yZ.push(Number.isFinite(z) ? z : null);
+              datasets[key].xV.push(Number.isFinite(v) && v > 0 ? v * 1000 : null);
+              datasets[key].yP.push(Pbar);
+            });
+          }
+          return datasets;
+        };
+
+        const renderCharts = () => {
+          if (!window.Plotly) {
+            elements.plotlyWarning.style.display = "block";
+            return;
+          }
+          elements.plotlyWarning.style.display = "none";
+          const data = computeData();
+          const tracesZ = [];
+          const tracesPV = [];
+
+          Object.keys(state.models).forEach((key) => {
+            if (!state.models[key]) {
+              return;
+            }
+            tracesZ.push({
+              x: data[key].xP,
+              y: data[key].yZ,
+              type: "scatter",
+              mode: "lines",
+              name: Models[key].label,
+              line: { color: Models[key].color, width: 2 },
+            });
+            tracesPV.push({
+              x: data[key].xV,
+              y: data[key].yP,
+              type: "scatter",
+              mode: "lines",
+              name: Models[key].label,
+              line: { color: Models[key].color, width: 2 },
+            });
+          });
+
+          const commonLayout = {
+            margin: { t: 20, r: 20, l: 60, b: 50 },
+            paper_bgcolor: "rgba(0,0,0,0)",
+            plot_bgcolor: "rgba(0,0,0,0)",
+            font: { family: "IBM Plex Sans, sans-serif", color: "#0f172a" },
+            legend: { orientation: "h", x: 0, y: 1.12 },
+            xaxis: { gridcolor: "#e2e8f0", zeroline: false },
+            yaxis: { gridcolor: "#e2e8f0", zeroline: false },
+          };
+
+          const layoutZ = {
+            ...commonLayout,
+            xaxis: { ...commonLayout.xaxis, title: "Pressure (bar)" },
+            yaxis: { ...commonLayout.yaxis, title: "Z = PV / RT" },
+          };
+
+          const layoutPV = {
+            ...commonLayout,
+            xaxis: { ...commonLayout.xaxis, title: "Molar Volume (L/mol)", type: "log" },
+            yaxis: { ...commonLayout.yaxis, title: "Pressure (bar)" },
+          };
+
+          const config = { responsive: true, displayModeBar: false };
+
+          if (!chartsReady) {
+            Plotly.newPlot("zChart", tracesZ, layoutZ, config);
+            Plotly.newPlot("pvChart", tracesPV, layoutPV, config);
+            chartsReady = true;
+          } else {
+            Plotly.react("zChart", tracesZ, layoutZ, config);
+            Plotly.react("pvChart", tracesPV, layoutPV, config);
+          }
+        };
+
+        const updateAnalysis = (gas) => {
+          const vdwText = state.models.vdw
+            ? "Van der Waals captures attraction and excluded volume, producing a dip in Z at moderate pressures. "
+            : "";
+          const prText = state.models.pr
+            ? "Peng-Robinson often predicts sharper deviations near the critical region using the acentric factor. "
+            : "";
+          elements.analysisText.innerHTML = `At <strong>${state.temp} K</strong>, ${gas.name} shows visible non-ideal behavior as pressure increases. ${vdwText}${prText}`;
+        };
+
+        const updateUI = () => {
+          const gas = GAS_PRESETS[state.gasIndex];
+          elements.gasName.textContent = gas.name;
+          elements.tempDisplay.textContent = `${state.temp} K`;
+          elements.pMaxDisplay.textContent = `${state.pMax} bar`;
+          elements.tempValue.textContent = `${state.temp} K`;
+          elements.pValue.textContent = `${state.pMax} bar`;
+
+          elements.gasDetails.textContent =
+            gas.type === "real"
+              ? `Tc: ${gas.Tc} K, Pc: ${(gas.Pc / 1e5).toFixed(1)} bar, \u03c9: ${gas.omega}`
+              : "Ideal reference: Z = 1 across all conditions.";
+
+          renderParams(gas);
+          updateAnalysis(gas);
+        };
+
+        const bindEvents = () => {
+          elements.gasSelect.addEventListener("change", (event) => {
+            state.gasIndex = parseInt(event.target.value, 10);
+            updateUI();
+            renderCharts();
+          });
+
+          elements.temperature.addEventListener("input", (event) => {
+            state.temp = parseInt(event.target.value, 10);
+            updateUI();
+            renderCharts();
+          });
+
+          elements.pressure.addEventListener("input", (event) => {
+            state.pMax = parseInt(event.target.value, 10);
+            updateUI();
+            renderCharts();
+          });
+
+          elements.toggleIdeal.addEventListener("change", (event) => {
+            state.models.ideal = event.target.checked;
+            renderCharts();
+          });
+
+          elements.toggleVdw.addEventListener("change", (event) => {
+            state.models.vdw = event.target.checked;
+            renderCharts();
+          });
+
+          elements.togglePr.addEventListener("change", (event) => {
+            state.models.pr = event.target.checked;
+            renderCharts();
+          });
+        };
+
+        const init = () => {
+          GAS_PRESETS.forEach((gas, index) => {
+            const option = document.createElement("option");
+            option.value = index;
+            option.textContent = gas.name;
+            elements.gasSelect.appendChild(option);
+          });
+          elements.gasSelect.value = state.gasIndex;
+          updateUI();
+          bindEvents();
+          renderCharts();
+        };
+
+        window.addEventListener("load", init);
+      })();
+    </script>
+  </body>
+</html>
