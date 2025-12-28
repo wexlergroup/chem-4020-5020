@@ -135,16 +135,11 @@ axs[1].legend(bbox_to_anchor=(1.05, 1), loc='upper left', borderaxespad=0.)
 
 fig.suptitle(r'$\Delta H = 0$')
 
-glue("gases_before_after", fig, display=False)
+plt.show()
 plt.close(fig)
 ```
 
-```{glue:figure} gases_before_after
-:figwidth: 100%
-:align: center
-
 Mixing of two ideal gases before and after opening the stopper that separates them.
-```
 
 Even though $\Delta H = 0$, the process is still **spontaneous**. If you were shown the “before” and “after” snapshots without additional labels, you would know the natural direction of mixing. This spontaneous behavior underscores that **enthalpy** alone cannot capture whether a process will occur without additional driving forces. That driving force is related to **entropy**.
 
@@ -152,7 +147,7 @@ Even though $\Delta H = 0$, the process is still **spontaneous**. If you were sh
 
 ```{glossary}
 Entropy
-  A state function denoted by $S$, quantifying the degree of *dispersal* or *spread* of energy and matter, thereby predicting the direction of spontaneous change.
+: A state function denoted by $S$, quantifying the degree of *dispersal* or *spread* of energy and matter, thereby predicting the direction of spontaneous change.
 ```
 
 ### First Law for a Reversible Process

@@ -56,7 +56,7 @@ kernelspec:
   - $PV = N k_{\text{B}} T = n R T$
   - Assumes point-like, non-interacting particles
 - **Absolute Temperature Scale**
-  - Kelvin scale derived by extrapolating volumes to zero at $-273.15\,^\circ\text{C}$
+  - Kelvin scale derived by extrapolating volumes to zero at $-273.15\,\text{°C}$
 
 ### Section 1.4. Real Gases
 

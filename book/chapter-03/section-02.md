@@ -24,13 +24,13 @@ This section explores how to apply the First Law of Thermodynamics to various th
 
 ```{glossary}
 Quasi-static process
-  A process carried out *infinitesimally slowly* so that the system remains *nearly in equilibrium* at all times. Each intermediate state is well-defined thermodynamically.
+: A process carried out *infinitesimally slowly* so that the system remains *nearly in equilibrium* at all times. Each intermediate state is well-defined thermodynamically.
 
 Reversible process
-  An *idealized* process that is (1) *quasi-static* and (2) free of *dissipative effects*, meaning it can be reversed with *no net change* to the system or surroundings.
+: An *idealized* process that is (1) *quasi-static* and (2) free of *dissipative effects*, meaning it can be reversed with *no net change* to the system or surroundings.
 
 Irreversible process
-  Any process that violates one or more of the conditions for reversibility (e.g., too rapid, frictional, or dissipative).
+: Any process that violates one or more of the conditions for reversibility (e.g., too rapid, frictional, or dissipative).
 ```
 
 ---
@@ -296,14 +296,10 @@ axs[0].set_xlim(0, 1)
 axs[1].set_xlim(0, 1)
 axs[2].set_xlim(0, 1)
 
-glue("microstates_energy_probabilities", fig, display=False)
+plt.show()
 plt.close(fig)
 ```
 
-```{glue:figure} microstates_energy_probabilities
-:figwidth: 100%
-:align: center
 Schematic of microstate energies (vertical) and probabilities (horizontal). Heating changes the distribution $\{p_i\}$; compression shifts microstate energies $E_i$.
-```
 
 By connecting heat transfer to probability shifts and work to energy-level changes, the microscopic picture of the First Law becomes clearer: energy enters or leaves the system either by rearranging how likely each microstate is (heat) or by shifting the energy of each microstate itself (work).

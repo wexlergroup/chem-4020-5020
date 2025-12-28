@@ -24,13 +24,13 @@ This section explores how to apply the First Law of Thermodynamics to various th
 
 ```{glossary}
 Quasi-static process
-  A process carried out *infinitesimally slowly* so that the system remains *nearly in equilibrium* at all times. Each intermediate state is well-defined thermodynamically.
+: A process carried out *infinitesimally slowly* so that the system remains *nearly in equilibrium* at all times. Each intermediate state is well-defined thermodynamically.
 
 Reversible process
-  An *idealized* process that is (1) *quasi-static* and (2) free of *dissipative effects*, meaning it can be reversed with *no net change* to the system or surroundings.
+: An *idealized* process that is (1) *quasi-static* and (2) free of *dissipative effects*, meaning it can be reversed with *no net change* to the system or surroundings.
 
 Irreversible process
-  Any process that violates one or more of the conditions for reversibility (e.g., too rapid, frictional, or dissipative).
+: Any process that violates one or more of the conditions for reversibility (e.g., too rapid, frictional, or dissipative).
 ```
 
 ---

@@ -208,16 +208,11 @@ for i, pos in enumerate(positions):
 ax3.text(40.1/4, -40.1/4, 40.1/16, 'H$_2$O', color='black', fontsize=12)
 
 plt.tight_layout()
-glue("rotational_symmetry", fig, display=False)
+plt.show()
 plt.close(fig)
 ```
 
-```{glue:figure} rotational_symmetry
-:figwidth: 100%
-:align: center
-
 Approximate visualization of rotational shapes for (left) a spherical top (CH₄), (middle) a symmetric top (NH₃), and (right) an asymmetric top (H₂O). The ellipsoids are scaled by $\sqrt{\Theta_{\text{rot}}}$ in each principal axis direction.
-```
 
 ## Vibrations of Polyatomic Molecules
 

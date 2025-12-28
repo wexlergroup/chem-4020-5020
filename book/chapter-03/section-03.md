@@ -151,16 +151,11 @@ plt.plot([1.7, 1.7], [0.3, 2.5], 'm-', lw=2, label='Ignition Source')
 plt.legend(bbox_to_anchor=(1.05, 0.5), loc='center left', borderaxespad=0., frameon=False)
 plt.axis('off')
 plt.tight_layout()
-glue("calorimeter_diagram", fig, display=False)
+plt.show()
 plt.close(fig)
 ```
 
-```{glue:figure} calorimeter_diagram
-:figwidth: 100%
-:align: center
-
 A simplified calorimeter. The process occurs in the sample container, which transfers heat to or from the surrounding water at constant pressure. The thermometer and stirrer ensure accurate, uniform temperature readings.
-```
 
 ````{admonition} Build Your Own Calorimeter
 :class: tip

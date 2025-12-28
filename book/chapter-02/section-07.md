@@ -64,16 +64,11 @@ axs[0].spines['right'].set_visible(False)
 axs[0].spines['left'].set_visible(False)
 
 plt.tight_layout()
-glue('linear_rigid_rotor_energy_levels', fig, display=False)
+plt.show()
 plt.close(fig)
 ```
 
-```{glue:figure} linear_rigid_rotor_energy_levels
-:figwidth: 100%
-:align: center
-
 Energy levels for a linear rigid rotor. The level labeled $E_J$ has degeneracy $g_J = 2J + 1$. For example, the $J=2$ level is split into five degenerate microstates corresponding to $m = -2, -1, 0, 1, 2$.
-```
 
 For a rigid, linear rotor of moment of inertia $I$, the energy levels are:
 
@@ -242,3 +237,18 @@ Physically, this means **one linear rotor** contributes $k_{\mathrm{B}}$ to the 
 ```{note}
 In a more rigorous quantum treatment (and for lower temperatures), the partition function and the resulting averages must use the full sum over $J$. At sufficiently low $T$, only the $J=0$ and $J=1$ levels are significantly populated, which reduces the effective heat capacity below $k_\mathrm{B}$.
 ```
+
+## Computational Studio: Linear Rigid Rotor
+
+Use the interactive studio below to explore how the rotational partition function, internal energy, and heat capacity evolve with temperature and rotational spacing.
+
+<div style="width: 100%; border: 1px solid #cbd5e1; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.08);">
+  <iframe
+    src="../computational-studios/rigid-rotor-studio.html"
+    title="Rigid Rotor Computational Studio"
+    style="width: 100%; height: 900px; border: 0;"
+    loading="lazy"
+  ></iframe>
+</div>
+
+If the embed does not load, you can open the studio in a new tab: [Rigid Rotor Computational Studio](../computational-studios/rigid-rotor-studio.html).

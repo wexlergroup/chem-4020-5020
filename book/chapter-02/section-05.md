@@ -60,16 +60,11 @@ axs[0].spines['right'].set_visible(False)
 axs[0].spines['left'].set_visible(False)
 
 plt.tight_layout()
-glue("particle_in_a_box", fig, display=False)
+plt.show()
 plt.close(fig)
 ```
 
-```{glue:figure} particle_in_a_box
-:figwidth: 100%
-:align: center
-
 Boundary conditions, energy levels, and wavefunctions for a particle in a one-dimensional box. The energy levels $E_n$ are shown as horizontal blue lines, while the wavefunctions $\psi_n$ are shown as red curves.
-```
 
 For a particle in a one-dimensional box of length $L$, the quantized energy levels are
 
@@ -251,3 +246,18 @@ q_{\text{trans}}
 ```
 
 is called the translational partition function. It underpins much of our classical description of gases when $\Lambda \ll$ (typical particle spacing), ensuring that quantum effects are negligible at normal densities and temperatures.
+
+## Computational Studio: Ideal Gas
+
+Use the interactive studio below to explore how particle count, volume, and temperature affect the motion of an ideal gas and its thermodynamic behavior.
+
+<div style="width: 100%; border: 1px solid #cbd5e1; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.08);">
+  <iframe
+    src="../computational-studios/ideal-gas-studio.html"
+    title="Ideal Gas Computational Studio"
+    style="width: 100%; height: 900px; border: 0;"
+    loading="lazy"
+  ></iframe>
+</div>
+
+If the embed does not load, you can open the studio in a new tab: [Ideal Gas Computational Studio](../computational-studios/ideal-gas-studio.html).

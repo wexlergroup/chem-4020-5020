@@ -152,7 +152,7 @@ Even though $\Delta H = 0$, the process is still **spontaneous**. If you were sh
 
 ```{glossary}
 Entropy
-  A state function denoted by $S$, quantifying the degree of *dispersal* or *spread* of energy and matter, thereby predicting the direction of spontaneous change.
+: A state function denoted by $S$, quantifying the degree of *dispersal* or *spread* of energy and matter, thereby predicting the direction of spontaneous change.
 ```
 
 ### First Law for a Reversible Process

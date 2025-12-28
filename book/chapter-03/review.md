@@ -24,7 +24,7 @@ kernelspec:
 
 2. **Mechanical Equivalent of Heat**
    - Joule’s experiments showed that mechanical work can be converted into heat in a fixed, quantitative ratio.
-   - For water: $\text{MEH} \approx 4.18\,\mathrm{J}\,\mathrm{g}^{-1}\,^\circ\mathrm{C}^{-1}$, establishing heat as another form of energy transfer.
+   - For water: $\mathrm{MEH} \approx 4.18\,\mathrm{J}\,\mathrm{g}^{-1}\,\text{°C}^{-1}$, establishing heat as another form of energy transfer.
 
 3. **First Law of Thermodynamics**
    - Statement: $\Delta U = q + w$, where $q$ is heat **absorbed by** the system, $w$ is work **done on** the system.

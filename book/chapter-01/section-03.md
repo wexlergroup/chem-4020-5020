@@ -80,19 +80,13 @@ plot_law(axs[3], number_of_particles / N_A, volumes_avogadro, "$V = c_\\text{A} 
 axs[3].text(0.1, 0.9, 'Constant $P$ & $T$', transform=axs[3].transAxes)
 
 plt.tight_layout()
-glue('gas-laws', fig, display=False)
+plt.show()
 plt.close(fig)
 ```
-
-```{glue:figure} gas-laws
-:name: fig-gas-laws
-:figwidth: 100%
-:align: center
 
 Four classical gas laws (blue) shown in chronological order: Boyle's law,[^1] Charles's law, Gay-Lussac's law, and Avogadro's law.
 
 [^1]: [Boyle's original data](https://web.lemoyne.edu/~giunta/classicalcs/boyleform.html)
-```
 
 All gases follow these relationships when at least one of the following conditions is met:
 
@@ -113,7 +107,7 @@ In [Section 1](section-01.md), we defined an **equation of state** as a mathemat
 The total differential $df$ of a function $f$ of $m$ variables $x_1, \ldots, x_m$ is
 
 ```{math}
-:label: total-differential
+:label: eq-total-differential
 df = \sum_{i=1}^m \left( \frac{\partial f}{\partial x_i} \right)_{\{ x_j | j \neq i \}} dx_i,
 ```
 
@@ -127,7 +121,7 @@ From Boyle's, Charles's, and Avogadro's laws, we can treat $V$ as a function of 
 V = V(P, T, N).
 ```
 
-Applying Equation {eq}`total-differential` to $V$:
+Applying Equation {eq}`eq-total-differential` to $V$:
 
 ```{math}
 dV = \left( \frac{\partial V}{\partial P} \right)_{T,N} dP \;+\; \left( \frac{\partial V}{\partial T} \right)_{P,N} dT \;+\; \left( \frac{\partial V}{\partial N} \right)_{P,T} dN.
@@ -258,25 +252,19 @@ ax.set_ylabel("Temperature (°C)")
 ax.grid(True, linestyle="--", linewidth=0.5)
 
 plt.tight_layout()
-glue('absolute-temperature', fig, display=False)
+plt.show()
 plt.close(fig)
 ```
-
-```{glue:figure} absolute-temperature
-:name: fig-absolute-temperature
-:figwidth: 100%
-:align: center
 
 Linear relationship between the per-molecule volume $v$ and Celsius temperature for O₂ at 1 Pa.[^2]  
 The red line is an ordinary least squares fit whose intercept at -273.15 °C signals the theoretical *zero-volume* limit, defining absolute zero (0 K).
 
 [^2]: [NIST WebBook: O₂ Data](https://webbook.nist.gov/cgi/inchi/InChI%3D1S/O2/c1-2)
-```
 
-Charles's law states that, at constant (low) pressure, the volume per particle is directly proportional to the gas temperature. Historically, the Celsius scale was used ($0\,^\circ\text{C}$ as the freezing point of water and $100\,^\circ\text{C}$ as the boiling point). However, by measuring gas volume at various Celsius temperatures and extrapolating to where volume vanishes, we identify $-273.15\,^\circ\text{C}$ as the limit—an unphysical negative volume indicates a *theoretical* bound. Shifting the Celsius scale by $273.15$ degrees places absolute zero at $0\,\text{K}$:
+Charles's law states that, at constant (low) pressure, the volume per particle is directly proportional to the gas temperature. Historically, the Celsius scale was used ($0\,\text{°C}$ as the freezing point of water and $100\,\text{°C}$ as the boiling point). However, by measuring gas volume at various Celsius temperatures and extrapolating to where volume vanishes, we identify $-273.15\,\text{°C}$ as the limit—an unphysical negative volume indicates a *theoretical* bound. Shifting the Celsius scale by $273.15$ degrees places absolute zero at $0\,\mathrm{K}$:
 
 ```{math}
-T(\text{K}) \;=\; T(^\circ\text{C}) \;+\; 273.15.
+T(\mathrm{K}) \;=\; T(\text{°C}) \;+\; 273.15.
 ```
 
 This defines the **Kelvin scale**, an absolute temperature scale that starts at the lowest physically meaningful temperature.

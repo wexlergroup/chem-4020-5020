@@ -160,16 +160,16 @@ In **thermodynamics**, typical $X$ values might be the **internal energy**, **en
 
 ```{glossary}
 Ensemble
-  The set of all possible microstates of a system consistent with the macroscopic properties of the system.
+: The set of all possible microstates of a system consistent with the macroscopic properties of the system.
 
 Microcanonical ensemble
-  All microstates have the same number of particles, volume, and energy $\left( N, V, E \right)$.
+: All microstates have the same number of particles, volume, and energy $\left( N, V, E \right)$.
 
 Canonical ensemble
-  All microstates have the same number of particles, volume, and temperature $\left( N, V, T \right)$.
+: All microstates have the same number of particles, volume, and temperature $\left( N, V, T \right)$.
 
 Grand canonical ensemble
-  All microstates have the same chemical potential, volume, and temperature $\left( \mu, V, T \right)$.
+: All microstates have the same chemical potential, volume, and temperature $\left( \mu, V, T \right)$.
 ```
 
 ## Probability of a Microstate in the Microcanonical Ensemble

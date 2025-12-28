@@ -98,17 +98,11 @@ def plot_container_2d(offset=0.2):
     return fig
 
 fig = plot_container_2d()
-glue('gas-in-container', fig, display=False)
+plt.show()
 plt.close(fig)
 ```
 
-```{glue:figure} gas-in-container
-:name: fig-gas-in-container
-:figwidth: 100%
-:align: center
-
 A two-dimensional representation of a single gas particle in a cuboid container (gray). Velocity components are shown in red. The length $L_y$ is not depicted, as it extends perpendicular to the plane of view.
-```
 
 ### Microscopic Picture of Pressure
 

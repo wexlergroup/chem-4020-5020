@@ -24,19 +24,19 @@ Recall from Section 1.1 that **thermodynamic equilibrium** is a state of simulta
 
 ```{glossary}
 Thermal contact
-    A state in which two systems can exchange energy.
+: A state in which two systems can exchange energy.
 
 Chemical contact
-    A state in which two systems can exchange matter.
+: A state in which two systems can exchange matter.
 
 Mechanical equilibrium
-    A state where the net force on every particle in the system is zero.
+: A state where the net force on every particle in the system is zero.
 
 Thermal equilibrium
-    A state where there is no net exchange of energy between systems in thermal contact.
+: A state where there is no net exchange of energy between systems in thermal contact.
 
 Chemical equilibrium
-    A state where there is no net exchange of matter between systems in chemical contact.
+: A state where there is no net exchange of matter between systems in chemical contact.
 ```
 
 ## Internal Energy
@@ -173,16 +173,11 @@ ax.set_xlim(0, 1000)
 ax.set_ylim(0, 0.01)
 
 plt.tight_layout()
-glue("fig:ensemble-average-internal-energy-two-state", fig, display=False)
+plt.show()
 plt.close(fig)
 ```
 
-```{glue:figure} fig:ensemble-average-internal-energy-two-state
-:figwidth: 100%
-:align: center
-
 Internal energy of a two-state system as a function of temperature. The energy difference between the two states is 0.01 eV.
-```
 
 ## Heat Capacity at Constant Volume
 

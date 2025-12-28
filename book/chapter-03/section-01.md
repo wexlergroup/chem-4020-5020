@@ -42,7 +42,7 @@ During the Apollo 15 mission, astronaut David Scott famously dropped a hammer an
 v = \sqrt{2 g h}.
 ```
 
-```{image} https://upload.wikimedia.org/wikipedia/commons/6/62/AS15-88-11866_-_Apollo_15_flag%2C_rover%2C_LM%2C_Irwin_-_restoration1.jpg
+```{image} ../_static/chapter-03/section-01/apollo-15-flag.jpg
 :width: 50%
 :align: center
 ```
@@ -59,16 +59,16 @@ align: center
 Joule's apparatus for measuring the mechanical equivalent of heat.
 ```
 
-In 1847, James Prescott Joule measured how mechanical work converts into heat. He famously found that dropping a total of $778$ lb$\cdot$ft of weight (e.g., by turning a paddle in water) raised the temperature of $1$ lb of water by $1\,^\circ\text{F}$. Converting to SI units:
+In 1847, James Prescott Joule measured how mechanical work converts into heat. He famously found that dropping a total of $778$ lb$\cdot$ft of weight (e.g., by turning a paddle in water) raised the temperature of $1$ lb of water by $1\,\text{°F}$. Converting to SI units:
 
 ```{math}
-\text{MEH} 
-= \frac{778 \;\text{lb}\cdot\text{ft}}{1\;\text{lb}\,^\circ\text{F}}
-\approx \frac{1{,}055 \;\text{J}}{(453.6 \;\text{g water}) \cdot (5/9\,^\circ\text{C})}
-\approx 4.18 \;\text{J}\,\text{g}^{-1}\,{^\circ\text{C}}^{-1}.
+\mathrm{MEH}
+= \frac{778 \;\mathrm{lb}\cdot\mathrm{ft}}{1\;\mathrm{lb}\,\text{°F}}
+\approx \frac{1{,}055 \;\mathrm{J}}{(453.6 \;\mathrm{g}) \cdot (5/9\,\text{°C})}
+\approx 4.18 \;\mathrm{J}\,\mathrm{g}^{-1}\,\text{°C}^{-1}.
 ```
 
-Here, $4.18\,\text{J}\,\text{g}^{-1}\,{^\circ\text{C}}^{-1}$ is the **specific heat** of water—i.e., the heat capacity per gram.
+Here, $4.18\,\mathrm{J}\,\mathrm{g}^{-1}\,\text{°C}^{-1}$ is the **specific heat** of water—i.e., the heat capacity per gram.
 
 ## First Law of Thermodynamics
 

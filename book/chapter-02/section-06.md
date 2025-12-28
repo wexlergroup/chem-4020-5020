@@ -136,15 +136,11 @@ axs[0].spines['left'].set_visible(False)
 axs[0].spines['bottom'].set_visible(False)
 
 plt.tight_layout()
-glue("harmonic_oscillator", fig, display=False)
+plt.show()
 plt.close(fig)
 ```
 
-```{glue:figure} harmonic_oscillator
-:figwidth: 100%
-:align: center
 Enery levels and wavefunctions for a one-dimensional harmonic oscillator. The energy levels $E_n$ are shown as blue lines, while the wavefunctions $\psi_n$ are shown as red curves.
-```
 
 For a one-dimensional harmonic oscillator of frequency $\omega$, the quantized energy levels are given by
 
@@ -270,15 +266,11 @@ kT = axs[0].plot(x, x, "r--", label=r"$U \rightarrow k_{\text{B}} T$")
 labelLines(kT, xvals=[Tr[-1] * 3 / 4], zorder=2.5)
 
 plt.tight_layout()
-glue("harmonic_oscillator_energy", fig, display=False)
+plt.show()
 plt.close(fig)
 ```
 
-```{glue:figure} harmonic_oscillator_energy
-:figwidth: 100%
-:align: center
 Internal energy of a harmonic oscillator as a function of temperature. The zero-point energy is shown as a blue dashed line, while the high-temperature limit is shown as a red dashed line.
-```
 
 <!-- Derivation of low- and high-temperature limits for the internal energy of a harmonic oscillator. -->
 
@@ -332,15 +324,26 @@ axs[0].set_xlabel(r"$T / \Theta_{\text{vib}}$")
 axs[0].set_ylabel(r"$C_V / k_{\text{B}}$")
 
 plt.tight_layout()
-glue("harmonic_oscillator_heat_capacity", fig, display=False)
+plt.show()
 plt.close(fig)
 ```
 
-```{glue:figure} harmonic_oscillator_heat_capacity
-:figwidth: 100%
-:align: center
 Heat capacity at constant volume of a harmonic oscillator as a function of temperature. The low-temperature limit is shown as a blue arrow, while the high-temperature limit is shown as a red dashed line.
-```
+
+## Computational Studio: Harmonic Oscillator
+
+Use the interactive studio below to explore how the reduced internal energy and heat capacity evolve with the characteristic temperature and the plotted temperature range.
+
+<div style="width: 100%; border: 1px solid #cbd5e1; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.08);">
+  <iframe
+    src="../computational-studios/harmonic-oscillator-studio.html"
+    title="Harmonic Oscillator Computational Studio"
+    style="width: 100%; height: 900px; border: 0;"
+    loading="lazy"
+  ></iframe>
+</div>
+
+If the embed does not load, you can open the studio in a new tab: [Harmonic Oscillator Computational Studio](../computational-studios/harmonic-oscillator-studio.html).
 
 ## Einstein Model
 
@@ -398,12 +401,8 @@ dulong_petit = axs[0].plot([0, 100], [3, 3], "r--", label="Dulong-Petit law")
 labelLines(dulong_petit, zorder=2.5)
 
 plt.tight_layout()
-glue("dulong_petit", fig, display=False)
+plt.show()
 plt.close(fig)
 ```
 
-```{glue:figure} dulong_petit
-:figwidth: 100%
-:align: center
 Heat capacity of elemental solids as a function of atomic number. The Dulong-Petit law is shown as a red dashed line.
-```

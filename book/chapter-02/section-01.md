@@ -17,13 +17,7 @@ kernelspec:
 ## Overview
 
 ```{mermaid}
----
-config: "{
-  \"theme\": \"neutral\",
-  \"look\": \"handDrawn\",
-  \"layout\": \"elk\"
-}"
----
+%%{init: {"theme": "neutral", "look": "handDrawn", "layout": "elk"}}%%
 flowchart LR
   %% Beginnings and ending
   CM([Classical mechanics])
@@ -160,16 +154,16 @@ In **thermodynamics**, typical $X$ values might be the **internal energy**, **en
 
 ```{glossary}
 Ensemble
-  The set of all possible microstates of a system consistent with the macroscopic properties of the system.
+: The set of all possible microstates of a system consistent with the macroscopic properties of the system.
 
 Microcanonical ensemble
-  All microstates have the same number of particles, volume, and energy $\left( N, V, E \right)$.
+: All microstates have the same number of particles, volume, and energy $\left( N, V, E \right)$.
 
 Canonical ensemble
-  All microstates have the same number of particles, volume, and temperature $\left( N, V, T \right)$.
+: All microstates have the same number of particles, volume, and temperature $\left( N, V, T \right)$.
 
 Grand canonical ensemble
-  All microstates have the same chemical potential, volume, and temperature $\left( \mu, V, T \right)$.
+: All microstates have the same chemical potential, volume, and temperature $\left( \mu, V, T \right)$.
 ```
 
 ## Probability of a Microstate in the Microcanonical Ensemble
@@ -204,17 +198,11 @@ def plot_system(ax, title, annotations, boundary_color='b'):
 fig, ax = plt.subplots(1, 1, figsize=(4, 4))
 plot_system(ax, "", [])
 
-glue('isolated-system', fig, display=False)
+plt.show()
 plt.close(fig)
 ```
 
-```{glue:figure} isolated-system
-:name: isolated-system
-:figwidth: 100%
-:align: center
-
 An isolated system, exchanging neither energy nor matter with its surroundings.
-```
 
 ### Fundamental Postulate of Statistical Mechanics
 

@@ -326,3 +326,20 @@ plt.close(fig)
 
 Partition function of a two-state system and the probabilities of finding it in each state as a function of temperature. The energy difference between the two states is 0.01 eV.
 ```
+
+## Computational Studio: Two-Level System
+
+Explore how the canonical probabilities, partition function, and heat capacity respond to changes in the energy gap and temperature range.
+
+```{raw} html
+<div style="width: 100%; border: 1px solid #cbd5e1; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.08);">
+  <iframe
+    src="../computational-studios/two-level-system.html"
+    title="Two-Level System Studio"
+    style="width: 100%; height: 850px; border: 0;"
+    loading="lazy"
+  ></iframe>
+</div>
+```
+
+If the embed does not load, you can open the studio in a new tab: [Two-Level System Studio](../computational-studios/two-level-system.html).

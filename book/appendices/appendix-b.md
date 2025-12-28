@@ -175,15 +175,11 @@ def main():
     axs[2].set_ylim(-174, -166)
 
     plt.tight_layout()
-    glue("thermal_energy", fig, display=False)
+    plt.show()
     plt.close(fig)
 
 if __name__ == "__main__":
     main()
 ```
 
-```{glue:figure} thermal_energy
-:figwidth: 100%
-:align: center
 Energy level diagram for a diatomic molecule at 300 K (energies scaled by kT). The first subplot shows the ground and first excited electronic potential curves, the second displays the quantized vibrational levels over the ground-state potential, and the third presents the rotational levels for the v = 0 state.
-```

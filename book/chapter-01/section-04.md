@@ -98,22 +98,16 @@ labelLines(repulsive_line, xvals=800, zorder=2.5)
 
 # Adjust layout and display
 plt.tight_layout()
-glue('compressibility-factor', fig, display=False)
+plt.show()
 plt.close(fig)
 ```
 
-```{glue:figure} compressibility-factor
-:name: compressibility-factor
-:figwidth: 100%
-:align: center
-
 Compressibility factor $Z$ of water at 300 K as a function of pressure, with the ideal-gas line ($Z=1$) included for comparison. The dip below $Z=1$ highlights net attractive forces (most pronounced at the minimum $Z$), while crossing above $Z=1$ at higher pressures reflects repulsive interactions. The point at which the real-gas curve intersects the ideal-gas line indicates a coincidental match to ideal behavior.
-```
 
 One of the ways to quantify deviations from ideal behavior is by way of the compressibility factor $Z$:
 
 ```{math}
-:label: compressibility-factor
+:label: compressibility-factor-eq
 Z = \frac{P V}{N k_\text{B} T} = \frac{P V}{n R T}.
 ```
 
@@ -262,17 +256,11 @@ ax.grid(True, linestyle="--", alpha=0.7)
 
 # Adjust layout and display
 plt.tight_layout()
-glue('van-der-waals-isotherms', fig, display=False)
+plt.show()
 plt.close(fig)
 ```
 
-```{glue:figure} van-der-waals-isotherms
-:name: van-der-waals-isotherms
-:figwidth: 100%
-:align: center
-
 Comparison of experimental and van der Waals isotherms for CO<sub>2</sub> at temperatures below, at, and above the critical temperature $T_c$. The subcritical isotherm ($T < T_c$) displays the characteristic loop associated with phase separation, while the isotherm at $T = T_c$ shows an inflection point, and supercritical conditions ($T > T_c$) no longer exhibit a liquid–vapor transition.
-```
 
 #### Critical Point
 
@@ -529,17 +517,11 @@ axs[0].grid(True, linestyle="--", alpha=0.7)
 
 # Adjust layout and display
 plt.tight_layout()
-glue('van-der-waals-critical-point', fig, display=False)
+plt.show()
 plt.close(fig)
 ```
 
-```{glue:figure} van-der-waals-critical-point
-:name: van-der-waals-critical-point
-:figwidth: 100%
-:align: center
-
 Van der Waals isotherm for CO<sub>2</sub> at $T = 0.9\,T_c$, with the Maxwell construction illustrating how the unphysical loop is replaced by a horizontal tie line defining liquid–vapor coexistence. The critical point at $T = T_c$ is also shown, where the liquid and vapor phases merge.
-```
 
 Expanding Equation {eq}`van-der-waals-eos` and rearranging terms:
 
@@ -683,17 +665,11 @@ ax.set_ylabel("$Z$")
 ax.grid(True, linestyle="--", alpha=0.7)
 
 plt.tight_layout()
-glue('corresponding-states', fig, display=False)
+plt.show()
 plt.close(fig)
 ```
 
-```{glue:figure} corresponding-states
-:name: corresponding-states
-:figwidth: 100%
-:align: center
-
 Compressibility factor $Z$ of argon, oxygen, water, and carbon dioxide plotted over a range of reduced pressures for different reduced temperatures. These data illustrate how real gases exhibit similar trends when expressed in terms of their critical properties, in accordance with the principle of corresponding states.
-```
 
 Redefining $V_\text{m}$, $P$, and $T$ as fractions $V_{\text{m},r}$, $P_r$, and $T_r$ of their critical values:
 
@@ -739,3 +715,9 @@ Calculate the value of the compressibility factor for a van der Waals fluid at t
 ```
 
 ````
+
+## Computational Studio: Real Gas
+
+Calculate and visualize the behavior of real gases using three distinct Equations of State (EOS): Ideal Gas, Van der Waals (vdW), and Peng-Robinson (PR).
+
+If the embed does not load, you can open the studio in a new tab: [Real Gas Studio](../computational-studios/real-gas-studio.html).

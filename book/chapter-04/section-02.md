@@ -103,16 +103,11 @@ axs.annotate("system\nreleases\nheat", (x, y - 0.1), textcoords="offset points",
 
 axs.grid()
 
-glue("carnot_cycle", fig, display=False)
+plt.show()
 plt.close(fig)
 ```
 
-```{glue:figure} carnot_cycle
-:figwidth: 100%
-:align: center
-
 The Carnot cycle for an ideal gas. The isothermal expansion and compression curves follow Boyle's law, while the adiabatic expansion and compression curves follow the adiabatic equation, which is a steeper curve than the isothermal curves.
-```
 
 ## How to Operate a Carnot Cycle/Engine
 

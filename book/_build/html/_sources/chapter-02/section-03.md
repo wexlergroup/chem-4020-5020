@@ -24,19 +24,19 @@ Recall from Section 1.1 that **thermodynamic equilibrium** is a state of simulta
 
 ```{glossary}
 Thermal contact
-    A state in which two systems can exchange energy.
+: A state in which two systems can exchange energy.
 
 Chemical contact
-    A state in which two systems can exchange matter.
+: A state in which two systems can exchange matter.
 
 Mechanical equilibrium
-    A state where the net force on every particle in the system is zero.
+: A state where the net force on every particle in the system is zero.
 
 Thermal equilibrium
-    A state where there is no net exchange of energy between systems in thermal contact.
+: A state where there is no net exchange of energy between systems in thermal contact.
 
 Chemical equilibrium
-    A state where there is no net exchange of matter between systems in chemical contact.
+: A state where there is no net exchange of matter between systems in chemical contact.
 ```
 
 ## Internal Energy

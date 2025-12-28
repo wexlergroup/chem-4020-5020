@@ -35,10 +35,8 @@ Typical chemical systems contain on the order of [Avogadro's number](https://phy
 Thermodynamics and statistical mechanics are central to diverse fields, including industrial chemistry, materials science, and biochemistry. The examples below highlight just a few applications:
 
 ::::{grid}
-:gutter: 3
 
 :::{grid-item-card} Industrial Chemistry
-:text-align: center
 <div class="center-text">
 Predicting reaction spontaneity and modeling large-scale chemical processes.
 </div>
@@ -55,7 +53,6 @@ Hydrogen production via steam–methane reforming.[^1]
 :::
 
 :::{grid-item-card} Materials Chemistry
-:text-align: center
 <div class="center-text">
 Designing advanced materials for optical, electronic, or mechanical applications.
 </div>
@@ -72,7 +69,6 @@ Electricity generation using solar panels.[^2]
 :::
 
 :::{grid-item-card} Biochemistry
-:text-align: center
 <div class="center-text">
 Investigating protein folding and enzyme activity in biological systems.
 </div>
@@ -141,51 +137,36 @@ fig, axes = plt.subplots(1, 3, figsize=(12, 4))
 for i, ax in enumerate(axes):
     plot_system(ax, titles[i], annotations[i])
 
-glue('thermo-systems', fig, display=False)
+plt.show()
 plt.close(fig)
 ```
 
-```{glue:figure} thermo-systems
-:name: thermo-systems
-:figwidth: 100%
-:align: center
-
 **Types of thermodynamic systems:** (a) **Isolated**—no exchange of energy or matter; (b) **Closed**—exchanges energy but not matter; and (c) **Open**—exchanges both energy and matter.
-```
 
 ```{glossary}
 System
-  The portion of the universe chosen for study, separated from its surroundings by a boundary.
+: The portion of the universe chosen for study, separated from its surroundings by a boundary.
 
 Surroundings
-  Everything external to the system that can exchange energy or matter with it.
+: Everything external to the system that can exchange energy or matter with it.
 
 Boundary
-  The interface separating a system from its surroundings.
+: The interface separating a system from its surroundings.
 
 Isolated system
-  Exchanges neither energy nor matter with its surroundings.
+: Exchanges neither energy nor matter with its surroundings.
 
 Closed system
-  Exchanges energy but not matter with its surroundings.
+: Exchanges energy but not matter with its surroundings.
 
 Open system
-  Exchanges both energy and matter with its surroundings.
+: Exchanges both energy and matter with its surroundings.
 ```
 
 ### State of a System
 
 ```{mermaid}
----
-config: "{
-  \"flowchart\": {
-    \"htmlLabels\": false
-  },
-  \"theme\": \"neutral\",
-  \"look\": \"handDrawn\",
-  \"layout\": \"elk\"
-}"
----
+%%{init: {"flowchart": {"htmlLabels": false}, "theme": "neutral", "look": "handDrawn", "layout": "elk"}}%%
 flowchart TB
   subgraph B["Microscopic"]
     direction TB
@@ -217,43 +198,43 @@ flowchart TB
 
 ```{glossary}
 Particle
-  A microscopic entity such as an atom, molecule, or ion.
+: A microscopic entity such as an atom, molecule, or ion.
 
 Microscopic state (classical)
-  Positions and momenta of all particles in the system.
+: Positions and momenta of all particles in the system.
 
 Microscopic state (quantum)
-  The wavefunction describing the system's particles.
+: The wavefunction describing the system's particles.
 
 Equilibrium
-  A condition in which macroscopic properties remain constant over time.
+: A condition in which macroscopic properties remain constant over time.
 
 Thermodynamic equilibrium
-  A state of simultaneous mechanical, thermal, and chemical equilibrium.
+: A state of simultaneous mechanical, thermal, and chemical equilibrium.
 
 Thermodynamic state
-  A set of macroscopic variables defining a system in equilibrium.
+: A set of macroscopic variables defining a system in equilibrium.
 
 State variable
-  A property that defines a system's state.
+: A property that defines a system's state.
 
 State function
-  A property depending only on the system's state, not on the path taken.
+: A property depending only on the system's state, not on the path taken.
 
 Equation of state
-  A mathematical relationship among state variables.
+: A mathematical relationship among state variables.
 
 Path function
-  A property depending on the process or path taken between states.
+: A property depending on the process or path taken between states.
 
 Process
-  A transformation changing a system from one state to another.
+: A transformation changing a system from one state to another.
 
 Extensive property
-  A property proportional to system size (e.g., volume, entropy).
+: A property proportional to system size (e.g., volume, entropy).
 
 Intensive property
-  A property independent of system size (e.g., temperature, pressure).
+: A property independent of system size (e.g., temperature, pressure).
 ```
 
 ---
@@ -261,16 +242,7 @@ Intensive property
 ## Basic Forms of Energy and Energy Transfer
 
 ```{mermaid}
----
-config: "{
-  \"flowchart\": {
-    \"htmlLabels\": false
-  },
-  \"theme\": \"neutral\",
-  \"look\": \"handDrawn\",
-  \"layout\": \"elk\"
-}"
----
+%%{init: {"flowchart": {"htmlLabels": false}, "theme": "neutral", "look": "handDrawn", "layout": "elk"}}%%
 flowchart TB
   subgraph H1["Electrostatic"]
     direction TB
@@ -322,23 +294,23 @@ flowchart TB
 
 ```{glossary}
 Kinetic energy
-  Energy due to motion (e.g., a moving particle).
+: Energy due to motion (e.g., a moving particle).
 
 Potential energy
-  Energy due to position or configuration (e.g., a stretched spring).
+: Energy due to position or configuration (e.g., a stretched spring).
 
 Internal energy
-  The total microscopic kinetic and potential energy of a system, averaged over its microstates.
+: The total microscopic kinetic and potential energy of a system, averaged over its microstates.
 ```
 
 ### Energy Transfer
 
 ```{glossary}
 Work
-  Energy transferred when a force acts over a distance (e.g., lifting a mass).
+: Energy transferred when a force acts over a distance (e.g., lifting a mass).
 
 Heat
-  Energy transferred because of a temperature difference (e.g., conduction from hot to cold).
+: Energy transferred because of a temperature difference (e.g., conduction from hot to cold).
 ```
 
 ---
@@ -402,7 +374,7 @@ Heat
 
 ```{list-table} **Non-SI Units**
 :header-rows: 1
-:name: non-si-units
+:name: non-si-units-table
 
 * - Quantity
   - Unit
