@@ -17,7 +17,7 @@ kernelspec:
 ## Overview
 
 This section connects **entropy** to the performance limits of heat engines using the **Carnot cycle**.
-The handwritten notes for Class 28 emphasize four linked ideas:
+It emphasizes four linked ideas:
 
 1. **Entropy and reversible heat**  
    The differential definition of entropy is (for a reversible path)

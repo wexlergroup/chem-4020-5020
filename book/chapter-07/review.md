@@ -75,7 +75,7 @@ kernelspec:
 ## 2. Checklist of Most Important Equations
 
 | **Equation** | **Variables** | **Meaning & Use Cases** | **Caveats/Approximations** |
-|:-|:-|:-|:-|
+| :- | :- | :- | :- |
 | $\Delta G_{\text{rxn}} = \sum_i \nu_i\,\mu_i \;=\;\left(\frac{\partial G}{\partial x}\right)_{T,P}$ | $\nu_i$: stoichiometric coefficients (products positive)<br>$\mu_i$: chemical potential of species $i$ | Reaction driving force. Use this to assess spontaneity and locate equilibrium $\left( \Delta G_{\text{rxn}} = 0 \right)$. | Assumes constant $T,P$ and only $PV$ work; applies generally to closed, simple systems. |
 | $\mu_i = \mu_i^\circ + RT\ln\left( P_i / P^{\circ} \right)$ | — | Defines chemical potential in terms of measurable quantities. Controls mass exchange; at equilibrium between phases or compartments, $\mu_i$ equal in each. | Requires proper choice of standard state and correction for nonideal behavior. |
 | $\Delta G_{\text{rxn}} = \Delta G_{\text{rxn}}^\circ + RT\ln Q$ | $\Delta G_{\text{rxn}}^\circ$: standard‐state free energy change<br>$Q=\prod \left( P_i / P^{\circ} \right)^{\nu_i}$: reaction quotient | Relates instantaneous driving force to composition. Use to predict direction of reaction under non‐standard conditions. | — |
