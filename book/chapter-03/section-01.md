@@ -108,14 +108,14 @@ In Module 1.1, we defined work as “energy transferred when a force acts over a
 
 Many physical processes fit a “generalized force” $\times$ “generalized displacement” pattern:
 
-| Generalized “Force”   | Generalized “Displacement” | $\delta w$            | Example                         |
-|:---------------------:|:--------------------------:|:-----------------------:|:--------------------------------:|
-| Mechanical $F$       | $x$                     | $F \,dx$              | Lifting a weight                |
-| Linear tension $k$   | $l=x - x_0$             | $k \,dl$              | Stretching a spring             |
-| Surface tension $\gamma$ | $A$                 | $\pm\,\gamma \, dA$   | Blowing a soap bubble           |
-| Pressure $P$         | $V$                     | $-P\,dV$              | Compressing a gas               |
-| Chemical $\mu$       | $N$ or $n$            | $\mu\,dN$             | Forming a molecule              |
-| Electrical $E$       | Charge $q_{\text{el}}$  | $E\,dq_{\text{el}}$   | Moving an electric charge       |
+| Generalized “Force” | Generalized “Displacement” | $\delta w$ | Example |
+| :---------------------: | :--------------------------: | :-----------------------: | :--------------------------------: |
+| Mechanical $F$ | $x$ | $F \,dx$ | Lifting a weight |
+| Linear tension $k$ | $l=x - x_0$ | $k \,dl$ | Stretching a spring |
+| Surface tension $\gamma$ | $A$ | $\pm\,\gamma \, dA$ | Blowing a soap bubble |
+| Pressure $P$ | $V$ | $-P\,dV$ | Compressing a gas |
+| Chemical $\mu$ | $N$ or $n$ | $\mu\,dN$ | Forming a molecule |
+| Electrical $E$ | Charge $q_{\text{el}}$ | $E\,dq_{\text{el}}$ | Moving an electric charge |
 
 ```{include} ../_includes/thermo-conventions.md
 ```
