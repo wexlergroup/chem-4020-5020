@@ -44,7 +44,7 @@ Irreversible process
 The First Law states:
 
 ```{math}
-dU = \delta q - \delta w,
+dU = \delta q + \delta w,
 ```
 
 where $dU$ is the change in internal energy, $\delta q$ is the heat added to the system, and $\delta w$ is the work done by the system. To make this law more useful for specific processes, follow the steps below.
