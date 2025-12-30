@@ -294,3 +294,118 @@ This speed is significantly faster than a Boeing 747-8 airliner at cruising velo
 [^1]: [https://webbook.nist.gov/cgi/cbook.cgi?Formula=N2&NoIon=on&Units=SI](https://webbook.nist.gov/cgi/cbook.cgi?Formula=N2&NoIon=on&Units=SI)  
 [^2]: [https://www.boeing.com/commercial/747-8/design-highlights#technologically-advanced](https://www.boeing.com/commercial/747-8/design-highlights#technologically-advanced)
 ````
+
+---
+
+## Maxwell–Boltzmann Speed Distribution
+
+The root-mean-square speed $v_{\text{rms}}$ is a useful *single-number* summary, but in thermal
+equilibrium a gas actually has a **distribution** of particle speeds.
+
+For an ideal gas in three dimensions, the **Maxwell–Boltzmann speed distribution** gives the
+probability density $f(v)$ for finding a molecule with speed between $v$ and $v+dv$:
+
+```{math}
+:label: maxwell-boltzmann-speed-distribution
+f(v)
+=
+4\pi\left(\frac{m}{2\pi k_\text{B}T}\right)^{3/2} v^2\,\exp\!\left(-\frac{m v^2}{2k_\text{B}T}\right),
+\qquad v\ge 0.
+```
+
+It is normalized so that $\int_0^\infty f(v)\,dv = 1$.
+
+### Most probable speed and mean speed
+
+From $f(v)$ we can define several “typical” speeds:
+
+```{math}
+:label: most-probable-speed
+v_{\text{mp}} = \sqrt{\frac{2k_\text{B}T}{m}} \qquad \text{(speed at the peak of } f(v)\text{)}
+```
+
+```{math}
+:label: mean-speed
+\langle v\rangle = \int_0^\infty v\,f(v)\,dv = \sqrt{\frac{8k_\text{B}T}{\pi m}}
+```
+
+The rms speed (from Eq. {eq}`rms-speed`) is
+
+```{math}
+v_{\text{rms}} = \sqrt{\langle v^2\rangle} = \sqrt{\frac{3k_\text{B}T}{m}}.
+```
+
+For any Maxwell–Boltzmann distribution, these satisfy
+
+```{math}
+v_{\text{mp}} < \langle v\rangle < v_{\text{rms}}.
+```
+
+### Comparing gases and temperatures
+
+The Maxwell–Boltzmann curves below illustrate two trends:
+
+- **Lighter gases** (smaller $m$) have distributions shifted to higher speeds.
+- **Higher temperatures** shift the distribution to higher speeds and make it broader.
+
+```{code-cell} ipython3
+:tags: [hide-input]
+
+import numpy as np
+import matplotlib.pyplot as plt
+from scipy.constants import k as k_B, N_A
+
+
+def f_MB(v, M_kg_per_mol, T):
+    """Maxwell–Boltzmann speed distribution f(v) for an ideal gas.
+
+    Parameters
+    ----------
+    v : array
+        Speeds (m/s).
+    M_kg_per_mol : float
+        Molar mass (kg/mol).
+    T : float
+        Temperature (K).
+
+    Returns
+    -------
+    f : array
+        Probability density (s/m).
+    """
+    m = M_kg_per_mol / N_A  # mass per molecule (kg)
+    prefactor = 4 * np.pi * (m / (2 * np.pi * k_B * T)) ** 1.5
+    return prefactor * v**2 * np.exp(-m * v**2 / (2 * k_B * T))
+
+
+# Molar masses (kg/mol)
+M_He = 4.002602e-3
+M_N2 = 28.0134e-3
+M_CO2 = 44.0095e-3
+
+cases = [
+    (M_CO2, 300, r"CO$_2$ (300 K)"),
+    (M_N2, 300, r"N$_2$ (300 K)"),
+    (M_N2, 600, r"N$_2$ (600 K)"),
+    (M_He, 300, r"He (300 K)"),
+]
+
+v = np.linspace(0, 4000, 4000)
+
+fig, ax = plt.subplots(figsize=(6, 4))
+
+for M, T, label in cases:
+    ax.plot(v, f_MB(v, M, T), label=label)
+
+ax.set_xlabel("Speed $v$ (m/s)")
+ax.set_ylabel(r"Probability density $f(v)$")
+ax.set_xlim(0, 4000)
+ax.grid(True)
+ax.legend(frameon=False)
+
+plt.tight_layout()
+plt.show()
+plt.close(fig)
+```
+
+Maxwell–Boltzmann speed distributions for different gases and temperatures.
