@@ -4,6 +4,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Real Gas Computational Studio</title>
+    <link rel="stylesheet" href="real-gas-studio.css" />
     <style>
       @import url("https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;600&display=swap");
 
@@ -382,16 +383,16 @@
             <label>Models</label>
             <div class="toggle-list">
               <div class="toggle-row">
-                <span><span class="dot" style="background:#94a3b8;"></span>Ideal Gas</span>
-                <input id="toggleIdeal" type="checkbox" checked />
+                <span><span class="dot dot-ideal"></span>Ideal Gas</span>
+                <input id="toggleIdeal" type="checkbox" checked aria-label="Toggle ideal gas model" title="Toggle ideal gas model" />
               </div>
               <div class="toggle-row">
-                <span><span class="dot" style="background:#3b82f6;"></span>Van der Waals</span>
-                <input id="toggleVdw" type="checkbox" checked />
+                <span><span class="dot dot-vdw"></span>Van der Waals</span>
+                <input id="toggleVdw" type="checkbox" checked aria-label="Toggle van der Waals model" title="Toggle van der Waals model" />
               </div>
               <div class="toggle-row">
-                <span><span class="dot" style="background:#10b981;"></span>Peng-Robinson</span>
-                <input id="togglePr" type="checkbox" checked />
+                <span><span class="dot dot-pr"></span>Peng-Robinson</span>
+                <input id="togglePr" type="checkbox" checked aria-label="Toggle Peng-Robinson model" title="Toggle Peng-Robinson model" />
               </div>
             </div>
           </div>
@@ -561,7 +562,7 @@
           elements.paramBody.innerHTML = `
             <div class="mono-row"><span>Van der Waals a</span><span>${vdwParams.a.toFixed(3)}</span></div>
             <div class="mono-row"><span>Van der Waals b</span><span>${(vdwParams.b * 1e5).toFixed(2)} e-5</span></div>
-            <div class="mono-row" style="margin-top:8px;"><span>Peng-Robinson a(T)</span><span>${prParams.a.toFixed(3)}</span></div>
+            <div class="mono-row mono-row-spaced"><span>Peng-Robinson a(T)</span><span>${prParams.a.toFixed(3)}</span></div>
             <div class="mono-row"><span>Peng-Robinson b</span><span>${(prParams.b * 1e5).toFixed(2)} e-5</span></div>
           `;
         };
