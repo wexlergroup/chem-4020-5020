@@ -30,6 +30,19 @@ Key ideas:
 
 This leads to the **chemical equilibrium condition** $\Delta_r G=0$, and (for ideal gases) the familiar relationship
 
+```{admonition} Notational warning
+:class: warning
+
+The symbol $Q$ is overloaded in this course.
+
+- **Here (equilibrium thermodynamics):** $Q$ (or $Q_p$) is the **reaction quotient**,
+  a *dimensionless* product of activities.
+  For ideal gases: $Q_p=\prod_i(P_i/P^{\circ})^{\nu_i}$.
+
+- **Elsewhere (statistical mechanics):** $Q$ (often $Z$) can denote a **partition function**.
+  In Section 7.2 we use $\mathcal{Q}$ for partition functions.
+```
+
 ```{math}
 \Delta_r G = \Delta_r G^{\circ} + RT\ln Q,
 \qquad
@@ -128,6 +141,12 @@ At equilibrium,
 ---
 
 ## 7.1.3 Reaction quotient $Q$ and the equilibrium constant $K$
+
+```{admonition} Notational warning
+:class: warning
+
+In this section, $Q$ (or $Q_p$) means the **reaction quotient**, not a partition function.
+```
 
 To connect $\Delta_r G$ to measurable composition variables, we need an expression for the chemical potentials.
 

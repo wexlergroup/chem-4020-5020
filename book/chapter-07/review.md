@@ -31,6 +31,15 @@ kernelspec:
      - If $\Delta G_{\text{rxn}}>0$, reaction moves backward.
 
 2. **Reaction Quotient & Equilibrium Constant**
+
+   ```{admonition} Notational warning
+   :class: warning
+
+   Here, $Q$ is the **reaction quotient** (activity product).
+   Don’t confuse it with the **canonical partition function**,
+   which is also often written $Q$ (or $Z$) in statistical mechanics.
+   ```
+
    - **Reaction quotient** $Q$ compares partial pressures to standard state:
 
      ```{math}
@@ -76,10 +85,10 @@ kernelspec:
 
 | **Equation** | **Variables** | **Meaning & Use Cases** | **Caveats/Approximations** |
 | :- | :- | :- | :- |
-| $\Delta G_{\text{rxn}} = \sum_i \nu_i\,\mu_i \;=\;\left(\frac{\partial G}{\partial x}\right)_{T,P}$ | $\nu_i$: stoichiometric coefficients (products positive)<br>$\mu_i$: chemical potential of species $i$ | Reaction driving force. Use this to assess spontaneity and locate equilibrium $\left( \Delta G_{\text{rxn}} = 0 \right)$. | Assumes constant $T,P$ and only $PV$ work; applies generally to closed, simple systems. |
+| $\Delta G_{\text{rxn}} = \sum_i \nu_i\,\mu_i \;=\;\left(\frac{\partial G}{\partial x}\right)_{T,P}$ | $\nu_i$: stoichiometric coefficients (products positive); $\mu_i$: chemical potential of species $i$ | Reaction driving force. Use this to assess spontaneity and locate equilibrium $\left( \Delta G_{\text{rxn}} = 0 \right)$. | Assumes constant $T,P$ and only $PV$ work; applies generally to closed, simple systems. |
 | $\mu_i = \mu_i^\circ + RT\ln\left( P_i / P^{\circ} \right)$ | — | Defines chemical potential in terms of measurable quantities. Controls mass exchange; at equilibrium between phases or compartments, $\mu_i$ equal in each. | Requires proper choice of standard state and correction for nonideal behavior. |
-| $\Delta G_{\text{rxn}} = \Delta G_{\text{rxn}}^\circ + RT\ln Q$ | $\Delta G_{\text{rxn}}^\circ$: standard‐state free energy change<br>$Q=\prod \left( P_i / P^{\circ} \right)^{\nu_i}$: reaction quotient | Relates instantaneous driving force to composition. Use to predict direction of reaction under non‐standard conditions. | — |
+| $\Delta G_{\text{rxn}} = \Delta G_{\text{rxn}}^\circ + RT\ln Q$ | $\Delta G_{\text{rxn}}^\circ$: standard‐state free energy change; $Q=\prod \left( P_i / P^{\circ} \right)^{\nu_i}$: reaction quotient | Relates instantaneous driving force to composition. Use to predict direction of reaction under non‐standard conditions. | — |
 | $K = \exp\left(-\frac{\Delta G_{\text{rxn}}^\circ}{RT}\right)$ | $K$: equilibrium constant (can be $K_P$, $K_c$, etc.) | Defines equilibrium composition. Use standard thermodynamic data ($\Delta G_{\text{rxn}}^\circ$) to compute $K$. | Assumes temperature‐independent $\Delta G_{\text{rxn}}^\circ$ unless corrected; different $K$ for different standard states (pressure vs concentration). |
-| $Q = \frac{\left( y_{\ce{Y}} P / P^{\circ} \right)^{\nu_{\ce{Y}}} \, \left( y_{\ce{Z}} P / P^{\circ} \right)^{\nu_{\ce{Z}}}}{\left( y_{\ce{A}} P / P^{\circ} \right)^{\nu_{\ce{A}}} \, \left( y_{\ce{B}} P / P^{\circ} \right)^{\nu_{\ce{B}}}}$ | $y_i$: mole fraction of gas $i$<br>$P$: total pressure | Specific form of $Q$ for ideal‐gas mixtures. Use in ICE analyses to solve for equilibrium extent $x$. | Ideal‐gas assumption; neglects nonidealities. |
+| $Q = \frac{\left( y_{\ce{Y}} P / P^{\circ} \right)^{\nu_{\ce{Y}}} \, \left( y_{\ce{Z}} P / P^{\circ} \right)^{\nu_{\ce{Z}}}}{\left( y_{\ce{A}} P / P^{\circ} \right)^{\nu_{\ce{A}}} \, \left( y_{\ce{B}} P / P^{\circ} \right)^{\nu_{\ce{B}}}}$ | $y_i$: mole fraction of gas $i$; $P$: total pressure | Specific form of $Q$ for ideal‐gas mixtures. Use in ICE analyses to solve for equilibrium extent $x$. | Ideal‐gas assumption; neglects nonidealities. |
 | $\frac{d\ln K}{dT} = \frac{\Delta H_{\text{rxn}}^\circ}{R\,T^2}$ | $\Delta H_{\text{rxn}}^\circ$: standard enthalpy change | **van't Hoff**: predicts how $K$ shifts with $T$. | Assumes $\Delta H_{\text{rxn}}^\circ$ constant over the temperature range; in reality, $C_p$ corrections may be needed. |
-| $A = -RT\ln Q,\quad \mu_i = -RT\left(\frac{\partial\ln Q}{\partial N_i}\right)_{T,V}$ | $A$: Helmholtz free energy of the mixture<br>$Q$: total partition function | Connects molecular partition functions to macroscopic free energies and chemical potentials. Enables **microscopic** calculation of $K$. | Exact only if full partition functions (translational, rotational, vibrational, electronic) are known. |
+| $A = -RT\ln Q,\quad \mu_i = -RT\left(\frac{\partial\ln Q}{\partial N_i}\right)_{T,V}$ | $A$: Helmholtz free energy of the mixture; $Q$: total partition function | Connects molecular partition functions to macroscopic free energies and chemical potentials. Enables **microscopic** calculation of $K$. | Exact only if full partition functions (translational, rotational, vibrational, electronic) are known. |

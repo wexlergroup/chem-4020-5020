@@ -26,9 +26,13 @@ the **canonical partition function** of an ideal-gas mixture. The key goal is:
   (translation, rotation, vibration, electronic structure),
 - and therefore predict whether a reaction is product-favored or reactant-favored at a given $T$.
 
-> **Notation note:** In thermodynamics, $Q$ usually denotes the *reaction quotient*.  
-> In statistical mechanics, $\mathcal{Q}$ denotes the *canonical partition function*.  
-> To avoid confusion, we will use $\mathcal{Q}$ for partition functions in this section.
+```{admonition} Notational warning
+:class: warning
+
+- In **thermodynamics**, $Q$ denotes the **reaction quotient** (Section 7.1).
+- In **statistical mechanics**, $Q$ (often $Z$) is also used for the **canonical partition function**.
+  In this section we write $\mathcal{Q}$ for partition functions to avoid confusion.
+```
 
 ---
 
