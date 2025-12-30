@@ -5,4 +5,5 @@ project/*
 utils/*
 book/_build/*
 _build/*
-
+book/chapter-*/lecture-*-notes-jc.pdf
+book/chapter-*/lecture-notes/lecture-*-notes-jc.pdf
