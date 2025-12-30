@@ -52,6 +52,11 @@ jobs:
       - name: Build HTML Assets
         working-directory: book
         run: myst build --execute --html
+      - name: Copy computational studios
+        working-directory: book
+        run: |
+          mkdir -p _build/html/computational-studios
+          cp computational-studios/*.html _build/html/computational-studios/
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
