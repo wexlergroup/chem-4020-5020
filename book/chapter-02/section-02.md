@@ -172,6 +172,186 @@ p_m = \frac{a_m}{\mathcal{A}} = \frac{e^{-\beta E_m}}{\sum_m e^{-\beta E_m}} = \
 
 where $p_m$ is the probability of finding the system in microstate $m$ and $Q$ is called the **partition function**, which is the essential quantity in statistical mechanics.
 
+````{admonition} Alternative derivation roadmap: where does $p_i \propto e^{-\beta E_i}$ come from?
+:class: dropdown
+
+We will use the canonical-ensemble probability
+```{math}
+p_i \propto e^{-\beta E_i}
+\quad\text{with}\quad
+\beta = \frac{1}{k_B T}
+```
+throughout this module. Before we use it heavily, here are two quick (complementary) ways to see
+**why the exponential “Boltzmann factor” appears**.
+
+---
+
+### Setup (common to both routes)
+
+- **System** $S$: a *closed* system (fixed $N,V$) with discrete microstates $i=1,2,\dots$ and energies $E_i$.
+- **Reservoir / heat bath** $R$: very large, can exchange energy with $S$, and stays at (approximately) constant temperature $T$.
+- **Universe** $S+R$ is **isolated**, so the total energy is fixed:
+  ```{math}
+  E_{\text{tot}} = E_i + E_R.
+  ```
+- **Weak coupling**: the interaction energy is negligible, so energies add.
+
+The question is: *What is the probability $p_i$ that the system is in microstate $i$?*
+
+---
+
+## Route A: “Counting” argument (microcanonical $\rightarrow$ canonical)
+
+**Idea:** the system is more likely to be in a microstate $i$ if the reservoir has *many* compatible microstates
+when the system has energy $E_i$.
+
+1. **Fundamental postulate for an isolated system (the universe):**  
+   all accessible microstates of $S+R$ at fixed $E_{\text{tot}}$ are equally likely.
+
+2. **If $S$ is in microstate $i$, then $R$ must have energy**
+   ```{math}
+   E_R = E_{\text{tot}} - E_i.
+   ```
+   The number of compatible universe microstates is therefore the number of reservoir microstates at that energy:
+   ```{math}
+   \Omega_R(E_{\text{tot}}-E_i).
+   ```
+   So
+   ```{math}
+   p_i \propto \Omega_R(E_{\text{tot}}-E_i).
+   ```
+
+3. **Convert multiplicity to entropy** using Boltzmann’s definition:
+   ```{math}
+   S_R(E) = k_B \ln \Omega_R(E).
+   ```
+   Taking logs,
+   ```{math}
+   \ln p_i = \text{const} + \ln \Omega_R(E_{\text{tot}}-E_i)
+   = \text{const} + \frac{S_R(E_{\text{tot}}-E_i)}{k_B}.
+   ```
+
+4. **Reservoir is huge $\Rightarrow$ expand $S_R$ in a Taylor series** around $E_{\text{tot}}$.  
+   Because $E_i$ is “small” compared to the reservoir’s energy scale,
+   ```{math}
+   S_R(E_{\text{tot}}-E_i)
+   \approx S_R(E_{\text{tot}})
+   - E_i\left(\frac{\partial S_R}{\partial E}\right)_{E_{\text{tot}}}
+   + \frac{E_i^2}{2}\left(\frac{\partial^2 S_R}{\partial E^2}\right)_{E_{\text{tot}}}
+   + \cdots
+   ```
+
+5. **Use the thermodynamic definition of temperature (for the reservoir):**
+   ```{math}
+   \left(\frac{\partial S}{\partial E}\right)_{V,N} = \frac{1}{T}.
+   ```
+   So the *linear* term becomes $-E_i/T$.
+
+   The *quadratic* term is typically negligible because the reservoir’s heat capacity is enormous:
+   ```{math}
+   \left(\frac{\partial^2 S}{\partial E^2}\right)_{V,N}
+   =
+   -\frac{1}{T^2 C_V},
+   ```
+   so the correction looks like $-E_i^2/(2T^2 C_V)$, which is tiny when $C_V$ is very large.
+
+6. **Keep only the dominant (linear) term**:
+   ```{math}
+   S_R(E_{\text{tot}}-E_i) \approx S_R(E_{\text{tot}}) - \frac{E_i}{T}.
+   ```
+
+7. **Exponentiate to get the Boltzmann factor**:
+   ```{math}
+   p_i \propto \exp\!\left(\frac{S_R(E_{\text{tot}})}{k_B}\right)\,
+          \exp\!\left(-\frac{E_i}{k_B T}\right).
+   ```
+   The first exponential is just a constant (independent of $i$), so the *physics* is:
+   ```{math}
+   \boxed{p_i \propto e^{-E_i/(k_B T)} \equiv e^{-\beta E_i}}
+   \quad\text{with}\quad
+   \beta \equiv \frac{1}{k_B T}.
+   ```
+
+8. **Normalize** to turn “$\propto$” into “$=$”. Define the **partition function**
+   ```{math}
+   Q \equiv \sum_i e^{-\beta E_i},
+   ```
+   so
+   ```{math}
+   \boxed{p_i = \frac{e^{-\beta E_i}}{Q}}.
+   ```
+
+---
+
+## Route B: “Maximum entropy” argument (Gibbs entropy + constraints)
+
+**Idea:** in equilibrium with a heat bath, the system adopts the probability distribution that
+maximizes entropy subject to what is fixed.
+
+1. Start from the Gibbs/Shannon entropy functional for a probability distribution $\{p_i\}$:
+   ```{math}
+   S[\{p_i\}] = -k_B \sum_i p_i \ln p_i.
+   ```
+
+2. Impose the two canonical constraints:
+   - normalization: $\sum_i p_i = 1$
+   - fixed mean energy: $\sum_i p_i E_i = U$
+
+3. Maximize $S$ with Lagrange multipliers $\alpha$ and $\lambda$:
+   ```{math}
+   \delta\Big[-k_B\sum_i p_i\ln p_i
+   -\alpha\Big(\sum_i p_i-1\Big)
+   -\lambda\Big(\sum_i p_iE_i-U\Big)\Big]=0.
+   ```
+
+4. The maximizer satisfies
+   ```{math}
+   p_i = \text{const}\times e^{-(\lambda/k_B)E_i}.
+   ```
+   Rename $\beta \equiv \lambda/k_B$:
+   ```{math}
+   p_i \propto e^{-\beta E_i}.
+   ```
+
+5. Normalize exactly as before:
+   ```{math}
+   p_i=\frac{e^{-\beta E_i}}{Q},
+   \qquad
+   Q=\sum_i e^{-\beta E_i}.
+   ```
+
+6. Identify $\beta$ with temperature by using the thermodynamic identity
+   ```{math}
+   \left(\frac{\partial S}{\partial U}\right)_{V,N}=\frac{1}{T}.
+   ```
+   For the canonical distribution one can show $dS/dU = k_B\beta$, so
+   ```{math}
+   \boxed{\beta=\frac{1}{k_B T}}.
+   ```
+
+---
+
+## Quick checks / intuition (why this form makes sense)
+
+- **Energy differences matter, not absolute zero**:
+  ```{math}
+  \frac{p_j}{p_i}=e^{-\beta(E_j-E_i)}.
+  ```
+  Shifting all energies by a constant leaves all probability ratios unchanged.
+
+- **Low $T$ (large $\beta$)**: weights concentrate on the lowest-energy microstates.  
+  **High $T$ (small $\beta$)**: many microstates become appreciably populated.
+
+- **Degeneracy is automatic** if we sum over microstates:  
+  if many microstates share the same energy, that energy level is more probable because it appears many times in the sum.
+
+---
+
+**Bottom line:** In the canonical ensemble, the exponential appears because *the reservoir’s multiplicity grows
+exponentially with its entropy*, and the entropy changes approximately linearly with energy over the small energy
+exchanges relevant to a large heat bath.
+````
+
 ## Two-State System
 
 Consider a system with two states: state 1 with energy $E_1$ and state 2 with energy $E_2$.
