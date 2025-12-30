@@ -91,7 +91,7 @@ kernelspec:
 <!-- ; use fugacity for real gases at high pressure -->
 
 | **Equation** | **Variables** | **Meaning & Use Cases** | **Caveats/Approximations** |
-|:-|:-|:-|:-|
+| :- | :- | :- | :- |
 | $G_\alpha = G_\beta$ | $G$: molar Gibbs free energy | **Fundamental** phase‐equilibrium criterion. Use to locate transition points in $P$–$T$ space. | Applies only at the equilibrium curve. |
 | $\Delta H_\text{trs} = H_\beta - H_\alpha$ | $H$: enthalpy | **Latent heat** associated with phase change (fusion, vaporization). Determines heat required/​released at transition. | Measured at constant $P$. |
 | $\Delta S_\text{trs} = S_\beta - S_\alpha = \dfrac{\Delta H_\text{trs}}{T_\text{trs}}$ | $S$: entropy; $T_\text{trs}$: transition temperature | Quantifies **entropy jump** at a first‐order transition. Essential for Clapeyron equation. | — |
