@@ -51,9 +51,12 @@ project:
     - title: Module 6. Phase Equilibria
       children:
         - file: chapter-06/section-01.md
+        - file: chapter-06/section-02.md
         - file: chapter-06/review.md
     - title: Module 7. Chemical Equilibrium
       children:
+        - file: chapter-07/section-01.md
+        - file: chapter-07/section-02.md
         - file: chapter-07/review.md
     - title: Appendices
       children:
