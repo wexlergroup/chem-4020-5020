@@ -12,6 +12,8 @@ kernelspec:
   name: python3
 ---
 
+<!-- TODO: Add content from lecture-26-notes-jc.pdf -->
+
 # 4.1. Entropy
 
 ## Overview
