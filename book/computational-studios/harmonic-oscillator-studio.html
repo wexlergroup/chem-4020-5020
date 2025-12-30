@@ -4,6 +4,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Harmonic Oscillator Computational Studio</title>
+    <link rel="stylesheet" href="harmonic-oscillator-studio.css" />
     <style>
       @import url("https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600&family=IBM+Plex+Mono:wght@400;600&display=swap");
 
@@ -437,7 +438,7 @@
 
           <div class="toggle-row">
             <span>Show Limit Lines</span>
-            <button type="button" id="toggleLimits" class="toggle active" aria-pressed="true"></button>
+            <button type="button" id="toggleLimits" class="toggle active" aria-pressed="true" aria-label="Toggle limit lines" title="Toggle limit lines"></button>
           </div>
 
           <div class="section-title">Physics Core</div>
@@ -445,11 +446,11 @@
             <strong>Partition variable</strong>
             x = &Theta;<sub>E</sub> / T
           </div>
-          <div class="formula" style="margin-top: 10px;">
+          <div class="formula formula-spaced">
             <strong>Heat Capacity (C<sub>V</sub>)</strong>
             k<sub>B</sub> &middot; x<sup>2</sup> &middot; e<sup>x</sup> / (e<sup>x</sup> - 1)<sup>2</sup>
           </div>
-          <div class="formula" style="margin-top: 10px;">
+          <div class="formula formula-spaced">
             <strong>Internal Energy (U)</strong>
             k<sub>B</sub>&Theta;<sub>E</sub> &middot; (1/2 + 1/(e<sup>x</sup> - 1))
           </div>
