@@ -188,6 +188,127 @@ The notes mention **Trouton's rule (1884)**: for many liquids at their _normal_ 
 
 This is a useful “order-of-magnitude” estimate; real substances can deviate (especially when there is strong association / hydrogen bonding, or when the liquid structure is unusually ordered).
 
+#### Worked example: using tabulated $C_P(T)$ + an entropy jump (water at 1 bar)
+
+**Goal.** Estimate $\Delta S$ and $\Delta H$ when **1 mol** of water is heated _reversibly_ at constant pressure $p=1\ \mathrm{bar}$ from **298.15 K** (liquid water) to **800 K** (steam), crossing the liquid–vapor boundary.
+
+Within a _single phase_ at constant pressure:
+
+```{math}
+\Delta S = \int_{T_1}^{T_2} \frac{C_P(T)}{T}\,dT,
+\qquad
+\Delta H = \int_{T_1}^{T_2} C_P(T)\,dT.
+```
+
+At a first-order phase transition (here, vaporization) the entropy has a _finite jump_:
+
+```{math}
+\Delta S_{vap}(T_{tr}) = \frac{\Delta H_{vap}(T_{tr})}{T_{tr}}.
+```
+
+We'll use a **coarse** set of $C_P^\circ(T)$ values from the **NIST–JANAF thermochemical tables** for $\mathrm{H_2O(l)}$ and $\mathrm{H_2O(g)}$ at the standard-state pressure $p^\circ=0.1\ \mathrm{MPa}=1\ \mathrm{bar}$. In that dataset, the liquid–vapor transition occurs at
+
+```{math}
+T_{tr}=372.780\ \mathrm{K}\quad\text{(very close to 373.15 K at 1 atm)}.
+```
+
+##### Data used (excerpt)
+
+| Phase | $T$ (K) | $C_P^\circ$ (J mol$^{-1}$ K$^{-1}$) |
+| --- | ---: | ---: |
+| $\mathrm{H_2O(l)}$ | 298.15 | 75.351 |
+| | 300 | 75.349 |
+| | 320 | 75.344 |
+| | 340 | 75.388 |
+| | 360 | 75.679 |
+| | 372.780 | 75.962 |
+| $\mathrm{H_2O(g)}$ | 300 | 33.596 |
+| | 400 | 34.262 |
+| | 500 | 35.226 |
+| | 600 | 36.325 |
+| | 700 | 37.495 |
+| | 800 | 38.721 |
+
+For the gas-phase heating integral, we linearly interpolate $C_P^\circ$ to $T_{tr}$ using the 300–400 K values.
+
+To estimate the **latent heat** at the transition we use the tabulated standard enthalpies of formation (same JANAF source) and interpolate them to $T_{tr}$:
+
+```{math}
+\Delta H_{vap}(T_{tr})
+\approx
+\Delta_f H^\circ_{g}(T_{tr})-\Delta_f H^\circ_{l}(T_{tr}).
+```
+
+```{code-cell} ipython3
+import numpy as np
+
+# ---- Cp(T) data (J/mol/K) ----
+T_tr = 372.780  # K (liquid <-> vapor at 1 bar in the JANAF tables)
+
+T_liq = np.array([298.15, 300, 320, 340, 360, T_tr])
+Cp_liq = np.array([75.351, 75.349, 75.344, 75.388, 75.679, 75.962])
+
+T_gas_tab = np.array([300, 400, 500, 600, 700, 800])
+Cp_gas_tab = np.array([33.596, 34.262, 35.226, 36.325, 37.495, 38.721])
+
+# Interpolate Cp_gas at T_tr (between 300 and 400 K)
+Cp_gas_tr = Cp_gas_tab[0] + (T_tr - T_gas_tab[0])/(T_gas_tab[1] - T_gas_tab[0])*(Cp_gas_tab[1] - Cp_gas_tab[0])
+
+T_gas = np.concatenate([[T_tr], T_gas_tab[1:]])
+Cp_gas = np.concatenate([[Cp_gas_tr], Cp_gas_tab[1:]])
+
+# ---- Heating contributions (trapezoid rule) ----
+dS_liq = np.trapezoid(Cp_liq/T_liq, T_liq)          # J/mol/K
+dH_liq = np.trapezoid(Cp_liq, T_liq)/1000           # kJ/mol
+
+dS_gas = np.trapezoid(Cp_gas/T_gas, T_gas)          # J/mol/K
+dH_gas = np.trapezoid(Cp_gas, T_gas)/1000           # kJ/mol
+
+# ---- Vaporization jump from JANAF delta_f H° (linear interpolation to T_tr) ----
+# liquid delta_f H° at 360 and 400 K (kJ/mol)
+Hf_liq_360, Hf_liq_400 = -283.874, -282.591
+Hf_liq_tr = Hf_liq_360 + (T_tr-360)/(400-360)*(Hf_liq_400 - Hf_liq_360)
+
+# gas delta_f H° at 300 and 400 K (kJ/mol)
+Hf_gas_300, Hf_gas_400 = -241.844, -242.846
+Hf_gas_tr = Hf_gas_300 + (T_tr-300)/(400-300)*(Hf_gas_400 - Hf_gas_300)
+
+dH_vap = Hf_gas_tr - Hf_liq_tr                 # kJ/mol
+dS_vap = dH_vap*1000/T_tr                      # J/mol/K
+
+print(f"Heating (liquid, 298.15 -> {T_tr:.3f} K):  ΔH = {dH_liq:6.3f} kJ/mol,  ΔS = {dS_liq:6.2f} J/mol/K")
+print(f"Vaporization at {T_tr:.3f} K (1 bar):        ΔH = {dH_vap:6.2f} kJ/mol,  ΔS = {dS_vap:6.2f} J/mol/K")
+print(f"Heating (gas,    {T_tr:.3f} -> 800 K):       ΔH = {dH_gas:6.2f} kJ/mol,  ΔS = {dS_gas:6.2f} J/mol/K")
+
+dH_total = dH_liq + dH_vap + dH_gas
+dS_total = dS_liq + dS_vap + dS_gas
+print(f"\nTOTAL (298.15 K liquid -> 800 K steam, 1 bar): ΔH ≈ {dH_total:6.2f} kJ/mol,  ΔS ≈ {dS_total:6.1f} J/mol/K")
+```
+
+**What to notice.**
+
+- The entropy change is dominated by the **phase transition**: $\Delta S_{vap}\approx 1.1\times 10^2\ \mathrm{J\,mol^{-1}\,K^{-1}}$.
+- Water is a classic _exception_ to Trouton's rule (hydrogen bonding makes the liquid unusually ordered, increasing $\Delta S_{vap}$).
+
+```{code-cell} ipython3
+import matplotlib.pyplot as plt
+
+# Cumulative entropy relative to 298.15 K along the path (trapezoid segments)
+S_liq_cum = np.concatenate([[0.0], np.cumsum(0.5*(Cp_liq[1:]/T_liq[1:] + Cp_liq[:-1]/T_liq[:-1]) * np.diff(T_liq))])
+S_gas_cum = np.concatenate([[0.0], np.cumsum(0.5*(Cp_gas[1:]/T_gas[1:] + Cp_gas[:-1]/T_gas[:-1]) * np.diff(T_gas))])
+
+T_path = np.concatenate([T_liq, T_gas[1:]])
+S_path = np.concatenate([S_liq_cum, S_liq_cum[-1] + dS_vap + S_gas_cum[1:]])
+
+plt.figure()
+plt.plot(T_path, S_path)
+plt.axvline(T_tr, linestyle="--")
+plt.xlabel("Temperature (K)")
+plt.ylabel(r"$\Delta S$ from 298.15 K (J mol$^{-1}$ K$^{-1}$)")
+plt.title("Heating water at 1 bar: entropy rise + vaporization jump")
+plt.show()
+```
+
 ## 6.1.5 Clapeyron and Clausius–Clapeyron equations (phase-boundary slopes)
 
 The coexistence curves in a phase diagram come from enforcing $\mu_\alpha(T,P)=\mu_\beta(T,P)$ _along the boundary_.
