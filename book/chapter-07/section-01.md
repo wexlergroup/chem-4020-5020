@@ -160,6 +160,58 @@ For an ideal gas,
 
 where $P^{\circ}$ is the standard-state pressure (often 1 bar), and $\mu_i^{\circ}(T)$ is the standard chemical potential.
 
+````{admonition} Why is $K_P$ unitless if it's built from pressures?
+:class: note
+
+Any logarithm in thermodynamics must take a **dimensionless** argument. That's why we never write $\ln P$ (pressure has units), and instead write $\ln(P/P^\circ)$, where $P^\circ$ is the **standard-state pressure** (often $1\ \text{bar}$).
+
+**Numerical example (units cancel):**
+Take a gas with partial pressure $P_i = 2.50\ \text{bar}$ at $T=298\ \text{K}$, with $P^\circ = 1.00\ \text{bar}$.
+
+```{math}
+\frac{P_i}{P^\circ}=\frac{2.50\ \text{bar}}{1.00\ \text{bar}}=2.50 \quad \text{(dimensionless)}
+```
+
+So the pressure contribution to chemical potential is
+
+```{math}
+\mu_i-\mu_i^\circ = RT\ln\!\left(\frac{P_i}{P^\circ}\right)
+= RT\ln(2.50).
+```
+
+At $298\ \text{K}$, $RT \approx 2.48\ \text{kJ mol}^{-1}$, and $\ln(2.50)=0.916$, so
+
+```{math}
+\mu_i-\mu_i^\circ \approx (2.48)(0.916)=2.27\ \text{kJ mol}^{-1}.
+```
+
+**Why this matters:** the ratio makes the result **unit-independent**.
+If you compute the same ratio in pascals,
+```{math}
+\frac{2.50\times 10^{5}\ \text{Pa}}{1.00\times 10^{5}\ \text{Pa}}=2.50,
+```
+you get the same $\ln(2.50)$. Without the ratio, changing units would (incorrectly) change the number inside the logarithm.
+
+**Connection to $Q$ and $K$:**
+This same idea is why the reaction quotient is written as
+```{math}
+Q=\prod_i\left(\frac{P_i}{P^\circ}\right)^{\nu_i},
+```
+so that $Q$ (and $K$) are always **dimensionless**, which is required by $\Delta_r G=\Delta_r G^\circ + RT\ln Q$.
+
+**Later generalization (flag only):**
+For non-ideal systems, we keep the same *structure* but replace the simple ratio $P_i/P^\circ$ with a more general **activity** $a_i$:
+```{math}
+\mu_i=\mu_i^\circ + RT\ln a_i,\qquad Q=\prod_i a_i^{\nu_i}.
+```
+
+* ideal gas: $a_i = P_i/P^\circ$
+* real gas: $a_i = f_i/P^\circ$ where $f_i$ is the **fugacity** (often $f_i=\phi_i P_i$)
+* solutions: $a_i$ is built from concentration/mole fraction times an activity coefficient (e.g., $a_i=\gamma_i,c_i/c^\circ$ or $a_i=\gamma_i x_i$).
+
+(We won't develop activities/fugacities in detail yet, but this is where they will "plug in" later.)
+````
+
 ### Derivation of $\Delta_r G = \Delta_r G^{\circ} + RT\ln Q$
 
 Substitute $\mu_i(T,P_i)$ into $\Delta_r G=\sum_i\nu_i\mu_i$:
@@ -365,7 +417,7 @@ If we write the Gibbs free energy of the reacting mixture as a function of exten
 - the **equilibrium extent** $\xi_{eq}$ is located where the slope is zero
 - equilibrium corresponds to a **minimum** in $G(\xi)$ at fixed $T,P$
 
-For the $\mathrm{NO_2/N_2O_4}$ system, the notes sketch $G$ vs. $\xi$ with a clear minimum at $\xi_{eq}$: the system “rolls downhill” in $G$ until it reaches that minimum.
+For the $\mathrm{NO_2/N_2O_4}$ system, the notes sketch $G$ vs. $\xi$ with a clear minimum at $\xi_{eq}$: the system "rolls downhill" in $G$ until it reaches that minimum.
 
 ---
 
