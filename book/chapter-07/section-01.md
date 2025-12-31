@@ -421,6 +421,150 @@ For the $\mathrm{NO_2/N_2O_4}$ system, the notes sketch $G$ vs. $\xi$ with a cle
 
 ---
 
+
+---
+
+## 7.1.7 Data Skills: Using NIST/JANAF/ATcT to compute $\Delta_r H^\circ$, $\Delta_r S^\circ$, $\Delta_r G^\circ$, and $K$
+
+In Section 7.1.3 we derived the key link between equilibrium and thermochemistry:
+
+```{math}
+\Delta_r G^\circ(T) = -RT\ln K(T).
+```
+
+So if you can compute $\Delta_r G^\circ$ at a temperature of interest, you can immediately compute the equilibrium constant:
+
+```{math}
+K(T) = \exp\!\left(-\frac{\Delta_r G^\circ(T)}{RT}\right).
+```
+
+This mini-section is a practical workflow for *getting* $\Delta_r G^\circ$ from tabulated thermochemical data.
+
+### Step 0: Write the reaction (with phases) and choose a standard state
+
+1. **Balance the reaction** and include phases, e.g. $\mathrm{NH_3(g)}$ vs $\mathrm{NH_3(\ell)}$.
+2. Use a consistent **standard state** across all species (most modern tables use $P^\circ=1\ \mathrm{bar}$ at $T=298.15\ \mathrm{K}$; always check the table header).
+
+### Step 1: Pull species data at the same temperature
+
+For each species $i$ in the balanced equation, collect *either*:
+
+- **Option A (most common at 298.15 K):**  
+  $\Delta_f H_i^\circ$ and $S_i^\circ$ (and optionally $\Delta_f G_i^\circ$)
+
+- **Option B (temperature-dependent, e.g. $T\neq 298.15$):**  
+  $H_i^\circ(T)$ and $S_i^\circ(T)$ (or directly $G_i^\circ(T)$ if provided)
+
+Where to get the data:
+
+- **NIST Chemistry WebBook**: fast way to grab $\Delta_f H^\circ(298.15\ \mathrm{K})$ and $S^\circ(298.15\ \mathrm{K})$ for many species (check the phase!).  
+- **NIST/JANAF Thermochemical Tables**: best when you need $H^\circ(T)$ and $S^\circ(T)$ over a range of temperatures (not just 298.15 K).  
+- **ATcT (Active Thermochemical Tables)**: best when you care about *high-accuracy* formation thermochemistry (often includes uncertainties). In practice, many workflows use **ATcT for $\Delta_f H^\circ$** and **JANAF for $S^\circ(T)$**.
+
+(Links to these sources are collected in Appendix Y.)
+
+### Step 2: Convert species data into reaction values
+
+Once you have consistent species data, compute reaction properties using stoichiometric coefficients $\nu_i$
+(products positive, reactants negative):
+
+```{math}
+\Delta_r H^\circ = \sum_i \nu_i\,H_i^\circ
+\qquad\text{and}\qquad
+\Delta_r S^\circ = \sum_i \nu_i\,S_i^\circ.
+```
+
+If your data are **enthalpies of formation**, this becomes the familiar “products minus reactants” form:
+
+```{math}
+\Delta_r H^\circ
+= \sum_{\text{products}} \nu_p\,\Delta_f H_p^\circ
+-\sum_{\text{reactants}} \nu_r\,\Delta_f H_r^\circ.
+```
+
+> **Shortcut for elements:** if an element appears in its **standard state**, then by convention  
+> $\Delta_f H^\circ = 0$ for that elemental form (e.g., $\mathrm{N_2(g)}$, $\mathrm{H_2(g)}$ at 1 bar).  
+> This often simplifies $\Delta_r H^\circ$ calculations dramatically.
+
+### Step 3: Compute $\Delta_r G^\circ$
+
+If you have $\Delta_r H^\circ$ and $\Delta_r S^\circ$ at the same temperature, then
+
+```{math}
+\Delta_r G^\circ(T) = \Delta_r H^\circ(T) - T\,\Delta_r S^\circ(T).
+```
+
+**Unit check:** it is very common to have $\Delta H^\circ$ in **kJ/mol** while $S^\circ$ is in **J/(mol·K)**.  
+Convert before combining (e.g., divide entropy by $1000$ to get kJ/(mol·K)).
+
+### Step 4: Compute $K$
+
+Finally,
+
+```{math}
+K(T) = \exp\!\left(-\frac{\Delta_r G^\circ(T)}{RT}\right),
+\qquad
+\log_{10}K(T) = -\frac{\Delta_r G^\circ(T)}{2.303\,RT}.
+```
+
+For an **ideal-gas** reaction, this $K$ corresponds to a pressure-based equilibrium constant $K_p$ with the
+dimensionless ratio $(P_i/P^\circ)$ inside $Q$.
+
+---
+
+### Worked example: ammonia formation at 298.15 K
+
+For the Haber–Bosch reaction (as written in Section 5.3),
+
+```{math}
+\mathrm{N_2(g) + 3H_2(g) \rightarrow 2NH_3(g)}.
+```
+
+A typical 298.15 K workflow is:
+
+1. Pull $\Delta_f H^\circ$ and $S^\circ$ for $\mathrm{N_2(g)}$, $\mathrm{H_2(g)}$, and $\mathrm{NH_3(g)}$ from NIST (or JANAF/ATcT).
+2. Compute $\Delta_r H^\circ$ and $\Delta_r S^\circ$ using stoichiometry.
+3. Compute $\Delta_r G^\circ = \Delta_r H^\circ - T\Delta_r S^\circ$.
+4. Compute $K_p = \exp\!\left(-\Delta_r G^\circ/RT\right)$.
+
+Using the **reaction values quoted in Section 5.3** at 298.15 K,
+
+```{math}
+\Delta_r H^\circ \approx -92\ \mathrm{kJ\,mol^{-1}},\qquad
+\Delta_r S^\circ \approx -198\ \mathrm{J\,mol^{-1}\,K^{-1}},
+```
+
+gives
+
+```{math}
+\Delta_r G^\circ
+\approx -92\ \mathrm{kJ\,mol^{-1}}
+- (298.15\ \mathrm{K})\left(-0.198\ \mathrm{kJ\,mol^{-1}\,K^{-1}}\right)
+\approx -33\ \mathrm{kJ\,mol^{-1}}.
+```
+
+Then
+
+```{math}
+K_p(298.15\ \mathrm{K})
+= \exp\!\left(-\frac{\Delta_r G^\circ}{RT}\right)
+\approx \exp\!\left(\frac{33{,}000}{(8.314)(298.15)}\right)
+\approx 10^{5}\text{–}10^{6}.
+```
+
+**Interpretation:** $K_p \gg 1$ at room temperature, so the equilibrium strongly favors $\mathrm{NH_3}$ *at the standard state*.
+(Section 5.3 explains why temperature and pressure “knobs” still matter for industrial operation.)
+
+---
+
+### Common pitfalls (and quick fixes)
+
+- **Wrong phase:** $\mathrm{H_2O(\ell)}$ and $\mathrm{H_2O(g)}$ (or $\mathrm{NH_3(\ell)}$ vs $\mathrm{NH_3(g)}$) have very different $S^\circ$ and $\Delta_f H^\circ$.
+- **Mixed standard states:** make sure all species use the same $P^\circ$ convention and the same temperature.
+- **Unit mismatches:** always reconcile kJ vs J and “per mole of reaction” vs “per mole of species.”
+- **Sign mistakes:** products minus reactants (or use $\nu_i$ with the sign convention consistently).
+
+
 ## Key takeaways
 
 1. Use $\xi$ to relate **composition** to reaction progress.

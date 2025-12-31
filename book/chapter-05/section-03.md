@@ -54,6 +54,19 @@ From the lecture notes, at $T = 298.15\ \mathrm{K}$ ($25^\circ\mathrm{C}$):
 
 So, **thermodynamically**, ammonia formation is spontaneous at 298 K because $\Delta G_r^\circ < 0$.
 
+:::{admonition} Data skills: where do these $\Delta H_r^\circ$, $\Delta S_r^\circ$, and $\Delta G_r^\circ$ numbers come from?
+:class: dropdown
+
+In practice, standard reaction values are usually computed from **tabulated species data**:
+
+1. Pull $\Delta_f H^\circ(298.15\ \mathrm{K})$ and $S^\circ(298.15\ \mathrm{K})$ for each species from a data source (NIST WebBook, JANAF, ATcT).
+2. Compute $\Delta_r H^\circ$ and $\Delta_r S^\circ$ using stoichiometry (products minus reactants).
+3. Compute $\Delta_r G^\circ = \Delta_r H^\circ - T\Delta_r S^\circ$.
+4. Convert $\Delta_r G^\circ$ to an equilibrium constant via $K=\exp(-\Delta_r G^\circ/RT)$.
+
+A step-by-step workflow (including a worked ammonia example) is given in **Section 7.1.7** and the main data sources are collected in **Appendix Y**.
+:::
+
 :::{admonition} Key idea
 :class: tip
 Thermodynamics ($\Delta G$) tells us *which direction is favored at equilibrium*.
