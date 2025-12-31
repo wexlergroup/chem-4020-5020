@@ -20,7 +20,7 @@ This section applies **thermodynamic equilibrium conditions** to **phases of mat
 
 From the lecture hand-written notes (Apr 16):
 
-1. **Phase equilibrium condition:** $G_\alpha = G_\beta$ (shorthand for “equal molar Gibbs free energy / equal chemical potential”) at a phase transition.
+1. **Phase equilibrium condition:** $G_\alpha = G_\beta$ (shorthand for "equal molar Gibbs free energy / equal chemical potential") at a phase transition.
 2. **First-order transition signatures:** $H_\alpha \neq H_\beta$ (**latent heat**) and $S_\alpha \neq S_\beta$ (**entropy jump**) at phase equilibrium.
 3. **Open systems:** the **chemical potential** $\mu$ is the natural quantity to use.
 4. **Coexistence curves:** the **(Clausius–)Clapeyron equation** provides the slope(s) of phase boundaries and lets us draw phase diagrams.
@@ -79,7 +79,7 @@ A useful way to remember the stability criterion:
 - At fixed $(T,P)$ the **stable phase** is the one with the **lowest** $g$ (or $\mu$).
 - A **phase transition** occurs where the $g$–surfaces for two phases intersect.
 
-## 6.1.3 What “$G_\alpha = G_\beta$” looks like on graphs
+## 6.1.3 What "$G_\alpha = G_\beta$" looks like on graphs
 
 The lecture notes emphasize that phase transitions correspond to intersections of Gibbs free-energy curves, and that the **slopes** of those curves encode entropy and volume.
 
@@ -186,7 +186,7 @@ The notes mention **Trouton's rule (1884)**: for many liquids at their _normal_ 
 \Delta S_{vap} \approx 85.9\;\mathrm{J\,mol^{-1}\,K^{-1}} \approx 10.3\,R.
 ```
 
-This is a useful “order-of-magnitude” estimate; real substances can deviate (especially when there is strong association / hydrogen bonding, or when the liquid structure is unusually ordered).
+This is a useful "order-of-magnitude" estimate; real substances can deviate (especially when there is strong association / hydrogen bonding, or when the liquid structure is unusually ordered).
 
 #### Worked example: using tabulated $C_P(T)$ + an entropy jump (water at 1 bar)
 
@@ -367,6 +367,270 @@ If $\Delta H_{vap}$ is approximately constant over the temperature range of inte
 ```
 
 which is the working form often used to fit vapor-pressure data and sketch the liquid–gas coexistence curve.
+
+## Mini-lab: Vapor pressure $\rightarrow$ $\Delta H_\mathrm{vap}$, linearity limits, and $\Delta H_\mathrm{vap}(T)$
+
+### Goals
+
+1. Use a **Clausius–Clapeyron plot** to estimate an **average** $\Delta H_\mathrm{vap}$ from data.
+2. Diagnose **when the "straight line" model breaks** (linearity limits).
+3. Estimate a **temperature-dependent** $\Delta H_\mathrm{vap}(T)$ from **local slopes**.
+
+> **Important:** In this section we are using the _liquid–vapor approximation_ (vapor ideal, $v_g\gg v_l$), which is what makes the simple $\ln P$ vs $1/T$ method work. Deviations can come from (i) real-gas behavior, (ii) non-negligible liquid molar volume, and (iii) the fact that $\Delta H_\mathrm{vap}$ itself changes with $T$.
+
+---
+
+### Dataset: saturation vapor pressure of water (example)
+
+Use this dataset as if it were experimental measurements (values are smooth/consistent and good for analysis practice).
+
+```{list-table}
+:header-rows: 1
+:name: tab:water-vap-pressure-mini-lab
+
+* * $T$ (°C)
+  * $P_\mathrm{sat}$ (kPa)
+* * 20
+  * 2.3296
+* * 30
+  * 4.2317
+* * 40
+  * 7.3584
+* * 50
+  * 12.3056
+* * 60
+  * 19.8702
+* * 70
+  * 31.0872
+* * 80
+  * 47.2671
+* * 90
+  * 70.0298
+* * 100
+  * 101.3365
+* * 120
+  * 197.9718
+* * 140
+  * 358.9652
+* * 160
+  * 613.6815
+* * 180
+  * 997.4430
+```
+
+---
+
+### Part A. Global Clausius–Clapeyron fit (the "straight-line" model)
+
+**Task:** Plot $y=\ln(P_\mathrm{sat}/1\ \mathrm{bar})$ versus $x=1/T$ (with $T$ in K), fit a line, and extract $\Delta H_\mathrm{vap}$ from the slope.
+
+```{code-cell} ipython3
+import io
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+from scipy import stats
+
+R = 8.314462618  # J mol^-1 K^-1
+
+data = """T_C,P_kPa
+20,2.3296
+30,4.2317
+40,7.3584
+50,12.3056
+60,19.8702
+70,31.0872
+80,47.2671
+90,70.0298
+100,101.3365
+120,197.9718
+140,358.9652
+160,613.6815
+180,997.4430
+"""
+
+df = pd.read_csv(io.StringIO(data))
+df["T_K"] = df["T_C"] + 273.15
+df["P_bar"] = df["P_kPa"] / 100.0  # 100 kPa = 1 bar
+df["invT"] = 1.0 / df["T_K"]
+df["lnP"] = np.log(df["P_bar"])     # ln(P/1 bar)
+
+# Linear regression: lnP = m*(1/T) + b
+
+m, b, r, p, se = stats.linregress(df["invT"], df["lnP"])
+DeltaHvap = -m * R  # J/mol
+
+print(f"slope m = {m: .2f} K")
+print(f"intercept b = {b: .3f}")
+print(f"R^2 = {r**2: .6f}")
+print(f"DeltaHvap (global fit) = {DeltaHvap/1000: .2f} kJ/mol")
+
+# Plot
+
+x = df["invT"].to_numpy()
+y = df["lnP"].to_numpy()
+x_fit = np.linspace(x.min(), x.max(), 200)
+y_fit = m*x_fit + b
+
+plt.figure(figsize=(6,4))
+plt.plot(x, y, "o", label="data")
+plt.plot(x_fit, y_fit, "-", label="linear fit")
+plt.xlabel(r"$1/T\ \mathrm{(K^{-1})}$")
+plt.ylabel(r"$\ln(P_\mathrm{sat}/1,\mathrm{bar})$")
+plt.grid(True)
+plt.legend()
+plt.tight_layout()
+plt.show()
+```
+
+**Interpretation prompts (answer in a sentence or two):**
+
+- What units should $\Delta H_\mathrm{vap}$ have?
+- Why is the slope negative?
+- Does the line _look_ good over the full temperature range?
+
+---
+
+### Part B. Linearity limits: residuals beat "it looks straight"
+
+A Clausius–Clapeyron plot can look linear even when the **constant $\Delta H_\mathrm{vap}$** assumption is quietly failing. A quick diagnostic is a **residual plot**.
+
+````{code-cell} ipython3
+# Residual plot
+
+df["lnP_fit"] = m*df["invT"] + b
+df["residual"] = df["lnP"] - df["lnP_fit"]
+
+plt.figure(figsize=(6,4))
+plt.axhline(0, linewidth=1)
+plt.plot(df["invT"], df["residual"], "o-")
+plt.xlabel(r"$1/T\ \mathrm{(K^{-1})}$")
+plt.ylabel("residual = data − fit (in ln units)")
+plt.grid(True)
+plt.tight_layout()
+plt.show()
+````
+
+**What to look for:**
+
+- If residuals are **random scatter around 0**, the linear model is adequate.
+- If residuals show a **systematic curve** (e.g., negative at both ends, positive in the middle), then the "straight-line" model is **missing physics**—often $\Delta H_\mathrm{vap}(T)$ changing with $T$, plus non-ideality.
+
+---
+
+### Part C. Two-range fits: do you get the same $\Delta H_\mathrm{vap}$?
+
+**Task:** Fit a **low-T** subset and a **high-T** subset and compare.
+
+```{code-cell} ipython3
+def fit_subset(df_sub):
+    m, b, r, p, se = stats.linregress(df_sub["invT"], df_sub["lnP"])
+    return {
+        "T_range_C": (df_sub["T_C"].min(), df_sub["T_C"].max()),
+        "R2": r**2,
+        "DeltaHvap_kJmol": (-m*R)/1000
+    }
+
+low = df[df["T_C"].between(20, 90)]
+high = df[df["T_C"].between(120, 180)]
+
+print("Low-T fit:", fit_subset(low))
+print("High-T fit:", fit_subset(high))
+```
+
+<!-- TODO: clean up print output formatting -->
+
+**Interpretation:**
+If $\Delta H_\mathrm{vap}$ were truly constant, these two fitted values would match (within uncertainty). If they differ systematically, that’s evidence that $\Delta H_\mathrm{vap}$ is **temperature-dependent** (and/or the ideal-vapor approximation is deteriorating at higher pressures).
+
+---
+
+### Part D. A "local slope" estimate of $\Delta H_\mathrm{vap}(T)$
+
+From the differential Clausius–Clapeyron form,
+
+```{math}
+\Delta H_\mathrm{vap}(T)=R,T^2\left(\frac{d\ln P_\mathrm{sat}}{dT}\right)
+```
+
+so we can estimate $\Delta H_\mathrm{vap}(T)$ from finite differences.
+
+```{code-cell} ipython3
+T = df["T_K"].to_numpy()
+lnP = df["lnP"].to_numpy()
+
+# central differences for d(lnP)/dT
+
+dlnP_dT = np.empty_like(T)
+dlnP_dT[1:-1] = (lnP[2:] - lnP[:-2]) / (T[2:] - T[:-2])
+dlnP_dT[0] = (lnP[1] - lnP[0]) / (T[1] - T[0])
+dlnP_dT[-1] = (lnP[-1] - lnP[-2]) / (T[-1] - T[-2])
+
+df["DeltaHvap_local_kJmol"] = (R * T**2 * dlnP_dT) / 1000
+
+plt.figure(figsize=(6,4))
+plt.plot(df["T_C"], df["DeltaHvap_local_kJmol"], "o-")
+plt.xlabel(r"$T\ (^\circ\mathrm{C})$")
+plt.ylabel(r"apparent $\Delta H_\mathrm{vap}(T)$ (kJ/mol)")
+plt.grid(True)
+plt.tight_layout()
+plt.show()
+
+df[["T_C","DeltaHvap_local_kJmol"]]
+```
+
+**Interpretation:**
+
+- The "local" $\Delta H_\mathrm{vap}(T)$ typically **decreases with increasing temperature**.
+- Physically, as $T$ increases toward the critical point, the liquid and vapor become more similar; the enthalpy difference between phases shrinks, and $\Delta H_\mathrm{vap}\to 0$ at the critical point.
+
+---
+
+### Check your work (expected ballpark results)
+
+```{dropdown} Click to expand
+<!-- :class: dropdown -->
+
+Using the dataset above, typical results are:
+
+- Global fit (all points): $\Delta H_\mathrm{vap}\approx 42\ \mathrm{kJ/mol}$ (an average over the whole range).
+- Low-T fit (20–90°C): $\Delta H_\mathrm{vap}\approx 43\ \mathrm{kJ/mol}$.
+- High-T fit (120–180°C): $\Delta H_\mathrm{vap}\approx 40\ \mathrm{kJ/mol}$.
+- Local-slope estimate: $\Delta H_\mathrm{vap}(T)$ trends downward across the dataset.
+
+If your values differ slightly, check:
+
+1. you used **Kelvin**,
+2. you used **natural log** (not $\log_{10}$),
+3. your pressure in the log was **dimensionless** (e.g., $P/1\ \mathrm{bar}$).
+```
+
+---
+
+### Reflection questions (short answers)
+
+1. Over what temperature window does the Clausius–Clapeyron straight-line model look "good enough" _and_ have residuals that are roughly random?
+2. What physical reasons can explain curvature in $\ln P$ vs $1/T$?
+3. If you needed a better model than a single $\Delta H_\mathrm{vap}$, what would you do?
+
+   - (Examples: fit two ranges, use a published vapor-pressure correlation, or include temperature dependence via heat-capacity corrections.)
+
+## Computational Studio: Clausius-Clapeyron
+
+Use the interactive studio below to explore the Clausius-Clapeyron linearization, adjust regression ranges, and compare inferred $\Delta H_\mathrm{vap}$ values.
+
+```{raw} html
+<div style="width: 100%; border: 1px solid #cbd5e1; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.08);">
+  <iframe
+    src="../computational-studios/clausius-clapeyron-studio.html"
+    title="Clausius-Clapeyron Computational Studio"
+    style="width: 100%; height: 900px; border: 0;"
+    loading="lazy"
+  ></iframe>
+</div>
+```
+
+If the embed does not load, you can open the studio in a new tab: [Clausius-Clapeyron Computational Studio](../computational-studios/clausius-clapeyron-studio.html).
 
 ## Key takeaways
 

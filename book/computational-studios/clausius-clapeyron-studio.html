@@ -1,0 +1,972 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Clausius-Clapeyron Computational Studio</title>
+    <link rel="stylesheet" href="clausius-clapeyron-studio.css" />
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;600&display=swap");
+
+      :root {
+        color-scheme: light;
+        --ink: #0f172a;
+        --muted: #4b5563;
+        --soft: #94a3b8;
+        --card: #ffffff;
+        --border: #dbe3ea;
+        --accent: #0ea5a0;
+        --accent-2: #1d4ed8;
+        --accent-3: #f97316;
+        --shadow: 0 18px 40px rgba(15, 23, 42, 0.12);
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        font-family: "IBM Plex Sans", "Segoe UI", sans-serif;
+        color: var(--ink);
+        background:
+          radial-gradient(900px 420px at 8% -5%, #dbeafe 0%, transparent 60%),
+          radial-gradient(900px 520px at 96% 8%, #fef3c7 0%, transparent 55%),
+          linear-gradient(180deg, #f8fafc 0%, #eef2f7 70%, #f8fafc 100%);
+        min-height: 100vh;
+      }
+
+      .page {
+        max-width: 1220px;
+        margin: 0 auto;
+        padding: 24px 18px 40px;
+      }
+
+      .hero {
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-radius: 24px;
+        padding: 24px 28px;
+        box-shadow: var(--shadow);
+        display: flex;
+        justify-content: space-between;
+        gap: 20px;
+        align-items: flex-start;
+        position: relative;
+        overflow: hidden;
+        animation: rise 0.45s ease both;
+      }
+
+      .hero::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(120deg, rgba(14, 165, 160, 0.08), transparent 60%);
+        pointer-events: none;
+      }
+
+      .eyebrow {
+        font-size: 0.7rem;
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        color: var(--accent);
+        font-weight: 600;
+      }
+
+      .hero h1 {
+        margin: 10px 0 8px;
+        font-size: clamp(2rem, 3vw, 2.7rem);
+      }
+
+      .hero p {
+        margin: 0;
+        color: var(--muted);
+        max-width: 740px;
+        line-height: 1.6;
+      }
+
+      .hero-meta {
+        margin-top: 18px;
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+        gap: 12px;
+      }
+
+      .meta-card {
+        background: #f8fafc;
+        border: 1px solid #e2e8f0;
+        border-radius: 14px;
+        padding: 12px 14px;
+      }
+
+      .meta-label {
+        font-size: 0.7rem;
+        text-transform: uppercase;
+        letter-spacing: 0.14em;
+        color: var(--soft);
+      }
+
+      .meta-value {
+        display: block;
+        margin-top: 6px;
+        font-family: "IBM Plex Mono", ui-monospace, monospace;
+        font-size: 0.95rem;
+      }
+
+      .layout {
+        margin-top: 22px;
+        display: grid;
+        grid-template-columns: minmax(280px, 340px) 1fr;
+        gap: 20px;
+      }
+
+      .column {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+      }
+
+      .card {
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-radius: 20px;
+        padding: 18px;
+        box-shadow: var(--shadow);
+        animation: rise 0.5s ease both;
+      }
+
+      .card h2 {
+        margin: 0 0 12px;
+        font-size: 1.05rem;
+      }
+
+      .stepper {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 8px;
+      }
+
+      .step-button {
+        border: 1px solid #e2e8f0;
+        background: #f8fafc;
+        border-radius: 12px;
+        padding: 8px 10px;
+        font-size: 0.78rem;
+        font-weight: 600;
+        text-align: left;
+        cursor: pointer;
+        color: var(--muted);
+        transition: all 0.2s ease;
+      }
+
+      .step-button.active {
+        background: var(--accent);
+        border-color: var(--accent);
+        color: white;
+      }
+
+      .step-button.complete {
+        background: #ecfeff;
+        border-color: #a5f3fc;
+        color: #0f766e;
+      }
+
+      .step-button.locked {
+        background: #f1f5f9;
+        border-color: #e2e8f0;
+        color: #94a3b8;
+        cursor: not-allowed;
+      }
+
+      .phase-card {
+        display: none;
+      }
+
+      .phase-card.active {
+        display: block;
+      }
+
+      .formula {
+        background: #f8fafc;
+        border: 1px solid #e2e8f0;
+        border-radius: 12px;
+        padding: 10px;
+        font-family: "IBM Plex Mono", ui-monospace, monospace;
+        font-size: 0.78rem;
+        text-align: center;
+        color: #0f172a;
+      }
+
+      .table-wrap {
+        max-height: 240px;
+        overflow: auto;
+        border: 1px solid #e2e8f0;
+        border-radius: 12px;
+      }
+
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 0.82rem;
+      }
+
+      thead {
+        background: #f8fafc;
+        position: sticky;
+        top: 0;
+        z-index: 1;
+      }
+
+      th,
+      td {
+        padding: 8px 10px;
+        border-bottom: 1px solid #e2e8f0;
+        text-align: left;
+      }
+
+      tr.selected {
+        background: #eff6ff;
+      }
+
+      tr.muted {
+        opacity: 0.5;
+      }
+
+      .mono {
+        font-family: "IBM Plex Mono", ui-monospace, monospace;
+      }
+
+      .button {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 6px;
+        border: none;
+        border-radius: 12px;
+        padding: 10px 14px;
+        font-weight: 600;
+        cursor: pointer;
+        background: var(--accent-2);
+        color: white;
+      }
+
+      .button.secondary {
+        background: #ecfeff;
+        color: #0f766e;
+      }
+
+      .button.small {
+        padding: 8px 10px;
+        font-size: 0.78rem;
+      }
+
+      .input-row {
+        display: flex;
+        gap: 10px;
+      }
+
+      input[type="number"],
+      input[type="text"] {
+        width: 100%;
+        padding: 8px 10px;
+        border-radius: 10px;
+        border: 1px solid #e2e8f0;
+        font-size: 0.9rem;
+      }
+
+      input[type="range"] {
+        width: 100%;
+        accent-color: var(--accent);
+      }
+
+      .feedback {
+        border-radius: 12px;
+        padding: 10px;
+        font-size: 0.85rem;
+        line-height: 1.4;
+      }
+
+      .feedback.success {
+        background: #ecfdf5;
+        border: 1px solid #a7f3d0;
+        color: #0f766e;
+      }
+
+      .feedback.warning {
+        background: #fff7ed;
+        border: 1px solid #fed7aa;
+        color: #9a3412;
+      }
+
+      .feedback.error {
+        background: #fef2f2;
+        border: 1px solid #fecaca;
+        color: #b91c1c;
+      }
+
+      .chart-card {
+        padding: 18px;
+      }
+
+      .chart-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 10px;
+      }
+
+      .chart-header h3 {
+        margin: 0;
+        font-size: 1rem;
+      }
+
+      .toggle {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        font-size: 0.82rem;
+      }
+
+      .chart {
+        height: 340px;
+      }
+
+      .note {
+        margin-top: 10px;
+        font-size: 0.85rem;
+        color: var(--muted);
+        line-height: 1.5;
+      }
+
+      .range-card {
+        margin-top: 12px;
+        padding: 12px;
+        border-radius: 14px;
+        border: 1px solid #e2e8f0;
+        background: #f8fafc;
+      }
+
+      .range-labels {
+        display: flex;
+        justify-content: space-between;
+        font-size: 0.75rem;
+        color: var(--muted);
+      }
+
+      .analysis {
+        background: #f8fafc;
+        border: 1px solid #e2e8f0;
+        border-radius: 16px;
+        padding: 16px;
+      }
+
+      .analysis h3 {
+        margin: 0 0 8px;
+        font-size: 0.95rem;
+      }
+
+      .analysis p {
+        margin: 0 0 10px;
+        color: var(--muted);
+        font-size: 0.88rem;
+        line-height: 1.6;
+      }
+
+      .question {
+        display: flex;
+        gap: 10px;
+        align-items: flex-start;
+      }
+
+      .question span {
+        background: #e0f2fe;
+        color: #0369a1;
+        font-weight: 700;
+        padding: 4px 8px;
+        border-radius: 8px;
+        font-size: 0.75rem;
+      }
+
+      .warning {
+        display: none;
+        margin-top: 12px;
+        background: #fff7ed;
+        border: 1px solid #fed7aa;
+        color: #9a3412;
+        padding: 10px 12px;
+        border-radius: 10px;
+        font-size: 0.85rem;
+      }
+
+      .hidden {
+        display: none;
+      }
+
+      @keyframes rise {
+        from {
+          opacity: 0;
+          transform: translateY(12px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      @media (max-width: 960px) {
+        .hero {
+          flex-direction: column;
+          align-items: flex-start;
+        }
+
+        .layout {
+          grid-template-columns: 1fr;
+        }
+
+        .chart {
+          height: 260px;
+        }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        * {
+          animation: none !important;
+          transition: none !important;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="page">
+      <header class="hero">
+        <div>
+          <div class="eyebrow">Computational Studio</div>
+          <h1>Clausius-Clapeyron</h1>
+          <p>
+            Investigate the relationship between vapor pressure and temperature for ethanol to determine its enthalpy of
+            vaporization using a linearized Clausius-Clapeyron plot.
+          </p>
+          <div class="hero-meta">
+            <div class="meta-card">
+              <span class="meta-label">Dataset</span>
+              <span class="meta-value">Ethanol vapor pressure</span>
+            </div>
+            <div class="meta-card">
+              <span class="meta-label">Points</span>
+              <span class="meta-value">8 measurements</span>
+            </div>
+            <div class="meta-card">
+              <span class="meta-label">Gas Constant</span>
+              <span class="meta-value">R = 8.314 J/mol K</span>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <main class="layout">
+        <section class="column">
+          <div class="card">
+            <h2>Progress</h2>
+            <div class="stepper" id="stepper">
+              <button class="step-button" data-step="1">Phase 1: Data</button>
+              <button class="step-button" data-step="2">Phase 2: Transform</button>
+              <button class="step-button" data-step="3">Phase 3: Analysis</button>
+              <button class="step-button" data-step="4">Phase 4: Interpretation</button>
+            </div>
+          </div>
+
+          <div class="card phase-card" id="phase1Card">
+            <h2>Raw Experimental Data</h2>
+            <p class="note">
+              Vapor pressure data for ethanol are collected at multiple temperatures. Transform the data to linearize
+              the Clausius-Clapeyron equation.
+            </p>
+            <div class="formula formula-block">
+              ln(P) = (-&Delta;H<sub>vap</sub>/R) &middot; (1/T) + C
+            </div>
+            <button class="button" id="transformButton" type="button">Transform Data</button>
+          </div>
+
+          <div class="card phase-card" id="phase2Card">
+            <h2>Data Table</h2>
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>T (&deg;C)</th>
+                    <th>1/T (K<sup>-1</sup>)</th>
+                    <th>ln(P)</th>
+                  </tr>
+                </thead>
+                <tbody id="dataTable"></tbody>
+              </table>
+            </div>
+            <p class="note note-spaced">Click rows to adjust the regression range.</p>
+            <button class="button secondary" id="toAnalysis" type="button">Proceed to Analysis</button>
+          </div>
+
+          <div class="card phase-card" id="phase3Card">
+            <h2>Analysis</h2>
+            <div class="control">
+              <label>Slope (m)</label>
+              <div class="formula" id="slopeValue">--</div>
+            </div>
+            <div class="control">
+              <label for="hvapInput">Calculate &Delta;H<sub>vap</sub> (kJ/mol)</label>
+              <div class="input-row">
+                <input id="hvapInput" type="number" placeholder="Enter value" />
+                <button class="button small" id="checkButton" type="button">Check</button>
+              </div>
+              <p class="note">Hint: slope = -&Delta;H<sub>vap</sub> / R</p>
+            </div>
+            <div id="feedback" class="feedback hidden"></div>
+          </div>
+        </section>
+
+        <section class="column">
+          <div class="card chart-card hidden" id="chartCard">
+            <div class="chart-header">
+              <h3>Clausius-Clapeyron Plot</h3>
+              <label class="toggle">
+                <input id="toggleFit" type="checkbox" />
+                Show regression line
+              </label>
+            </div>
+            <div id="plot" class="chart"></div>
+            <div class="note">Z = ln(P) vs 1/T; selected points define the regression.</div>
+            <div class="range-card hidden" id="rangeCard">
+              <div class="range-labels">
+                <span>High T (low 1/T)</span>
+                <strong class="mono">Adjust range</strong>
+                <span>Low T (high 1/T)</span>
+              </div>
+              <input id="rangeSlider" type="range" min="0" max="0" value="0" />
+              <div class="range-labels range-labels-spaced">
+                <span id="rangeLow">--</span>
+                <span>Selected range</span>
+                <span id="rangeHigh">--</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="card chart-card" id="placeholderCard">
+            <h3>Clausius-Clapeyron Plot</h3>
+            <p class="note">Transform data to view the plot and regression tools.</p>
+          </div>
+
+          <div class="analysis hidden" id="interpretationCard">
+            <h3>Interpretation &amp; Linearity Limits</h3>
+            <p>
+              Literature values for ethanol &Delta;H<sub>vap</sub> near the boiling point are about 38.6 kJ/mol, but the
+              value is closer to 42.3 kJ/mol at 25 &deg;C. Use the range selector to test how slope changes with
+              temperature.
+            </p>
+            <div class="question">
+              <span>Q1</span>
+              <p>
+                Select only the low temperature points (high 1/T). Does the slope become steeper or flatter? What does
+                that imply about &Delta;H<sub>vap</sub> at lower temperatures?
+              </p>
+            </div>
+            <div class="question question-spaced">
+              <span>Q2</span>
+              <p>
+                Why might the line curve slightly at the highest temperatures? (Hint: the ideal gas assumption begins
+                to break down near the critical region.)
+              </p>
+            </div>
+          </div>
+
+          <div class="warning" id="plotlyWarning">
+            Plotly did not load. Check network access or provide a local plotly.js file.
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <script src="https://cdn.plot.ly/plotly-2.27.0.min.js"></script>
+    <script>
+      (() => {
+        const rawData = [
+          { t_c: -31.3, p_pa: 133.3 },
+          { t_c: -2.3, p_pa: 1333.2 },
+          { t_c: 19.0, p_pa: 5332.9 },
+          { t_c: 34.9, p_pa: 13332.2 },
+          { t_c: 48.0, p_pa: 26664.0 },
+          { t_c: 63.5, p_pa: 53329.0 },
+          { t_c: 78.4, p_pa: 101325.0 },
+          { t_c: 97.5, p_pa: 202650.0 },
+        ];
+
+        const R = 8.314;
+
+        const state = {
+          step: 1,
+          transformedData: [],
+          showBestFit: false,
+          selectionRange: [0, rawData.length - 1],
+          studentHvap: "",
+          feedback: null,
+        };
+
+        const elements = {
+          stepper: document.getElementById("stepper"),
+          phase1Card: document.getElementById("phase1Card"),
+          phase2Card: document.getElementById("phase2Card"),
+          phase3Card: document.getElementById("phase3Card"),
+          chartCard: document.getElementById("chartCard"),
+          placeholderCard: document.getElementById("placeholderCard"),
+          rangeCard: document.getElementById("rangeCard"),
+          interpretationCard: document.getElementById("interpretationCard"),
+          transformButton: document.getElementById("transformButton"),
+          toAnalysis: document.getElementById("toAnalysis"),
+          dataTable: document.getElementById("dataTable"),
+          slopeValue: document.getElementById("slopeValue"),
+          hvapInput: document.getElementById("hvapInput"),
+          checkButton: document.getElementById("checkButton"),
+          feedback: document.getElementById("feedback"),
+          toggleFit: document.getElementById("toggleFit"),
+          rangeSlider: document.getElementById("rangeSlider"),
+          rangeLow: document.getElementById("rangeLow"),
+          rangeHigh: document.getElementById("rangeHigh"),
+          plotlyWarning: document.getElementById("plotlyWarning"),
+        };
+
+        let chartReady = false;
+
+        const formatExp = (value, digits) => value.toExponential(digits);
+        const formatFixed = (value, digits) => value.toFixed(digits);
+
+        const computeTransformedData = () =>
+          rawData.map((point, index) => {
+            const t_k = point.t_c + 273.15;
+            const inv_t = 1 / t_k;
+            const ln_p = Math.log(point.p_pa);
+            return {
+              id: index,
+              t_c: point.t_c,
+              p_pa: point.p_pa,
+              t_k,
+              inv_t,
+              inv_t_display: formatExp(inv_t, 4),
+              ln_p,
+              ln_p_display: formatFixed(ln_p, 3),
+            };
+          });
+
+        const computeRegression = () => {
+          if (!state.transformedData.length) {
+            return { slope: 0, intercept: 0, count: 0, hvapKj: 0 };
+          }
+          const [minIndex, maxIndex] = state.selectionRange;
+          const subset = state.transformedData.slice(minIndex, maxIndex + 1);
+          const n = subset.length;
+          if (n < 2) {
+            return { slope: 0, intercept: 0, count: n, hvapKj: 0 };
+          }
+
+          let sumX = 0;
+          let sumY = 0;
+          let sumXY = 0;
+          let sumXX = 0;
+
+          subset.forEach((d) => {
+            sumX += d.inv_t;
+            sumY += d.ln_p;
+            sumXY += d.inv_t * d.ln_p;
+            sumXX += d.inv_t * d.inv_t;
+          });
+
+          const slope = (n * sumXY - sumX * sumY) / (n * sumXX - sumX * sumX);
+          const intercept = (sumY - slope * sumX) / n;
+          const hvapKj = (-slope * R) / 1000;
+          return { slope, intercept, count: n, hvapKj };
+        };
+
+        const computeLineData = (stats) => {
+          const [minIndex, maxIndex] = state.selectionRange;
+          const subset = state.transformedData.slice(minIndex, maxIndex + 1);
+          if (subset.length < 2) {
+            return [];
+          }
+          const invValues = subset.map((d) => d.inv_t);
+          const minX = Math.min(...invValues);
+          const maxX = Math.max(...invValues);
+          return [
+            { x: minX, y: stats.slope * minX + stats.intercept },
+            { x: maxX, y: stats.slope * maxX + stats.intercept },
+          ];
+        };
+
+        const setStep = (step) => {
+          if (step <= state.step) {
+            state.step = step;
+            updateUI();
+          }
+        };
+
+        const advanceTo = (step) => {
+          if (step > state.step) {
+            state.step = step;
+          }
+          updateUI();
+        };
+
+        const updateStepper = () => {
+          const buttons = elements.stepper.querySelectorAll(".step-button");
+          buttons.forEach((button) => {
+            const step = parseInt(button.dataset.step, 10);
+            button.classList.toggle("active", state.step === step);
+            button.classList.toggle("complete", state.step > step);
+            button.classList.toggle("locked", state.step < step);
+            button.disabled = state.step < step;
+          });
+        };
+
+        const updatePhaseVisibility = () => {
+          elements.phase1Card.classList.toggle("active", state.step === 1);
+          elements.phase2Card.classList.toggle("active", state.step >= 2);
+          elements.phase3Card.classList.toggle("active", state.step >= 3);
+          elements.chartCard.classList.toggle("hidden", state.step < 2);
+          elements.placeholderCard.classList.toggle("hidden", state.step >= 2);
+          elements.rangeCard.classList.toggle("hidden", state.step < 3);
+          elements.interpretationCard.classList.toggle("hidden", state.step !== 4);
+        };
+
+        const updateTable = () => {
+          if (!state.transformedData.length) {
+            elements.dataTable.innerHTML = "";
+            return;
+          }
+          const [minIndex, maxIndex] = state.selectionRange;
+          elements.dataTable.innerHTML = state.transformedData
+            .map((row, index) => {
+              const isSelected = index >= minIndex && index <= maxIndex;
+              return `
+                <tr data-index="${index}" class="${isSelected ? "selected" : "muted"}">
+                  <td>${row.t_c}</td>
+                  <td class="mono">${row.inv_t_display}</td>
+                  <td class="mono" style="color: #1d4ed8;">${row.ln_p_display}</td>
+                </tr>
+              `;
+            })
+            .join("");
+        };
+
+        const updateAnalysis = () => {
+          const stats = computeRegression();
+          elements.slopeValue.textContent = stats.count >= 2 ? `${stats.slope.toFixed(1)} K` : "--";
+          if (state.feedback) {
+            elements.feedback.className = `feedback ${state.feedback.type}`;
+            elements.feedback.textContent = state.feedback.msg;
+            elements.feedback.classList.remove("hidden");
+          } else {
+            elements.feedback.classList.add("hidden");
+          }
+        };
+
+        const updateRangeUI = () => {
+          if (!state.transformedData.length) {
+            return;
+          }
+          const [minIndex, maxIndex] = state.selectionRange;
+          elements.rangeSlider.max = state.transformedData.length - 1;
+          elements.rangeSlider.value = maxIndex;
+          elements.rangeLow.textContent = `${state.transformedData[minIndex].t_c} C`;
+          elements.rangeHigh.textContent = `${state.transformedData[maxIndex].t_c} C`;
+        };
+
+        const renderChart = () => {
+          if (!window.Plotly) {
+            elements.plotlyWarning.style.display = "block";
+            return;
+          }
+          elements.plotlyWarning.style.display = "none";
+
+          const stats = computeRegression();
+          const [minIndex, maxIndex] = state.selectionRange;
+
+          const selected = state.transformedData.filter(
+            (row, index) => index >= minIndex && index <= maxIndex
+          );
+          const muted = state.transformedData.filter(
+            (row, index) => index < minIndex || index > maxIndex
+          );
+
+          const traces = [];
+          if (muted.length) {
+            traces.push({
+              x: muted.map((d) => d.inv_t),
+              y: muted.map((d) => d.ln_p),
+              mode: "markers",
+              name: "Other data",
+              marker: { color: "#94a3b8", size: 7, opacity: 0.5 },
+              customdata: muted.map((d) => [d.t_c, d.inv_t, d.ln_p, d.p_pa]),
+              hovertemplate:
+                "T=%{customdata[0]} C<br>1/T=%{customdata[1]:.4e} K^-1<br>ln(P)=%{customdata[2]:.3f}<br>P=%{customdata[3]:.0f} Pa<extra></extra>",
+            });
+          }
+
+          if (selected.length) {
+            traces.push({
+              x: selected.map((d) => d.inv_t),
+              y: selected.map((d) => d.ln_p),
+              mode: "markers",
+              name: "Selected data",
+              marker: { color: "#1d4ed8", size: 9 },
+              customdata: selected.map((d) => [d.t_c, d.inv_t, d.ln_p, d.p_pa]),
+              hovertemplate:
+                "T=%{customdata[0]} C<br>1/T=%{customdata[1]:.4e} K^-1<br>ln(P)=%{customdata[2]:.3f}<br>P=%{customdata[3]:.0f} Pa<extra></extra>",
+            });
+          }
+
+          if (state.showBestFit && stats.count >= 2) {
+            const lineData = computeLineData(stats);
+            traces.push({
+              x: lineData.map((d) => d.x),
+              y: lineData.map((d) => d.y),
+              mode: "lines",
+              name: "Regression",
+              line: { color: "#f97316", width: 2 },
+              hoverinfo: "skip",
+            });
+          }
+
+          const layout = {
+            margin: { t: 20, r: 20, l: 60, b: 50 },
+            paper_bgcolor: "rgba(0,0,0,0)",
+            plot_bgcolor: "rgba(0,0,0,0)",
+            font: { family: "IBM Plex Sans, sans-serif", color: "#0f172a" },
+            legend: { orientation: "h", x: 0, y: 1.12 },
+            xaxis: { title: "Inverse Temperature (1/T) (K^-1)", tickformat: ".2e", gridcolor: "#e2e8f0" },
+            yaxis: { title: "ln(P)", gridcolor: "#e2e8f0" },
+          };
+
+          const config = { responsive: true, displayModeBar: false };
+
+          if (!chartReady) {
+            Plotly.newPlot("plot", traces, layout, config);
+            chartReady = true;
+          } else {
+            Plotly.react("plot", traces, layout, config);
+          }
+        };
+
+        const updateUI = () => {
+          updateStepper();
+          updatePhaseVisibility();
+          updateTable();
+          updateAnalysis();
+          updateRangeUI();
+          if (state.step >= 2) {
+            renderChart();
+          }
+        };
+
+        const handleRowClick = (index) => {
+          const [minIndex, maxIndex] = state.selectionRange;
+          if (index < minIndex) {
+            state.selectionRange = [index, maxIndex];
+          } else if (index > maxIndex) {
+            state.selectionRange = [minIndex, index];
+          } else {
+            state.selectionRange = [index, index];
+          }
+          updateUI();
+        };
+
+        const checkAnswer = () => {
+          const stats = computeRegression();
+          if (stats.count < 2) {
+            state.feedback = { type: "error", msg: "Select at least two points for regression." };
+            updateUI();
+            return;
+          }
+
+          const userHvap = parseFloat(state.studentHvap);
+          if (Number.isNaN(userHvap)) {
+            state.feedback = { type: "error", msg: "Please enter a numeric value." };
+            updateUI();
+            return;
+          }
+
+          const actual = stats.hvapKj;
+          const error = Math.abs((userHvap - actual) / actual) * 100;
+
+          if (error < 5) {
+            state.feedback = {
+              type: "success",
+              msg: `Excellent. ${userHvap.toFixed(2)} kJ/mol is within ${error.toFixed(1)}% of ${actual.toFixed(2)} kJ/mol.`,
+            };
+            advanceTo(4);
+          } else {
+            state.feedback = {
+              type: "warning",
+              msg: `Not quite. The slope suggests ${actual.toFixed(2)} kJ/mol. Check sign and units.`,
+            };
+          }
+          updateUI();
+        };
+
+        const bindEvents = () => {
+          elements.transformButton.addEventListener("click", () => {
+            state.transformedData = computeTransformedData();
+            state.selectionRange = [0, state.transformedData.length - 1];
+            state.step = 2;
+            updateUI();
+          });
+
+          elements.toAnalysis.addEventListener("click", () => {
+            if (state.step >= 2) {
+              advanceTo(3);
+            }
+          });
+
+          elements.dataTable.addEventListener("click", (event) => {
+            const row = event.target.closest("tr");
+            if (!row) {
+              return;
+            }
+            const index = parseInt(row.dataset.index, 10);
+            handleRowClick(index);
+          });
+
+          elements.hvapInput.addEventListener("input", (event) => {
+            state.studentHvap = event.target.value;
+          });
+
+          elements.checkButton.addEventListener("click", checkAnswer);
+
+          elements.toggleFit.addEventListener("change", (event) => {
+            state.showBestFit = event.target.checked;
+            renderChart();
+          });
+
+          elements.rangeSlider.addEventListener("input", (event) => {
+            const value = parseInt(event.target.value, 10);
+            if (value >= state.selectionRange[0]) {
+              state.selectionRange = [state.selectionRange[0], value];
+              updateUI();
+            }
+          });
+
+          elements.stepper.addEventListener("click", (event) => {
+            const button = event.target.closest(".step-button");
+            if (!button || button.disabled) {
+              return;
+            }
+            const step = parseInt(button.dataset.step, 10);
+            setStep(step);
+          });
+        };
+
+        const init = () => {
+          bindEvents();
+          updateUI();
+        };
+
+        window.addEventListener("load", init);
+      })();
+    </script>
+  </body>
+</html>
