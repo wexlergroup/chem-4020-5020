@@ -716,8 +716,24 @@ Calculate the value of the compressibility factor for a van der Waals fluid at t
 
 ````
 
+Here is the updated subsection text, modeled after your Two-Level System example, with an improved description and the embedded frame pointing to your new deployment.
+
+---
+
 ## Computational Studio: Real Gas
 
-Calculate and visualize the behavior of real gases using three distinct Equations of State (EOS): Ideal Gas, Van der Waals (vdW), and Peng-Robinson (PR).
+Explore deviations from ideal behavior by dynamically comparing the Ideal Gas, Van der Waals (vdW), and Peng-Robinson (PR) equations of state. Adjust temperature and pressure to visualize how intermolecular forces impact the compressibility factor () and  isotherms, particularly near the critical point.
 
-If the embed does not load, you can open the studio in a new tab: [Real Gas Studio](../computational-studios/real-gas-studio.html).
+<div style="width: 100%; border: 1px solid #cbd5e1; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.08);">
+<iframe
+src="https://chem-4020-5020-ugp4.vercel.app/"
+title="Real Gas Computational Studio"
+style="width: 100%; height: 850px; border: 0;"
+loading="lazy"
+></iframe>
+</div>
+
+If the embed does not load, you can open the studio in a new tab:
+<a href="https://chem-4020-5020-ugp4.vercel.app/" target="_blank" rel="noopener">
+Real Gas Computational Studio
+</a>.
