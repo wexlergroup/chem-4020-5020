@@ -240,15 +240,18 @@ In a more rigorous quantum treatment (and for lower temperatures), the partition
 
 ## Computational Studio: Linear Rigid Rotor
 
-Use the interactive studio below to explore how the rotational partition function, internal energy, and heat capacity evolve with temperature and rotational spacing.
+Explore how molecular geometry and symmetry impact rotational thermodynamics. Use this studio to visualize the rotor, analyze the population distribution across quantum states (), and compare the partition function and entropy of heteronuclear vs. homonuclear diatomic molecules.
 
 <div style="width: 100%; border: 1px solid #cbd5e1; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.08);">
-  <iframe
-    src="../computational-studios/rigid-rotor-studio.html"
-    title="Rigid Rotor Computational Studio"
-    style="width: 100%; height: 900px; border: 0;"
-    loading="lazy"
-  ></iframe>
+<iframe
+src="https://chem-4020-5020-sk2g.vercel.app/"
+title="Rigid Rotor Computational Studio"
+style="width: 100%; height: 900px; border: 0;"
+loading="lazy"
+></iframe>
 </div>
 
-If the embed does not load, you can open the studio in a new tab: [Rigid Rotor Computational Studio](../computational-studios/rigid-rotor-studio.html).
+If the embed does not load, you can open the studio in a new tab:
+<a href="https://chem-4020-5020-sk2g.vercel.app/" target="_blank" rel="noopener">
+Rigid Rotor Computational Studio
+</a>.
