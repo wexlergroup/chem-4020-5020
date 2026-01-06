@@ -501,11 +501,14 @@ Explore how the canonical probabilities, partition function, and heat capacity r
 
 <div style="width: 100%; border: 1px solid #cbd5e1; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.08);">
   <iframe
-    src="../computational-studios/two-level-system.html"
+    src="../_static/two-level-system.html"
     title="Two-Level System Studio"
     style="width: 100%; height: 850px; border: 0;"
     loading="lazy"
   ></iframe>
 </div>
 
-If the embed does not load, you can open the studio in a new tab: [Two-Level System Studio](../computational-studios/two-level-system.html).
+If the embed does not load, you can open the studio in a new tab:
+<a href="../_static/two-level-system.html" target="_blank" rel="noopener">
+  Two-Level System Studio
+</a>.
