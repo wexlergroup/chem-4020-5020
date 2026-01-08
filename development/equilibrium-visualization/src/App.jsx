@@ -137,20 +137,20 @@ const EquilibriumVis = () => {
   ];
 
   return (
-    <div className="w-full max-w-4xl mx-auto p-4 bg-white rounded-xl shadow-lg font-sans">
-      <div className="mb-6 border-b pb-4">
-        <h2 className="text-2xl font-bold text-slate-800">Minimizing Gibbs Free Energy</h2>
+    <div className="w-full max-w-5xl mx-auto p-2 sm:p-4 bg-white rounded-xl shadow-lg font-sans">
+      <div className="mb-4 sm:mb-6 border-b pb-4">
+        <h2 className="text-xl sm:text-2xl font-bold text-slate-800">Minimizing Gibbs Free Energy</h2>
         <p className="text-slate-500 text-sm mt-1">
           Visualizing equilibrium for <span className="font-mono font-medium text-slate-700">2 NO₂(g) ⇌ N₂O₄(g)</span>
         </p>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-8">
         {/* Left Column: Visualization */}
         <div className="lg:col-span-2 space-y-4">
           
           {/* Main Chart */}
-          <div className="h-80 bg-slate-50 rounded-lg border border-slate-200 p-2 relative">
+          <div className="h-64 sm:h-80 bg-slate-50 rounded-lg border border-slate-200 p-2 relative">
             <ResponsiveContainer width="100%" height="100%">
               <LineChart margin={{ top: 20, right: 30, left: 20, bottom: 20 }}>
                 <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" />
@@ -203,13 +203,6 @@ const EquilibriumVis = () => {
                   stroke="#fff" 
                   strokeWidth={2} 
                 />
-
-                {/* Tangent Line (Visualizing Slope) */}
-                {/* We simulate a tangent by drawing a reference line between two calc'd points */}
-                {/* Note: Recharts doesn't support arbitrary line segments easily, so we overlay an SVG or use ReferenceLine if axis matches. 
-                    However, strictly plotting a segment in Recharts is tricky. 
-                    Simplification: We won't draw the tangent line inside Recharts to avoid artifacting, 
-                    instead we rely on the slope readout below. */}
               </LineChart>
             </ResponsiveContainer>
 

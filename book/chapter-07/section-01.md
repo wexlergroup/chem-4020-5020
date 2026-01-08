@@ -379,6 +379,15 @@ n_{\mathrm{NO_2},eq} = 2-2\xi_{eq} \approx 0.38,\qquad
 n_{\mathrm{N_2O_4},eq} = \xi_{eq} \approx 0.81.
 ```
 
+<div style="width: 100%; border: 1px solid #cbd5e1; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.08);">
+  <iframe
+    src="https://chem-4020-5020-auqq.vercel.app/"
+    title="Equilibrium Visualization"
+    style="width: 100%; height: 1200px; border: 0;"
+    loading="lazy"
+  ></iframe>
+</div>
+
 ---
 
 ### 7.1.5 Temperature dependence: the van't Hoff equation
