@@ -17,13 +17,24 @@ kernelspec:
 
 [Course-wide Conventions & Notation](../notation.md)
 
-## Overview
+## Overview and Learning Objectives
+
+Applying the First Law becomes straightforward once you choose convenient independent variables and impose process constraints. This section defines quasi-static/reversible/irreversible processes, provides a workflow for analyzing thermodynamic paths, and illustrates common ideal-gas cases (isochoric, isothermal, adiabatic) including a microscopic interpretation of heat and work.
 
 This section explores how to apply the First Law of Thermodynamics to various thermodynamic processes. We begin by clarifying key process definitions, then outline a step-by-step method for using the First Law under different constraints, and end with a microscopic interpretation that connects probability distributions of microstates with heat exchange.
 
 ---
 
-## Thermodynamic Processes
+Learning objectives:
+
+- Differentiate quasi-static, reversible, and irreversible processes and explain why reversibility is an idealization.
+- Rewrite the First Law in terms of chosen independent variables and apply constraints (isothermal, isochoric, isobaric, adiabatic).
+- Integrate $PV$ work and heat for common ideal-gas processes and relate results to state-variable changes.
+- Interpret microscopic changes in $p_i$ and $E_i$ as heat and work contributions to $dU$.
+
+## Core Ideas and Derivations
+
+### Thermodynamic Processes
 
 ```{glossary}
 Quasi-static process
@@ -42,7 +53,7 @@ Irreversible process
 
 <!-- Examples of quasi-static, reversible, and irreversible processes -->
 
-## How to Apply the First Law of Thermodynamics
+### How to Apply the First Law of Thermodynamics
 
 The First Law states:
 
@@ -111,11 +122,11 @@ Different process constraints (isobaric, isochoric, isothermal, adiabatic) dicta
 
 ---
 
-## Example: Using $V$ and $T$ as Independent Variables
+### Example: Using $V$ and $T$ as Independent Variables
 
 For many systems—especially gases—choosing $V$ and $T$ can simplify calculations.
 
-### First Law in Terms of $V$ and $T$
+#### First Law in Terms of $V$ and $T$
 
 Starting from
 
@@ -148,7 +159,7 @@ P = \frac{N k_B T}{V},
 C_V = \left(\frac{\partial U}{\partial T}\right)_V = \frac{3}{2} N k_B.
 ```
 
-### Process Constraints
+#### Process Constraints
 
 ```{list-table} Processes for an Ideal Gas ($V$ and $T$ as Independents)
 :header-rows: 1
@@ -168,7 +179,7 @@ C_V = \left(\frac{\partial U}{\partial T}\right)_V = \frac{3}{2} N k_B.
   - $C_V\, dT = -P\, dV$
 ```
 
-### Integrations Under Specific Constraints
+#### Integrations Under Specific Constraints
 
 1. **Isochoric ($dV = 0$)**
 
@@ -204,7 +215,7 @@ C_V = \left(\frac{\partial U}{\partial T}\right)_V = \frac{3}{2} N k_B.
 
 ---
 
-## Microscopic Interpretation of the First Law
+### Microscopic Interpretation of the First Law
 
 From a statistical mechanics perspective, the internal energy is
 
@@ -309,3 +320,52 @@ plt.close(fig)
 Schematic of microstate energies (vertical) and probabilities (horizontal). Heating changes the distribution $\{p_i\}$; compression shifts microstate energies $E_i$.
 
 By connecting heat transfer to probability shifts and work to energy-level changes, the microscopic picture of the First Law becomes clearer: energy enters or leaves the system either by rearranging how likely each microstate is (heat) or by shifting the energy of each microstate itself (work).
+
+## Worked Example
+
+### Isothermal reversible expansion of an ideal gas
+
+One mole of an ideal gas expands reversibly and isothermally at $T=300\ \mathrm{K}$ from $V_1=5.0\ \mathrm{L}$ to $V_2=20.0\ \mathrm{L}$. Compute $w$, $q$, and $\Delta U$.
+
+**Assumptions.** Ideal gas, reversible, isothermal; for an ideal gas $U=U(T)$.
+
+1. **Work**
+
+   ```{math}
+   w = -\int_{V_1}^{V_2} P\,dV = -\int_{V_1}^{V_2}\frac{nRT}{V}\,dV
+   = -nRT\ln\left(\frac{V_2}{V_1}\right).
+   ```
+
+   With $n=1$, $R=8.314\ \mathrm{J\,mol^{-1}\,K^{-1}}$, $T=300\ \mathrm{K}$, $V_2/V_1=4$:
+
+   ```{math}
+   w = -(8.314)(300)\ln 4 = -3.46\times10^{3}\ \mathrm{J}=-3.46\ \mathrm{kJ}.
+   ```
+
+2. **Internal energy**
+
+   ```{math}
+   \Delta U = 0 \quad (\text{isothermal ideal gas}).
+   ```
+
+3. **Heat from the First Law**
+
+   ```{math}
+   \Delta U = q + w \Rightarrow 0 = q + w \Rightarrow q = -w = +3.46\ \mathrm{kJ}.
+   ```
+
+**Result.** $w=-3.46\ \mathrm{kJ}$, $q=+3.46\ \mathrm{kJ}$, and $\Delta U=0$.
+
+## Concept Checks
+
+1. Why is reversibility useful even when real processes are irreversible?
+2. What distinguishes an isothermal process from an adiabatic process in terms of energy transfer mechanisms?
+3. For an ideal gas, why does $\left(\partial U/\partial V\right)_T=0$?
+4. In the microscopic expression $dU=\sum_i E_i\,dp_i+\sum_i p_i\,dE_i$, which term corresponds to heat and which to work (under the stated conditions)?
+
+## Key Takeaways
+
+- Choosing independent variables and constraints turns the First Law into solvable differential relations.
+- Ideal-gas isothermal expansion has $\Delta U=0$ and $q=-w$.
+- Adiabatic constraints set $q=0$ and force $T$ to change when work is done.
+- Microscopically, heat changes probabilities over fixed levels, while work changes the energy levels themselves (in common cases).

@@ -17,14 +17,22 @@ kernelspec:
 
 [Course-wide Conventions & Notation](../notation.md)
 
-> *“The total energy of the world, kinetic plus potential, is a constant when we look closely enough… [If we see energy not conserved, then] this is due to a lack of appreciation of what it is that we see.”*  
-> — Richard Feynman
+## Overview and Learning Objectives
 
-## Overview
+The First Law of Thermodynamics formalizes conservation of energy for macroscopic systems by accounting for heat and work. This section motivates the law from historical measurements, introduces sign conventions, and catalogs common forms of work as generalized force–displacement pairs.
 
 In this section, we introduce the principle of **conservation of energy** and the **First Law of Thermodynamics**, which unifies the ideas of heat and work into one fundamental statement.
 
-## Conservation of Mechanical Energy
+Learning objectives:
+
+- State the First Law in finite and differential forms and explain why $q$ and $w$ are path-dependent.
+- Apply sign conventions to determine whether heat/work is done *on* or *by* the system.
+- Compute $PV$ work for expansion/compression under specified external pressure conditions.
+- Recognize other work modes (surface, electrical, chemical potential) as generalized force–displacement terms.
+
+## Core Ideas and Derivations
+
+### Conservation of Mechanical Energy
 
 Between 1732 and 1736, Bernoulli and Euler combined the discoveries of Newton (laws of motion) and Leibniz (the connection between weight × vertical displacement and weight × velocity squared) into an early form of the law of conservation of mechanical energy. A simple example is the interchange between potential and kinetic energy:
 
@@ -51,7 +59,7 @@ v = \sqrt{2 g h}.
 ```
 ````
 
-## Mechanical Equivalent of Heat
+### Mechanical Equivalent of Heat
 
 ```{figure} https://upload.wikimedia.org/wikipedia/commons/c/c3/Joule%27s_Apparatus_%28Harper%27s_Scan%29.png
 ---
@@ -73,7 +81,7 @@ In 1847, James Prescott Joule measured how mechanical work converts into heat. H
 
 Here, $4.18\,\mathrm{J}\,\mathrm{g}^{-1}\,\text{°C}^{-1}$ is the **specific heat** of water—i.e., the heat capacity per gram.
 
-## First Law of Thermodynamics
+### First Law of Thermodynamics
 
 Joule’s work revealed that heat and mechanical energy are interconvertible. To include heat ($q$) and work ($w$) in one statement of energy conservation, we use:
 
@@ -87,7 +95,7 @@ where
 - $q$ is the heat **absorbed by** the system,
 - $w$ is the work **done on** the system.
 
-### Differential Form
+#### Differential Form
 
 In differential form,
 
@@ -99,7 +107,7 @@ dU = \delta q + \delta w
 
 The notation $\delta$ is used to remind us that $q$ and $w$ are **path functions**, not state functions.
 
-## Types of Work
+### Types of Work
 
 In Module 1.1, we defined work as “energy transferred when a force acts over a distance.” Mathematically:
 
@@ -125,7 +133,7 @@ Many physical processes fit a “generalized force” $\times$ “generalized di
 
 ---
 
-### Example 1. Expanding Against Constant Pressure
+#### Example 1. Expanding Against Constant Pressure
 
 Calculate the work necessary to expand an ideal gas from $20\,\mathrm{L}$ to $85\,\mathrm{L}$ against a constant external pressure of $2.5\,\mathrm{bar}$.  
 
@@ -170,7 +178,7 @@ Calculate the work necessary to expand an ideal gas from $20\,\mathrm{L}$ to $85
 
 ---
 
-### Example 2. Expanding a Water Bubble
+#### Example 2. Expanding a Water Bubble
 
 Calculate the work necessary to expand a water “bubble” (two surfaces) with surface tension $\gamma = 72\,\mathrm{J/m^2}$ from a radius of $1\,\mathrm{cm}$ to $3.25\,\mathrm{cm}$.
 
@@ -232,7 +240,7 @@ Calculate the work necessary to expand a water “bubble” (two surfaces) with 
 
 ---
 
-### Example 3. Stretching a Hookean Fiber
+#### Example 3. Stretching a Hookean Fiber
 
 Calculate the work required to stretch a fiber obeying Hooke’s law, with $k=100\,\mathrm{N/cm}$, by $0.15\,\mathrm{cm}$.
 
@@ -279,3 +287,45 @@ Calculate the work required to stretch a fiber obeying Hooke’s law, with $k=10
    - This is the energy required (work done **on** the system) to stretch the fiber by $0.15\,\mathrm{cm}$.
    - The positive sign indicates the system absorbs energy (an external force pulls on the fiber).
 ````
+
+## Worked Example
+
+### Constant external pressure expansion
+
+An ideal gas expands from $V_i=20\ \mathrm{L}$ to $V_f=85\ \mathrm{L}$ against constant external pressure $P_{\mathrm{ext}}=2.5\ \mathrm{bar}$. Compute the work $w$ (system sign convention: $w<0$ for expansion work done by the system).
+
+1. **Convert units**
+
+   ```{math}
+   P_{\mathrm{ext}}=2.5\times10^{5}\ \mathrm{Pa},\quad
+   \Delta V = (85-20)\ \mathrm{L}=65\times10^{-3}\ \mathrm{m^3}.
+   ```
+
+2. **Work at constant $P_{\mathrm{ext}}$**
+
+   ```{math}
+   w = -\int_{V_i}^{V_f} P_{\mathrm{ext}}\,dV = -P_{\mathrm{ext}}\Delta V
+   =-(2.5\times10^{5})(65\times10^{-3})\ \mathrm{J}.
+   ```
+
+3. **Evaluate**
+
+   ```{math}
+   w = -1.625\times10^{4}\ \mathrm{J}= -16.3\ \mathrm{kJ}.
+   ```
+
+**Result.** The gas does $16\ \mathrm{kJ}$ of work on the surroundings, so $w\approx -16\ \mathrm{kJ}$.
+
+## Concept Checks
+
+1. Why are $q$ and $w$ called *path functions* while $U$ is a *state function*?
+2. In which sign convention does expansion work appear as positive? How would the First Law be written then?
+3. Why does $PV$ work depend on the **external** pressure for irreversible expansions?
+4. What is the physical meaning of the chemical work term $\mu\,dN$?
+
+## Key Takeaways
+
+- The First Law ($\Delta U=q+w$) enforces energy conservation by bookkeeping heat and work.
+- Heat and work are **path-dependent**; internal energy is a **state function**.
+- Many work modes share a generalized force–displacement structure, including $PV$ work $(-P\,dV)$.
+- Careful sign conventions prevent systematic mistakes in energy balances.

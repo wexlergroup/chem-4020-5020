@@ -17,9 +17,22 @@ kernelspec:
 
 [Course-wide Conventions & Notation](../notation.md)
 
+## Overview and Learning Objectives
+
+This section reframes entropy in microscopic terms: as a measure of multiplicity and as a functional of a probability distribution over microstates. Starting from the second law for isolated systems, it introduces Boltzmann’s $S=k_{\mathrm B}\ln\Omega$, the Gibbs/Shannon form $S=-k_{\mathrm B}\sum p_i\ln p_i$, and the canonical relation between entropy, internal energy, and the partition function.
+
 This section shifts from the **macroscopic** entropy statements used with Carnot cycles to a more **microscopic / statistical** interpretation: entropy as a measure of *how many ways* a system can realize a macrostate, and how this connects to probability distributions and the partition function.
 
-## Roadmap (from the lecture)
+Learning objectives:
+
+- State the second-law condition $dS\ge 0$ for isolated systems and interpret equilibrium as $dS=0$.
+- Use Boltzmann’s formula $S=k_{\mathrm B}\ln\Omega$ and explain why the logarithm ensures extensivity.
+- Compute entropy from a probability distribution via $S=-k_{\mathrm B}\sum_i p_i\ln p_i$.
+- Derive the canonical identity $S = k_{\mathrm B}\ln Q + U/T$ (equivalently $S=k_{\mathrm B}(\ln Q+\beta U)$.
+
+## Core Ideas and Derivations
+
+### Roadmap (from the lecture)
 
 **Review** (from earlier sections)
 
@@ -56,7 +69,7 @@ This section shifts from the **macroscopic** entropy statements used with Carnot
 
 ---
 
-## Entropy increases until the system reaches equilibrium
+### Entropy increases until the system reaches equilibrium
 
 For an **isolated system**, the lecture emphasized this qualitative picture:
 
@@ -106,7 +119,7 @@ This plot is schematic, but it matches the lecture sketch: entropy rises from $S
 
 ---
 
-## A more generic second law statement: the Clausius inequality
+### A more generic second law statement: the Clausius inequality
 
 The definition
 
@@ -141,7 +154,7 @@ Interpretation: irreversibility produces additional entropy beyond the entropy �
 
 ---
 
-## Entropy and the number of microstates: Boltzmann’s formula
+### Entropy and the number of microstates: Boltzmann’s formula
 
 For an **isolated system**, the lecture connects entropy to the number of accessible microstates:
 
@@ -157,7 +170,7 @@ The notes emphasize that, for an isolated system, $\Omega$ can be viewed as the 
 - Fix $U$ (and $N,V$, etc.)
 - Count: “How many different states did I find?”
 
-### Why the logarithm?
+#### Why the logarithm?
 
 A key property of thermodynamic entropy is that it is **extensive**:
 
@@ -186,7 +199,7 @@ That is the “why ln?” point made in the notes.
 
 ---
 
-## Entropy in terms of probabilities: the Gibbs entropy
+### Entropy in terms of probabilities: the Gibbs entropy
 
 The lecture then generalizes from “counting microstates” to working with a probability distribution $\{p_i\}$ over microstates $i=1,\dots,M$:
 
@@ -210,7 +223,7 @@ This formula has two important features:
 
 ---
 
-## Canonical ensemble and the partition function
+### Canonical ensemble and the partition function
 
 For a **closed system** (fixed $N,V$) in thermal contact with a reservoir at temperature $T$, the canonical ensemble assigns probabilities
 
@@ -228,7 +241,7 @@ Q(N,V,\beta) \equiv \sum_{i=1}^{M} e^{-\beta E_i}
 
 is the **canonical partition function**.
 
-### Entropy in terms of $U$ and $Q$
+#### Entropy in terms of $U$ and $Q$
 
 Starting from the Gibbs entropy,
 
@@ -276,7 +289,7 @@ which is the final result on the last page of the lecture notes.
 
 ---
 
-## Microscopic interpretation of heat (review connection)
+### Microscopic interpretation of heat (review connection)
 
 The lecture’s “review” line
 
@@ -305,10 +318,41 @@ This is the microscopic counterpart to the macroscopic first law bookkeeping.
 
 ---
 
-## Key takeaways
+## Worked Example
 
-- **Entropy increase and equilibrium:** for an isolated system, spontaneous evolution drives $S$ upward until equilibrium where $dS=0$.
-- **General second law (Clausius inequality):** $dS \ge \delta q/T$, with equality only for reversible processes.
-- **Boltzmann entropy:** $S=k_B\ln\Omega$ connects entropy to the multiplicity of microstates in an isolated system.
-- **Gibbs entropy:** $S=-k_B\sum p_i\ln p_i$ generalizes entropy to non-uniform probability distributions.
-- **Canonical ensemble:** $p_i = e^{-\beta E_i}/Q$ and $S=U/T + k_B\ln Q$ connect thermodynamic entropy to the partition function.
+### Entropy of a two-state distribution
+
+A system has two microstates with probabilities $p$ and $1-p$. The Gibbs entropy is
+
+```{math}
+S(p)=-k_{\mathrm B}\left[p\ln p + (1-p)\ln(1-p)\right].
+```
+
+Take the “maximally uncertain” case $p=1/2$:
+
+1. **Insert $p=1/2$**
+
+   ```{math}
+   S = -k_{\mathrm B}\left[\frac12\ln\left(\frac12\right)+\frac12\ln\left(\frac12\right)\right]
+   = -k_{\mathrm B}\left[\ln\left(\frac12\right)\right]
+   = k_{\mathrm B}\ln 2.
+   ```
+
+2. **Interpretation**
+   $S$ is largest at $p=1/2$ because the distribution is most spread out (largest uncertainty / multiplicity).
+
+**Result.** A two-state system with equal probabilities has entropy $k_{\mathrm B}\ln 2$.
+
+## Concept Checks
+
+1. How does “entropy increases until equilibrium” translate into a statement about probability distributions over microstates?
+2. Why does $S=k_{\mathrm B}\ln\Omega$ require the microcanonical assumption $p_i=1/\Omega$?
+3. What physical meaning does the canonical partition function $Q$ have beyond being a normalization constant?
+4. How can entropy be extensive while probability distributions are normalized to 1?
+
+## Key Takeaways
+
+- Entropy is a macroscopic measure of how many microstates (or how much probability weight) a macrostate contains.
+- Boltzmann’s $S=k_{\mathrm B}\ln\Omega$ and Gibbs’s $S=-k_{\mathrm B}\sum p_i\ln p_i$ are consistent in the microcanonical limit.
+- The logarithm ensures entropy additivity for independent subsystems.
+- In the canonical ensemble, $S=k_{\mathrm B}\ln Q + U/T$ ties entropy directly to the partition function.

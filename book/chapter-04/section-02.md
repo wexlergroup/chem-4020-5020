@@ -17,7 +17,9 @@ kernelspec:
 
 [Course-wide Conventions & Notation](../notation.md)
 
-## Overview
+## Overview and Learning Objectives
+
+The Carnot cycle is a fully reversible heat-engine cycle that sets the maximum efficiency any engine can achieve between two reservoir temperatures. Using the entropy definition $dS=\delta q_{\mathrm{rev}}/T$, the cycle relates heat flows to temperature and establishes $\eta_{\mathrm{Carnot}}=1-T_{\mathrm{cold}}/T_{\mathrm{hot}}$. The same reasoning yields a second-law statement about the direction of spontaneous heat flow.
 
 This section connects **entropy** to the performance limits of heat engines using the **Carnot cycle**.
 It emphasizes four linked ideas:
@@ -59,7 +61,16 @@ Throughout, we will use the standard Carnot labeling $A \to B \to C \to D \to A$
 
 ---
 
-## The Cycle
+Learning objectives:
+
+- Describe the four reversible steps of the Carnot cycle (two isotherms and two adiabats) on a $P$–$V$ diagram.
+- Use entropy changes on reversible isotherms and adiabats to show $\Delta S_{\mathrm{cycle}}=0$.
+- Derive the Carnot efficiency $\eta_{\mathrm{Carnot}}=1-T_{\mathrm{cold}}/T_{\mathrm{hot}}$.
+- Explain why spontaneous heat flow from hot to cold is required by non-decreasing total entropy.
+
+## Core Ideas and Derivations
+
+### The Cycle
 
 The figure below plots the Carnot cycle on a **pressure–volume (P–V) diagram** for an ideal gas.
 The key geometric features match the lecture sketch:
@@ -159,7 +170,7 @@ The Carnot cycle for an ideal gas. The isothermal expansion and compression curv
 (Boyle's-law form at fixed $T$), while the adiabatic expansion and compression curves follow the adiabatic equation
 (which produces a steeper curve than the isotherms).
 
-### Step-by-step thermodynamic description (matching the lecture sketch)
+#### Step-by-step thermodynamic description (matching the lecture sketch)
 
 | Step | Process type | Thermal contact | Heat $q$ | Entropy change $\Delta S$ | Qualitative work |
 | --- | --- | --- | --- | --- | --- |
@@ -185,7 +196,7 @@ Two quick consequences (both appear explicitly in the notes):
 
 ---
 
-## How to Operate a Carnot Cycle/Engine
+### How to Operate a Carnot Cycle/Engine
 
 The notes give a piston-and-weights picture for how to realize each step (page 2).
 
@@ -284,7 +295,7 @@ plt.show()
 
 ---
 
-## Maximum Efficiency of Converting Heat to Work (Carnot efficiency)
+### Maximum Efficiency of Converting Heat to Work (Carnot efficiency)
 
 The notes define the heat quantities on the two isothermal legs:
 
@@ -338,7 +349,7 @@ maximum possible efficiency.
 
 ---
 
-## The Second Law: Entropy and the Direction of Heat Flow
+### The Second Law: Entropy and the Direction of Heat Flow
 
 The notes (page 3) use a simple composite system:
 
@@ -393,7 +404,7 @@ composite system, which violates the second law.
 
 ---
 
-## Summary (what to remember)
+### Summary (what to remember)
 
 - $dS = \delta q_{\mathrm{rev}}/T$ is the entropy bookkeeping rule highlighted in the notes.
 - The Carnot cycle consists of two reversible isotherms (heat exchange at fixed $T$) and two reversible adiabats (no heat exchange).
@@ -404,3 +415,53 @@ composite system, which violates the second law.
   ```
 
 - The second law can be phrased as: for an isolated system, $\Delta S \ge 0$, which enforces the direction of spontaneous heat flow.
+
+## Worked Example
+
+### Carnot efficiency and reversible entropy bookkeeping
+
+An ideal Carnot engine operates between $T_{\mathrm{hot}}=500\ \mathrm{K}$ and $T_{\mathrm{cold}}=300\ \mathrm{K}$. Suppose it absorbs $q_{\mathrm{hot}}=1000\ \mathrm{J}$ from the hot reservoir in the isothermal expansion step.
+
+1. **Maximum efficiency**
+
+   ```{math}
+   \eta_{\mathrm{Carnot}} = 1-\frac{T_{\mathrm{cold}}}{T_{\mathrm{hot}}}
+   =1-\frac{300}{500}=0.40.
+   ```
+
+   So the maximum work per cycle is
+
+   ```{math}
+   w_{\max} = \eta\,q_{\mathrm{hot}} = 0.40(1000)=400\ \mathrm{J}.
+   ```
+
+2. **Heat rejected**
+   Energy conservation over a cycle gives $w=q_{\mathrm{hot}}+q_{\mathrm{cold}}$ with $q_{\mathrm{cold}}<0$, so
+
+   ```{math}
+   q_{\mathrm{cold}} = w - q_{\mathrm{hot}} = 400-1000 = -600\ \mathrm{J}.
+   ```
+
+3. **Entropy changes of reservoirs (reversible)**
+
+   ```{math}
+   \Delta S_{\mathrm{hot}} = -\frac{q_{\mathrm{hot}}}{T_{\mathrm{hot}}}= -\frac{1000}{500}=-2.0\ \mathrm{J/K},
+   \qquad
+   \Delta S_{\mathrm{cold}} = -\frac{q_{\mathrm{cold}}}{T_{\mathrm{cold}}}= -\frac{-600}{300}=+2.0\ \mathrm{J/K}.
+   ```
+
+**Result.** $\Delta S_{\mathrm{hot}}+\Delta S_{\mathrm{cold}}=0$, consistent with a reversible cycle, and $40\%$ is the maximum possible efficiency for these reservoir temperatures.
+
+## Concept Checks
+
+1. Why are adiabatic steps isentropic only in the *reversible* case?
+2. What feature of the Carnot cycle makes it “best possible” compared to real engines?
+3. If $T_{\mathrm{cold}}$ is lowered while $T_{\mathrm{hot}}$ is fixed, how does $\eta_{\mathrm{Carnot}}$ change and why?
+4. How does the Carnot argument connect a cyclic engine analysis to the second-law direction of heat flow?
+
+## Key Takeaways
+
+- A Carnot engine is fully reversible and therefore sets the **maximum** possible efficiency between two temperatures.
+- Reversible isotherms exchange heat at fixed $T$; reversible adiabats exchange no heat and keep $S$ constant.
+- The Carnot efficiency depends only on reservoir temperatures: $\eta_{\mathrm{Carnot}}=1-T_c/T_h$.
+- Second-law reasoning implies spontaneous heat flow from hot to cold because total entropy of an isolated system cannot decrease.

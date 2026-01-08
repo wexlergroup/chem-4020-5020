@@ -17,13 +17,24 @@ kernelspec:
 
 [Course-wide Conventions & Notation](../notation.md)
 
-## Overview
+## Overview and Learning Objectives
+
+Enthalpy $H=U+PV$ is the natural energy-like potential for constant-pressure processes, which are common in chemistry and calorimetry. This section defines enthalpy from the First Law at constant pressure, relates $q_P$ to $\Delta H$, and introduces standard enthalpy changes used in thermochemistry.
 
 Enthalpy $H$ is a thermodynamic potential particularly convenient for processes at constant pressure, which is common in chemistry.
 
 ---
 
-## Defining Enthalpy
+Learning objectives:
+
+- Derive the definition $H=U+PV$ and show that $q_P=\Delta H$ for constant-pressure processes with only $PV$ work.
+- Define heat capacity at constant pressure $C_P$ and use it to compute enthalpy changes over temperature intervals.
+- Explain standard states and the meaning of standard enthalpy of formation and reaction.
+- Apply Hess’s Law to compute $\Delta H_{\mathrm{rxn}}^\circ$ from formation enthalpies.
+
+## Core Ideas and Derivations
+
+### Defining Enthalpy
 
 Consider the first-law expression when $T$ and $P$ are the independent variables:
 
@@ -86,7 +97,7 @@ This matches Equation {eq}`differential_first_law_constant_pressure`, thus confi
 $\delta q_P = \mathrm{d}H$ at constant pressure.
 ````
 
-## Measuring Enthalpy and Enthalpy Changes
+### Measuring Enthalpy and Enthalpy Changes
 
 At constant pressure, the heat absorbed or released by a process is equal to the change in enthalpy of the system:
 
@@ -174,13 +185,13 @@ Consider a reaction that involves dissolving a solid in water. You could use a t
 ```
 ````
 
-## Defining Common Enthalpy Changes
+### Defining Common Enthalpy Changes
 
-### Standard Conditions
+#### Standard Conditions
 
 Standard conditions are defined as $P^\circ = 1\text{ bar}$. Reference databases---e.g., the [NIST-JANAF Thermochemical Tables](https://doi.org/10.18434/T42S31) and [Active Thermochemical Tables](https://atct.anl.gov/)---often document properties at $T = 25^\circ C$ (298.15 K).
 
-### Standard Enthalpy of Formation
+#### Standard Enthalpy of Formation
 
 The **standard enthalpy of formation**, $\Delta H_f^\circ$, is the enthalpy change when **1 mole** of a compound is formed from its constituent elements **in their standard states**.
 
@@ -225,7 +236,7 @@ The **standard enthalpy of formation**, $\Delta H_f^\circ$, is the enthalpy chan
   - Po
 ```
 
-### Standard Enthalpy of Reaction
+#### Standard Enthalpy of Reaction
 
 The **standard enthalpy of reaction**, $\Delta H_{\mathrm{rxn}}^\circ$, is the enthalpy change when a reaction is carried out under standard conditions. Mathematically:
 
@@ -285,3 +296,43 @@ Alternatively, break each species into formation (or reverse formation) reaction
 
 Either approach gives the same result, thanks to Hess’s Law.
 `````
+
+## Worked Example
+
+### Heating at constant pressure
+
+A sample has constant-pressure heat capacity $C_P=75.0\ \mathrm{J\,mol^{-1}\,K^{-1}}$ (approximately constant over the range). Find $\Delta H$ when it is heated from $T_i=298\ \mathrm{K}$ to $T_f=350\ \mathrm{K}$ at constant pressure.
+
+At constant pressure,
+
+```{math}
+\Delta H=\int_{T_i}^{T_f} C_P\,dT \approx C_P(T_f-T_i).
+```
+
+Compute $\Delta T$:
+
+```{math}
+\Delta T = 350-298 = 52\ \mathrm{K}.
+```
+
+Then
+
+```{math}
+\Delta H \approx (75.0)(52)\ \mathrm{J\,mol^{-1}} = 3.90\times10^{3}\ \mathrm{J\,mol^{-1}}=3.90\ \mathrm{kJ\,mol^{-1}}.
+```
+
+**Result.** $\Delta H \approx 3.9\ \mathrm{kJ\,mol^{-1}}$ for this heating step at constant pressure.
+
+## Concept Checks
+
+1. Why does adding the $PV$ term make $H$ especially convenient at constant pressure?
+2. When is it *not* valid to identify $q_P$ with $\Delta H$?
+3. Why are formation enthalpies of elements in their standard states defined as zero?
+4. How does Hess’s Law justify computing reaction enthalpies without specifying a mechanism?
+
+## Key Takeaways
+
+- Enthalpy is defined by $H=U+PV$ and satisfies $q_P=\Delta H$ for constant-pressure $PV$-only work.
+- Heat capacities relate temperature changes to enthalpy changes via $\Delta H=\int C_P\,dT$.
+- Standard enthalpy changes (formation, reaction) provide a consistent bookkeeping framework.
+- Hess’s Law lets you build $\Delta H_{\mathrm{rxn}}^\circ$ from tabulated formation enthalpies.
