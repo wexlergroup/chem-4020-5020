@@ -17,13 +17,24 @@ kernelspec:
 
 [Course-wide Conventions & Notation](../notation.md)
 
-## Overview
+## Overview and Learning Objectives
+
+Real gases deviate from ideal behavior when finite molecular size and intermolecular forces matter. This section introduces the compressibility factor as a quantitative measure of non-ideality and develops the van der Waals equation of state, including its critical constants and the principle of corresponding states.
 
 Under high pressures, high densities, or low temperatures, we cannot treat gases as sets of non-interacting point particles. Higher pressures imply more frequent collisions and higher densities, higher densities are associated with closer molecules that can more strongly interact and experience each other's finite size, and lower temperatures indicate that molecules have lower kinetic energy and are more disposed to be affected by these interactions. This section presents approaches for quantifying deviations from ideal behavior and the van der Waals equation of state, which is one of the simplest models for real gases and the subject of the [Nobel Prize in Physics 1910](https://www.nobelprize.org/prizes/physics/1910/summary/).
 
-## Deviations from Ideal Behavior
+Learning objectives:
 
-### Compressibility Factor
+- Define the compressibility factor $Z$ and interpret $Z<1$ vs. $Z>1$ in terms of attractions/repulsions.
+- Write the van der Waals equation of state in particle and molar forms and interpret the parameters $a$ and $b$.
+- Derive (or use) the van der Waals critical constants $V_{\mathrm m,c}=3b$, $P_c=a/(27b^2)$, $T_c=8a/(27bR)$.
+- Non-dimensionalize the van der Waals EOS to obtain the corresponding-states form in reduced variables.
+
+## Core Ideas and Derivations
+
+### Deviations from Ideal Behavior
+
+#### Compressibility Factor
 
 ```{code-cell} ipython3
 :tags: [hide-input]
@@ -148,9 +159,9 @@ Can you demonstrate why $V_\text{real} > V_\text{ideal}$ for $Z > 1$ and $V_\tex
 What might be the cause of attractive interactions in a gas of carbon dioxide or methane molecules?
 ```
 
-## Van der Waals Fluid
+### Van der Waals Fluid
 
-### Van der Waals Equation of State
+#### Van der Waals Equation of State
 
 The van der Waals equation of state is one of the simplest models for real gases and the subject of the [Nobel Prize in Physics 1910](https://www.nobelprize.org/prizes/physics/1910/summary/):
 
@@ -183,7 +194,7 @@ where $a$ and $b$ are constants that quantify two deviations from ideal behavior
 - **$a$**: Attractive interactions between particles.
 - **$b$**: Volume occupied by the particles.
 
-### Van der Waals Isotherm
+#### Van der Waals Isotherm
 
 ```{code-cell} ipython3
 :tags: [hide-input]
@@ -265,7 +276,7 @@ plt.close(fig)
 
 Comparison of experimental and van der Waals isotherms for CO<sub>2</sub> at temperatures below, at, and above the critical temperature $T_c$. The subcritical isotherm ($T < T_c$) displays the characteristic loop associated with phase separation, while the isotherm at $T = T_c$ shows an inflection point, and supercritical conditions ($T > T_c$) no longer exhibit a liquid–vapor transition.
 
-#### Critical Point
+##### Critical Point
 
 ```{code-cell} ipython3
 :tags: [hide-input]
@@ -608,7 +619,7 @@ T_{\text{c}} &= \frac{8 a_\text{m}}{27 b_\text{m} R}.
 ```
 ````
 
-#### Corresponding States
+##### Corresponding States
 
 ```{code-cell} ipython3
 :tags: [hide-input]
@@ -723,7 +734,7 @@ Here is the updated subsection text, modeled after your Two-Level System example
 
 ---
 
-## Computational Studio: Real Gas
+### Computational Studio: Real Gas
 
 Explore deviations from ideal behavior by dynamically comparing the Ideal Gas, Van der Waals (vdW), and Peng-Robinson (PR) equations of state. Adjust temperature and pressure to visualize how intermolecular forces impact the compressibility factor () and  isotherms, particularly near the critical point.
 
@@ -741,3 +752,60 @@ You can open the studio in a new tab:
 <a href="https://chem-4020-5020-ugp4.vercel.app/" target="_blank" rel="noopener">
 Real Gas Computational Studio
 </a>.
+
+## Worked Example
+
+**van der Waals critical constants and $Z_c$ for CO$_2$**
+
+Use the van der Waals parameters (as in the section plots)  
+$a_m = 3.6551\ \mathrm{L^2\,bar\,mol^{-2}}$, $b_m=0.042816\ \mathrm{L\,mol^{-1}}$, and $R=0.08314\ \mathrm{L\,bar\,mol^{-1}\,K^{-1}}$.
+
+The van der Waals critical constants are
+
+```{math}
+V_{\mathrm m,c}=3b_m,\qquad
+P_c=\frac{a_m}{27b_m^2},\qquad
+T_c=\frac{8a_m}{27b_mR}.
+```
+
+1. **Critical volume**
+
+   ```{math}
+   V_{\mathrm m,c}=3(0.042816)=0.128448\ \mathrm{L/mol}.
+   ```
+
+2. **Critical pressure**
+
+   ```{math}
+   P_c=\frac{3.6551}{27(0.042816)^2}=73.85\ \mathrm{bar}.
+   ```
+
+3. **Critical temperature**
+
+   ```{math}
+   T_c=\frac{8(3.6551)}{27(0.042816)(0.08314)}=304.2\ \mathrm{K}.
+   ```
+
+4. **Critical compressibility factor**
+
+   ```{math}
+   Z_c \equiv \frac{P_cV_{\mathrm m,c}}{RT_c}
+   =\frac{73.85\times 0.12845}{0.08314\times 304.2}
+   =0.375=\frac{3}{8}.
+   ```
+
+**Result.** The van der Waals model predicts $T_c\approx 304\ \mathrm{K}$, $P_c\approx 74\ \mathrm{bar}$, $V_{\mathrm m,c}\approx 0.128\ \mathrm{L/mol}$, and $Z_c=3/8$.
+
+## Concept Checks
+
+1. Why can a gas be “coincidentally ideal” (i.e., $Z=1$) even when interactions are not negligible?
+2. What physical effects are represented by the $a/V_{\mathrm m}^2$ and $b$ corrections in the van der Waals EOS?
+3. At fixed $T$, how does increasing $P$ typically shift $Z$ for real gases and why?
+4. Why does the reduced-variable form imply similar behavior across different substances near corresponding reduced conditions?
+
+## Key Takeaways
+
+- Non-ideality is quantified by $Z=PV/(nRT)$; $Z<1$ suggests net attractions and $Z>1$ suggests net repulsions.
+- The van der Waals EOS adds an attraction parameter $a$ and an excluded-volume parameter $b$.
+- Critical constants follow directly from the cubic form of the van der Waals EOS, with $Z_c=3/8$.
+- Using reduced variables $(T_r,P_r,V_r)$ yields the corresponding-states form shared by all van der Waals fluids.

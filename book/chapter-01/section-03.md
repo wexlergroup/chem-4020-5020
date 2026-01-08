@@ -17,7 +17,9 @@ kernelspec:
 
 [Course-wide Conventions & Notation](../notation.md)
 
-## Overview
+## Overview and Learning Objectives
+
+The ideal-gas model collects several empirical gas laws into a single equation of state and is accurate when intermolecular interactions are negligible. This section reviews the classical gas laws, derives $PV=Nk_{\mathrm B}T$, and uses the result to estimate microscopic length scales and motivate the absolute temperature scale.
 
 Ideal gases are a central model in thermodynamics. By simplifying microscopic interactions and treating molecules as non-interacting point particles, we can accurately predict many macroscopic properties for gases under appropriate conditions. This section reviews the classical gas laws, derives the ideal gas equation of state, and discusses the assumptions underlying the ideal gas model.
 
@@ -25,7 +27,16 @@ Ideal gases are a central model in thermodynamics. By simplifying microscopic in
 
 (section:gas-laws)=
 
-## Gas Laws
+Learning objectives:
+
+- State Boyle’s, Charles’s, Gay–Lussac’s, and Avogadro’s laws and identify the variables held constant in each.
+- Derive the ideal-gas equation of state $PV=Nk_{\mathrm B}T=nRT$ by combining the gas laws.
+- Explain the microscopic assumptions behind ideal-gas behavior and when they are expected to hold.
+- Use $V/N=(k_{\mathrm B}T/P)$ to estimate number density and mean intermolecular spacing.
+
+## Core Ideas and Derivations
+
+### Gas Laws
 
 ```{code-cell} ipython3
 :tags: [hide-input]
@@ -101,11 +112,11 @@ These conditions collectively ensure minimal intermolecular interactions, allowi
 
 ---
 
-## Deriving an Equation of State
+### Deriving an Equation of State
 
 In [Section 1](section-01.md), we defined an **equation of state** as a mathematical relationship among state variables. Above, each gas law relates *two* state variables (among $P, V, T, N$) under conditions where two other variables remain constant. To derive a single equation of state that relates *all* four variables, we can combine these laws and use multivariate calculus (as covered in [Math 233](https://math.wustl.edu/calculus-iii)).
 
-### Total Differential
+#### Total Differential
 
 The total differential $df$ of a function $f$ of $m$ variables $x_1, \ldots, x_m$ is
 
@@ -116,7 +127,7 @@ df = \sum_{i=1}^m \left( \frac{\partial f}{\partial x_i} \right)_{\{ x_j | j \ne
 
 where $\left(\partial f / \partial x_i\right)_{\{ x_j | j \neq i \}}$ is the **partial derivative** of $f$ with respect to $x_i$, holding all other variables constant, and $dx_i$ represents an **infinitesimal change** in $x_i$.
 
-### Total Differential of Volume
+#### Total Differential of Volume
 
 From Boyle's, Charles's, and Avogadro's laws, we can treat $V$ as a function of $P, T,$ and $N$:
 
@@ -130,7 +141,7 @@ Applying Equation {eq}`eq-total-differential` to $V$:
 dV = \left( \frac{\partial V}{\partial P} \right)_{T,N} dP \;+\; \left( \frac{\partial V}{\partial T} \right)_{P,N} dT \;+\; \left( \frac{\partial V}{\partial N} \right)_{P,T} dN.
 ```
 
-### Partial Derivatives via Gas Laws
+#### Partial Derivatives via Gas Laws
 
 Using the gas laws in differential form, one finds:
 
@@ -144,7 +155,7 @@ Rearranging and employing logarithmic differentials:
 d \ln P \;+\; d \ln V \;=\; d \ln T \;+\; d \ln N.
 ```
 
-### Integrating the Total Differential
+#### Integrating the Total Differential
 
 Integrate from an initial state $(P_i, V_i, T_i, N_i)$ to a final state $(P_f, V_f, T_f, N_f)$. By properties of logarithms, we obtain
 
@@ -163,7 +174,7 @@ where $n = N / N_\text{A}$ is the number of moles and $R = k_\text{B} N_\text{A}
 
 ---
 
-## Ideal Gas Assumptions
+### Ideal Gas Assumptions
 
 A gas described by Equation {eq}`ideal-gas-equation-of-state` is called *ideal* because, under low pressures, low densities, or high temperatures, we can adopt simplifying assumptions from kinetic theory:
 
@@ -175,7 +186,7 @@ Many thermodynamic properties derive neatly from these assumptions.
 
 ---
 
-## Estimating Particle Distances
+### Estimating Particle Distances
 
 Rearranging Equation {eq}`ideal-gas-equation-of-state`, the average distance $\langle d \rangle$ between particles is:
 
@@ -221,7 +232,7 @@ which is small compared to the thermal kinetic energy,
 Because $\lvert E_\text{pot} \rvert$ is negligible relative to $\langle E_\text{kin} \rangle$, the Ar atoms behave almost as if they are non-interacting, validating the ideal gas approximation.
 ````
 
-## Absolute Temperature Scale
+### Absolute Temperature Scale
 
 ```{code-cell} ipython3
 :tags: [hide-input]
@@ -271,3 +282,48 @@ T(\mathrm{K}) \;=\; T(\text{°C}) \;+\; 273.15.
 ```
 
 This defines the **Kelvin scale**, an absolute temperature scale that starts at the lowest physically meaningful temperature.
+
+## Worked Example
+
+### Mean intermolecular spacing at 1 bar
+
+Estimate the mean spacing $\langle d\rangle$ between molecules in an ideal gas at $T=300\ \mathrm{K}$ and $P=1.00\ \mathrm{bar}$.
+
+Using
+
+```{math}
+\langle d\rangle=\left(\frac{V}{N}\right)^{1/3}=\left(\frac{k_{\mathrm B}T}{P}\right)^{1/3},
+```
+
+with $k_{\mathrm B}=1.38065\times10^{-23}\ \mathrm{J/K}$ and $P=1.00\times10^{5}\ \mathrm{Pa}$:
+
+1. **Compute $k_{\mathrm B}T/P$**
+
+   ```{math}
+   \frac{k_{\mathrm B}T}{P}=\frac{(1.38065\times10^{-23})(300)}{1.00\times10^{5}}
+   =4.14\times10^{-26}\ \mathrm{m^3}.
+   ```
+
+2. **Take the cube root**
+
+   ```{math}
+   \langle d\rangle=(4.14\times10^{-26})^{1/3}
+   \approx 3.46\times10^{-9}\ \mathrm{m}
+   =3.46\ \mathrm{nm}.
+   ```
+
+**Result.** At $300\ \mathrm{K}$ and $1\ \mathrm{bar}$, molecules are typically separated by a few nanometers.
+
+## Concept Checks
+
+1. Why does the ratio $PV/(NT)$ have to be constant if the total differential argument holds for arbitrary initial/final states?
+2. Which change (increase $T$, increase $P$) makes a gas *less* ideal, and why?
+3. Why must temperature be measured on an absolute (Kelvin) scale in the ideal-gas law?
+4. How would $\langle d\rangle$ scale if pressure increased by a factor of 8 at fixed $T$?
+
+## Key Takeaways
+
+- The classical gas laws combine into the ideal-gas equation of state $PV=Nk_{\mathrm B}T=nRT$.
+- Ideal behavior is expected at **low density/pressure** or **high temperature**, where interactions are small.
+- The mean molecular spacing scales as $\langle d\rangle\propto (T/P)^{1/3}$.
+- The Kelvin scale naturally appears because the gas-law proportionalities require $T>0$ and linearity in $T$.

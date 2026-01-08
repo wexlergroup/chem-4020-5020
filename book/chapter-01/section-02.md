@@ -17,13 +17,24 @@ kernelspec:
 
 [Course-wide Conventions & Notation](../notation.md)
 
-## Overview
+## Overview and Learning Objectives
+
+Kinetic theory provides a microscopic route to macroscopic gas behavior by modeling a gas as many rapidly moving particles undergoing elastic collisions. Here we derive the pressure of an ideal gas from particle–wall collisions, connect temperature to average kinetic energy, and interpret molecular speed distributions.
 
 Kinetic theory connects the microscopic motion of gas particles to macroscopic properties such as pressure and temperature. This section introduces the fundamental assumptions of kinetic theory, derives key equations, and highlights their physical relevance.
 
 ---
 
-## Foundational Assumptions of Kinetic Theory
+Learning objectives:
+
+- List the assumptions of kinetic theory used to model an ideal gas.
+- Derive the relation $P=\tfrac{1}{3}(N/V)m\langle v^{2}\rangle$ from particle–wall momentum transfer.
+- Use $\langle E_{\mathrm{kin}}\rangle = \tfrac{3}{2}k_{\mathrm B}T$ to relate temperature to molecular motion.
+- Compute characteristic speeds ($v_{\mathrm{mp}},\ \bar v,\ v_{\mathrm{rms}}$) and interpret the Maxwell–Boltzmann distribution.
+
+## Core Ideas and Derivations
+
+### Foundational Assumptions of Kinetic Theory
 
 1. **Large Number of Particles**:
    A gas contains a very large number of identical particles moving randomly in all directions.
@@ -48,7 +59,7 @@ Kinetic theory connects the microscopic motion of gas particles to macroscopic p
 
 ---
 
-## Deriving Pressure from Particle-Wall Collisions
+### Deriving Pressure from Particle-Wall Collisions
 
 ```{code-cell} ipython3
 :tags: [hide-input]
@@ -107,11 +118,11 @@ plt.close(fig)
 
 A two-dimensional representation of a single gas particle in a cuboid container (gray). Velocity components are shown in red. The length $L_y$ is not depicted, as it extends perpendicular to the plane of view.
 
-### Microscopic Picture of Pressure
+#### Microscopic Picture of Pressure
 
 Pressure is the force exerted per unit area on the container walls. On a microscopic level, this force comes from the collective effect of countless collisions of gas particles with the walls.
 
-#### Particle Momentum Change
+##### Particle Momentum Change
 
 For an elastic collision of a particle of mass $m$ moving with velocity $v_x$ in the $x$-direction, the momentum change is:
 
@@ -119,7 +130,7 @@ For an elastic collision of a particle of mass $m$ moving with velocity $v_x$ in
 \Delta p_x = 2 m v_x.
 ```
 
-#### Time Between Collisions
+##### Time Between Collisions
 
 If the container has length $L_x$ in the $x$-direction, the time between two consecutive collisions of the same particle with that wall is:
 
@@ -127,7 +138,7 @@ If the container has length $L_x$ in the $x$-direction, the time between two con
 \Delta t = \frac{2 L_x}{v_x}.
 ```
 
-#### Force on the Wall
+##### Force on the Wall
 
 A single particle's average force on the wall (in the $x$-direction) is then:
 
@@ -135,7 +146,7 @@ A single particle's average force on the wall (in the $x$-direction) is then:
 F_{\text{p}, x} = \frac{\Delta p_x}{\Delta t} = \frac{m v_x^2}{L_x}.
 ```
 
-### Total Pressure
+#### Total Pressure
 
 For $N$ identical particles with isotropic motion in a volume $V$, the total pressure $P$ is:
 
@@ -154,7 +165,7 @@ This equation shows how the macroscopic pressure depends on the microscopic spee
 
 ---
 
-## Kinetic Energy and Temperature
+### Kinetic Energy and Temperature
 
 The average translational kinetic energy per particle is:
 
@@ -265,7 +276,7 @@ Each translational degree of freedom contributes $k_\text{B} T / 2$ to the avera
 
 ---
 
-## Estimating Particle Speeds
+### Estimating Particle Speeds
 
 By rearranging Equation {eq}`equipartition-theorem`, we obtain the root-mean-square (rms) speed:
 
@@ -300,7 +311,7 @@ This speed is significantly faster than a Boeing 747-8 airliner at cruising velo
 
 ---
 
-## Maxwell–Boltzmann Speed Distribution
+### Maxwell–Boltzmann Speed Distribution
 
 The root-mean-square speed $v_{\text{rms}}$ is a useful *single-number* summary, but in thermal
 equilibrium a gas actually has a **distribution** of particle speeds.
@@ -318,7 +329,7 @@ f(v)
 
 It is normalized so that $\int_0^\infty f(v)\,dv = 1$.
 
-### Most probable speed and mean speed
+#### Most probable speed and mean speed
 
 From $f(v)$ we can define several “typical” speeds:
 
@@ -344,7 +355,7 @@ For any Maxwell–Boltzmann distribution, these satisfy
 v_{\text{mp}} < \langle v\rangle < v_{\text{rms}}.
 ```
 
-### Comparing gases and temperatures
+#### Comparing gases and temperatures
 
 The Maxwell–Boltzmann curves below illustrate two trends:
 
@@ -412,3 +423,42 @@ plt.close(fig)
 ```
 
 Maxwell–Boltzmann speed distributions for different gases and temperatures.
+
+## Worked Example
+
+### Root-mean-square speed at room temperature
+
+Estimate the rms speed of $\mathrm{N_2}$ molecules at $T=300\ \mathrm{K}$.
+
+**Assumptions.** Ideal-gas kinetic theory and equipartition; $v_{\mathrm{rms}}=\sqrt{3k_{\mathrm B}T/m}$.  
+Take $m(\mathrm{N_2}) = 28.0\,u = 28.0(1.66054\times10^{-27})\ \mathrm{kg} = 4.65\times10^{-26}\ \mathrm{kg}$.
+
+1. **Insert numbers**
+
+   ```{math}
+   v_{\mathrm{rms}}=\sqrt{\frac{3k_{\mathrm B}T}{m}}
+   =\sqrt{\frac{3(1.38065\times10^{-23}\ \mathrm{J/K})(300\ \mathrm{K})}{4.65\times10^{-26}\ \mathrm{kg}}}.
+   ```
+
+2. **Evaluate**
+
+   ```{math}
+   v_{\mathrm{rms}}=\sqrt{2.67\times10^{5}\ \mathrm{m^2/s^2}}
+   \approx 5.17\times10^{2}\ \mathrm{m/s}.
+   ```
+
+**Result.** $v_{\mathrm{rms}}(\mathrm{N_2},300\ \mathrm{K})\approx 5.2\times10^{2}\ \mathrm{m/s}$.
+
+## Concept Checks
+
+1. Which kinetic-theory assumption is most directly violated at high pressures or low temperatures?
+2. Why does pressure depend on $\langle v_x^2\rangle$ (or $\langle v^2\rangle$) rather than on $\langle v_x\rangle$?
+3. How would doubling the absolute temperature change $v_{\mathrm{rms}}$?
+4. What physical information is encoded in the *width* of the Maxwell–Boltzmann speed distribution?
+
+## Key Takeaways
+
+- Pressure arises from **momentum transfer** during particle–wall collisions.
+- For an ideal gas, temperature measures **average translational kinetic energy**.
+- Characteristic molecular speeds scale as $\sqrt{T/m}$.
+- The Maxwell–Boltzmann distribution explains why gases contain a range of speeds even at fixed $T$.
