@@ -17,7 +17,9 @@ kernelspec:
 
 [Course-wide Conventions & Notation](../notation.md)
 
-## Overview
+## Overview and Learning Objectives
+
+Phase diagrams summarize which phase of a substance is thermodynamically stable as a function of $T$ and $P$. This section uses chemical potential equality to express phase coexistence, interprets phase boundaries as intersections of molar Gibbs free energies, and connects latent heats and coexistence-curve slopes through the Clapeyron and Clausius–Clapeyron equations.
 
 This section applies **thermodynamic equilibrium conditions** to **phases of matter** and shows how those conditions generate the familiar **phase diagram** (e.g., a $P$–$T$ diagram for a pure substance).
 
@@ -28,7 +30,16 @@ From the lecture hand-written notes (Apr 16):
 3. **Open systems:** the **chemical potential** $\mu$ is the natural quantity to use.
 4. **Coexistence curves:** the **(Clausius–)Clapeyron equation** provides the slope(s) of phase boundaries and lets us draw phase diagrams.
 
-## 6.1.1 A quick tour of a $P$–$T$ phase diagram (one-component)
+Learning objectives:
+
+- Identify key features on a one-component $P$–$T$ phase diagram (coexistence curves, triple point, critical point).
+- State the phase-equilibrium condition $\mu_\alpha(T,P)=\mu_\beta(T,P)$ and interpret stability as minimizing $g$ (molar $G$).
+- Relate latent heat and entropy jump at a first-order transition via $\Delta H_{tr}=T_{tr}\Delta S_{tr}$.
+- Derive/use the Clapeyron equation $dP/dT=\Delta s/\Delta v=\Delta H_{tr}/(T\Delta v)$ and the Clausius–Clapeyron approximation for vaporization.
+
+## Core Ideas and Derivations
+
+### 6.1.1 A quick tour of a $P$–$T$ phase diagram (one-component)
 
 A schematic $P$–$T$ phase diagram for a single component contains regions where one phase is stable (solid, liquid, gas) separated by **coexistence curves** where two phases are in equilibrium.
 
@@ -39,9 +50,9 @@ Key landmarks:
 
 The coexistence curves are **phase-transition lines**: moving across a line changes which phase is thermodynamically stable at that $(T,P)$.
 
-## 6.1.2 Thermodynamic criterion for phase equilibrium
+### 6.1.2 Thermodynamic criterion for phase equilibrium
 
-### Gibbs free energy and chemical potential
+#### Gibbs free energy and chemical potential
 
 For a closed, fixed-composition system,
 
@@ -67,7 +78,7 @@ For a **one-component** system, the chemical potential equals the **molar Gibbs 
 \mu = g \equiv \frac{G}{n}.
 ```
 
-### Phase equilibrium condition ($\mu_\alpha = \mu_\beta$)
+#### Phase equilibrium condition ($\mu_\alpha = \mu_\beta$)
 
 At equilibrium between two phases $\alpha$ and $\beta$ of the _same substance_,
 
@@ -82,11 +93,11 @@ A useful way to remember the stability criterion:
 - At fixed $(T,P)$ the **stable phase** is the one with the **lowest** $g$ (or $\mu$).
 - A **phase transition** occurs where the $g$–surfaces for two phases intersect.
 
-## 6.1.3 What "$G_\alpha = G_\beta$" looks like on graphs
+### 6.1.3 What "$G_\alpha = G_\beta$" looks like on graphs
 
 The lecture notes emphasize that phase transitions correspond to intersections of Gibbs free-energy curves, and that the **slopes** of those curves encode entropy and volume.
 
-### (A) $G$ vs. $T$ at fixed pressure
+#### (A) $G$ vs. $T$ at fixed pressure
 
 At constant pressure,
 
@@ -115,7 +126,7 @@ G_\alpha(T_{tr}) = G_\beta(T_{tr}),
 
 and the system switches which phase gives the lowest $G$.
 
-### (B) $G$ vs. $P$ at fixed temperature
+#### (B) $G$ vs. $P$ at fixed temperature
 
 At constant temperature,
 
@@ -136,14 +147,14 @@ V_g > V_l > V_s,
 
 so the gas line has the largest slope, then liquid, then solid. Intersections of these lines correspond to the pressures where phase coexistence occurs at that temperature.
 
-## 6.1.4 Latent heat and entropy jump at phase equilibrium
+### 6.1.4 Latent heat and entropy jump at phase equilibrium
 
 At many phase transitions (fusion, vaporization, sublimation) the first derivatives of $G$ are discontinuous. The lecture notes highlight two consequences:
 
 - **Latent heat:** the enthalpy changes discontinuously across the boundary.
 - **Entropy jump:** the entropy changes discontinuously across the boundary.
 
-### Definitions at the transition temperature
+#### Definitions at the transition temperature
 
 For a transition $\alpha \rightarrow \beta$ occurring at $(T_{tr},P_{tr})$:
 
@@ -165,7 +176,7 @@ Because $\Delta G=0$ at coexistence and $\Delta G = \Delta H - T\Delta S$, we ob
 \boxed{\Delta H_{tr} = T_{tr}\,\Delta S_{tr}}.
 ```
 
-### Common special cases
+#### Common special cases
 
 - **Fusion (melting) at $T_{fus}$:**
 
@@ -181,7 +192,7 @@ Because $\Delta G=0$ at coexistence and $\Delta G = \Delta H - T\Delta S$, we ob
   \Delta S_{vap} = S_g(T_{vap}) - S_l(T_{vap}).
   ```
 
-#### Trouton's rule (rule-of-thumb)
+##### Trouton's rule (rule-of-thumb)
 
 The notes mention **Trouton's rule (1884)**: for many liquids at their _normal_ boiling point,
 
@@ -191,7 +202,7 @@ The notes mention **Trouton's rule (1884)**: for many liquids at their _normal_ 
 
 This is a useful "order-of-magnitude" estimate; real substances can deviate (especially when there is strong association / hydrogen bonding, or when the liquid structure is unusually ordered).
 
-#### Worked example: using tabulated $C_P(T)$ + an entropy jump (water at 1 bar)
+##### Worked example: using tabulated $C_P(T)$ + an entropy jump (water at 1 bar)
 
 **Goal.** Estimate $\Delta S$ and $\Delta H$ when **1 mol** of water is heated _reversibly_ at constant pressure $p=1\ \mathrm{bar}$ from **298.15 K** (liquid water) to **800 K** (steam), crossing the liquid–vapor boundary.
 
@@ -215,7 +226,7 @@ We'll use a **coarse** set of $C_P^\circ(T)$ values from the **NIST–JANAF ther
 T_{tr}=372.780\ \mathrm{K}\quad\text{(very close to 373.15 K at 1 atm)}.
 ```
 
-##### Data used (excerpt)
+###### Data used (excerpt)
 
 | Phase | $T$ (K) | $C_P^\circ$ (J mol$^{-1}$ K$^{-1}$) |
 | --- | ---: | ---: |
@@ -312,7 +323,7 @@ plt.title("Heating water at 1 bar: entropy rise + vaporization jump")
 plt.show()
 ```
 
-## 6.1.5 Clapeyron and Clausius–Clapeyron equations (phase-boundary slopes)
+### 6.1.5 Clapeyron and Clausius–Clapeyron equations (phase-boundary slopes)
 
 The coexistence curves in a phase diagram come from enforcing $\mu_\alpha(T,P)=\mu_\beta(T,P)$ _along the boundary_.
 
@@ -344,7 +355,7 @@ Rearranging gives the **Clapeyron equation**
 
 where $\Delta s = s_\beta-s_\alpha$, $\Delta v=v_\beta-v_\alpha$, and we used $\Delta H_{tr}=T\Delta s$.
 
-### Clausius–Clapeyron (liquid–vapor approximation)
+#### Clausius–Clapeyron (liquid–vapor approximation)
 
 For liquid–vapor equilibrium:
 
@@ -371,9 +382,9 @@ If $\Delta H_{vap}$ is approximately constant over the temperature range of inte
 
 which is the working form often used to fit vapor-pressure data and sketch the liquid–gas coexistence curve.
 
-## Mini-lab: Vapor pressure $\rightarrow$ $\Delta H_\mathrm{vap}$, linearity limits, and $\Delta H_\mathrm{vap}(T)$
+### Mini-lab: Vapor pressure $\rightarrow$ $\Delta H_\mathrm{vap}$, linearity limits, and $\Delta H_\mathrm{vap}(T)$
 
-### Goals
+#### Goals
 
 1. Use a **Clausius–Clapeyron plot** to estimate an **average** $\Delta H_\mathrm{vap}$ from data.
 2. Diagnose **when the "straight line" model breaks** (linearity limits).
@@ -383,7 +394,7 @@ which is the working form often used to fit vapor-pressure data and sketch the l
 
 ---
 
-### Dataset: saturation vapor pressure of water (example)
+#### Dataset: saturation vapor pressure of water (example)
 
 Use this dataset as if it were experimental measurements (values are smooth/consistent and good for analysis practice).
 
@@ -423,7 +434,7 @@ Use this dataset as if it were experimental measurements (values are smooth/cons
 
 ---
 
-### Part A. Global Clausius–Clapeyron fit (the "straight-line" model)
+#### Part A. Global Clausius–Clapeyron fit (the "straight-line" model)
 
 **Task:** Plot $y=\ln(P_\mathrm{sat}/1\ \mathrm{bar})$ versus $x=1/T$ (with $T$ in K), fit a line, and extract $\Delta H_\mathrm{vap}$ from the slope.
 
@@ -494,7 +505,7 @@ plt.show()
 
 ---
 
-### Part B. Linearity limits: residuals beat "it looks straight"
+#### Part B. Linearity limits: residuals beat "it looks straight"
 
 A Clausius–Clapeyron plot can look linear even when the **constant $\Delta H_\mathrm{vap}$** assumption is quietly failing. A quick diagnostic is a **residual plot**.
 
@@ -521,7 +532,7 @@ plt.show()
 
 ---
 
-### Part C. Two-range fits: do you get the same $\Delta H_\mathrm{vap}$?
+#### Part C. Two-range fits: do you get the same $\Delta H_\mathrm{vap}$?
 
 **Task:** Fit a **low-T** subset and a **high-T** subset and compare.
 
@@ -548,7 +559,7 @@ If $\Delta H_\mathrm{vap}$ were truly constant, these two fitted values would ma
 
 ---
 
-### Part D. A "local slope" estimate of $\Delta H_\mathrm{vap}(T)$
+#### Part D. A "local slope" estimate of $\Delta H_\mathrm{vap}(T)$
 
 From the differential Clausius–Clapeyron form,
 
@@ -589,7 +600,7 @@ df[["T_C","DeltaHvap_local_kJmol"]]
 
 ---
 
-### Check your work (expected ballpark results)
+#### Check your work (expected ballpark results)
 
 ```{dropdown} Click to expand
 <!-- :class: dropdown -->
@@ -610,7 +621,7 @@ If your values differ slightly, check:
 
 ---
 
-### Reflection questions (short answers)
+#### Reflection questions (short answers)
 
 1. Over what temperature window does the Clausius–Clapeyron straight-line model look "good enough" _and_ have residuals that are roughly random?
 2. What physical reasons can explain curvature in $\ln P$ vs $1/T$?
@@ -618,7 +629,7 @@ If your values differ slightly, check:
 
    - (Examples: fit two ranges, use a published vapor-pressure correlation, or include temperature dependence via heat-capacity corrections.)
 
-## Computational Studio: Clausius-Clapeyron
+### Computational Studio: Clausius-Clapeyron
 
 Interact with real vapor pressure data for ethanol. Transform the dataset to visualize the Clausius-Clapeyron linearization ($\ln P$ vs $1/T$), dynamically adjust regression bounds to explore linearity limits, and extract the enthalpy of vaporization ($\Delta H_\mathrm{vap}$).
 
@@ -637,11 +648,31 @@ You can open the studio in a new tab:
   Clausius-Clapeyron Studio
 </a>.
 
-## Key takeaways
+## Worked Example
 
-- Phase boundaries are where **chemical potentials match**: $\mu_\alpha=\mu_\beta$.
-- Intersections of $G(T)$ or $G(P)$ curves visualize phase transitions:
-  - $(\partial G/\partial T)_P=-S$  (entropy controls slope in $G$–$T$)
-  - $(\partial G/\partial P)_T=V$  (volume controls slope in $G$–$P$)
-- First-order transitions show **latent heat** and **entropy jumps**, related by $\Delta H = T\Delta S$.
-- The **Clapeyron** (and **Clausius–Clapeyron**) equations determine **phase-boundary slopes** in a $P$–$T$ diagram.
+### Entropy jump from latent heat
+
+At a liquid–vapor transition, $\Delta G_{tr}=0$ implies $\Delta H_{vap}=T_{tr}\Delta S_{vap}$.
+Suppose water has $\Delta H_{vap}=40.7\ \mathrm{kJ\,mol^{-1}}$ at $T_{tr}=373.15\ \mathrm{K}$. Estimate $\Delta S_{vap}$.
+
+```{math}
+\Delta S_{vap}=\frac{\Delta H_{vap}}{T_{tr}}
+=\frac{40.7\times10^{3}\ \mathrm{J\,mol^{-1}}}{373.15\ \mathrm{K}}
+=1.09\times10^{2}\ \mathrm{J\,mol^{-1}\,K^{-1}}.
+```
+
+**Result.** $\Delta S_{vap}\approx 109\ \mathrm{J\,mol^{-1}\,K^{-1}}$, consistent with the large entropy increase on vaporization.
+
+## Concept Checks
+
+1. Why is chemical potential the natural variable for analyzing phase equilibria in open systems?
+2. On a $G$–$T$ plot at fixed $P$, what do the slopes represent, and why do different phases have different slopes?
+3. Why can the liquid–vapor coexistence curve end at a critical point, but the solid–liquid line generally does not?
+4. What approximation turns the Clapeyron equation into the Clausius–Clapeyron equation for vaporization?
+
+## Key Takeaways
+
+- Phase equilibrium occurs when chemical potentials (molar Gibbs free energies) of coexisting phases are equal.
+- First-order transitions exhibit latent heat and entropy jumps, linked by $\Delta H_{tr}=T_{tr}\Delta S_{tr}$.
+- Coexistence-curve slopes follow Clapeyron: $dP/dT=\Delta H_{tr}/(T\Delta v)$.
+- For vaporization, $v_g\gg v_l$ and ideal-vapor behavior yield the Clausius–Clapeyron form for $P_{sat}(T)$.

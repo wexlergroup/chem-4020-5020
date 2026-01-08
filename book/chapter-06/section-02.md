@@ -17,7 +17,9 @@ kernelspec:
 
 [Course-wide Conventions & Notation](../notation.md)
 
-## Overview
+## Overview and Learning Objectives
+
+The Clausius–Clapeyron equation is a practical approximation of the Clapeyron equation for liquid–vapor equilibrium when the vapor is ideal and dominates the molar volume change. It predicts how saturation vapor pressure changes with temperature and provides a convenient way to estimate $\Delta H_{vap}$ from vapor-pressure data.
 
 In the previous section we introduced **phase equilibrium** using Gibbs free energy / chemical potential equality.
 In this lecture we push that idea further:
@@ -30,9 +32,18 @@ In this lecture we push that idea further:
 
 ---
 
-## 6.1.1 Chemical potential and open systems
+Learning objectives:
 
-### What makes a system “open”?
+- State the phase-equilibrium condition $\mu_\alpha=\mu_\beta$ and derive the Clapeyron slope $dP/dT=\Delta H_{tr}/(T\Delta v)$.
+- Apply the approximations $v_g\gg v_l$ and $v_g=RT/P$ to obtain $d\ln P/dT=\Delta H_{vap}/(RT^2)$.
+- Integrate the Clausius–Clapeyron equation under constant $\Delta H_{vap}$ to relate two $(T,P)$ points.
+- Use vapor-pressure data to estimate $\Delta H_{vap}$ and interpret trends (e.g., hydrogen bonding).
+
+## Core Ideas and Derivations
+
+### 6.1.1 Chemical potential and open systems
+
+#### What makes a system “open”?
 
 An **open system** can exchange **energy** and **matter** with its surroundings across a boundary.
 
@@ -41,7 +52,7 @@ An **open system** can exchange **energy** and **matter** with its surroundings 
 
 The notes emphasize: **$\mu$ controls matter exchange across a boundary.**
 
-### Fundamental differentials including composition
+#### Fundamental differentials including composition
 
 For a multicomponent system (sum over *components* $i$):
 
@@ -63,7 +74,7 @@ Here the chemical potential is defined by the partial derivative
 
 > “Components” means the *minimum* number of chemical species needed to specify the composition of all phases in the system.
 
-### Microscopic interpretation (intuition)
+#### Microscopic interpretation (intuition)
 
 Because $\mu_i$ is “how much $G$ changes when you add a little of $i$,” you can think of it as:
 
@@ -74,7 +85,7 @@ Matter tends to flow from **higher $\mu$** to **lower $\mu$** until equilibrium 
 
 ---
 
-## 6.1.2 Phase equilibrium as “no driving force for transfer”
+### 6.1.2 Phase equilibrium as “no driving force for transfer”
 
 Consider two phases, $\alpha$ and $\beta$, separated by a **matter-permeable boundary**. Let an amount $dn$ be transferred from $\alpha$ to $\beta$.
 
@@ -107,7 +118,7 @@ This is the key equilibrium condition we will now differentiate to get the slope
 
 ---
 
-## 6.1.3 Clapeyron equation (general slope of a coexistence curve)
+### 6.1.3 Clapeyron equation (general slope of a coexistence curve)
 
 Along a phase boundary, $\mu_\alpha(T,P)=\mu_\beta(T,P)$.  
 Moving an infinitesimal amount *along the boundary* keeps them equal, so:
@@ -157,7 +168,7 @@ Using $\Delta \bar{h} = T\,\Delta\bar{s}$ at a phase transition (latent heat rel
 
 ---
 
-## 6.1.4 Clausius–Clapeyron (liquid–vapor, ideal-gas approximation)
+### 6.1.4 Clausius–Clapeyron (liquid–vapor, ideal-gas approximation)
 
 For **vaporization** ($l \rightleftharpoons g$), usually
 
@@ -182,7 +193,7 @@ So
 
 This is the **Clausius–Clapeyron equation** in differential form.
 
-### Integrated form (constant $\Delta H_{vap}$ approximation)
+#### Integrated form (constant $\Delta H_{vap}$ approximation)
 
 If $\Delta\bar{h}_{vap}$ is approximately constant over the temperature interval, integrate:
 
@@ -205,7 +216,7 @@ A common algebraic rearrangement (used on the board) is
 
 ---
 
-## 6.1.5 Worked example: estimating $\Delta H_{vap}$ of water from vapor pressure
+### 6.1.5 Worked example: estimating $\Delta H_{vap}$ of water from vapor pressure
 
 The board example uses two points on the vapor-pressure curve of water:
 
@@ -238,7 +249,7 @@ Plugging in the board values gives an estimate on the order of
 
 (the board computation reports **$\approx 40.8\ \text{kJ mol}^{-1}$**).
 
-### Physical interpretation (hydrogen bonding)
+#### Physical interpretation (hydrogen bonding)
 
 The notes add a molecular-level interpretation:
 
@@ -253,22 +264,59 @@ The notes add a molecular-level interpretation:
 
 ---
 
-## Key takeaways
+## Worked Example
 
-- Chemical potential $\mu_i$ appears naturally when **matter can cross the boundary**:  
-  $dG = -S\,dT + V\,dP + \sum_i \mu_i\,dN_i$.
-- Phase equilibrium is “no driving force for transfer”:  
-  $\mu_\alpha = \mu_\beta$.
-- Differentiating $\mu_\alpha=\mu_\beta$ along the coexistence curve gives **Clapeyron**:
+### Estimating $\Delta H_{vap}$ from two vapor-pressure points
 
-  ```{math}
-  \frac{dP}{dT} = \frac{\Delta \bar{s}}{\Delta \bar{v}} = \frac{\Delta \bar{h}_{tr}}{T\,\Delta \bar{v}}.
-  ```
+Using the integrated Clausius–Clapeyron form
 
-- With $\Delta v\approx RT/P$ (ideal vapor), we get **Clausius–Clapeyron**:
+```{math}
+\ln\left(\frac{P_2}{P_1}\right)=\frac{\Delta H_{vap}}{R}\left(\frac{1}{T_1}-\frac{1}{T_2}\right),
+```
 
-  ```{math}
-  \frac{d\ln P}{dT} = \frac{\Delta H_{vap}}{R\,T^2},
-  ```
+estimate $\Delta H_{vap}$ for water given:
 
-  and the integrated form lets us estimate $\Delta H_{vap}$ from two $(T,P)$ points.
+- $T_1=363.2\ \mathrm{K}$, $P_1=5.2\times10^2\ \mathrm{torr}$
+- $T_2=373.2\ \mathrm{K}$, $P_2=760\ \mathrm{torr}$
+
+Solve for $\Delta H_{vap}$:
+
+```{math}
+\Delta H_{vap}=R\,\frac{\ln(P_2/P_1)}{(1/T_1-1/T_2)}.
+```
+
+1. **Compute the logarithm**
+
+   ```{math}
+   \ln\left(\frac{P_2}{P_1}\right)=\ln\left(\frac{760}{520}\right)=0.379.
+   ```
+
+2. **Compute the temperature factor**
+
+   ```{math}
+   \left(\frac{1}{T_1}-\frac{1}{T_2}\right)=\frac{1}{363.2}-\frac{1}{373.2}
+   =7.38\times10^{-5}\ \mathrm{K^{-1}}.
+   ```
+
+3. **Compute $\Delta H_{vap}$**
+
+   ```{math}
+   \Delta H_{vap}=(8.314)\frac{0.379}{7.38\times10^{-5}}
+   =4.27\times10^{4}\ \mathrm{J\,mol^{-1}}=42.7\ \mathrm{kJ\,mol^{-1}}.
+   ```
+
+**Result.** The two-point estimate gives $\Delta H_{vap}\sim 4\times10^{1}\ \mathrm{kJ\,mol^{-1}}$, consistent with tabulated values (and sensitive to the chosen data points/approximations).
+
+## Concept Checks
+
+1. Why does $d\ln P/dT$ depend on $1/T^2$ rather than simply on $1/T$?
+2. What physical effect would cause a Clausius–Clapeyron plot to deviate from a straight line?
+3. Why is it usually safe to approximate $\Delta v\approx v_g$ for vaporization but not for melting of many solids?
+4. What is the sign of $dP/dT$ for vaporization, and what does it imply about the phase boundary slope?
+
+## Key Takeaways
+
+- Clapeyron relates coexistence-curve slope to latent heat and volume change: $dP/dT=\Delta H_{tr}/(T\Delta v)$.
+- For vaporization with ideal vapor, Clausius–Clapeyron gives $d\ln P/dT=\Delta H_{vap}/(RT^2)$.
+- The integrated form extracts $\Delta H_{vap}$ from two vapor-pressure points (or from a linear fit of $\ln P$ vs $1/T$).
+- Deviations from linearity signal changing $\Delta H_{vap}(T)$ and/or non-ideal behavior.

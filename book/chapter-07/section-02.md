@@ -17,7 +17,9 @@ kernelspec:
 
 [Course-wide Conventions & Notation](../notation.md)
 
-## Overview
+## Overview and Learning Objectives
+
+Equilibrium constants can be computed from microscopic molecular information by expressing chemical potentials in terms of partition functions. For ideal-gas mixtures at fixed $T,V$, minimizing the Helmholtz free energy leads to an equilibrium condition that can be rearranged into a partition-function expression for $K$. This section derives those links and illustrates how translation, rotation, vibration, and electronic structure contributions shape equilibrium trends.
 
 In Section 7.1 we described equilibrium and spontaneity using macroscopic thermodynamics
 (e.g., $\Delta_r G = \Delta_r G^\circ + RT\ln Q$ and $\Delta_r G=0$ at equilibrium).
@@ -39,7 +41,16 @@ the **canonical partition function** of an ideal-gas mixture. The key goal is:
 
 ---
 
-## 7.2.1 The right potential for equilibrium at constant $T,V$
+Learning objectives:
+
+- Write the equilibrium condition at fixed $T,V$ as $\sum_i \nu_i\mu_i=0$ from minimizing Helmholtz free energy.
+- Use $\mathcal{Q}=\prod_i \mathcal{Q}_i$ and $\mathcal{Q}_i=q_i^{N_i}/N_i!$ to relate mixture partition functions to species chemical potentials.
+- Derive $\mu_i=-RT\ln(q_i/N_i)$ (Stirling approximation) for ideal gases.
+- Express equilibrium constants in terms of single-particle partition functions and relate $K_p$ and $K_c$ through $\Delta\nu$.
+
+## Core Ideas and Derivations
+
+### 7.2.1 The right potential for equilibrium at constant $T,V$
 
 Consider a general gas-phase reaction
 
@@ -81,7 +92,7 @@ This is the **chemical equilibrium condition** written in terms of chemical pote
 
 ---
 
-## 7.2.2 Partition function of a mixture of ideal gases
+### 7.2.2 Partition function of a mixture of ideal gases
 
 For a mixture of ideal gases, the canonical partition function factorizes:
 
@@ -105,7 +116,7 @@ where $q_i$ is the **single-particle partition function** for species $i$.
 
 ---
 
-## 7.2.3 Connecting $\mathcal{Q}$ to chemical potentials
+### 7.2.3 Connecting $\mathcal{Q}$ to chemical potentials
 
 Statistical mechanics connects Helmholtz free energy to the partition function:
 
@@ -145,7 +156,7 @@ one finds
 
 ---
 
-## 7.2.4 Equilibrium constants from partition functions
+### 7.2.4 Equilibrium constants from partition functions
 
 Insert $\mu_i = -RT\ln(q_i/N_i)$ into the equilibrium condition $\sum_i \nu_i\mu_i=0$:
 
@@ -177,7 +188,7 @@ or equivalently,
 }
 ```
 
-### Relating to $K_c$ and $K_p$
+#### Relating to $K_c$ and $K_p$
 
 Define number concentrations $c_i = N_i/V$. Then
 
@@ -200,7 +211,7 @@ you can compute $K_c$ (and then $K_p$).
 
 ---
 
-## 7.2.5 Example: spontaneity of $\mathrm{HI(g)}$ formation
+### 7.2.5 Example: spontaneity of $\mathrm{HI(g)}$ formation
 
 Consider
 
@@ -234,7 +245,7 @@ microscopic molecular properties encoded in the $q_i$.
 
 ---
 
-## 7.2.6 Single-particle partition function for a diatomic ideal gas
+### 7.2.6 Single-particle partition function for a diatomic ideal gas
 
 For a diatomic molecule, the single-particle partition function is typically written as a product of
 translational and internal contributions:
@@ -266,7 +277,7 @@ The brackets in the lecture notes correspond to:
 - **vibrational:** $q_{\mathrm{vib}}=e^{-\theta_{\mathrm{vib}}/(2T)}/(1-e^{-\theta_{\mathrm{vib}}/T})$
 - **electronic:** $q_{\mathrm{el}}\approx g_{\mathrm{el}}e^{D_0/(RT)}$
 
-### Thermal de Broglie wavelength
+#### Thermal de Broglie wavelength
 
 ```{math}
 \boxed{
@@ -274,7 +285,7 @@ The brackets in the lecture notes correspond to:
 }
 ```
 
-### Notes on parameters
+#### Notes on parameters
 
 - $m$: molecular mass  
 - $\sigma$: rotational symmetry number  
@@ -290,7 +301,7 @@ The brackets in the lecture notes correspond to:
 
 ---
 
-## 7.2.7 $K$ for $\mathrm{H_2 + I_2 \rightleftharpoons 2HI}$ in terms of molecular parameters
+### 7.2.7 $K$ for $\mathrm{H_2 + I_2 \rightleftharpoons 2HI}$ in terms of molecular parameters
 
 Using $K = q_{HI}^2/(q_{H_2}q_{I_2})$ and the diatomic-gas forms above, the lecture notes give
 
@@ -317,13 +328,55 @@ This expression makes the microscopic physics very explicit:
 
 ---
 
-## Key takeaways
+## Worked Example
 
-1. At constant $T,V$, equilibrium corresponds to minimizing Helmholtz free energy $A$, giving
-   $\sum_i \nu_i\mu_i=0$.
-2. For an ideal-gas mixture, the canonical partition function factorizes and
-   $\mathcal{Q}_i = q_i^{N_i}/N_i!$.
-3. The chemical potential can be obtained directly from $\mathcal{Q}$:
-   $\mu_i = -RT\ln(q_i/N_i)$.
-4. The equilibrium constant can be expressed in terms of single-particle partition functions
-   (and therefore in terms of molecular masses and energy level spacings).
+### Why volume cancels when $\Delta\nu=0$: $ \mathrm{H_2+I_2\rightleftharpoons 2HI}$
+
+For the reaction
+
+```{math}
+\mathrm{H_2(g) + I_2(g) \rightleftharpoons 2HI(g)},
+```
+
+the section shows
+
+```{math}
+K = \frac{q_{HI}^2}{q_{H_2}q_{I_2}}.
+```
+
+Write each single-particle partition function as $q_i = q_{\mathrm{trans},i}\,q_{\mathrm{int},i}$ with $q_{\mathrm{trans},i}=V/\Lambda_i^3$. Then
+
+```{math}
+K=\frac{(V/\Lambda_{HI}^3)^2\,q_{\mathrm{int},HI}^2}{(V/\Lambda_{H_2}^3)(V/\Lambda_{I_2}^3)\,q_{\mathrm{int},H_2}\,q_{\mathrm{int},I_2}}.
+```
+
+Because the reaction has $\Delta\nu=2-1-1=0$, the volume factors cancel:
+
+```{math}
+\frac{V^2}{V\cdot V}=1,
+```
+
+leaving
+
+```{math}
+K=\left(\frac{\Lambda_{H_2}^3\Lambda_{I_2}^3}{\Lambda_{HI}^6}\right)\,
+\frac{q_{\mathrm{int},HI}^2}{q_{\mathrm{int},H_2}\,q_{\mathrm{int},I_2}}.
+```
+
+Since $\Lambda\propto m^{-1/2}$, the translational contribution becomes the mass factor $\left(\frac{m_{HI}^2}{m_{H_2}m_{I_2}}\right)^{3/2}$, as in the final expression in the section.
+
+**Result.** For reactions with $\Delta\nu=0$, $K$ is independent of volume (and pressure) in the ideal-gas model; microscopic physics enters through masses and internal partition functions.
+
+## Concept Checks
+
+1. Why is the Helmholtz free energy the relevant potential for equilibrium at constant $T,V$?
+2. Where does Stirling’s approximation enter, and what physical limit makes it reasonable?
+3. How does the choice of energy zero affect the appearance of zero-point terms vs. dissociation-energy terms in $q$?
+4. Why do vibrational contributions often matter most at high temperature for equilibrium constants involving bond changes?
+
+## Key Takeaways
+
+- Microscopic partition functions provide a route to equilibrium constants by linking $A=-RT\ln\mathcal{Q}$ to chemical potentials.
+- For ideal-gas mixtures, $\mu_i=-RT\ln(q_i/N_i)$ leads to $K$ as a ratio of single-particle partition functions.
+- Translational, rotational, vibrational, and electronic factors contribute in separable ways under common approximations.
+- For $\Delta\nu=0$ gas reactions, volume (and pressure) dependence cancels in the ideal-gas equilibrium constant.

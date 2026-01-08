@@ -17,7 +17,9 @@ kernelspec:
 
 [Course-wide Conventions & Notation](../notation.md)
 
-## Overview
+## Overview and Learning Objectives
+
+Chemical equilibrium is reached when a reacting system can no longer lower its Gibbs free energy at the specified constraints. This section introduces the extent of reaction, derives the equilibrium condition $\Delta_r G=0$ at constant $T,P$, and connects $\Delta_r G$ to the reaction quotient $Q$ and equilibrium constant $K$.
 
 In this section we connect **Gibbs free energy** to (i) whether a reaction is spontaneous and (ii) how far it proceeds before reaching **chemical equilibrium**.
 
@@ -54,7 +56,16 @@ The symbol $Q$ is overloaded in this course.
 
 ---
 
-## 7.1.1 Extent of reaction $\xi$
+Learning objectives:
+
+- Use the extent of reaction $\xi$ to relate changes in species amounts via $dn_i=\nu_i\,d\xi$.
+- Derive $\Delta_r G=\sum_i \nu_i\mu_i$ and show $(\partial G/\partial\xi)_{T,P}=\Delta_r G$.
+- Derive $\Delta_r G=\Delta_r G^\circ + RT\ln Q$ for ideal gases and define $Q$ as a dimensionless product of activities.
+- Use $\Delta_r G^\circ=-RT\ln K$ and the comparison of $Q$ and $K$ to predict reaction direction.
+
+## Core Ideas and Derivations
+
+### 7.1.1 Extent of reaction $\xi$
 
 Consider a general reaction written with stoichiometric coefficients:
 
@@ -81,7 +92,7 @@ dn_i = \nu_i\,d\xi
 
 ---
 
-## 7.1.2 Gibbs free energy and the equilibrium condition
+### 7.1.2 Gibbs free energy and the equilibrium condition
 
 Treat the system Gibbs energy as a function of $T,P$, and composition:
 
@@ -129,7 +140,7 @@ and therefore
 \left(\frac{\partial G}{\partial \xi}\right)_{T,P} = \Delta_r G.
 ```
 
-### Spontaneity and equilibrium (constant $T,P$)
+#### Spontaneity and equilibrium (constant $T,P$)
 
 - $\Delta_r G < 0$: reaction proceeds **forward** (toward products)
 - $\Delta_r G = 0$: **equilibrium**
@@ -143,7 +154,7 @@ At equilibrium,
 
 ---
 
-## 7.1.3 Reaction quotient $Q$ and the equilibrium constant $K$
+### 7.1.3 Reaction quotient $Q$ and the equilibrium constant $K$
 
 ```{admonition} Notational warning
 :class: warning
@@ -153,7 +164,7 @@ In this section, $Q$ (or $Q_p$) means the **reaction quotient**, not a partition
 
 To connect $\Delta_r G$ to measurable composition variables, we need an expression for the chemical potentials.
 
-### Ideal-gas chemical potential
+#### Ideal-gas chemical potential
 
 For an ideal gas,
 
@@ -215,7 +226,7 @@ For non-ideal systems, we keep the same *structure* but replace the simple ratio
 (We won't develop activities/fugacities in detail yet, but this is where they will "plug in" later.)
 ````
 
-### Derivation of $\Delta_r G = \Delta_r G^{\circ} + RT\ln Q$
+#### Derivation of $\Delta_r G = \Delta_r G^{\circ} + RT\ln Q$
 
 Substitute $\mu_i(T,P_i)$ into $\Delta_r G=\sum_i\nu_i\mu_i$:
 
@@ -245,7 +256,7 @@ Therefore,
 \boxed{\Delta_r G = \Delta_r G^{\circ} + RT\ln Q_p.}
 ```
 
-### Equilibrium: $Q = K$
+#### Equilibrium: $Q = K$
 
 At equilibrium $\Delta_r G=0$, so
 
@@ -263,7 +274,7 @@ K_p = \exp\left(-\frac{\Delta_r G^{\circ}}{RT}\right).
 }
 ```
 
-### Using $Q$ vs $K$ to predict direction
+#### Using $Q$ vs $K$ to predict direction
 
 Since $\Delta_r G = RT\ln(Q/K)$:
 
@@ -273,7 +284,7 @@ Since $\Delta_r G = RT\ln(Q/K)$:
 
 ---
 
-## 7.1.4 Worked example: gas-phase dimerization of $\mathrm{NO_2}$
+### 7.1.4 Worked example: gas-phase dimerization of $\mathrm{NO_2}$
 
 Consider the equilibrium
 
@@ -283,7 +294,7 @@ Consider the equilibrium
 
 ($\mathrm{NO_2}$ is brown; $\mathrm{N_2O_4}$ is colorless.)
 
-### Thermodynamics and $K_p$ at 298.15 K
+#### Thermodynamics and $K_p$ at 298.15 K
 
 At $298.15\,\mathrm{K}$ (values from lecture notes):
 
@@ -301,7 +312,7 @@ K_p = \exp\left(-\frac{\Delta_r G^{\circ}}{RT}\right)
 \approx 6.74.
 ```
 
-### Equilibrium composition at a specified total pressure
+#### Equilibrium composition at a specified total pressure
 
 Suppose we start with **2 mol of** $\mathrm{NO_2}$ and **0 mol of** $\mathrm{N_2O_4}$.
 
@@ -370,7 +381,7 @@ n_{\mathrm{N_2O_4},eq} = \xi_{eq} \approx 0.81.
 
 ---
 
-## 7.1.5 Temperature dependence: the van't Hoff equation
+### 7.1.5 Temperature dependence: the van't Hoff equation
 
 The temperature dependence of $K$ follows from the Gibbs–Helmholtz relation:
 
@@ -398,7 +409,7 @@ An equivalent integrated form between $T_1$ and $T_2$ (assuming $\Delta_r H^{\ci
 }
 ```
 
-### Example trend for $2\,\mathrm{NO_2}\rightleftharpoons\mathrm{N_2O_4}$
+#### Example trend for $2\,\mathrm{NO_2}\rightleftharpoons\mathrm{N_2O_4}$
 
 From the lecture notes, for $P=P^{\circ}$:
 
@@ -412,7 +423,7 @@ Because $\Delta_r H^{\circ}<0$ for dimerization, increasing temperature drives $
 
 ---
 
-## 7.1.6 Visualizing equilibrium as a minimum of $G(\xi)$
+### 7.1.6 Visualizing equilibrium as a minimum of $G(\xi)$
 
 If we write the Gibbs free energy of the reacting mixture as a function of extent, $G(\xi)$, then:
 
@@ -424,10 +435,7 @@ For the $\mathrm{NO_2/N_2O_4}$ system, the notes sketch $G$ vs. $\xi$ with a cle
 
 ---
 
-
----
-
-## 7.1.7 Data Skills: Using NIST/JANAF/ATcT to compute $\Delta_r H^\circ$, $\Delta_r S^\circ$, $\Delta_r G^\circ$, and $K$
+### 7.1.7 Data Skills: Using NIST/JANAF/ATcT to compute $\Delta_r H^\circ$, $\Delta_r S^\circ$, $\Delta_r G^\circ$, and $K$
 
 In Section 7.1.3 we derived the key link between equilibrium and thermochemistry:
 
@@ -443,12 +451,12 @@ K(T) = \exp\!\left(-\frac{\Delta_r G^\circ(T)}{RT}\right).
 
 This mini-section is a practical workflow for *getting* $\Delta_r G^\circ$ from tabulated thermochemical data.
 
-### Step 0: Write the reaction (with phases) and choose a standard state
+#### Step 0: Write the reaction (with phases) and choose a standard state
 
 1. **Balance the reaction** and include phases, e.g. $\mathrm{NH_3(g)}$ vs $\mathrm{NH_3(\ell)}$.
 2. Use a consistent **standard state** across all species (most modern tables use $P^\circ=1\ \mathrm{bar}$ at $T=298.15\ \mathrm{K}$; always check the table header).
 
-### Step 1: Pull species data at the same temperature
+#### Step 1: Pull species data at the same temperature
 
 For each species $i$ in the balanced equation, collect *either*:
 
@@ -466,7 +474,7 @@ Where to get the data:
 
 (Links to these sources are collected in Appendix Y.)
 
-### Step 2: Convert species data into reaction values
+#### Step 2: Convert species data into reaction values
 
 Once you have consistent species data, compute reaction properties using stoichiometric coefficients $\nu_i$
 (products positive, reactants negative):
@@ -489,7 +497,7 @@ If your data are **enthalpies of formation**, this becomes the familiar “produ
 > $\Delta_f H^\circ = 0$ for that elemental form (e.g., $\mathrm{N_2(g)}$, $\mathrm{H_2(g)}$ at 1 bar).  
 > This often simplifies $\Delta_r H^\circ$ calculations dramatically.
 
-### Step 3: Compute $\Delta_r G^\circ$
+#### Step 3: Compute $\Delta_r G^\circ$
 
 If you have $\Delta_r H^\circ$ and $\Delta_r S^\circ$ at the same temperature, then
 
@@ -500,7 +508,7 @@ If you have $\Delta_r H^\circ$ and $\Delta_r S^\circ$ at the same temperature, t
 **Unit check:** it is very common to have $\Delta H^\circ$ in **kJ/mol** while $S^\circ$ is in **J/(mol·K)**.  
 Convert before combining (e.g., divide entropy by $1000$ to get kJ/(mol·K)).
 
-### Step 4: Compute $K$
+#### Step 4: Compute $K$
 
 Finally,
 
@@ -515,7 +523,7 @@ dimensionless ratio $(P_i/P^\circ)$ inside $Q$.
 
 ---
 
-### Worked example: ammonia formation at 298.15 K
+#### Worked example: ammonia formation at 298.15 K
 
 For the Haber–Bosch reaction (as written in Section 5.3),
 
@@ -560,19 +568,63 @@ K_p(298.15\ \mathrm{K})
 
 ---
 
-### Common pitfalls (and quick fixes)
+#### Common pitfalls (and quick fixes)
 
 - **Wrong phase:** $\mathrm{H_2O(\ell)}$ and $\mathrm{H_2O(g)}$ (or $\mathrm{NH_3(\ell)}$ vs $\mathrm{NH_3(g)}$) have very different $S^\circ$ and $\Delta_f H^\circ$.
 - **Mixed standard states:** make sure all species use the same $P^\circ$ convention and the same temperature.
 - **Unit mismatches:** always reconcile kJ vs J and “per mole of reaction” vs “per mole of species.”
 - **Sign mistakes:** products minus reactants (or use $\nu_i$ with the sign convention consistently).
 
+## Worked Example
 
-## Key takeaways
+### NO$_2$ dimerization: solving for $\xi_{eq}$ at $P=P^\circ$
 
-1. Use $\xi$ to relate **composition** to reaction progress.
-2. At constant $T,P$, equilibrium occurs when $\Delta_r G = 0$.
-3. For ideal gases, $\Delta_r G = \Delta_r G^{\circ} + RT\ln Q_p$.
-4. At equilibrium, $Q_p=K_p$ and $\Delta_r G^{\circ}=-RT\ln K_p$.
-5. Comparing $Q$ to $K$ predicts the direction of spontaneous change.
-6. The van't Hoff equation links $K$ to temperature through $\Delta_r H^{\circ}$.
+Reaction:
+
+```{math}
+2\,\mathrm{NO_2(g)} \rightleftharpoons \mathrm{N_2O_4(g)}.
+```
+
+Start with $n_{\mathrm{NO_2},0}=2$, $n_{\mathrm{N_2O_4},0}=0$. At extent $\xi$:
+
+```{math}
+n_{\mathrm{NO_2}}=2-2\xi,\qquad n_{\mathrm{N_2O_4}}=\xi,\qquad n_{\text{tot}}=2-\xi.
+```
+
+Mole fractions:
+
+```{math}
+y_{\mathrm{NO_2}}=\frac{2-2\xi}{2-\xi},\qquad y_{\mathrm{N_2O_4}}=\frac{\xi}{2-\xi}.
+```
+
+At total pressure $P=P^\circ$, partial pressures are $P_i=y_iP^\circ$, and the ideal-gas equilibrium constant is
+
+```{math}
+K_p=\frac{(P_{\mathrm{N_2O_4}}/P^\circ)}{(P_{\mathrm{NO_2}}/P^\circ)^2}
+=\frac{y_{\mathrm{N_2O_4}}}{y_{\mathrm{NO_2}}^2}.
+```
+
+Therefore,
+
+```{math}
+K_p=\frac{\xi/(2-\xi)}{\left[(2-2\xi)/(2-\xi)\right]^2}
+=\frac{\xi(2-\xi)}{(2-2\xi)^2}.
+```
+
+Given $K_p=6.74$, solve $\xi(2-\xi)=6.74(2-2\xi)^2$, yielding $\xi_{eq}\approx 0.81$.
+
+**Result.** $n_{\mathrm{NO_2},eq}\approx 2-2(0.81)=0.38$ and $n_{\mathrm{N_2O_4},eq}\approx 0.81$ at $P=P^\circ$.
+
+## Concept Checks
+
+1. Why is $\Delta_r G=0$ the correct equilibrium condition at constant $T,P$ but not necessarily at constant $T,V$?
+2. Why must $Q$ and $K$ be dimensionless? What role does $P^\circ$ play?
+3. How does comparing $Q$ to $K$ predict the direction of spontaneous change?
+4. What changes in the derivation if the mixture is non-ideal and activities replace partial-pressure ratios?
+
+## Key Takeaways
+
+- Extent of reaction $\xi$ provides a compact way to track composition changes via stoichiometry.
+- At constant $T,P$, equilibrium corresponds to minimizing $G$, giving $\Delta_r G=0$.
+- For ideal gases, $\Delta_r G=\Delta_r G^\circ+RT\ln Q$ and $\Delta_r G^\circ=-RT\ln K$.
+- The sign of $\Delta_r G$ (equivalently $Q$ vs $K$) determines spontaneous direction.

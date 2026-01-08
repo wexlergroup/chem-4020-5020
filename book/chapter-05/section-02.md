@@ -17,11 +17,11 @@ kernelspec:
 
 [Course-wide Conventions & Notation](../notation.md)
 
-## Overview
+## Overview and Learning Objectives
+
+The third law fixes the entropy reference point by specifying how entropy behaves as temperature approaches absolute zero. Using Boltzmann’s microscopic definition, the section explains why an ideal crystal has $S(0)=0$, introduces residual entropy when the ground state is degenerate or disordered, and uses Haber–Bosch as a reminder that thermodynamic favorability is not the same as reaction speed.
 
 In this section we introduce the **third law of thermodynamics** and connect it to the statistical-mechanical meaning of entropy.
-
-By the end, you should be able to:
 
 - State **Planck’s (third-law) statement** and explain what “pure crystalline substance” and “ideal crystal” mean.
 - Use **Boltzmann’s equation** to interpret why an **ideal crystal** has $S(0\,\mathrm{K})=0$.
@@ -30,7 +30,16 @@ By the end, you should be able to:
 
 ---
 
-## 5.2.1 Review: Boltzmann’s equation for entropy
+Learning objectives:
+
+- State Planck’s formulation of the third law and define what is meant by a pure crystalline substance and an ideal crystal.
+- Use $S=k_{\mathrm B}\ln\Omega$ to justify $S(0)=0$ for an ideal crystal with a unique ground state.
+- Compute residual entropy $S_{\mathrm{res}}=k_{\mathrm B}\ln\Omega_0$ (or per mole $R\ln\Omega_0$) for degenerate/disordered ground states.
+- Contrast thermodynamic driving force ($\Delta G$, equilibrium) with kinetics (activation barriers, rate, catalysts).
+
+## Core Ideas and Derivations
+
+### 5.2.1 Review: Boltzmann’s equation for entropy
 
 A useful microscopic interpretation of entropy is
 
@@ -47,9 +56,9 @@ This “counting” perspective is the bridge between statistical mechanics and 
 
 ---
 
-## 5.2.2 Third law of thermodynamics
+### 5.2.2 Third law of thermodynamics
 
-### Planck’s statement
+#### Planck’s statement
 
 **Planck’s statement of the third law**:
 
@@ -61,7 +70,7 @@ A key special case is the **ideal (perfect) crystal**, meaning **no defects** (n
 S(0\,\mathrm{K}) = 0 \quad \text{(ideal crystal)}
 ```
 
-### Why the “ideal crystal” has $S(0)=0$
+#### Why the “ideal crystal” has $S(0)=0$
 
 Using Boltzmann’s equation:
 
@@ -72,7 +81,7 @@ Using Boltzmann’s equation:
 S(0) = k_B \ln(1) = 0
 ```
 
-### Real crystals: defects and disorder
+#### Real crystals: defects and disorder
 
 Real materials can deviate from the ideal picture. Even at very low temperature, a crystal may contain (or “freeze in”) structural or chemical disorder such as:
 
@@ -85,7 +94,7 @@ These imperfections can increase the number of distinct microscopic arrangements
 
 ---
 
-## 5.2.3 Residual entropy
+### 5.2.3 Residual entropy
 
 If a system approaches $T\to 0\,\mathrm{K}$ while retaining **more than one** accessible (or frozen-in) microscopic arrangement, then the entropy approaches a **non-zero constant**. This is often called **residual entropy**.
 
@@ -95,7 +104,7 @@ If the ground state is $\Omega_0$-fold degenerate, then
 S_{\text{res}} = \lim_{T\to 0} S(T) = k_B \ln \Omega_0
 ```
 
-### Example: orientational disorder in solid CO
+#### Example: orientational disorder in solid CO
 
 In the lecture notes, solid CO at very low temperature is used as an example where the entropy at $0\,\mathrm{K}$ can be **non-zero** because molecules can be arranged in more than one orientation in the lattice (e.g., **CO** vs **OC** “head–tail” orientations). If each molecule has two equally likely orientations, then for $N$ molecules:
 
@@ -120,7 +129,7 @@ and per mole (optional conversion), since $R = N_A k_B$:
 S_{\text{res,m}} = R \ln 2
 ```
 
-### Reconciling residual entropy with the third law
+#### Reconciling residual entropy with the third law
 
 Planck’s statement says $S\to$ **a constant** as $T\to 0$, not automatically *zero*.
 
@@ -131,7 +140,7 @@ So residual entropy is not a violation of the third law—it reflects that the s
 
 ---
 
-## 5.2.4 Haber–Bosch process: thermodynamics feeds the world
+### 5.2.4 Haber–Bosch process: thermodynamics feeds the world
 
 A major industrial example where thermodynamics and kinetics both matter is the **Haber–Bosch process** for ammonia production:
 
@@ -147,7 +156,7 @@ Historical context from the notes:
 - Process developed/invented in **1909**
 - Recognized with a **1918 Nobel Prize**
 
-### Typical operating conditions
+#### Typical operating conditions
 
 Industrial conditions are chosen as a compromise between equilibrium yield and reaction rate:
 
@@ -156,9 +165,9 @@ Industrial conditions are chosen as a compromise between equilibrium yield and r
 
 ---
 
-## 5.2.5 Thermodynamics meets its match: kinetics
+### 5.2.5 Thermodynamics meets its match: kinetics
 
-### Thermodynamics (driving force)
+#### Thermodynamics (driving force)
 
 For the Haber–Bosch reaction, the notes list standard reaction quantities at $298.15\,\mathrm{K}$:
 
@@ -178,7 +187,7 @@ Also note:
 
 - The reaction goes from **4 moles of gas** to **2 moles of gas**, which helps explain why **high pressure** favors ammonia (Le Châtelier’s principle).
 
-### Kinetics (rate, activation barrier)
+#### Kinetics (rate, activation barrier)
 
 Even if $\Delta G < 0$ (thermodynamically favorable), the reaction may proceed **extremely slowly** if the **activation energy** is large.
 
@@ -194,11 +203,41 @@ Key idea:
 
 ---
 
-:::{admonition} Key takeaways
-:class: tip
+## Worked Example
 
-- Third law (Planck): $S\to$ constant as $T\to 0$.
-- Ideal crystal: $\Omega_0=1\Rightarrow S(0)=0$.
-- Residual entropy: $\Omega_0>1\Rightarrow S_{\text{res}} = k_B\ln\Omega_0$.
-- Thermodynamics tells you what is favored at equilibrium; kinetics tells you how fast you get there.
-:::
+### Residual entropy from orientational disorder
+
+Suppose a crystal contains $N$ CO molecules, each of which can be frozen in two orientations (CO vs. OC) even as $T\to 0$.
+If all orientations are accessible/frozen in, the ground-state multiplicity is
+
+```{math}
+\Omega_0 = 2^N.
+```
+
+Boltzmann’s equation gives
+
+```{math}
+S_{\mathrm{res}} = k_{\mathrm B}\ln\Omega_0 = k_{\mathrm B}\ln(2^N)=Nk_{\mathrm B}\ln 2.
+```
+
+Per mole (using $R=N_Ak_{\mathrm B}$):
+
+```{math}
+S_{\mathrm{res,m}} = R\ln 2 = (8.314)\ln 2 = 5.76\ \mathrm{J\,mol^{-1}\,K^{-1}}.
+```
+
+**Result.** Even as $T\to 0$, a disordered crystal can retain a finite entropy set by the degeneracy of its ground state.
+
+## Concept Checks
+
+1. Why does Planck’s statement allow $S(0)$ to approach a *constant* without requiring that constant to be zero?
+2. What physical features distinguish an ideal crystal from a real crystal?
+3. How can a system have residual entropy without violating the third law?
+4. In the Haber–Bosch example, why does a catalyst affect the rate but not the equilibrium constant?
+
+## Key Takeaways
+
+- Third law: $S\to$ constant as $T\to 0$; ideal crystals set that constant to 0 by convention.
+- Boltzmann counting explains $S(0)=0$ when the ground state is unique ($\Omega_0=1$).
+- Residual entropy occurs when $\Omega_0>1$ due to degeneracy or frozen-in disorder.
+- Thermodynamics tells what is favored at equilibrium; kinetics tells how fast it happens.

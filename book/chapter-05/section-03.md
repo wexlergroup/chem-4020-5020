@@ -17,7 +17,9 @@ kernelspec:
 
 [Course-wide Conventions & Notation](../notation.md)
 
-## Overview
+## Overview and Learning Objectives
+
+Ammonia synthesis ($\mathrm{N_2+3H_2\rightarrow 2NH_3}$) is a classic example where thermodynamics and kinetics pull in different directions. This section uses heat-capacity-based temperature corrections and ideal-gas pressure dependence to show how $\Delta G$ changes with operating conditions, motivating the high-pressure, high-temperature, catalyzed conditions of Haber–Bosch.
 
 In this section we use the **Haber–Bosch ammonia formation reaction** as a case study for how
 thermodynamics and kinetics both matter in chemical engineering:
@@ -37,9 +39,18 @@ The goal is to understand (and quantify) these tradeoffs.
 
 ---
 
-## Thermodynamics vs. kinetics
+Learning objectives:
 
-### Standard thermodynamic data at 298.15 K
+- Use $\Delta G=\Delta H-T\Delta S$ to reason qualitatively about temperature effects when $\Delta S<0$.
+- Estimate temperature corrections to $\Delta H$ and $\Delta S$ from constant-$C_P$ models.
+- Derive the ideal-gas pressure dependence $G(P_f)-G(P_i)=nRT\ln(P_f/P_i)$ and apply it to reactions.
+- Compute the pressure required to offset an unfavorable $\Delta G^\circ(T)$ when $\Delta\nu\neq 0$.
+
+## Core Ideas and Derivations
+
+### Thermodynamics vs. kinetics
+
+#### Standard thermodynamic data at 298.15 K
 
 From the lecture notes, at $T = 298.15\ \mathrm{K}$ ($25^\circ\mathrm{C}$):
 
@@ -76,7 +87,7 @@ Thermodynamics ($\Delta G$) tells us *which direction is favored at equilibrium*
 Kinetics (activation barrier / $E_a$) tells us *how fast the system gets there*.
 :::
 
-### Why it is still “too slow” at room temperature
+#### Why it is still “too slow” at room temperature
 
 Even if $\Delta G_r^\circ < 0$, the reaction can be extremely slow if the activation barrier is large.
 For ammonia formation, the strong $\mathrm{N\equiv N}$ bond leads to a very high barrier for the uncatalyzed pathway.
@@ -87,7 +98,7 @@ Raising temperature further increases rates (Arrhenius behavior), so at $500^\ci
 
 ---
 
-## Temperature dependence of $G$
+### Temperature dependence of $G$
 
 We want to know: **if we increase temperature from 25°C to 500°C, do we change spontaneity?**
 
@@ -98,7 +109,7 @@ A practical strategy is to compute $G^\circ(T_f) - G^\circ(T_i)$ in two pieces:
 
 since $G(T)=H(T)-TS(T)$.
 
-### Enthalpy correction from $C_P$
+#### Enthalpy correction from $C_P$
 
 At constant pressure,
 
@@ -114,7 +125,7 @@ so
 H(T_f) - H(T_i) = \int_{T_i}^{T_f} C_P(T)\,dT
 ```
 
-### Entropy correction from $C_P$
+#### Entropy correction from $C_P$
 
 Using the equilibrium identity (constant composition)
 
@@ -136,7 +147,7 @@ S(T_f) - S(T_i) = \int_{T_i}^{T_f} \frac{C_P(T)}{T}\,dT
 
 ---
 
-## Ideal-gas heat capacities from degrees of freedom
+### Ideal-gas heat capacities from degrees of freedom
 
 To get a simple estimate, the notes assume $\mathrm{N_2}$, $\mathrm{H_2}$, and $\mathrm{NH_3}$ behave as ideal gases
 and use a constant-$C_P$ model based on the number of (active) degrees of freedom $f$:
@@ -171,14 +182,14 @@ S(T_f)-S(T_i) = C_P\ln\!\left(\frac{T_f}{T_i}\right)
 
 ---
 
-## Worked example: temperature effect from 298.15 K to 773.15 K
+### Worked example: temperature effect from 298.15 K to 773.15 K
 
 Let
 
 - $T_i = 298.15\ \mathrm{K}$ (25°C)
 - $T_f = 773.15\ \mathrm{K}$ (500°C)
 
-### Species enthalpy/entropy shifts (ideal-gas approximation)
+#### Species enthalpy/entropy shifts (ideal-gas approximation)
 
 **For $\mathrm{N_2}$ and $\mathrm{H_2}$** ($C_P = \tfrac{7}{2}R$):
 
@@ -202,7 +213,7 @@ S(T_f) \approx S(T_i) + 4R\ln\!\left(\frac{T_f}{T_i}\right)
 \approx S(T_i) + 31.7\ \mathrm{J\,(K\,mol)^{-1}}
 ```
 
-### Reaction $\Delta G_r^\circ$ at 773.15 K
+#### Reaction $\Delta G_r^\circ$ at 773.15 K
 
 Start from
 
@@ -258,7 +269,7 @@ even though it would be much faster kinetically.
 
 ---
 
-## Pressure dependence of $G$ for an ideal gas
+### Pressure dependence of $G$ for an ideal gas
 
 Temperature isn’t the only knob; for gases, pressure matters.
 
@@ -275,7 +286,7 @@ G(P_f)-G(P_i)=\int_{P_i}^{P_f} \frac{nRT}{P}\,dP
 = nRT\ln\!\left(\frac{P_f}{P_i}\right)
 ```
 
-### Apply to ammonia formation
+#### Apply to ammonia formation
 
 At fixed $T=T_f$,
 
@@ -314,7 +325,7 @@ P_f \approx 3.19\times 10^2\ \mathrm{bar} \;\approx\; 319\ \mathrm{bar}
 
 ---
 
-## Summary of the “engineering knobs”
+### Summary of the “engineering knobs”
 
 - **Catalyst:** lowers the activation barrier $\Rightarrow$ faster kinetics (does *not* change $\Delta G$).
 - **Temperature:** higher $T$ $\Rightarrow$ faster kinetics, but can push $\Delta G$ in an unfavorable direction
@@ -325,7 +336,7 @@ This is the core thermodynamics/kinetics tradeoff that motivates the operating c
 
 ---
 
-## (Preview) Phase equilibria
+### (Preview) Phase equilibria
 
 **Phase equilibria** applies the thermodynamic equilibrium condition to decide what phase (solid/liquid/gas)
 a system exists in.
@@ -339,3 +350,51 @@ A typical single-component $P$-$T$ phase diagram contains:
 
 The lecture also previewed that phase diagrams can describe *solid–solid* transitions (e.g., different solid
 forms of Sn) and even motivate historical anecdotes (“phase diagrams & the downfall of Napoleon”).
+
+## Worked Example
+
+### Pressure needed for spontaneity at $773\ \mathrm{K}$
+
+For $\mathrm{N_2 + 3H_2 \rightarrow 2NH_3}$, $\Delta\nu = 2-4=-2$.
+At $T=773.15\ \mathrm{K}$, the section estimates $\Delta G_r^\circ(T)\approx +74.1\ \mathrm{kJ\,mol^{-1}}$ near $1\ \mathrm{bar}$.
+
+For ideal gases at fixed $T$,
+
+```{math}
+\Delta G_r(P,T)\approx \Delta G_r^\circ(T)+\Delta\nu\,RT\ln\left(\frac{P}{P^\circ}\right),
+```
+
+where $P^\circ=1\ \mathrm{bar}$.
+
+Set $\Delta G_r(P,T)=0$ to find the pressure $P$ where the reaction is just spontaneous:
+
+```{math}
+0 = \Delta G_r^\circ(T)+\Delta\nu\,RT\ln\left(\frac{P}{1\ \mathrm{bar}}\right)
+\Rightarrow
+\ln\left(\frac{P}{1\ \mathrm{bar}}\right)= -\frac{\Delta G_r^\circ(T)}{\Delta\nu\,RT}.
+```
+
+Insert numbers ($R=8.314\ \mathrm{J\,mol^{-1}\,K^{-1}}$, $\Delta\nu=-2$):
+
+```{math}
+\ln\left(\frac{P}{1\ \mathrm{bar}}\right)
+= -\frac{74.1\times10^{3}}{(-2)(8.314)(773.15)}=5.76
+\Rightarrow
+P=(1\ \mathrm{bar})e^{5.76}=3.19\times10^{2}\ \mathrm{bar}.
+```
+
+**Result.** Around $T=500^{\circ}\mathrm{C}$, pressures of order $10^2$–$10^3\ \mathrm{bar}$ can be required to restore thermodynamic favorability in this ideal-gas estimate.
+
+## Concept Checks
+
+1. Why does $\Delta S<0$ make high temperature less favorable for ammonia formation at equilibrium?
+2. How does the sign of $\Delta\nu$ determine whether pressure helps or hurts product formation?
+3. Which approximations are embedded in using $G(P_f)-G(P_i)=nRT\ln(P_f/P_i)$?
+4. Why can an industrial process choose conditions that are not those that maximize equilibrium yield?
+
+## Key Takeaways
+
+- Thermodynamics ($\Delta G$) and kinetics (activation barriers) must both be considered for Haber–Bosch.
+- With $\Delta S_r^\circ<0$, increasing $T$ can drive $\Delta G_r^\circ$ upward, reducing equilibrium favorability.
+- Ideal-gas pressure dependence adds $\Delta\nu RT\ln P$ terms; for $\Delta\nu<0$, high pressure favors products.
+- Engineering “knobs” include catalysts (rate), temperature (rate vs. equilibrium), and pressure (equilibrium for gas reactions).

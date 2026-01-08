@@ -17,11 +17,11 @@ kernelspec:
 
 [Course-wide Conventions & Notation](../notation.md)
 
-## Overview
+## Overview and Learning Objectives
+
+Free energies package the second law into practical extremum principles: under common laboratory constraints, certain potentials decrease spontaneously until equilibrium. This section reviews the differentials of $U,H,A,G$, identifies which potential is minimized for given constraints, and connects Helmholtz free energy to the canonical partition function via $A=-k_{\mathrm B}T\ln Q$.
 
 These notes bring together (i) the *thermodynamic* idea of **equilibrium as an extremum principle** and (ii) the *statistical-mechanical* idea that macroscopic quantities can be computed from the **partition function**.
-
-By the end of this section you should be able to:
 
 - Recognize which thermodynamic potential is “natural” for a set of constraints (e.g. constant $T,V$ vs. constant $T,P$).
 - Use the differentials of $U$, $H$, $A$ (Helmholtz), and $G$ (Gibbs) to read off measurable quantities like $P$ and $S$.
@@ -31,13 +31,20 @@ By the end of this section you should be able to:
   $$
   and then compute properties such as $P$ from derivatives of $\ln Q$.
 
-(Primary sources: Lecture 30–31 handwritten notes.)  
-
 ---
 
-## Where we are at: “tools” on the stat mech side and the thermo side
+Learning objectives:
 
-### Statistical mechanics (canonical ensemble)
+- Identify the natural variables and differentials of $U$, $H$, $A$, and $G$.
+- State which thermodynamic potential is minimized at equilibrium under fixed $(S,V)$, $(S,P)$, $(T,V)$, and $(T,P)$.
+- Derive $A=-k_{\mathrm B}T\ln Q$ from the canonical entropy expression and define the partition function notation used.
+- Use $P = k_{\mathrm B}T(\partial\ln Q/\partial V)_T$ to connect microscopic counting to an equation of state.
+
+## Core Ideas and Derivations
+
+### Where we are at: “tools” on the stat mech side and the thermo side
+
+#### Statistical mechanics (canonical ensemble)
 
 For a system in contact with a heat bath at temperature $T$ (canonical ensemble):
 
@@ -65,7 +72,7 @@ For a system in contact with a heat bath at temperature $T$ (canonical ensemble)
 
 > In these notes the canonical partition function is written as $Q$ (many texts use $Z$).
 
-### Thermodynamics
+#### Thermodynamics
 
 - **First law (energy conservation)**
   $$
@@ -86,11 +93,11 @@ Equality holds for reversible changes; the inequality direction encodes spontane
 
 ---
 
-## Thermodynamic equilibrium as an extremum principle
+### Thermodynamic equilibrium as an extremum principle
 
 Equation {eq}`eq:fundamental-ineq` gives an “equilibrium test” once you specify what is held fixed.
 
-### Constant $S$ and $V$  ⇒  minimize $U$
+#### Constant $S$ and $V$  ⇒  minimize $U$
 
 If $S$ and $V$ are fixed, then {eq}`eq:fundamental-ineq` reduces to
 
@@ -100,7 +107,7 @@ $$
 
 So **at constant $S$ and $V$, spontaneous evolution drives $U$ downward** until equilibrium is reached at a minimum of $U$.
 
-### Identifying $T$ and $P$ from derivatives of $U(S,V)$
+#### Identifying $T$ and $P$ from derivatives of $U(S,V)$
 
 For a simple compressible system:
 
@@ -114,7 +121,7 @@ $dU = T\,dS - P\,dV$ (at equilibrium / reversible).
 
 ---
 
-## Euler’s theorem and the Euler relation
+### Euler’s theorem and the Euler relation
 
 Many thermodynamic functions are **homogeneous** in their extensive variables. If a function
 $f(x_1,\dots,x_n)$ is homogeneous of degree $k$ (i.e., $f(sx_1,\dots,sx_n)=s^k f(x_1,\dots,x_n)$),
@@ -137,12 +144,12 @@ Equation {eq}`eq:euler-simple` is the **Euler relation** for this simplified cas
 
 ---
 
-## Thermodynamic potentials (“free energies”)
+### Thermodynamic potentials (“free energies”)
 
 Thermodynamic potentials are obtained from $U$ by Legendre transforms that swap “awkward” variables
 for variables that are experimentally easier to control.
 
-### Summary table
+#### Summary table
 
 | potential (name) | symbol | definition | differential (equilibrium) | natural variables |
 | --- | ---: | --- | --- | --- |
@@ -155,7 +162,7 @@ for variables that are experimentally easier to control.
 inequalities of the form “$d(\text{potential})\le \cdots$”, which leads directly to minimization
 principles.
 
-### Which potential is minimized?
+#### Which potential is minimized?
 
 From the inequalities derived in lecture:
 
@@ -169,7 +176,7 @@ These are extremely useful because many laboratory conditions are naturally “c
 
 ---
 
-## Helmholtz free energy from the partition function
+### Helmholtz free energy from the partition function
 
 A key bridge between **macro** thermodynamics and **micro** statistical mechanics comes from combining
 
@@ -188,7 +195,7 @@ So once you know $Q(T,V,N)$, you can compute the thermodynamics.
 
 ---
 
-## Pressure from the partition function
+### Pressure from the partition function
 
 From the Helmholtz differential
 
@@ -216,7 +223,7 @@ P
 
 ---
 
-## Example: monatomic ideal gas
+### Example: monatomic ideal gas
 
 For a monatomic ideal gas (canonical ensemble), the partition function factorizes and the result can be written as
 
@@ -232,7 +239,7 @@ where $\Lambda$ is the **thermal de Broglie wavelength**
 \Lambda = \frac{h}{\sqrt{2\pi m k_B T}}
 ```
 
-### Helmholtz free energy
+#### Helmholtz free energy
 
 From {eq}`eq:A-from-Q`,
 
@@ -248,7 +255,7 @@ Using Stirling’s approximation ($\ln N!\approx N\ln N - N$), we get the common
 A \approx -N k_B T\left[\ln\left(\frac{V}{N\Lambda^3}\right)+1\right]
 ```
 
-### Pressure (recovering the ideal gas law)
+#### Pressure (recovering the ideal gas law)
 
 From {eq}`eq:P-from-Q` and the fact that $\ln Q$ depends on $V$ as $N\ln V + \text{(no }$V$\text{)}$:
 
@@ -265,7 +272,7 @@ $$
 
 ---
 
-## “Energy free to do work”: Gibbs free energy and non-$PV$ work
+### “Energy free to do work”: Gibbs free energy and non-$PV$ work
 
 The Gibbs free energy is
 
@@ -302,7 +309,7 @@ dG\Big|_{T,P} = \delta w_{\text{non-}PV,\text{rev}}
 
 So under typical lab constraints (constant $T,P$), **changes in $G$ track reversible “useful” work** (electrical, surface, shaft work, etc.) *other than* $PV$ expansion/compression.
 
-### Example: water splitting (electrolysis)
+#### Example: water splitting (electrolysis)
 
 Consider the (standard-state) water splitting reaction:
 
@@ -320,18 +327,55 @@ Because $\Delta G^\circ>0$, the reaction is **non-spontaneous** under standard c
 
 ---
 
-## Key takeaways
+## Worked Example
 
-- A “free energy” is the potential that *naturally decreases* under a specified set of constraints.
-- In common laboratory settings:
-  - constant $T,V$  ⇒  minimize $A$ (Helmholtz)
-  - constant $T,P$  ⇒  minimize $G$ (Gibbs)
-- Statistical mechanics provides a direct route to macroscopic free energies:
-  $$
-  A = -k_B T\ln Q
-  $$
-- Once $A$ is known, derivatives give measurable properties, e.g.
-  $$
-  P = k_B T\left(\frac{\partial \ln Q}{\partial V}\right)_T
-  $$
-- For reversible processes at constant $T,P$, $\Delta G$ equals the non-$PV$ work; hence the idea that $G$ is the “energy free to do useful work.”
+### Recovering the ideal-gas law from $Q$
+
+For a monatomic ideal gas,
+
+```{math}
+Q(T,V,N)=\frac{1}{N!}\left(\frac{V}{\Lambda^3}\right)^N,
+\qquad
+\Lambda=\frac{h}{\sqrt{2\pi m k_{\mathrm B}T}}.
+```
+
+Use $P=k_{\mathrm B}T\left(\frac{\partial\ln Q}{\partial V}\right)_{T,N}$.
+
+1. **Compute $\ln Q$**
+
+   ```{math}
+   \ln Q = -\ln N! + N\ln V - 3N\ln\Lambda.
+   ```
+
+2. **Differentiate with respect to $V$**
+   Only the $N\ln V$ term depends on $V$, so
+
+   ```{math}
+   \left(\frac{\partial\ln Q}{\partial V}\right)_{T,N}=\frac{N}{V}.
+   ```
+
+3. **Insert into the pressure formula**
+
+   ```{math}
+   P = k_{\mathrm B}T\frac{N}{V}
+   \quad\Rightarrow\quad
+   PV = Nk_{\mathrm B}T,
+   ```
+
+   which is the ideal gas law.
+
+**Result.** The microscopic translational partition function reproduces the macroscopic equation of state via derivatives of $\ln Q$.
+
+## Concept Checks
+
+1. Why do extremum principles involve *minimization* of a potential rather than minimization of entropy in most lab settings?
+2. What changes in the inequalities when a process is irreversible rather than reversible?
+3. Why does $A$ (not $G$) naturally appear for systems at fixed $T,V$?
+4. How does the interpretation of $\Delta G$ as non-$PV$ work depend on reversibility?
+
+## Key Takeaways
+
+- Thermodynamic potentials are Legendre transforms of $U$ tailored to controllable variables.
+- Equilibrium corresponds to minimization of $U,H,A,$ or $G$ depending on constraints.
+- In the canonical ensemble, $A=-k_{\mathrm B}T\ln Q$ connects free energy to microscopic counting.
+- Derivatives of $\ln Q$ yield measurable properties such as pressure.
