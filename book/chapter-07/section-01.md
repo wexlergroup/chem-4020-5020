@@ -12,7 +12,10 @@ kernelspec:
   name: python3
 ---
 
+
 # 7.1. Equilibrium Constant
+
+[Course-wide Conventions & Notation](../notation.md)
 
 ## Overview
 

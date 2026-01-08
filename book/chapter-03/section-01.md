@@ -12,7 +12,10 @@ kernelspec:
   name: python3
 ---
 
+
 # 3.1. Conservation of Energy
+
+[Course-wide Conventions & Notation](../notation.md)
 
 > *“The total energy of the world, kinetic plus potential, is a constant when we look closely enough… [If we see energy not conserved, then] this is due to a lack of appreciation of what it is that we see.”*  
 > — Richard Feynman

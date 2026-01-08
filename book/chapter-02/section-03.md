@@ -12,7 +12,10 @@ kernelspec:
   name: python3
 ---
 
+
 # 2.3. Ensemble Averages
+
+[Course-wide Conventions & Notation](../notation.md)
 
 ## Overview
 

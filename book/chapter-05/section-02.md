@@ -12,7 +12,10 @@ kernelspec:
   name: python3
 ---
 
+
 # 5.2. Third Law
+
+[Course-wide Conventions & Notation](../notation.md)
 
 ## Overview
 

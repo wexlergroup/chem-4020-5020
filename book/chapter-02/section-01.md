@@ -12,7 +12,10 @@ kernelspec:
   name: python3
 ---
 
+
 # 2.1. Introduction to Statistical Mechanics
+
+[Course-wide Conventions & Notation](../notation.md)
 
 ## Overview
 

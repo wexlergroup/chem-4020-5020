@@ -12,7 +12,10 @@ kernelspec:
   name: python3
 ---
 
+
 # 1.3. Ideal Gases
+
+[Course-wide Conventions & Notation](../notation.md)
 
 ## Overview
 

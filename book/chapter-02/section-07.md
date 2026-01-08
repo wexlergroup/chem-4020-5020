@@ -12,7 +12,10 @@ kernelspec:
   name: python3
 ---
 
+
 # 2.7. Linear Rigid Rotor
+
+[Course-wide Conventions & Notation](../notation.md)
 
 ## Overview
 

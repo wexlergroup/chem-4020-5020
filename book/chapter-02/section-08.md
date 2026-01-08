@@ -12,7 +12,10 @@ kernelspec:
   name: python3
 ---
 
+
 # 2.8. Molecular Statistical Mechanics
+
+[Course-wide Conventions & Notation](../notation.md)
 
 ## Overview
 

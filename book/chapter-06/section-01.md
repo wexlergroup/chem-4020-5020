@@ -12,7 +12,10 @@ kernelspec:
   name: python3
 ---
 
+
 # 6.1. Phase Diagrams
+
+[Course-wide Conventions & Notation](../notation.md)
 
 ## Overview
 

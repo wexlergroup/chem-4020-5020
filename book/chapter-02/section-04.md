@@ -12,7 +12,10 @@ kernelspec:
   name: python3
 ---
 
+
 # 2.4. Molecular Partition Functions
+
+[Course-wide Conventions & Notation](../notation.md)
 
 ## Overview
 

@@ -12,7 +12,10 @@ kernelspec:
   name: python3
 ---
 
+
 # 4.2. Carnot Cycle
+
+[Course-wide Conventions & Notation](../notation.md)
 
 ## Overview
 

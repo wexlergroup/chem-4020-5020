@@ -12,7 +12,10 @@ kernelspec:
   name: python3
 ---
 
+
 # 5.1. Free Energy
+
+[Course-wide Conventions & Notation](../notation.md)
 
 ## Overview
 

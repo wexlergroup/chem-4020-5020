@@ -12,7 +12,10 @@ kernelspec:
   name: python3
 ---
 
+
 # 2.5. Particle in a Box
+
+[Course-wide Conventions & Notation](../notation.md)
 
 ## Overview
 

@@ -12,7 +12,10 @@ kernelspec:
   name: python3
 ---
 
+
 # 1.1. Course Introduction
+
+[Course-wide Conventions & Notation](../notation.md)
 
 ## Overview
 

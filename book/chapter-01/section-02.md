@@ -12,7 +12,10 @@ kernelspec:
   name: python3
 ---
 
+
 # 1.2. Kinetic Theory
+
+[Course-wide Conventions & Notation](../notation.md)
 
 ## Overview
 

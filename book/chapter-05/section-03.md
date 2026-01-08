@@ -12,7 +12,10 @@ kernelspec:
   name: python3
 ---
 
+
 # 5.3. Ammonia Formation
+
+[Course-wide Conventions & Notation](../notation.md)
 
 ## Overview
 

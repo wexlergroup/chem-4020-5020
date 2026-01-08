@@ -12,7 +12,10 @@ kernelspec:
   name: python3
 ---
 
+
 # 7.2. Reaction Spontaneity from Microscopic Properties
+
+[Course-wide Conventions & Notation](../notation.md)
 
 ## Overview
 

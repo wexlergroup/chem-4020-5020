@@ -12,7 +12,10 @@ kernelspec:
   name: python3
 ---
 
+
 # 3.2. Applications of the First Law
+
+[Course-wide Conventions & Notation](../notation.md)
 
 ## Overview
 

@@ -12,7 +12,10 @@ kernelspec:
   name: python3
 ---
 
+
 # 6.2. Clausius-Clapeyron
+
+[Course-wide Conventions & Notation](../notation.md)
 
 ## Overview
 

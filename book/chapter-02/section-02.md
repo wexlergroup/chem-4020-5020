@@ -12,7 +12,10 @@ kernelspec:
   name: python3
 ---
 
+
 # 2.2. Canonical Ensemble
+
+[Course-wide Conventions & Notation](../notation.md)
 
 ## Overview
 

@@ -12,7 +12,10 @@ kernelspec:
   name: python3
 ---
 
+
 # 3.3. Enthalpy
+
+[Course-wide Conventions & Notation](../notation.md)
 
 ## Overview
 

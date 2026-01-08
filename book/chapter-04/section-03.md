@@ -12,7 +12,10 @@ kernelspec:
   name: python3
 ---
 
+
 # 4.3. Microscopic View of Entropy
+
+[Course-wide Conventions & Notation](../notation.md)
 
 This section shifts from the **macroscopic** entropy statements used with Carnot cycles to a more **microscopic / statistical** interpretation: entropy as a measure of *how many ways* a system can realize a macrostate, and how this connects to probability distributions and the partition function.
 

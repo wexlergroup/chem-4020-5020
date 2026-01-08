@@ -12,7 +12,10 @@ kernelspec:
   name: python3
 ---
 
+
 # 2.6. Harmonic Oscillator
+
+[Course-wide Conventions & Notation](../notation.md)
 
 ## Overview
 
