@@ -246,13 +246,14 @@ const PhaseDiagram = ({ onPhaseSelect, currentPhase }) => {
   };
 
   return (
-    <div className="w-full md:w-1/2 h-1/2 md:h-full border-r border-slate-700 relative bg-slate-900 flex flex-col">
+    // UPDATED: Forced w-1/2 instead of responsive stacking, added min-w-0 to prevent flex overflow
+    <div className="w-1/2 h-full border-r border-slate-700 relative bg-slate-900 flex flex-col min-w-0">
       <div className="p-4 border-b border-slate-700 bg-slate-800">
         <h1 className="text-xl font-bold text-blue-400">H₂O Phase Diagram</h1>
         <p className="text-sm text-slate-400 mt-1">Click a region to view molecular structure.</p>
       </div>
       
-      <div ref={containerRef} className="relative flex-grow cursor-pointer">
+      <div ref={containerRef} className="relative flex-grow cursor-pointer w-full h-full min-h-0">
         <canvas 
           ref={canvasRef} 
           className="w-full h-full block"
@@ -308,11 +309,12 @@ const MolecularSimulation = ({ phase, isPaused, togglePause }) => {
     scene.background = new THREE.Color(0x000000);
     scene.fog = new THREE.FogExp2(0x000000, 0.02);
     
-    const camera = new THREE.PerspectiveCamera(50, mountRef.current.clientWidth / mountRef.current.clientHeight, 0.1, 100);
+    // Initialize with a default aspect, will be corrected by handleResize immediately after
+    const camera = new THREE.PerspectiveCamera(50, 1, 0.1, 100);
     camera.position.z = 20;
 
     const renderer = new THREE.WebGLRenderer({ antialias: true });
-    renderer.setSize(mountRef.current.clientWidth, mountRef.current.clientHeight);
+    // Don't set fixed size yet, wait for mount
     mountRef.current.appendChild(renderer.domElement);
 
     const ambientLight = new THREE.AmbientLight(0x404040, 2);
@@ -329,11 +331,22 @@ const MolecularSimulation = ({ phase, isPaused, togglePause }) => {
     // Resize Handler
     const handleResize = () => {
       if (!mountRef.current) return;
-      camera.aspect = mountRef.current.clientWidth / mountRef.current.clientHeight;
+      const width = mountRef.current.clientWidth;
+      const height = mountRef.current.clientHeight;
+      
+      camera.aspect = width / height;
       camera.updateProjectionMatrix();
-      renderer.setSize(mountRef.current.clientWidth, mountRef.current.clientHeight);
+      renderer.setSize(width, height);
     };
-    window.addEventListener('resize', handleResize);
+    
+    // Initial resize
+    handleResize();
+    
+    // Use ResizeObserver for more robust sizing in flex containers
+    const observer = new ResizeObserver(() => {
+        handleResize();
+    });
+    observer.observe(mountRef.current);
 
     // Animation Loop
     let animationId;
@@ -383,7 +396,7 @@ const MolecularSimulation = ({ phase, isPaused, togglePause }) => {
     animate();
 
     return () => {
-      window.removeEventListener('resize', handleResize);
+      observer.disconnect();
       cancelAnimationFrame(animationId);
       if (mountRef.current && renderer.domElement) {
         mountRef.current.removeChild(renderer.domElement);
@@ -481,7 +494,8 @@ const MolecularSimulation = ({ phase, isPaused, togglePause }) => {
   const info = getSimInfo();
 
   return (
-    <div className="w-full md:w-1/2 h-1/2 md:h-full relative bg-black">
+    // UPDATED: Forced w-1/2 instead of responsive stacking, added min-w-0 to prevent flex overflow
+    <div className="w-1/2 h-full relative bg-black min-w-0">
       <div ref={mountRef} className="w-full h-full" />
       <div id="overlay" className="absolute top-5 left-5 pointer-events-none z-10">
         <div className="bg-slate-900/80 p-4 rounded-lg border border-slate-700 max-w-xs">
@@ -506,7 +520,8 @@ const App = () => {
   const [isPaused, setIsPaused] = useState(true);
 
   return (
-    <div className="flex flex-col h-screen md:flex-row font-sans bg-slate-900 text-white">
+    // UPDATED: Forced flex-row (no breakpoints), h-screen to fill iframe, overflow-hidden to contain children
+    <div className="flex flex-row h-screen w-full font-sans bg-slate-900 text-white overflow-hidden">
       <PhaseDiagram onPhaseSelect={setPhase} currentPhase={phase} />
       <MolecularSimulation phase={phase} isPaused={isPaused} togglePause={() => setIsPaused(!isPaused)} />
     </div>

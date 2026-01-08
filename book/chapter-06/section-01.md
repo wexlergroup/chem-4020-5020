@@ -43,6 +43,15 @@ Learning objectives:
 
 A schematic $P$–$T$ phase diagram for a single component contains regions where one phase is stable (solid, liquid, gas) separated by **coexistence curves** where two phases are in equilibrium.
 
+<div style="width: 100%; border: 1px solid #cbd5e1; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.08);">
+  <iframe
+    src="https://chem-4020-5020-8isb.vercel.app/"
+    title="Phase Diagram Schematic"
+    style="width: 100%; height: 850px; border: 0;"
+    loading="lazy"
+  ></iframe>
+</div>
+
 Key landmarks:
 
 - **Triple point (tp):** all three phases coexist (solid–liquid–gas) at a single $(T,P)$.
