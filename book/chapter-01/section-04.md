@@ -755,7 +755,7 @@ Real Gas Computational Studio
 
 ## Worked Example
 
-**van der Waals critical constants and $Z_c$ for CO$_2$**
+### van der Waals critical constants and $Z_c$ for CO$_2$
 
 Use the van der Waals parameters (as in the section plots)  
 $a_m = 3.6551\ \mathrm{L^2\,bar\,mol^{-2}}$, $b_m=0.042816\ \mathrm{L\,mol^{-1}}$, and $R=0.08314\ \mathrm{L\,bar\,mol^{-1}\,K^{-1}}$.
