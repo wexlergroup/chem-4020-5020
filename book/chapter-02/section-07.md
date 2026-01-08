@@ -17,11 +17,22 @@ kernelspec:
 
 [Course-wide Conventions & Notation](../notation.md)
 
-## Overview
+## Overview and Learning Objectives
+
+The linear rigid rotor captures molecular rotation (especially for diatomics) and provides the rotational partition function used in molecular thermodynamics. This section develops the quantized rotational levels, accounts for degeneracy, and derives the high-temperature approximation $q_{\mathrm{rot}}\approx T/(\sigma\Theta_{\mathrm{rot}})$ along with the associated energy and heat capacity.
 
 This section covers the quantum mechanical treatment of a linear rigid rotor (e.g., a diatomic molecule) and shows how to derive thermodynamic properties from its rotational partition function.
 
-## Review of the Linear Rigid Rotor
+Learning objectives:
+
+- State the rigid-rotor energy levels $E_J=\hbar^2J(J+1)/(2I)$ and degeneracy $g_J=2J+1$.
+- Write the rotational partition function as a sum over $J$ including degeneracy.
+- Derive the high-temperature approximation and define the rotational temperature $\Theta_{\mathrm{rot}}=\hbar^2/(2k_{\mathrm B}I)$.
+- Compute rotational contributions to $U$ and $C_V$ in the classical limit and interpret the symmetry factor $\sigma$.
+
+## Core Ideas and Derivations
+
+### Review of the Linear Rigid Rotor
 
 ```{code-cell} ipython3
 :tags: [hide-input]
@@ -94,7 +105,7 @@ The moment of inertia $I$ measures how mass is distributed around the rotation a
 where $r$ is the bond length and $\mu$ is the reduced mass of the two atoms.
 ````
 
-## Partition Function for a Linear Rigid Rotor
+### Partition Function for a Linear Rigid Rotor
 
 In the canonical ensemble, the rotational partition function is:
 
@@ -114,7 +125,7 @@ q_{\mathrm{rot}}
 - **Sum over $J$**: reorganizes the sum by energy level $E_J$, factoring in the degeneracy $g_J = 2J+1$.
 ```
 
-### High-Temperature Approximation
+#### High-Temperature Approximation
 
 When $k_\mathrm{B} T \gg \frac{\hbar^2}{2I}$, we can approximate the discrete sum by converting it into an integral. Let us set
 
@@ -177,9 +188,9 @@ Whether or not you include $\sigma$ depends on the level of detail needed (e.g.,
 
 <!-- What is the exact value of the partition function? -->
 
-## Ensemble Averages
+### Ensemble Averages
 
-### Natural Logarithm of the Partition Function
+#### Natural Logarithm of the Partition Function
 
 From the high-$T$ approximation (with $\sigma=1$ for simplicity),
 
@@ -191,7 +202,7 @@ From the high-$T$ approximation (with $\sigma=1$ for simplicity),
 \ln T \;-\;\ln \Theta_{\mathrm{rot}}.
 ```
 
-### Internal Energy
+#### Internal Energy
 
 The (rotational) internal energy $U_{\mathrm{rot}}$ is given by
 
@@ -223,7 +234,7 @@ U_{\mathrm{rot}}
 k_{\mathrm{B}} \, T.
 ```
 
-### Heat Capacity at Constant Volume
+#### Heat Capacity at Constant Volume
 
 The rotational contribution to the heat capacity is
 
@@ -241,7 +252,7 @@ Physically, this means **one linear rotor** contributes $k_{\mathrm{B}}$ to the 
 In a more rigorous quantum treatment (and for lower temperatures), the partition function and the resulting averages must use the full sum over $J$. At sufficiently low $T$, only the $J=0$ and $J=1$ levels are significantly populated, which reduces the effective heat capacity below $k_\mathrm{B}$.
 ```
 
-## Computational Studio: Linear Rigid Rotor
+### Computational Studio: Linear Rigid Rotor
 
 Explore how molecular geometry and symmetry impact rotational thermodynamics. Use this studio to visualize the rotor, analyze the population distribution across quantum states (), and compare the partition function and entropy of heteronuclear vs. homonuclear diatomic molecules.
 
@@ -259,3 +270,55 @@ You can open the studio in a new tab:
 <a href="https://chem-4020-5020-sk2g.vercel.app/" target="_blank" rel="noopener">
 Rigid Rotor Computational Studio
 </a>.
+
+## Worked Example
+
+**Rotational temperature and $q_{\mathrm{rot}}$ for CO**
+
+Approximate CO as a rigid rotor with bond length $r=1.128\ \text{\AA}=1.128\times10^{-10}\ \mathrm{m}$.
+Use $m_C=12u$, $m_O=16u$, $u=1.66054\times10^{-27}\ \mathrm{kg}$.
+
+1. **Reduced mass**
+
+   ```{math}
+   \mu=\frac{m_Cm_O}{m_C+m_O}
+   =\frac{(12u)(16u)}{28u}=6.857u
+   =1.14\times10^{-26}\ \mathrm{kg}.
+   ```
+
+2. **Moment of inertia**
+
+   ```{math}
+   I=\mu r^2=(1.14\times10^{-26})(1.128\times10^{-10})^2
+   =1.45\times10^{-46}\ \mathrm{kg\,m^2}.
+   ```
+
+3. **Rotational temperature**
+
+   ```{math}
+   \Theta_{\mathrm{rot}}=\frac{\hbar^2}{2k_{\mathrm B}I}
+   =\frac{(1.055\times10^{-34})^2}{2(1.381\times10^{-23})(1.45\times10^{-46})}
+   \approx 2.78\ \mathrm{K}.
+   ```
+
+4. **High-$T$ partition function (heteronuclear, $\sigma=1$) at $T=300\ \mathrm{K}$**
+
+   ```{math}
+   q_{\mathrm{rot}}\approx \frac{T}{\Theta_{\mathrm{rot}}}=\frac{300}{2.78}\approx 1.08\times10^{2}.
+   ```
+
+**Result.** For CO at room temperature, $T\gg \Theta_{\mathrm{rot}}$, so the high-$T$ approximation is well justified.
+
+## Concept Checks
+
+1. Why does each $J$ level have degeneracy $2J+1$? What symmetry is responsible?
+2. What changes in the partition function when the molecule is homonuclear rather than heteronuclear?
+3. Why does the classical (high-$T$) rotor have $U_{\mathrm{rot}}=k_{\mathrm B}T$ per molecule?
+4. What physical parameter(s) of the molecule increase $\Theta_{\mathrm{rot}}$?
+
+## Key Takeaways
+
+- Rigid-rotor levels scale as $J(J+1)$ with degeneracy $2J+1$.
+- In the high-$T$ limit, $q_{\mathrm{rot}}\approx T/(\sigma\Theta_{\mathrm{rot}})$.
+- $\Theta_{\mathrm{rot}}$ is set by the moment of inertia $I=\mu r^2$; small, stiff molecules have larger $\Theta_{\mathrm{rot}}$.
+- Rotational contributions approach equipartition values at sufficiently high temperature.

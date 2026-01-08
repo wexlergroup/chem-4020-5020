@@ -17,7 +17,9 @@ kernelspec:
 
 [Course-wide Conventions & Notation](../notation.md)
 
-## Overview
+## Overview and Learning Objectives
+
+Molecular partition functions extend the canonical framework from one particle to many particles and then to molecules with internal degrees of freedom. This section shows how distinguishability changes counting (and therefore $Q$), introduces the $1/N!$ correction for identical particles, and motivates factorization into translational, rotational, vibrational, and electronic contributions.
 
 In Sections 2.2 and 2.3, we derived the canonical partition function and the ensemble averages for systems of one particle. In this section, we extend these concepts to closed systems of **many identical and independent particles with internal degrees of freedom**. We will also introduce the concept of **indistinguishability**, which is central to the statistical mechanics of quantum systems.
 
@@ -26,7 +28,16 @@ In Sections 2.2 and 2.3, we derived the canonical partition function and the ens
 Throughout this section, we assume that each one‐particle microstate can be occupied by **at most one** particle. Under this assumption, the total number of ways to place $N$ distinguishable particles in $M$ one‐particle microstates is $\tfrac{M!}{(M-N)!}$ rather than $M^N$. If multiple occupancy were allowed, the counting would differ accordingly (e.g., $M^N$ for unlimited occupancy).
 ```
 
-## Partition Function for Distinguishable Particles
+Learning objectives:
+
+- Count many-particle microstates for distinguishable vs. indistinguishable particles under the stated single-occupancy assumption.
+- Derive the factorized form $Q=q^N$ for independent distinguishable particles and $Q=q^N/N!$ for identical indistinguishable particles.
+- Explain why indistinguishability is essential for obtaining extensive thermodynamics (avoiding the Gibbs paradox).
+- Write the molecular partition function as $q=q_{\mathrm{trans}}q_{\mathrm{rot}}q_{\mathrm{vib}}q_{\mathrm{elec}}$ within the Born–Oppenheimer approximation.
+
+## Core Ideas and Derivations
+
+### Partition Function for Distinguishable Particles
 
 ````{admonition} Two Distinguishable Particles in a Four-State System
 :class: dropdown
@@ -143,7 +154,7 @@ Q = q^N
 
 where $q$ is the canonical partition function for one particle.
 
-## Partition Function for Indistinguishable Particles
+### Partition Function for Indistinguishable Particles
 
 ````{admonition} Two Indistinguishable Particles in a Four-State System
 :class: dropdown
@@ -210,7 +221,7 @@ If the particles are indistinguishable and identical, we can write the canonical
 Q = \frac{q^N}{N!}
 ```
 
-## Partition Function for Molecules
+### Partition Function for Molecules
 
 Within the Born-Oppenheimer approximation, the total energy of a molecule is given by the sum of the translational, rotational, vibrational, and electronic energies:
 
@@ -230,3 +241,47 @@ q &= \sum_{\lambda} e^{-\beta \varepsilon_{\lambda}} = \sum_{i} \sum_{j} \sum_{k
 ```
 
 where $q_{\text{trans}}$, $q_{\text{rot}}$, $q_{\text{vib}}$, and $q_{\text{elec}}$ are the canonical partition functions for the translational, rotational, vibrational, and electronic energies, respectively.
+
+## Worked Example
+
+### Counting microstates and the $1/N!$ factor (single occupancy)
+
+Two particles occupy $M=4$ one-particle microstates, with **at most one particle per microstate**.
+
+1. **Distinguishable particles**
+   The number of distinct arrangements (permutations) is
+
+   ```{math}
+   W_{\mathrm{dist}}=\frac{M!}{(M-N)!}=\frac{4!}{2!}=12.
+   ```
+
+2. **Indistinguishable particles**
+   Exchanging labels does not create a new microstate, so
+
+   ```{math}
+   W_{\mathrm{indist}}=\frac{1}{N!}\frac{M!}{(M-N)!}=\frac{1}{2}\cdot 12=6.
+   ```
+
+3. **Connection to partition functions**
+   If each allowed arrangement has the same energy $E_0$, then the canonical partition function is proportional to the count:
+
+   ```{math}
+   Q_{\mathrm{dist}} = W_{\mathrm{dist}}\,e^{-\beta E_0},\qquad
+   Q_{\mathrm{indist}} = W_{\mathrm{indist}}\,e^{-\beta E_0}=\frac{Q_{\mathrm{dist}}}{2!}.
+   ```
+
+**Result.** The $1/N!$ factor reduces overcounting for identical particles and changes the thermodynamics derived from $\ln Q$.
+
+## Concept Checks
+
+1. What physical experiment would fail to distinguish two microstates that differ only by swapping particle labels?
+2. Why does $Q$ factorize for independent particles but not for interacting particles?
+3. What assumption about occupancy is built into the combinatorial formulas in this section?
+4. How would the counting change if multiple occupancy were allowed?
+
+## Key Takeaways
+
+- Counting microstates depends on whether particles are **distinguishable**.
+- For identical particles, $Q=q^N/N!$ corrects overcounting and yields consistent extensive properties.
+- Molecular energies often separate into translation/rotation/vibration/electronic parts, motivating $q=q_{\mathrm{trans}}q_{\mathrm{rot}}q_{\mathrm{vib}}q_{\mathrm{elec}}$.
+- Partition functions are bookkeeping devices: changes in counting change $\ln Q$ and therefore the thermodynamics.

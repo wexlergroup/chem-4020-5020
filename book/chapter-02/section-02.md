@@ -17,7 +17,9 @@ kernelspec:
 
 [Course-wide Conventions & Notation](../notation.md)
 
-## Overview
+## Overview and Learning Objectives
+
+The canonical ensemble describes a closed system in thermal contact with a large heat bath at fixed temperature. Its central result is the Boltzmann probability $p_i\propto e^{-\beta E_i}$, with normalization set by the partition function. This section derives and interprets that probability assignment and introduces the two-state system as a concrete model.
 
 In a **closed system**—one that exchanges energy but not matter with its surroundings—the appropriate statistical description is the **canonical ensemble**.
 
@@ -61,7 +63,16 @@ plt.close(fig)
 
 A closed system, exchanging energy but not matter with its surroundings.
 
-## Probability of a Microstate in the Canonical Ensemble
+Learning objectives:
+
+- Describe the physical meaning of a heat bath and why its temperature is approximately constant during energy exchange.
+- Derive the canonical probability $p_i = e^{-\beta E_i}/Q$ and define $\beta$ and $Q$.
+- Use the partition function $Q=\sum_i e^{-\beta E_i}$ to normalize probabilities and compute ratios $p_j/p_i$.
+- Apply the canonical distribution to a two-level system and interpret low- and high-temperature limits.
+
+## Core Ideas and Derivations
+
+### Probability of a Microstate in the Canonical Ensemble
 
 Consider an ensemble of $\mathcal{A}$ closed systems exchanging energy with a heat bath at temperature $T$. A heat bath is an environment that can absorb or release energy without changing its temperature because it is much larger than the system.
 
@@ -86,7 +97,7 @@ This illustrates that an environment (or heat bath) can absorb or release energy
 Thus, even though the total kinetic energy of the universe (system plus environment) remains constant, the environment's temperature barely changes because any energy loss or gain is diluted among a huge number of particles.
 ````
 
-### Ratio of Numbers of Systems in Two Microstates is a Function of Their Relative Energies
+#### Ratio of Numbers of Systems in Two Microstates is a Function of Their Relative Energies
 
 Intuition tells us that a system is more likely to be found in microstates with lower energy.
 
@@ -114,7 +125,7 @@ The energy of a system is defined relative to an arbitrary (but often convenient
 Therefore, the absolute energy of a system is not essential in determining the likelihood of finding the system in a particular microstate, only the difference in energy between two microstates.
 ```
 
-### Finding an Acceptable Form for $f$
+#### Finding an Acceptable Form for $f$
 
 Since $\{ a_1, a_2, a_3, \ldots \}$ is a set of numbers, we can write
 
@@ -516,3 +527,50 @@ You can open the studio in a new tab:
 <a href="https://chem-4020-5020.vercel.app/" target="_blank" rel="noopener">
   Two-Level System Studio
 </a>.
+
+## Worked Example
+
+### Two-level system probabilities
+
+A single particle has two energy levels: $E_0=0$ and $E_1=\varepsilon$ with $\varepsilon=0.010\ \mathrm{eV}$. Find $p_0$ and $p_1$ at $T=300\ \mathrm{K}$.
+
+Use $p_i = e^{-\beta E_i}/Q$, $Q=1+e^{-\beta\varepsilon}$, and $k_{\mathrm B}=8.617\times 10^{-5}\ \mathrm{eV/K}$.
+
+1. **Compute $\beta\varepsilon$**
+
+   ```{math}
+   \beta\varepsilon=\frac{\varepsilon}{k_{\mathrm B}T}
+   =\frac{0.010}{(8.617\times10^{-5})(300)}=0.387.
+   ```
+
+2. **Compute the Boltzmann factor**
+
+   ```{math}
+   e^{-\beta\varepsilon}=e^{-0.387}=0.679.
+   ```
+
+3. **Normalize**
+
+   ```{math}
+   Q=1+0.679=1.679,
+   \qquad
+   p_0=\frac{1}{Q}=0.596,
+   \qquad
+   p_1=\frac{0.679}{Q}=0.404.
+   ```
+
+**Result.** At $300\ \mathrm{K}$, about $40\%$ of systems occupy the excited state for this energy gap.
+
+## Concept Checks
+
+1. Why must the argument of the exponential in $e^{-\beta E}$ be dimensionless?
+2. What happens to $p_1/p_0$ as $T\to 0$? As $T\to\infty$?
+3. Which part of the canonical derivation relies on the reservoir being much larger than the system?
+4. How does shifting all energies by a constant affect $p_i$ and why?
+
+## Key Takeaways
+
+- In the canonical ensemble, microstate probabilities follow $p_i=e^{-\beta E_i}/Q$ with $\beta=1/(k_{\mathrm B}T)$.
+- The partition function $Q$ normalizes probabilities and encodes thermodynamic information.
+- Probability ratios depend only on **energy differences**, not on the absolute zero of energy.
+- Two-level systems vividly illustrate how temperature controls population of higher-energy states.

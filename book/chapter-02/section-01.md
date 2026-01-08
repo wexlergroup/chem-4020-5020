@@ -17,7 +17,9 @@ kernelspec:
 
 [Course-wide Conventions & Notation](../notation.md)
 
-## Overview
+## Overview and Learning Objectives
+
+Statistical mechanics builds a bridge from microscopic states to macroscopic thermodynamics by treating measurable quantities as ensemble averages. This section introduces expected values, defines the common ensembles (microcanonical, canonical, grand canonical), and states the fundamental postulate for an isolated system.
 
 ```{mermaid}
 %%{init: {"theme": "neutral", "look": "handDrawn", "layout": "elk"}}%%
@@ -64,11 +66,20 @@ flowchart LR
   LimitCM -- No --> StateQM --> SM
 ```
 
-## Macroscopic Properties as Expected Values of Microscopic Properties
+Learning objectives:
+
+- Distinguish an arithmetic average from an ensemble (expected) average $\langle X\rangle$.
+- Define microstates, macrostates, and an ensemble, and identify the constraints for the microcanonical/canonical/grand-canonical ensembles.
+- State the fundamental postulate of statistical mechanics for the microcanonical ensemble.
+- Compute microcanonical probabilities $p_i=1/M$ and simple expected values from a discrete distribution.
+
+## Core Ideas and Derivations
+
+### Macroscopic Properties as Expected Values of Microscopic Properties
 
 A core principle of statistical mechanics is that **macroscopic thermodynamic properties** can be interpreted as **statistical averages** (or expected values) of microscopic properties.
 
-### Arithmetic Average vs. Expected Value
+#### Arithmetic Average vs. Expected Value
 
 In basic statistics, an **arithmetic average** $\bar{X}$ of a set of numbers $X = \{ X_1, X_2, \ldots, X_M \}$ is:
 
@@ -153,7 +164,7 @@ For 300 rolls,
 
 In **thermodynamics**, typical $X$ values might be the **internal energy**, **enthalpy**, or other measurable properties. We will see how to compute such properties by defining appropriate probabilities $p_i$ for the relevant ensemble.
 
-## Ensembles of Microstates
+### Ensembles of Microstates
 
 ```{glossary}
 Ensemble
@@ -169,7 +180,7 @@ Grand canonical ensemble
 : All microstates have the same chemical potential, volume, and temperature $\left( \mu, V, T \right)$.
 ```
 
-## Probability of a Microstate in the Microcanonical Ensemble
+### Probability of a Microstate in the Microcanonical Ensemble
 
 In an **isolated system**—one that exchanges neither energy nor matter with its surroundings—the appropriate statistical description is the **microcanonical ensemble**.
 
@@ -207,7 +218,7 @@ plt.close(fig)
 
 An isolated system, exchanging neither energy nor matter with its surroundings.
 
-### Fundamental Postulate of Statistical Mechanics
+#### Fundamental Postulate of Statistical Mechanics
 
 ```{admonition} Fundamental Postulate
 :class: tip
@@ -231,3 +242,39 @@ Consider an isolated electron with spin up in an $f$-orbital. The possible quant
 p_i = \frac{1}{7}.
 ```
 ````
+
+## Worked Example
+
+### Expected value vs. arithmetic mean (dice)
+
+A fair die is rolled $M=300$ times. Let $X=1$ if the outcome is a six and $X=0$ otherwise.
+
+1. **One roll**
+
+   ```{math}
+   \langle X\rangle_1 = 1\cdot \frac{1}{6} + 0\cdot \frac{5}{6} = \frac{1}{6}.
+   ```
+
+2. **Linearity of expectation**
+
+   For independent, identical trials, the expected total number of sixes is the sum of expectations:
+
+   ```{math}
+   \langle N_{\text{sixes}}\rangle = \sum_{j=1}^{300}\langle X\rangle_1 = 300\left(\frac{1}{6}\right)=50.
+   ```
+
+**Result.** The expected number of sixes in 300 rolls is $50$.
+
+## Concept Checks
+
+1. In what sense is “temperature” absent from the microcanonical ensemble description?
+2. Why is the expected value $\langle X\rangle$ more informative than the arithmetic mean of a single dataset when predicting thermodynamic properties?
+3. What physical meaning does “accessible microstate” carry in the fundamental postulate?
+4. How would you modify the probability assignment if only a subset of the $M$ microstates were accessible?
+
+## Key Takeaways
+
+- Macroscopic properties are computed as **expected values** over microstates.
+- An **ensemble** is a probability model for microstates consistent with specified macroscopic constraints.
+- In the microcanonical ensemble, each accessible microstate has equal probability: $p_i=1/M$.
+- Choosing the right ensemble is choosing the right constraints: $(N,V,E)$, $(N,V,T)$, or $(\mu,V,T)$.

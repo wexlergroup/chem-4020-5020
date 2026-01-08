@@ -17,11 +17,22 @@ kernelspec:
 
 [Course-wide Conventions & Notation](../notation.md)
 
-## Overview
+## Overview and Learning Objectives
+
+Once microstate probabilities are known, thermodynamic properties follow from ensemble averages. This section derives the canonical expressions for internal energy, heat capacity, and pressure as derivatives of $\ln Q$. A recurring theme is that fluctuations are not a nuisance—they encode response functions like $C_V$.
 
 In Section 2.1, we introduced the concept that *macroscopic properties are expected values of microscopic properties*, emphasizing that these expected values account for the probabilities of different microstates. In Section 2.2, we derived the probability distribution (in the canonical ensemble) for a closed system’s microstates. Now, in this section, we connect these ideas to calculate **ensemble averages** that determine macroscopic properties.
 
-## Thermodynamic Equilibrium
+Learning objectives:
+
+- Compute internal energy as an ensemble average $U=\langle E\rangle$ and as a derivative $U=-(\partial\ln Q/\partial\beta)_{N,V}$.
+- Relate heat capacity to energy fluctuations via $ \sigma_E^2 = k_{\mathrm B}T^2 C_V$.
+- Compute pressure from the partition function using $P=k_{\mathrm B}T(\partial\ln Q/\partial V)_{N,T}$ (when applicable).
+- Apply these formulas to simple discrete models (e.g., a two-state system).
+
+## Core Ideas and Derivations
+
+### Thermodynamic Equilibrium
 
 Recall from Section 1.1 that **thermodynamic equilibrium** is a state of simultaneous mechanical, thermal, and chemical equilibrium. Below are definitions of each type of equilibrium:
 
@@ -42,7 +53,7 @@ Chemical equilibrium
 : A state where there is no net exchange of matter between systems in chemical contact.
 ```
 
-## Internal Energy
+### Internal Energy
 
 The **internal energy** $U$ of a macroscopic system at thermodynamic equilibrium is defined as the ensemble average $\langle E \rangle$ of the total microscopic energy $E$:
 
@@ -70,7 +81,7 @@ Q \;=\; \sum_{i=1}^M e^{-\beta E_i}.
 Since $Q$ is defined at fixed $N, V,$ and $T$, it does not depend on the microstate index $i$. Consequently, $Q$ behaves as a constant with respect to the summation over $i$.
 ```
 
-### Partial Derivative of the Partition Function
+#### Partial Derivative of the Partition Function
 
 Taking the partial derivative of $Q$ with respect to $\beta$ yields:
 
@@ -98,7 +109,7 @@ Using the chain rule,
 ```
 ````
 
-### Example: Two-State System
+#### Example: Two-State System
 
 For a two-state system with energies $E_1$ and $E_2$, the partition function is
 
@@ -182,7 +193,7 @@ plt.close(fig)
 
 Internal energy of a two-state system as a function of temperature. The energy difference between the two states is 0.01 eV.
 
-## Heat Capacity at Constant Volume
+### Heat Capacity at Constant Volume
 
 From Section 1.1, **heat** is energy transferred due to a temperature difference. The **heat capacity** at constant volume, $C_V$, measures how much heat is required to change a system’s temperature at fixed $N$ and $V$:
 
@@ -191,7 +202,7 @@ C_V
 \;=\; \left(\frac{\partial U}{\partial T}\right)_{N,V}.
 ```
 
-### Heat Capacity and Energy Fluctuations
+#### Heat Capacity and Energy Fluctuations
 
 In statistics, the variance $\sigma_X^2$ of a random variable $X$ is $\sigma_X^2 = \langle (X - \langle X\rangle)^2\rangle$. In statistical mechanics, $\sigma_E^2$ represents fluctuations in total energy:
 
@@ -271,7 +282,7 @@ C_V &= \frac{\sigma_E^2}{k_{\text{B}} T^2}
 ```
 ````
 
-## Pressure
+### Pressure
 
 In Module 5, we will derive:
 
@@ -284,3 +295,55 @@ Combining these, we find
 P
 =\; k_{\text{B}}\,T \left(\frac{\partial \ln Q}{\partial V}\right)_{N,T}.
 ```
+
+## Worked Example
+
+### Two-state internal energy and heat capacity
+
+Consider a two-state system with $E_0=0$ and $E_1=\varepsilon$. Let $x\equiv \beta\varepsilon$.
+
+1. **Partition function**
+
+   ```{math}
+   Q=1+e^{-x}.
+   ```
+
+2. **Internal energy**
+
+   ```{math}
+   U=\frac{0\cdot 1+\varepsilon e^{-x}}{1+e^{-x}}
+   =\varepsilon\frac{e^{-x}}{1+e^{-x}}.
+   ```
+
+3. **Heat capacity at constant volume**
+Differentiate $U$ with respect to $T$ (holding $V,N$ fixed). Using $x=\varepsilon/(k_{\mathrm B}T)$ and $dx/dT=-x/T$,
+
+   ```{math}
+   C_V=\left(\frac{\partial U}{\partial T}\right)_{N,V}
+   = k_{\mathrm B}\,x^2\,\frac{e^{-x}}{(1+e^{-x})^2}.
+   ```
+
+4. **Numerical illustration**
+For $\varepsilon=0.010\ \mathrm{eV}$ at $T=300\ \mathrm{K}$, $x=0.387$ and $e^{-x}=0.679$, so
+
+   ```{math}
+   U = 0.010\ \mathrm{eV}\times \frac{0.679}{1.679}=4.04\times 10^{-3}\ \mathrm{eV},
+   \qquad
+   \frac{C_V}{k_{\mathrm B}}=x^2\frac{0.679}{1.679^2}=3.60\times 10^{-2}.
+   ```
+
+**Result.** $U$ interpolates between 0 and $\varepsilon/2$, while $C_V$ peaks when thermal energy is comparable to $\varepsilon$.
+
+## Concept Checks
+
+1. Why is $U$ obtained from a derivative of $\ln Q$ rather than from $Q$ directly?
+2. What does it mean physically when $C_V$ is large? When it is small?
+3. In the two-state model, why does $C_V\to 0$ both as $T\to 0$ and $T\to\infty$?
+4. How do fluctuations in energy relate to the system’s ability to exchange heat with a reservoir?
+
+## Key Takeaways
+
+- Thermodynamic properties are ensemble averages computed from microstate probabilities.
+- In the canonical ensemble, $U=-(\partial\ln Q/\partial\beta)_{N,V}$.
+- Response functions connect to fluctuations: $\sigma_E^2=k_{\mathrm B}T^2C_V$.
+- Simple discrete models already capture key qualitative behaviors of $U(T)$ and $C_V(T)$.

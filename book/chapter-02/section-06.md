@@ -17,11 +17,22 @@ kernelspec:
 
 [Course-wide Conventions & Notation](../notation.md)
 
-## Overview
+## Overview and Learning Objectives
+
+The quantum harmonic oscillator models vibrations in molecules and lattice modes in solids. This section derives the oscillator partition function, computes ensemble averages such as internal energy and heat capacity, and shows how the classical limit emerges when $T\gg \Theta_{\mathrm{vib}}$.
 
 This section discusses the quantum mechanical treatment of a harmonic oscillator, along with the derivation of key thermodynamic properties using the partition function. We begin with a review of the one-dimensional case, generalize to three dimensions, and then show how the classical partition function emerges in the high-temperature limit.
 
-## Review of the One-Dimensional Harmonic Oscillator
+Learning objectives:
+
+- State the harmonic oscillator energy levels $E_n=\hbar\omega(n+\tfrac12)$ and write the corresponding partition function.
+- Evaluate the geometric series to obtain $q = e^{-\beta\hbar\omega/2}/(1-e^{-\beta\hbar\omega})$.
+- Derive the mean energy $U=\tfrac12\hbar\omega+\hbar\omega/(e^{\beta\hbar\omega}-1)$ and interpret zero-point energy.
+- Use the vibrational temperature $\Theta_{\mathrm{vib}}=\hbar\omega/k_{\mathrm B}$ to analyze low- and high-temperature limits and connect to the Einstein model idea.
+
+## Core Ideas and Derivations
+
+### Review of the One-Dimensional Harmonic Oscillator
 
 ```{code-cell} ipython3
 :tags: [hide-input]
@@ -153,7 +164,7 @@ E_n = \hbar \omega \left( n + \frac{1}{2} \right) \quad \text{for} \; n = 0, 1, 
 
 where $\hbar$ is the [reduced Planck constant](https://physics.nist.gov/cgi-bin/cuu/Value?hbar) and $n$ is a positive integer.
 
-## Partition Function for a Harmonic Oscillator
+### Partition Function for a Harmonic Oscillator
 
 The partition function for a one-dimensional harmonic oscillator is:
 
@@ -165,7 +176,7 @@ q &= \sum_{n=0}^{\infty} e^{-\beta E_n} \\
 \end{aligned}
 ```
 
-### Evaluation of the Sum
+#### Evaluation of the Sum
 
 The $\sum_{n=0}^{\infty} e^{-\beta \hbar \omega n}$ term is a geometric series, which can be evaluated as
 
@@ -192,9 +203,9 @@ e^{-\beta \hbar \omega} &< 1 \\
 ```
 ````
 
-## Ensemble Averages for a Harmonic Oscillator
+### Ensemble Averages for a Harmonic Oscillator
 
-### Natural Logarithm of the Partition Function
+#### Natural Logarithm of the Partition Function
 
 Taking the logarithm of $q$:
 
@@ -203,7 +214,7 @@ Taking the logarithm of $q$:
 \ln q = -\frac{\beta \hbar \omega}{2} - \ln(1 - e^{-\beta \hbar \omega}).
 ```
 
-### Internal Energy
+#### Internal Energy
 
 The internal energy $U$ is found via:
 
@@ -277,7 +288,7 @@ Internal energy of a harmonic oscillator as a function of temperature. The zero-
 
 <!-- Derivation of low- and high-temperature limits for the internal energy of a harmonic oscillator. -->
 
-### Heat Capacity at Constant Volume
+#### Heat Capacity at Constant Volume
 
 In Section 2.3, we showed that
 
@@ -333,7 +344,7 @@ plt.close(fig)
 
 Heat capacity at constant volume of a harmonic oscillator as a function of temperature. The low-temperature limit is shown as a blue arrow, while the high-temperature limit is shown as a red dashed line.
 
-## Computational Studio: Harmonic Oscillator
+### Computational Studio: Harmonic Oscillator
 
 Explore how the internal energy and heat capacity evolve with the characteristic temperature, visualizing the transition between the quantum freeze-out and the classical high-temperature limits.
 
@@ -352,7 +363,7 @@ You can open the studio in a new tab:
   Harmonic Oscillator Studio
 </a>.
 
-## Einstein Model
+### Einstein Model
 
 The Einstein model is a simple model for an atomic crystal, where $N$ identical atoms are situated at lattice sites and vibrate (each with the same frequency) about these sites as independent (i.e., non-interacting), three-dimensional harmonic oscillators. Since the atoms are situated at lattice sites, they can be treated as distinguishable. For the Einstein model, the partition function is
 
@@ -372,7 +383,7 @@ and
 C_V = 3 N k_{\text{B}} \left( \frac{\hbar \omega}{k_{\text{B}} T} \right)^2 \frac{e^{\hbar \omega / k_{\text{B}} T}}{\left( e^{\hbar \omega / k_{\text{B}} T} - 1 \right)^2}.
 ```
 
-### Dulong-Petit Law
+#### Dulong-Petit Law
 
 ```{code-cell} ipython3
 :tags: [hide-input]
@@ -413,3 +424,54 @@ plt.close(fig)
 ```
 
 Heat capacity of elemental solids as a function of atomic number. The Dulong-Petit law is shown as a red dashed line.
+
+## Worked Example
+
+### Mean vibrational energy at finite temperature
+
+For a harmonic oscillator,
+
+```{math}
+U = k_{\mathrm B}\Theta_{\mathrm{vib}}\left[\frac{1}{2}+\frac{1}{e^{\Theta_{\mathrm{vib}}/T}-1}\right].
+```
+
+Take $\Theta_{\mathrm{vib}}=805\ \mathrm{K}$ (the value used in the section plot) and $T=298\ \mathrm{K}$.
+
+1. **Compute the exponential factor**
+
+   ```{math}
+   \frac{\Theta_{\mathrm{vib}}}{T}=\frac{805}{298}=2.70,
+   \qquad
+   e^{\Theta_{\mathrm{vib}}/T}=e^{2.70}=14.9.
+   ```
+
+2. **Evaluate the bracket**
+
+   ```{math}
+   \frac{1}{2}+\frac{1}{e^{\Theta_{\mathrm{vib}}/T}-1}
+   =\frac{1}{2}+\frac{1}{13.9}=0.572.
+   ```
+
+3. **Compute $U$**
+
+   ```{math}
+   U = k_{\mathrm B}(805)(0.572)=k_{\mathrm B}(460\ \mathrm{K}).
+   ```
+
+Per mole, $U_m = R(460\ \mathrm{K})=3.83\ \mathrm{kJ\,mol^{-1}}$.
+
+**Result.** At room temperature the oscillator energy is only modestly above the zero-point value because $T<\Theta_{\mathrm{vib}}$.
+
+## Concept Checks
+
+1. Why does the harmonic oscillator retain nonzero energy as $T\to 0$?
+2. What does the limit $T\gg\Theta_{\mathrm{vib}}$ predict for the heat capacity, and how does that compare to equipartition?
+3. How does increasing $\omega$ (stiffer bond) change $\Theta_{\mathrm{vib}}$ and the thermal population of excited levels?
+4. Why is vibration often “frozen out” at room temperature for high-frequency modes?
+
+## Key Takeaways
+
+- The harmonic oscillator has evenly spaced energy levels and a closed-form partition function.
+- Zero-point energy $\tfrac12\hbar\omega$ persists at $T=0$.
+- The vibrational temperature $\Theta_{\mathrm{vib}}$ sets the temperature scale for activating vibrational degrees of freedom.
+- In the high-$T$ limit, quantum results approach classical equipartition behavior.
