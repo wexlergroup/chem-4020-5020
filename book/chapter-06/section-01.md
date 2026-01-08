@@ -622,16 +622,17 @@ If your values differ slightly, check:
 
 Interact with real vapor pressure data for ethanol. Transform the dataset to visualize the Clausius-Clapeyron linearization ($\ln P$ vs $1/T$), dynamically adjust regression bounds to explore linearity limits, and extract the enthalpy of vaporization ($\Delta H_\mathrm{vap}$).
 
-<div style="width: 100%; border: 1px solid #cbd5e1; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.08);">
+<!-- <div style="width: 100%; border: 1px solid #cbd5e1; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.08);">
   <iframe
     src="https://chem-4020-5020-a7a7.vercel.app/"
     title="Clausius-Clapeyron Studio"
     style="width: 100%; height: 900px; border: 0;"
     loading="lazy"
   ></iframe>
-</div>
+</div> -->
 
-If the embed does not load, you can open the studio in a new tab:
+<!-- If the embed does not load, -->
+You can open the studio in a new tab:
 <a href="https://chem-4020-5020-a7a7.vercel.app/" target="_blank" rel="noopener">
   Clausius-Clapeyron Studio
 </a>.

@@ -337,21 +337,20 @@ Heat capacity at constant volume of a harmonic oscillator as a function of tempe
 
 Explore how the internal energy and heat capacity evolve with the characteristic temperature, visualizing the transition between the quantum freeze-out and the classical high-temperature limits.
 
-<div style="width: 100%; border: 1px solid #cbd5e1; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.08);">
+<!-- <div style="width: 100%; border: 1px solid #cbd5e1; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.08);">
   <iframe
     src="https://chem-4020-5020-dgm3.vercel.app/"
     title="Harmonic Oscillator Studio"
     style="width: 100%; height: 850px; border: 0;"
     loading="lazy"
   ></iframe>
-</div>
+</div> -->
 
-If the embed does not load, you can open the studio in a new tab:
+<!-- If the embed does not load, -->
+You can open the studio in a new tab:
 <a href="https://chem-4020-5020-dgm3.vercel.app/" target="_blank" rel="noopener">
   Harmonic Oscillator Studio
 </a>.
-
-If the embed does not load, you can open the studio in a new tab: [Harmonic Oscillator Computational Studio](../computational-studios/harmonic-oscillator-studio.html).
 
 ## Einstein Model
 

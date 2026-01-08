@@ -245,16 +245,17 @@ In a more rigorous quantum treatment (and for lower temperatures), the partition
 
 Explore how molecular geometry and symmetry impact rotational thermodynamics. Use this studio to visualize the rotor, analyze the population distribution across quantum states (), and compare the partition function and entropy of heteronuclear vs. homonuclear diatomic molecules.
 
-<div style="width: 100%; border: 1px solid #cbd5e1; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.08);">
-<iframe
-src="https://chem-4020-5020-sk2g.vercel.app/"
-title="Rigid Rotor Computational Studio"
-style="width: 100%; height: 900px; border: 0;"
-loading="lazy"
-></iframe>
-</div>
+<!-- <div style="width: 100%; border: 1px solid #cbd5e1; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.08);">
+  <iframe
+    src="https://chem-4020-5020-sk2g.vercel.app/"
+    title="Rigid Rotor Computational Studio"
+    style="width: 100%; height: 900px; border: 0;"
+    loading="lazy"
+  ></iframe>
+</div> -->
 
-If the embed does not load, you can open the studio in a new tab:
+<!-- If the embed does not load, -->
+You can open the studio in a new tab:
 <a href="https://chem-4020-5020-sk2g.vercel.app/" target="_blank" rel="noopener">
 Rigid Rotor Computational Studio
 </a>.

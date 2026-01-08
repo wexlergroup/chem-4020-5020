@@ -502,16 +502,17 @@ Partition function of a two-state system and the probabilities of finding it in 
 
 Explore how the canonical probabilities, partition function, and heat capacity respond to changes in the energy gap and temperature range.
 
-<div style="width: 100%; border: 1px solid #cbd5e1; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.08);">
+<!-- <div style="width: 100%; border: 1px solid #cbd5e1; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.08);">
   <iframe
     src="https://chem-4020-5020.vercel.app/"
     title="Two-Level System Studio"
     style="width: 100%; height: 850px; border: 0;"
     loading="lazy"
   ></iframe>
-</div>
+</div> -->
 
-If the embed does not load, you can open the studio in a new tab:
+<!-- If the embed does not load, -->
+You can open the studio in a new tab:
 <a href="https://chem-4020-5020.vercel.app/" target="_blank" rel="noopener">
   Two-Level System Studio
 </a>.

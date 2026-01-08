@@ -254,16 +254,17 @@ is called the translational partition function. It underpins much of our classic
 
 Bridge the gap between microstates and macrostates. Use the interactive studio below to adjust particle count ($N$), volume ($V$), and temperature ($T$), visualizing how these parameters drive the gas's motion while simultaneously observing the real-time derivation of Pressure, Internal Energy, and Entropy from the Partition Function.
 
-<div style="width: 100%; border: 1px solid #cbd5e1; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.08);">
+<!-- <div style="width: 100%; border: 1px solid #cbd5e1; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.08);">
   <iframe
     src="https://chem-4020-5020-s763.vercel.app/"
     title="Ideal Gas Computational Studio"
     style="width: 100%; height: 900px; border: 0;"
     loading="lazy"
   ></iframe>
-</div>
+</div> -->
 
-If the embed does not load, you can open the studio in a new tab:
+<!-- If the embed does not load, -->
+You can open the studio in a new tab:
 <a href="https://chem-4020-5020-s763.vercel.app/" target="_blank" rel="noopener">
   Ideal Gas Computational Studio
 </a>.

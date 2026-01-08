@@ -727,16 +727,17 @@ Here is the updated subsection text, modeled after your Two-Level System example
 
 Explore deviations from ideal behavior by dynamically comparing the Ideal Gas, Van der Waals (vdW), and Peng-Robinson (PR) equations of state. Adjust temperature and pressure to visualize how intermolecular forces impact the compressibility factor () and  isotherms, particularly near the critical point.
 
-<div style="width: 100%; border: 1px solid #cbd5e1; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.08);">
+<!-- <div style="width: 100%; border: 1px solid #cbd5e1; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.08);">
 <iframe
 src="https://chem-4020-5020-ugp4.vercel.app/"
 title="Real Gas Computational Studio"
 style="width: 100%; height: 850px; border: 0;"
 loading="lazy"
 ></iframe>
-</div>
+</div> -->
 
-If the embed does not load, you can open the studio in a new tab:
+<!-- If the embed does not load, -->
+You can open the studio in a new tab:
 <a href="https://chem-4020-5020-ugp4.vercel.app/" target="_blank" rel="noopener">
 Real Gas Computational Studio
 </a>.
