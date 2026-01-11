@@ -12,7 +12,7 @@ kernelspec:
   name: python3
 ---
 
-# Course-wide Conventions & Notation
+# Course-Wide Conventions & Notation
 
 (notation)=
 This page is a **one-page reference** for the conventions used throughout CHEM 4020/5020.
@@ -21,7 +21,7 @@ This page is a **one-page reference** for the conventions used throughout CHEM 4
 
 ## Sign conventions (heat $q$ and work $w$)
 
-We will use the **chemistry sign convention**:
+We will use the **chemistry sign convention** throughout:
 
 - **Heat** $q$ (or $\delta q$):
   - $q>0$ when heat is **absorbed by the system**.
@@ -31,7 +31,7 @@ We will use the **chemistry sign convention**:
   - $w>0$ when work is **done on the system**.
   - $w<0$ when work is **done by the system**.
 
-With this convention, the First Law is
+With this convention, the First Law reads
 
 ```{math}
 \Delta U = q + w
@@ -41,8 +41,8 @@ dU = \delta q + \delta w.
 
 ```{admonition} Common alternative convention
 :class: note
-Some physics texts define $w$ as “work done by the system,” giving $\Delta U = q - w$.  
-Both conventions are equivalent if you are consistent.
+Some physics texts define $w$ as "work done by the system," yielding $\Delta U = q - w$.
+Both conventions are equivalent as long as you are consistent.
 ```
 
 ### $P\,dV$ work (most common case)
@@ -53,22 +53,21 @@ For pressure–volume work against an external pressure $P_{\mathrm{ext}}$,
 \delta w = -P_{\mathrm{ext}}\,dV.
 ```
 
-So:
+Therefore:
 
 - Expansion ($dV>0$) gives $\delta w<0$ (system does work on surroundings).
 - Compression ($dV<0$) gives $\delta w>0$ (surroundings do work on system).
 
-For a **reversible** $PV$ process, $P_{\mathrm{ext}} = P$ and we often write
+For a **reversible** $PV$ process, $P_{\mathrm{ext}} = P$, so we often write
 $\delta w_{\mathrm{rev}} = -P\,dV$.
 
 ---
 
-## Standard state and the “$\circ$” symbol
+## Standard state and the "$\circ$" symbol
 
-A superscript $\circ$ denotes a **standard-state** quantity, e.g.
-$\mu^\circ$, $\Delta G^\circ$, $\Delta H^\circ$, $S^\circ$, $K^\circ$.
+A superscript $\circ$ denotes a **standard-state** quantity (e.g., $\mu^\circ$, $\Delta G^\circ$, $\Delta H^\circ$, $S^\circ$, $K^\circ$).
 
-In this course, for gases we take the standard-state pressure to be
+In this course, for gases, we take the standard-state pressure to be
 
 ```{math}
 P^\circ = 1\ \mathrm{bar}.
@@ -76,17 +75,17 @@ P^\circ = 1\ \mathrm{bar}.
 
 Notes:
 
-- Standard-state quantities can still depend on temperature (e.g. $\Delta G^\circ(T)$).
-- When we use activities, the standard state corresponds to *unit activity* ($a=1$).
+- Standard-state quantities can still depend on temperature (e.g., $\Delta G^\circ(T)$).
+- When we use activities, the standard state corresponds to unit activity ($a=1$).
 
 ---
 
 ## Per-molecule vs. per-mole quantities ($k_{\mathrm{B}}$ vs. $R$)
 
-We will be explicit about “how we count stuff”:
+We will be explicit about how we count:
 
-- $N$ = number of molecules/particles  
-- $n$ = number of moles  
+- $N$ = number of molecules/particles
+- $n$ = number of moles
 
 The ideal-gas equation is written in either form:
 
@@ -102,8 +101,8 @@ R = N_{\mathrm{A}}\,k_{\mathrm{B}}.
 
 Rule of thumb:
 
-- Use $k_{\mathrm{B}}$ for **per-particle** (stat mech / microscopic) work.
-- Use $R$ for **per-mole** (thermo / macroscopic) work.
+- Use $k_{\mathrm{B}}$ for **per-particle** (stat mech / microscopic) quantities.
+- Use $R$ for **per-mole** (thermo / macroscopic) quantities.
 
 ---
 
@@ -126,8 +125,8 @@ We **do not** use $Z$ to denote a partition function.
 
 ### (B) Partition functions use $q$ and $Q$
 
-- $q$ = **one-particle / one-molecule** partition function  
-- $Q$ = **many-particle (canonical)** partition function  
+- $q$ = **one-particle / one-molecule** partition function
+- $Q$ = **many-particle (canonical)** partition function
 
 (Many texts use $Z$ for a partition function; we will not.)
 
@@ -136,21 +135,20 @@ We **do not** use $Z$ to denote a partition function.
 - $Q$ (often written $Q_p$, $Q_c$, etc.) = **reaction quotient**
 - $K$ = **equilibrium constant**
 
-When the same letter appears in different contexts (e.g. $Q$ as a partition function vs. $Q$ as a reaction quotient),
-we will rely on **context and/or subscripts** ($Q(T,V,N)$ vs. $Q_p$, $Q_c$) to keep the meaning clear.
+When the same letter appears in different contexts (e.g., $Q$ as a partition function vs. $Q$ as a reaction quotient), we will rely on **context and/or subscripts** ($Q(T,V,N)$ vs. $Q_p$, $Q_c$) to keep the meaning clear.
 
 ---
 
 ## Quick lookup table
 
-| Concept | Symbol(s) | “Positive means…” / meaning |
-| --- | --- | --- |
-| heat into system | $q$ | system absorbs heat |
-| work on system | $w$ | surroundings do work on system |
+| Concept | Symbol(s) | Meaning ("positive means…") / definition |
+| - | - | - |
+| Heat into system | $q$ | system absorbs heat |
+| Work on system | $w$ | surroundings do work on system |
 | $PV$ work | $\delta w=-P_{\mathrm{ext}}\,dV$ | expansion gives negative work |
-| standard-state pressure | $P^\circ$ | reference pressure (1 bar) |
-| per particle constant | $k_{\mathrm{B}}$ | J K$^{-1}$ per particle |
-| per mole constant | $R$ | J mol$^{-1}$ K$^{-1}$ |
-| compressibility factor | $Z$ | deviation from ideal gas ($Z=1$ ideal) |
-| partition functions | $q,\ Q$ | state-counting in stat mech |
-| reaction quotient / equilibrium constant | $Q,\ K$ | composition measure / equilibrium value |
+| Standard-state pressure | $P^\circ$ | reference pressure (1 bar) |
+| Per-particle constant | $k_{\mathrm{B}}$ | J K$^{-1}$ per particle |
+| Per-mole constant | $R$ | J mol$^{-1}$ K$^{-1}$ |
+| Compressibility factor | $Z$ | deviation from ideal gas ($Z=1$ ideal) |
+| Partition functions | $q,\ Q$ | state counting in stat mech |
+| Reaction quotient / equilibrium constant | $Q,\ K$ | composition measure / equilibrium value |
