@@ -315,7 +315,7 @@ The rms speed $v_{\mathrm{rms}}$ is a useful *single-number* summary, but in the
 For an ideal gas in three dimensions, the **Maxwell–Boltzmann speed distribution** gives the probability density $f(v)$ for finding a molecule with speed between $v$ and $v+dv$:
 
 ```{math}
-:label: maxwell-boltzmann-speed-distribution
+:label: maxwell-boltzmann-speed-distribution-eq
 f(v)
 =
 4\pi\left(\frac{m}{2\pi k_{\mathrm{B}}T}\right)^{3/2} v^2\,\exp\!\left(-\frac{m v^2}{2k_{\mathrm{B}}T}\right),
