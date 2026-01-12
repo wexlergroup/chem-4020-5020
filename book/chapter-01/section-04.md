@@ -747,7 +747,7 @@ loading="lazy"
 </div> -->
 
 <!-- If the embed does not load: -->
-You can open the studio in a new tab: <a href="https://chem-4020-5020-ugp4.vercel.app/" target="_blank" rel="noopener">Real Gas Computational Studio</a>.
+You can open the studio in a new tab: [Real Gas Computational Studio](https://chem-4020-5020-ugp4.vercel.app/).
 
 ## Worked Example
 
