@@ -12,24 +12,23 @@ kernelspec:
   name: python3
 ---
 
-
 # 1.1. Course Introduction
 
-[Course-wide Conventions & Notation](../notation.md)
+See also: [Course-wide Conventions & Notation](../notation.md)
 
 ## Overview and Learning Objectives
 
-Thermodynamics and statistical mechanics connect microscopic models of matter to macroscopic observables like temperature, pressure, and free energy. This section introduces course conventions, the language of systems and surroundings, and the role of state variables in defining equilibrium descriptions. It also reviews common energy forms and unit conventions used throughout the course.
+Thermodynamics and statistical mechanics connect microscopic models of matter to macroscopic observables such as temperature, pressure, and free energy. This section introduces course conventions, the language of systems and surroundings, and the role of state variables in equilibrium descriptions. It also reviews common forms of energy, energy transfer, and the unit conventions used throughout the course.
 
-This course covers the fundamental concepts of thermodynamics and statistical mechanics, along with their applications to chemical systems. It builds upon the thermodynamic principles introduced in [Chem 106](https://chemistry.wustl.edu/chemistry-105-106) and [Chem 112](https://chemistry.wustl.edu/chemistry-111-112), and the quantum mechanics taught in [Chem 105](https://chemistry.wustl.edu/chemistry-105-106), [Chem 111](https://chemistry.wustl.edu/chemistry-111-112), and [Chem 401](https://chemistry.wustl.edu/physical-chemistry-i). By connecting molecular-level behavior to macroscopic thermodynamic observations, students will learn how theory underpins real-world chemical processes.
+This course develops the core concepts of thermodynamics and statistical mechanics and applies them to chemical systems. It builds on the thermodynamic principles introduced in [Chem 106](https://chemistry.wustl.edu/chemistry-105-106) and [Chem 112](https://chemistry.wustl.edu/chemistry-111-112), and on the quantum mechanics developed in [Chem 105](https://chemistry.wustl.edu/chemistry-105-106), [Chem 111](https://chemistry.wustl.edu/chemistry-111-112), and [Chem 401](https://chemistry.wustl.edu/physical-chemistry-i). By connecting molecular-level behavior to macroscopic thermodynamic observations, you will see how theory underpins real-world chemical processes.
 
 ---
 
 Learning objectives:
 
-- Define **system**, **surroundings**, and **boundary**, and distinguish isolated/closed/open systems.
-- Identify **state variables** vs. **process variables** and explain what makes a quantity a **state function**.
-- State the equilibrium criteria (mechanical/thermal/chemical) used to justify thermodynamic state descriptions.
+- Define **system**, **surroundings**, and **boundary**; distinguish isolated/closed/open systems.
+- Distinguish **state variables**/**state functions** from **process-dependent** (path) quantities, and explain what makes a quantity a **state function**.
+- State the criteria for mechanical/thermal/chemical equilibrium used to justify thermodynamic state descriptions.
 - Convert between common thermodynamic units (Pa, bar, atm; J, kJ, eV; K and °C) and check dimensional consistency.
 
 ## Core Ideas and Derivations
@@ -38,15 +37,15 @@ Learning objectives:
 
 #### Bridging the Microscopic and Macroscopic Worlds
 
-Typical chemical systems contain on the order of [Avogadro's number](https://physics.nist.gov/cgi-bin/cuu/Value?na) of particles (i.e., $N_\text{A} = 6.022 \times 10^{23}$). Thermodynamics abstracts the complexity of such large collections of molecules into a framework for predicting:
+Typical chemical systems contain on the order of [Avogadro's number](https://physics.nist.gov/cgi-bin/cuu/Value?na) of particles (i.e., $N_{\mathrm{A}} = 6.022 \times 10^{23}$). Thermodynamics abstracts this complexity into a framework for predicting, among other things,
 
-- Reaction spontaneity,
-- Equilibrium states,
-- Phase transitions, and more.
+- reaction spontaneity,
+- equilibrium states, and
+- phase transitions.
 
 #### Modern Applications
 
-Thermodynamics and statistical mechanics are central to diverse fields, including industrial chemistry, materials science, and biochemistry. The examples below highlight just a few applications:
+Thermodynamics and statistical mechanics are central to diverse fields, including industrial chemistry, materials science, and biochemistry. The examples below illustrate a few representative applications:
 
 ::::{grid}
 
@@ -155,7 +154,7 @@ plt.show()
 plt.close(fig)
 ```
 
-**Types of thermodynamic systems:** (a) **Isolated**—no exchange of energy or matter; (b) **Closed**—exchanges energy but not matter; and (c) **Open**—exchanges both energy and matter.
+**Types of thermodynamic systems.** (a) **Isolated**—no exchange of energy or matter; (b) **Closed**—exchanges energy but not matter; (c) **Open**—exchanges both energy and matter.
 
 ```{glossary}
 System
@@ -224,7 +223,7 @@ Equilibrium
 : A condition in which macroscopic properties remain constant over time.
 
 Thermodynamic equilibrium
-: A state of simultaneous mechanical, thermal, and chemical equilibrium.
+: Simultaneous mechanical, thermal, and chemical equilibrium.
 
 Thermodynamic state
 : A set of macroscopic variables defining a system in equilibrium.
@@ -331,7 +330,7 @@ Heat
 
 ### Important Units
 
-#### SI Units
+#### SI Units[^4]
 
 ```{list-table} **Base SI Units**
 :header-rows: 1
@@ -353,10 +352,6 @@ Heat
   - kelvin
   - K
 ```
-
-[^4]
-
-[^4]: [https://www.nist.gov/pml/owm/metric-si/si-units](https://www.nist.gov/pml/owm/metric-si/si-units)
 
 ```{list-table} **Derived SI Units**
 :header-rows: 1
@@ -384,7 +379,9 @@ Heat
   - $1 \,\text{J} = 1 \,\text{N m}$
 ```
 
-#### Non-SI Units
+[^4]: [https://www.nist.gov/pml/owm/metric-si/si-units](https://www.nist.gov/pml/owm/metric-si/si-units)
+
+#### Non-SI Units[^5][^6][^7]
 
 ```{list-table} **Non-SI Units**
 :header-rows: 1
@@ -398,15 +395,15 @@ Heat
   - bar
   - bar
   - $1 \,\text{bar} = 1 \times 10^5 \,\text{Pa}$
-* - 
+* - Pressure
   - atmosphere
   - atm
   - $1 \,\text{atm} \approx 1.01325 \,\text{bar}$
-* -
+* - Pressure
   - torr
   - torr
   - $1 \,\text{torr} = \frac{1}{760}\,\text{atm}$
-* -
+* - Pressure
   - millimeters of mercury
   - mmHg
   - $1 \,\text{mmHg} = 1 \,\text{torr}$
@@ -414,13 +411,11 @@ Heat
   - electronvolt
   - eV
   - $1 \,\text{eV} = 1.602 \times 10^{-19} \,\text{J}$
-* -
+* - Energy
   - calorie
   - cal
   - $1 \,\text{cal} = 4.184 \,\text{J}$
 ```
-
-[^5] [^6] [^7]
 
 [^5]: [https://www.nist.gov/pml/sensor-science/thermodynamic-metrology/unit-conversions](https://www.nist.gov/pml/sensor-science/thermodynamic-metrology/unit-conversions)  
 [^6]: [https://physics.nist.gov/cgi-bin/cuu/Value?evj](https://physics.nist.gov/cgi-bin/cuu/Value?evj)  
@@ -430,7 +425,7 @@ Heat
 
 ### Unit conversions you will use constantly
 
-A gas sample is reported to have pressure $P=1.50\ \mathrm{atm}$ at $T=25.0^{\circ}\mathrm{C}$. Convert $P$ to bar and Pa, and convert $T$ to kelvin.
+A gas sample has pressure $P=1.50\ \mathrm{atm}$ at $T=25.0^{\circ}\mathrm{C}$. Convert $P$ to bar and Pa, and convert $T$ to kelvin.
 
 **Assumptions.** Use $1\ \mathrm{atm}=1.01325\times 10^{5}\ \mathrm{Pa}$ and $1\ \mathrm{bar}=10^{5}\ \mathrm{Pa}$.
 
@@ -461,12 +456,12 @@ A gas sample is reported to have pressure $P=1.50\ \mathrm{atm}$ at $T=25.0^{\ci
 
 1. Why does thermodynamics emphasize *state functions* rather than path-dependent quantities?
 2. Give one real-world example each of an isolated, closed, and open system. What crosses the boundary in each case?
-3. Which variables would you choose as “independent” to describe a gas in a rigid sealed container? In a piston open to the atmosphere?
+3. Which variables would you choose as “independent” to describe a gas in a rigid, sealed container? In a piston open to the atmosphere?
 4. Why is dimensional analysis a useful error-checking tool in thermodynamic derivations?
 
 ## Key Takeaways
 
-- Thermodynamics models macroscopic behavior using a small set of **state variables** and equilibrium assumptions.
+- Thermodynamics models macroscopic behavior using a small set of **state variables** together with equilibrium assumptions.
 - Systems are classified by what they exchange across the boundary: **energy**, **matter**, or neither.
 - **State functions** depend only on the state, not the path; unit consistency is non-negotiable.
 - Clear notation and unit conventions reduce errors and make derivations reusable across topics.
