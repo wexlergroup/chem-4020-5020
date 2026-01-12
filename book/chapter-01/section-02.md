@@ -12,16 +12,13 @@ kernelspec:
   name: python3
 ---
 
-
 # 1.2. Kinetic Theory
 
-[Course-wide Conventions & Notation](../notation.md)
+See also: [Course-wide Conventions & Notation](../notation.md)
 
 ## Overview and Learning Objectives
 
-Kinetic theory provides a microscopic route to macroscopic gas behavior by modeling a gas as many rapidly moving particles undergoing elastic collisions. Here we derive the pressure of an ideal gas from particle–wall collisions, connect temperature to average kinetic energy, and interpret molecular speed distributions.
-
-Kinetic theory connects the microscopic motion of gas particles to macroscopic properties such as pressure and temperature. This section introduces the fundamental assumptions of kinetic theory, derives key equations, and highlights their physical relevance.
+Kinetic theory provides a microscopic route to macroscopic gas behavior by modeling a gas as a large number of rapidly moving particles that undergo elastic collisions. In this section, we derive the pressure of an ideal gas from particle–wall momentum transfer, connect temperature to average kinetic energy, and interpret molecular speed distributions.
 
 ---
 
@@ -29,27 +26,27 @@ Learning objectives:
 
 - List the assumptions of kinetic theory used to model an ideal gas.
 - Derive the relation $P=\tfrac{1}{3}(N/V)m\langle v^{2}\rangle$ from particle–wall momentum transfer.
-- Use $\langle E_{\mathrm{kin}}\rangle = \tfrac{3}{2}k_{\mathrm B}T$ to relate temperature to molecular motion.
-- Compute characteristic speeds ($v_{\mathrm{mp}},\ \bar v,\ v_{\mathrm{rms}}$) and interpret the Maxwell–Boltzmann distribution.
+- Use $\langle E_{\mathrm{kin}}\rangle = \tfrac{3}{2}k_{\mathrm{B}}T$ to relate temperature to molecular motion.
+- Compute characteristic speeds ($v_{\mathrm{mp}},\ \langle v\rangle,\ v_{\mathrm{rms}}$) and interpret the Maxwell–Boltzmann distribution.
 
 ## Core Ideas and Derivations
 
 ### Foundational Assumptions of Kinetic Theory
 
-1. **Large Number of Particles**:
+1. **Large Number of Particles**:  
    A gas contains a very large number of identical particles moving randomly in all directions.
 
-2. **Point Particles**:
-   Each particle's size is negligible compared to the average distance between particles.
+2. **Point Particles**:  
+   Each particle’s size is negligible compared to the average distance between particles.
 
-3. **Elastic Collisions**:
-   Collisions between particles, and between particles and the container walls, conserve both momentum and kinetic energy.
+3. **Elastic Collisions**:  
+   Collisions between particles and between particles and the container walls conserve both momentum and kinetic energy.
 
-4. **No Long-Range Interparticle Forces**:
-   Particles do not exert forces on one another except when they collide (i.e., there are no long-range attractive or repulsive forces).
+4. **No Long-Range Interparticle Forces**:  
+   Particles exert no forces on one another except during collisions (i.e., there are no long-range attractive or repulsive forces).
 
-5. **Classical Mechanics Applies**:
-   Particle motion follows Newton's second law:
+5. **Classical Mechanics Applies**:  
+   Particle motion follows Newton’s second law:
 
    ```{math}
    \vec{F} = \frac{d\vec{p}}{dt},
@@ -116,15 +113,15 @@ plt.show()
 plt.close(fig)
 ```
 
-A two-dimensional representation of a single gas particle in a cuboid container (gray). Velocity components are shown in red. The length $L_y$ is not depicted, as it extends perpendicular to the plane of view.
+Two-dimensional schematic of a single gas particle in a cuboid container (gray). Velocity components are shown in red. The length $L_y$ is not depicted, as it extends perpendicular to the plane of view.
 
 #### Microscopic Picture of Pressure
 
-Pressure is the force exerted per unit area on the container walls. On a microscopic level, this force comes from the collective effect of countless collisions of gas particles with the walls.
+Pressure is the force exerted per unit area on the container walls. Microscopically, it arises from momentum transfer during particle–wall collisions.
 
 ##### Particle Momentum Change
 
-For an elastic collision of a particle of mass $m$ moving with velocity $v_x$ in the $x$-direction, the momentum change is:
+Consider an elastic collision of a particle of mass $m$ with a wall perpendicular to the $x$-axis. The $x$-component of the velocity reverses ($v_x \to -v_x$). If we take $v_x>0$ to denote the *magnitude* of the $x$-component, then the magnitude of the particle’s momentum change is
 
 ```{math}
 \Delta p_x = 2 m v_x.
@@ -132,7 +129,7 @@ For an elastic collision of a particle of mass $m$ moving with velocity $v_x$ in
 
 ##### Time Between Collisions
 
-If the container has length $L_x$ in the $x$-direction, the time between two consecutive collisions of the same particle with that wall is:
+If the container has length $L_x$ in the $x$-direction, the time between successive collisions of the same particle with that wall is
 
 ```{math}
 \Delta t = \frac{2 L_x}{v_x}.
@@ -140,7 +137,7 @@ If the container has length $L_x$ in the $x$-direction, the time between two con
 
 ##### Force on the Wall
 
-A single particle's average force on the wall (in the $x$-direction) is then:
+A single particle’s average force on the wall (in the $x$-direction) is then
 
 ```{math}
 F_{\text{p}, x} = \frac{\Delta p_x}{\Delta t} = \frac{m v_x^2}{L_x}.
@@ -148,162 +145,162 @@ F_{\text{p}, x} = \frac{\Delta p_x}{\Delta t} = \frac{m v_x^2}{L_x}.
 
 #### Total Pressure
 
-For $N$ identical particles with isotropic motion in a volume $V$, the total pressure $P$ is:
+For $N$ identical particles with isotropic motion in a volume $V$, the total pressure $P$ is
 
 ```{math}
 P = \frac{1}{V} \sum_{i=1}^N \frac{1}{3} m v_i^2,
 ```
 
-where $v_i$ is the speed of the $i$-th particle. Using the average speed squared $\langle v^2 \rangle$, we get:
+where $v_i$ is the speed of the $i$-th particle. Using the mean-square speed $\langle v^2 \rangle$, we obtain
 
 ```{math}
 :label: pressure-kinetic-theory
 P = \frac{N m \langle v^2 \rangle}{3 V}.
 ```
 
-This equation shows how the macroscopic pressure depends on the microscopic speeds of the particles.
+This equation shows how macroscopic pressure depends on the microscopic particle speeds.
 
 ---
 
 ### Kinetic Energy and Temperature
 
-The average translational kinetic energy per particle is:
+The average translational kinetic energy per particle is
 
 ```{math}
-\langle E_\text{kin} \rangle = \frac{1}{2} m \langle v^2 \rangle.
+\langle E_{\mathrm{kin}} \rangle = \frac{1}{2} m \langle v^2 \rangle.
 ```
 
-From the ideal gas equation of state $P V = N k_\text{B} T$ (to be discussed in [Section 3](section-03.md)), one can show that
+Equating Eq. {eq}`pressure-kinetic-theory` with the ideal-gas equation of state, $PV = N k_{\mathrm{B}} T$ (discussed in [Section 3](section-03.md)), gives
 
 ```{math}
 :label: equipartition-theorem
-\frac{1}{2} m \langle v^2 \rangle = \frac{3}{2} k_\text{B} T,
+\frac{1}{2} m \langle v^2 \rangle = \frac{3}{2} k_{\mathrm{B}} T,
 ```
 
-where $k_\text{B}$ is the Boltzmann constant and $T$ is the absolute temperature. This result—called the equipartition theorem—indicates that the temperature is directly proportional to the average kinetic energy of the particles.
+where $k_{\mathrm{B}}$ is the Boltzmann constant and $T$ is the absolute temperature. This result—often presented as an application of equipartition—shows that temperature is directly proportional to the average translational kinetic energy of the particles.
 
 `````{admonition} Complete Derivation of the Relationship Between Kinetic Energy and Temperature
 :class: dropdown
 
-**1. Kinetic Energy of a Single Particle**:
-Consider a single particle with mass $m$ and velocity $v$. Its translational kinetic energy is given by
+**1. Kinetic Energy of a Single Particle**  
+Consider a single particle with mass $m$ and speed $v$. Its translational kinetic energy is
 
-```{math}
-E_{\text{p},\,\text{kin}} \;=\; \frac{1}{2}\,m\,v^{2}.
+```{}
+E_{\text{p},\,\mathrm{kin}} \;=\; \frac{1}{2}\,m\,v^{2}.
 ```
 
-**2. Total Kinetic Energy of $N$ Particles**:
-For $N$ particles with masses $m_1, m_2, \ldots, m_N$ and respective velocities $v_1, v_2, \ldots, v_N$, the total translational kinetic energy is
+**2. Total Kinetic Energy of $N$ Particles**  
+For $N$ particles with masses $m_1, m_2, \ldots, m_N$ and respective speeds $v_1, v_2, \ldots, v_N$, the total translational kinetic energy is
 
-```{math}
-E_{\text{kin}}\left(m_1,\ldots,m_N\right) \;=\; \frac{1}{2}\,\sum_{i=1}^{N} m_i\,v_i^2.
+```{}
+E_{\mathrm{kin}}\left(m_1,\ldots,m_N\right) \;=\; \frac{1}{2}\,\sum_{i=1}^{N} m_i\,v_i^2.
 ```
 
-If all particles are identical with mass $m$, the total kinetic energy simplifies to
+If all particles are identical with mass $m$, this simplifies to
 
-```{math}
-E_{\text{kin}} \;=\; \frac{1}{2}\,m\,\sum_{i=1}^{N} v_i^2.
+```{}
+E_{\mathrm{kin}} \;=\; \frac{1}{2}\,m\,\sum_{i=1}^{N} v_i^2.
 ```
 
-**3. Defining the Average of the Velocity Squared**:
-We define the average of the velocity squared as
+**3. Defining the Average of the Speed Squared**  
+Define the mean-square speed
 
-```{math}
+```{}
 \langle v^2 \rangle \;=\; \frac{1}{N}\,\sum_{i=1}^{N} v_i^2,
 ```
 
 so that
 
-```{math}
+```{}
 \sum_{i=1}^{N} v_i^2 \;=\; N\,\langle v^2 \rangle.
 ```
 
-Substituting this back into the expression for the total kinetic energy of $N$ identical particles gives
+Substituting back gives
 
-````{admonition} Total Kinetic Energy of $N$ Identical Particles
+````{}
 :class: important
 ```{math}
-E_{\text{kin}} \;=\; \frac{1}{2}\,N\,m\,\langle v^2 \rangle.
+E_{\mathrm{kin}} \;=\; \frac{1}{2}\,N\,m\,\langle v^2 \rangle.
 ```
 ````
 
-**4. Relating Pressure to Kinetic Energy**:
-From Equation {eq}`pressure-kinetic-theory`, the pressure $P$ in a volume $V$ can be written as
+**4. Relating Pressure to Kinetic Energy**  
+From Eq. {eq}`pressure-kinetic-theory`, the pressure $P$ in a volume $V$ can be written as
 
-```{math}
+```{}
 P \;=\; \frac{N\,m\,\langle v^2 \rangle}{3\,V}.
 ```
 
-Recognizing that $N m \langle v^2 \rangle / 2 = E_{\text{kin}}$, we see:
+Recognizing that $N m \langle v^2 \rangle / 2 = E_{\mathrm{kin}}$, we obtain
 
-```{math}
-P \;=\; \frac{2\,E_{\text{kin}}}{3\,V}.
+```{}
+P \;=\; \frac{2\,E_{\mathrm{kin}}}{3\,V}.
 ```
 
-**5. Equating to the Ideal Gas Equation of State**:
-According to the ideal gas equation of state (to be discussed in [Section 3](section-03.md)), the pressure is also given by
+**5. Equating to the Ideal-Gas Equation of State**  
+For an ideal gas (discussed in [Section 3](section-03.md)),
 
-```{math}
-P \;=\; \frac{N\,k_\text{B}\,T}{V},
+```{}
+P \;=\; \frac{N\,k_{\mathrm{B}}\,T}{V}.
 ```
 
-where $k_\text{B}$ is the Boltzmann constant and $T$ is the absolute temperature. Equating the two expressions for pressure,
+Equating the two expressions for $P$,
 
-```{math}
-\frac{2\,E_{\text{kin}}}{3\,V} \;=\; \frac{N\,k_\text{B}\,T}{V}.
+```{}
+\frac{2\,E_{\mathrm{kin}}}{3\,V} \;=\; \frac{N\,k_{\mathrm{B}}\,T}{V},
 ```
 
-Solving for $E_{\text{kin}}$:
+and solving for $E_{\mathrm{kin}}$ gives
 
-```{math}
-E_{\text{kin}} \;=\; \frac{3}{2}\,N\,k_\text{B}\,T.
+```{}
+E_{\mathrm{kin}} \;=\; \frac{3}{2}\,N\,k_{\mathrm{B}}\,T.
 ```
 
-**6. Average Kinetic Energy Per Particle (Equipartition Theorem)**:
-Dividing both sides by $N$, we obtain the average kinetic energy of a single particle:
+**6. Average Kinetic Energy Per Particle (Equipartition Theorem)**  
+Dividing by $N$ yields the average kinetic energy per particle:
 
-````{important}
+````{}
 ```{math}
-\langle E_{\text{kin}} \rangle 
-\;=\; \frac{E_{\text{kin}}}{N}
+\langle E_{\mathrm{kin}} \rangle 
+\;=\; \frac{E_{\mathrm{kin}}}{N}
 \;=\; \frac{1}{2}\,m\,\langle v^2 \rangle
-\;=\; \frac{3}{2}\,k_\text{B}\,T.
+\;=\; \frac{3}{2}\,k_{\mathrm{B}}\,T.
 ```
 ````
 
-Each translational degree of freedom contributes $k_\text{B} T / 2$ to the average kinetic energy.
+Each translational degree of freedom contributes $k_{\mathrm{B}}T/2$ to the average kinetic energy.
 `````
 
 ---
 
 ### Estimating Particle Speeds
 
-By rearranging Equation {eq}`equipartition-theorem`, we obtain the root-mean-square (rms) speed:
+Rearranging Eq. {eq}`equipartition-theorem` gives the root-mean-square (rms) speed:
 
 ```{math}
 :label: rms-speed
-v_{\text{rms}} = \sqrt{\frac{3 k_\text{B} T}{m}}.
+v_{\mathrm{rms}} = \sqrt{\frac{3 k_{\mathrm{B}} T}{m}}.
 ```
 
 This expression shows that:
 
 - Hotter gases (larger $T$) have faster particles.
-- For a given temperature, lighter particles (smaller $m$) move faster than heavier ones.
+- At fixed temperature, lighter particles (smaller $m$) move faster than heavier ones.
 
 ````{admonition} Example: Speed of Air Molecules at Room Temperature
 :class: dropdown
 
-Air is roughly 78% nitrogen (N$_2$) by volume. Thus, a good estimate for the speed of air molecules at around 300 K is the rms speed of an N$_2$ molecule at 300 K.
+Air is roughly 78% nitrogen (N$_2$) by volume. A reasonable estimate for the speed of air molecules near 300 K is therefore the rms speed of an N$_2$ molecule at 300 K.
 
-Using the molar mass of N$_2$, $M_\text{r} = 28.0134\,\text{g/mol}$,[^1] one finds:
+Using the molar mass of N$_2$, $M = 28.0134\,\mathrm{g\,mol^{-1}}$,[^1] we find
 
-```{math}
-v_{\text{rms}} = \sqrt{\frac{3 k_\text{B} T}{M_\text{r} / N_\text{A}}}
-               \approx 517\,\text{m/s}
-               \approx 1{,}156\,\text{mph}.
+```{}
+v_{\mathrm{rms}} = \sqrt{\frac{3 k_{\mathrm{B}} T}{M / N_{\mathrm{A}}}}
+               \approx 517\,\mathrm{m/s}
+               \approx 1{,}156\,\mathrm{mph}.
 ```
 
-This speed is significantly faster than a Boeing 747-8 airliner at cruising velocity (about 660 mph).[^2]
+This is significantly faster than a Boeing 747-8 airliner at cruising speed (about 660 mph).[^2]
 
 [^1]: [https://webbook.nist.gov/cgi/cbook.cgi?Formula=N2&NoIon=on&Units=SI](https://webbook.nist.gov/cgi/cbook.cgi?Formula=N2&NoIon=on&Units=SI)  
 [^2]: [https://www.boeing.com/commercial/747-8/design-highlights#technologically-advanced](https://www.boeing.com/commercial/747-8/design-highlights#technologically-advanced)
@@ -313,17 +310,15 @@ This speed is significantly faster than a Boeing 747-8 airliner at cruising velo
 
 ### Maxwell–Boltzmann Speed Distribution
 
-The root-mean-square speed $v_{\text{rms}}$ is a useful *single-number* summary, but in thermal
-equilibrium a gas actually has a **distribution** of particle speeds.
+The rms speed $v_{\mathrm{rms}}$ is a useful *single-number* summary, but in thermal equilibrium a gas has a **distribution** of particle speeds.
 
-For an ideal gas in three dimensions, the **Maxwell–Boltzmann speed distribution** gives the
-probability density $f(v)$ for finding a molecule with speed between $v$ and $v+dv$:
+For an ideal gas in three dimensions, the **Maxwell–Boltzmann speed distribution** gives the probability density $f(v)$ for finding a molecule with speed between $v$ and $v+dv$:
 
 ```{math}
 :label: maxwell-boltzmann-speed-distribution
 f(v)
 =
-4\pi\left(\frac{m}{2\pi k_\text{B}T}\right)^{3/2} v^2\,\exp\!\left(-\frac{m v^2}{2k_\text{B}T}\right),
+4\pi\left(\frac{m}{2\pi k_{\mathrm{B}}T}\right)^{3/2} v^2\,\exp\!\left(-\frac{m v^2}{2k_{\mathrm{B}}T}\right),
 \qquad v\ge 0.
 ```
 
@@ -335,24 +330,24 @@ From $f(v)$ we can define several “typical” speeds:
 
 ```{math}
 :label: most-probable-speed
-v_{\text{mp}} = \sqrt{\frac{2k_\text{B}T}{m}} \qquad \text{(speed at the peak of } f(v)\text{)}
+v_{\mathrm{mp}} = \sqrt{\frac{2k_{\mathrm{B}}T}{m}} \qquad \text{(speed at the peak of } f(v)\text{)}
 ```
 
 ```{math}
 :label: mean-speed
-\langle v\rangle = \int_0^\infty v\,f(v)\,dv = \sqrt{\frac{8k_\text{B}T}{\pi m}}
+\langle v\rangle = \int_0^\infty v\,f(v)\,dv = \sqrt{\frac{8k_{\mathrm{B}}T}{\pi m}}.
 ```
 
 The rms speed (from Eq. {eq}`rms-speed`) is
 
 ```{math}
-v_{\text{rms}} = \sqrt{\langle v^2\rangle} = \sqrt{\frac{3k_\text{B}T}{m}}.
+v_{\mathrm{rms}} = \sqrt{\langle v^2\rangle} = \sqrt{\frac{3k_{\mathrm{B}}T}{m}}.
 ```
 
 For any Maxwell–Boltzmann distribution, these satisfy
 
 ```{math}
-v_{\text{mp}} < \langle v\rangle < v_{\text{rms}}.
+v_{\mathrm{mp}} < \langle v\rangle < v_{\mathrm{rms}}.
 ```
 
 #### Comparing gases and temperatures
@@ -430,13 +425,13 @@ Maxwell–Boltzmann speed distributions for different gases and temperatures.
 
 Estimate the rms speed of $\mathrm{N_2}$ molecules at $T=300\ \mathrm{K}$.
 
-**Assumptions.** Ideal-gas kinetic theory and equipartition; $v_{\mathrm{rms}}=\sqrt{3k_{\mathrm B}T/m}$.  
+**Assumptions.** Ideal-gas kinetic theory and equipartition; $v_{\mathrm{rms}}=\sqrt{3k_{\mathrm{B}}T/m}$.  
 Take $m(\mathrm{N_2}) = 28.0\,u = 28.0(1.66054\times10^{-27})\ \mathrm{kg} = 4.65\times10^{-26}\ \mathrm{kg}$.
 
 1. **Insert numbers**
 
    ```{math}
-   v_{\mathrm{rms}}=\sqrt{\frac{3k_{\mathrm B}T}{m}}
+   v_{\mathrm{rms}}=\sqrt{\frac{3k_{\mathrm{B}}T}{m}}
    =\sqrt{\frac{3(1.38065\times10^{-23}\ \mathrm{J/K})(300\ \mathrm{K})}{4.65\times10^{-26}\ \mathrm{kg}}}.
    ```
 
