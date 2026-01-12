@@ -12,21 +12,20 @@ kernelspec:
   name: python3
 ---
 
-
 # 1.4. Real Gases
 
 [Course-wide Conventions & Notation](../notation.md)
 
 ## Overview and Learning Objectives
 
-Real gases deviate from ideal behavior when finite molecular size and intermolecular forces matter. This section introduces the compressibility factor as a quantitative measure of non-ideality and develops the van der Waals equation of state, including its critical constants and the principle of corresponding states.
+Real gases deviate from ideal behavior when finite molecular size and intermolecular forces become important. This section introduces the compressibility factor as a quantitative measure of nonideality and develops the van der Waals equation of state (EOS), including its critical constants and the principle of corresponding states.
 
-Under high pressures, high densities, or low temperatures, we cannot treat gases as sets of non-interacting point particles. Higher pressures imply more frequent collisions and higher densities, higher densities are associated with closer molecules that can more strongly interact and experience each other's finite size, and lower temperatures indicate that molecules have lower kinetic energy and are more disposed to be affected by these interactions. This section presents approaches for quantifying deviations from ideal behavior and the van der Waals equation of state, which is one of the simplest models for real gases and the subject of the [Nobel Prize in Physics 1910](https://www.nobelprize.org/prizes/physics/1910/summary/).
+At sufficiently high pressures (high densities) or low temperatures, we can no longer treat gases as collections of noninteracting point particles. High pressure/density brings molecules closer together, increasing collision frequency and making both excluded volume and intermolecular interactions more consequential. Lower temperature reduces kinetic energy, so these interactions more strongly perturb $PVT$ behavior. This section develops practical ways to quantify deviations from ideality and introduces the van der Waals EOS—one of the simplest real-gas models and the work recognized by the [Nobel Prize in Physics 1910](https://www.nobelprize.org/prizes/physics/1910/summary/).
 
 Learning objectives:
 
-- Define the compressibility factor $Z$ and interpret $Z<1$ vs. $Z>1$ in terms of attractions/repulsions.
-- Write the van der Waals equation of state in particle and molar forms and interpret the parameters $a$ and $b$.
+- Define the compressibility factor $Z$ and interpret $Z<1$ vs. $Z>1$ in terms of net attractions/repulsions.
+- Write the van der Waals EOS in particle and molar forms and interpret the parameters $a$ and $b$.
 - Derive (or use) the van der Waals critical constants $V_{\mathrm m,c}=3b$, $P_c=a/(27b^2)$, $T_c=8a/(27bR)$.
 - Non-dimensionalize the van der Waals EOS to obtain the corresponding-states form in reduced variables.
 
@@ -116,9 +115,9 @@ plt.show()
 plt.close(fig)
 ```
 
-Compressibility factor $Z$ of water at 300 K as a function of pressure, with the ideal-gas line ($Z=1$) included for comparison. The dip below $Z=1$ highlights net attractive forces (most pronounced at the minimum $Z$), while crossing above $Z=1$ at higher pressures reflects repulsive interactions. The point at which the real-gas curve intersects the ideal-gas line indicates a coincidental match to ideal behavior.
+Compressibility factor $Z$ for water at 300 K as a function of pressure, with the ideal-gas line ($Z=1$) included for comparison. The dip below $Z=1$ indicates net attractive forces (most pronounced at the minimum in $Z$), while the rise above $Z=1$ at higher pressures reflects repulsive interactions. The intersection with $Z=1$ marks a “coincidentally ideal” state.
 
-One of the ways to quantify deviations from ideal behavior is by way of the compressibility factor $Z$:
+One convenient measure of nonideality is the compressibility factor $Z$:
 
 ```{math}
 :label: compressibility-factor-eq
@@ -138,32 +137,32 @@ Z = \frac{P V}{N k_\text{B} T} = \frac{P V}{n R T}.
   - $> 1$
   - $V_\text{real} > V_\text{ideal}$
   - Repulsive interactions
-  - Pauli repulsion (steric hindrance)
+  - Pauli (steric) repulsion
 * - Medium
   - $< 1$
   - $V_\text{real} < V_\text{ideal}$
   - Attractive interactions
-  - H bonding and van der Waals interactions
+  - H-bonding and van der Waals interactions
 * - Low
   - $= 1$
   - $V_\text{real} = V_\text{ideal}$
-  - Ideal gas behavior
-  - 
+  - Ideal-gas behavior
+  - —
 ```
 
 ```{tip}
-Can you demonstrate why $V_\text{real} > V_\text{ideal}$ for $Z > 1$ and $V_\text{real} < V_\text{ideal}$ for $Z < 1$?
+Show that $V_\text{real} > V_\text{ideal}$ for $Z > 1$ and $V_\text{real} < V_\text{ideal}$ for $Z < 1$.
 ```
 
 ```{tip}
-What might be the cause of attractive interactions in a gas of carbon dioxide or methane molecules?
+What might be the origin of attractive interactions in a gas of carbon dioxide or methane molecules?
 ```
 
 ### Van der Waals Fluid
 
 #### Van der Waals Equation of State
 
-The van der Waals equation of state is one of the simplest models for real gases and the subject of the [Nobel Prize in Physics 1910](https://www.nobelprize.org/prizes/physics/1910/summary/):
+The van der Waals equation of state is among the simplest real-gas models (and was central to the work recognized by the [Nobel Prize in Physics 1910](https://www.nobelprize.org/prizes/physics/1910/summary/)):
 
 ````{list-table} Forms of the van der Waals Equation of State
 :header-rows: 1
@@ -189,10 +188,10 @@ The van der Waals equation of state is one of the simplest models for real gases
     ```
 ````
 
-where $a$ and $b$ are constants that quantify two deviations from ideal behavior:
+where $a$ and $b$ are substance-dependent parameters capturing two departures from ideality:
 
-- **$a$**: Attractive interactions between particles.
-- **$b$**: Volume occupied by the particles.
+- **$a$**: Net attractive interactions between particles.
+- **$b$**: Volume associated with finite particle size (excluded volume).
 
 #### Van der Waals Isotherm
 
@@ -274,7 +273,7 @@ plt.show()
 plt.close(fig)
 ```
 
-Comparison of experimental and van der Waals isotherms for CO<sub>2</sub> at temperatures below, at, and above the critical temperature $T_c$. The subcritical isotherm ($T < T_c$) displays the characteristic loop associated with phase separation, while the isotherm at $T = T_c$ shows an inflection point, and supercritical conditions ($T > T_c$) no longer exhibit a liquid–vapor transition.
+Comparison of experimental and van der Waals isotherms for CO$_2$ at temperatures below, at, and above the critical temperature $T_c$. For $T < T_c$, the van der Waals EOS exhibits the characteristic loop associated with phase separation; at $T = T_c$ the isotherm has an inflection point; and for $T > T_c$ the liquid–vapor transition disappears.
 
 ##### Critical Point
 
@@ -535,9 +534,9 @@ plt.show()
 plt.close(fig)
 ```
 
-Van der Waals isotherm for CO<sub>2</sub> at $T = 0.9\,T_c$, with the Maxwell construction illustrating how the unphysical loop is replaced by a horizontal tie line defining liquid–vapor coexistence. The critical point at $T = T_c$ is also shown, where the liquid and vapor phases merge.
+Van der Waals isotherm for CO$_2$ at $T = 0.9\,T_c$, with the Maxwell construction illustrating how the unphysical loop is replaced by a horizontal tie line defining liquid–vapor coexistence. The critical point at $T = T_c$ is also shown, where the liquid and vapor phases merge.
 
-Expanding Equation {eq}`van-der-waals-eos` and rearranging terms:
+Expanding Equation {eq}`van-der-waals-eos` and rearranging terms gives a cubic equation for $V_\text{m}$:
 
 ```{math}
 :label: van-der-waals-eos-expanded
@@ -547,32 +546,34 @@ V_\text{m}^3 - \left( b_\text{m} + \frac{R T}{P} \right) V_\text{m}^2 + \frac{a_
 ````{admonition} Complete Derivation of the Cubic Equation in $V_\text{m}$
 :class: dropdown
 
-**1. Expand Equation {eq}`van-der-waals-eos` and Subtract $RT$ From Both Sides:**
+**1. Expand Equation {eq}`van-der-waals-eos` and subtract $RT$ from both sides:**
 
-```{math}
+```{}
 P V_\text{m} - P b_\text{m} + \frac{a_\text{m}}{V_\text{m}} - \frac{a_\text{m} b_\text{m}}{V_\text{m}^2} - R T = 0.
 ```
 
-**2. Multiply Both Sides by $V_\text{m}^2 / P$:**
+**2. Multiply both sides by $V_\text{m}^2 / P$:**
 
-```{math}
+```{}
 V_\text{m}^3 - b_\text{m} V_\text{m}^2 + \frac{a_\text{m}}{P} V_\text{m} - \frac{a_\text{m} b_\text{m}}{P} - \frac{R T}{P} V_\text{m}^2 = 0.
 ```
 
-**3. Group Terms:**
+**3. Group terms:**
 
-```{math}
+```{}
 V_\text{m}^3 - \left( b_\text{m} + \frac{R T}{P} \right) V_\text{m}^2 + \frac{a_\text{m}}{P} V_\text{m} - \frac{a_\text{m} b_\text{m}}{P} = 0.
 ```
 ````
 
-At the critical point, Equation {eq}`van-der-waals-eos-expanded` simplifies to:
+At the critical point, the cubic in Equation {eq}`van-der-waals-eos-expanded` has a triple root at $V_{\text{m},c}$, so it can be written as
 
 ```{math}
-\left( V_\text{m} - V_{\text{m},c} \right)^3 = V_\text{m}^3 - 3 V_{\text{m},c} V_\text{m}^2 + 3 V_{\text{m},c}^2 V_\text{m} - V_{\text{m},c}^3 = 0.
+\left( V_\text{m} - V_{\text{m},c} \right)^3
+= V_\text{m}^3 - 3 V_{\text{m},c} V_\text{m}^2 + 3 V_{\text{m},c}^2 V_\text{m} - V_{\text{m},c}^3
+= 0.
 ```
 
-Comparing these equations:
+Matching coefficients yields
 
 ```{math}
 V_{\text{m},c} = 3 b_\text{m}, \quad P_{\text{c}} = \frac{a_\text{m}}{27 b_\text{m}^2}, \quad T_{\text{c}} = \frac{8 a_\text{m}}{27 b_\text{m} R}.
@@ -581,24 +582,26 @@ V_{\text{m},c} = 3 b_\text{m}, \quad P_{\text{c}} = \frac{a_\text{m}}{27 b_\text
 ````{admonition} Complete Derivation of the Critical Point
 :class: dropdown
 
-**1. Set Coefficients Equal to Each Other and Solve for Powers of $V_{\text{m},c}$:**
+**1. Set coefficients equal and solve for powers of $V_{\text{m},c}$:**
 
-```{math}
-V_{\text{m},c} = \frac{1}{3} \left( b_\text{m} + \frac{R T_{\text{c}}}{P_{\text{c}}} \right), \quad V_{\text{m},c}^2 = \frac{a_\text{m}}{3 P_{\text{c}}}, \quad V_{\text{m},c}^3 = \frac{a_\text{m} b_\text{m}}{P_{\text{c}}}.
+```{}
+V_{\text{m},c} = \frac{1}{3} \left( b_\text{m} + \frac{R T_{\text{c}}}{P_{\text{c}}} \right), \quad
+V_{\text{m},c}^2 = \frac{a_\text{m}}{3 P_{\text{c}}}, \quad
+V_{\text{m},c}^3 = \frac{a_\text{m} b_\text{m}}{P_{\text{c}}}.
 ```
 
-**2. Divide $V_{\text{m},c}^3$ by $V_{\text{m},c}^2$ and Eliminate $P_{\text{c}}$:**
+**2. Divide $V_{\text{m},c}^3$ by $V_{\text{m},c}^2$ to eliminate $P_{\text{c}}$:**
 
-```{math}
+```{}
 \begin{aligned}
 \frac{V_{\text{m},c}^3}{V_{\text{m},c}^2} &= \frac{a_\text{m} b_\text{m}}{P_{\text{c}}} \cdot \frac{3 P_{\text{c}}}{a_\text{m}} \\
 V_{\text{m},c} &= 3 b_\text{m}.
 \end{aligned}
 ```
 
-**3. Substitute This Result Into $V_{\text{m},c}^3$ and Solve for $P_{\text{c}}$:**
+**3. Substitute into $V_{\text{m},c}^3$ and solve for $P_{\text{c}}$:**
 
-```{math}
+```{}
 \begin{aligned}
 V_{\text{m},c}^3 &= \frac{a_\text{m} b_\text{m}}{P_{\text{c}}} \\
 27 b_\text{m}^3 &= \frac{a_\text{m} b_\text{m}}{P_{\text{c}}} \\
@@ -606,9 +609,9 @@ P_{\text{c}} &= \frac{a_\text{m}}{27 b_\text{m}^2}.
 \end{aligned}
 ```
 
-**4. Substitute These Results Into $V_{\text{m},c}$ and Solve for $T_{\text{c}}$:**
+**4. Substitute these results into $V_{\text{m},c}$ and solve for $T_{\text{c}}$:**
 
-```{math}
+```{}
 \begin{aligned}
 V_{\text{m},c} &= \frac{1}{3} \left( b_\text{m} + \frac{R T_{\text{c}}}{P_{\text{c}}} \right) \\
 3 b_\text{m} &= \frac{1}{3} \left( b_\text{m} + R T_{\text{c}} \cdot \frac{27 b_\text{m}^2}{a_\text{m}} \right) \\
@@ -683,45 +686,45 @@ plt.show()
 plt.close(fig)
 ```
 
-Compressibility factor $Z$ of argon, oxygen, water, and carbon dioxide plotted over a range of reduced pressures for different reduced temperatures. These data illustrate how real gases exhibit similar trends when expressed in terms of their critical properties, in accordance with the principle of corresponding states.
+Compressibility factor $Z$ for argon, oxygen, water, and carbon dioxide plotted over a range of reduced pressures for different reduced temperatures. These data illustrate how real gases exhibit similar trends when expressed in terms of their critical properties, consistent with the principle of corresponding states.
 
-Redefining $V_\text{m}$, $P$, and $T$ as fractions $V_{\text{m},r}$, $P_r$, and $T_r$ of their critical values:
+Introduce reduced variables $V_{\text{m},r}$, $P_r$, and $T_r$ via
 
 ```{math}
 V_\text{m} = V_{\text{m},r} V_{\text{m},c}, \quad P = P_r P_c, \quad T = T_r T_c,
 ```
 
-and substituting these definitions into Equation {eq}`van-der-waals-eos` reveals a significant result:
+and substitute into Equation {eq}`van-der-waals-eos` to obtain
 
 ```{math}
 :label: van-der-waals-eos-corresponding-states
 \left( P_r + \frac{3}{V_{\text{m},r}^2} \right) \left( V_{\text{m},r} - \frac{1}{3} \right) = \frac{8}{3} T_r.
 ```
 
-This result—called the principle of corresponding states—illustrates that the equations of state for all van der Waals fluids are alike when expressed relative to their critical properties.
+This corresponding-states form shows that all van der Waals fluids obey the same reduced EOS when expressed relative to their critical properties.
 
 ```{tip}
-Calculate the value of the compressibility factor for a van der Waals fluid at the critical point? Do you notice anything interesting?
+Calculate the compressibility factor of a van der Waals fluid at the critical point. Do you notice anything interesting?
 ```
 
 ````{admonition} Complete Derivation of the Corresponding States Equation
 :class: dropdown
 
-**1. Substitute the Definitions of $V_\text{m}$, $P$, and $T$ Into Equation {eq}`van-der-waals-eos`:**
+**1. Substitute the reduced-variable definitions into Equation {eq}`van-der-waals-eos`:**
 
-```{math}
+```{}
 \left( P_r P_c + \frac{a_\text{m}}{V_{\text{m},r}^2 V_{\text{m},c}^2} \right) \left( V_{\text{m},r} V_{\text{m},c} - b_\text{m} \right) = R T_r T_c.
 ```
 
-**2. Divide Both Sides by $P_c V_{\text{m},c}$:**
+**2. Divide both sides by $P_c V_{\text{m},c}$:**
 
-```{math}
+```{}
 \left( P_r + \frac{a_\text{m}}{V_{\text{m},r}^2 V_{\text{m},c}^2 P_c} \right) \left( V_{\text{m},r} - \frac{b_\text{m}}{V_{\text{m},c}} \right) = \frac{R T_c}{P_c V_{\text{m},c}} T_r.
 ```
 
-**3. Substitute the Definitions of $P_c$, $V_{\text{m},c}$, and $T_c$ In Terms of $a_\text{m}$, $b_\text{m}$, and $R$:**
+**3. Substitute $P_c$, $V_{\text{m},c}$, and $T_c$ in terms of $a_\text{m}$, $b_\text{m}$, and $R$:**
 
-```{math}
+```{}
 \begin{aligned}
 \left( P_r + \frac{a_\text{m}}{V_{\text{m},r}^2} \cdot \frac{1}{9 b_\text{m}^2} \cdot \frac{27 b_\text{m}^2}{a_\text{m}} \right) \left( V_{\text{m},r} - \frac{b_\text{m}}{3 b_\text{m}} \right) &= R \cdot \frac{8 a_\text{m}}{27 b_\text{m} R} \cdot \frac{27 b_\text{m}^2}{a_\text{m}} \cdot \frac{1}{3 b_\text{m}} T_r \\
 \left( P_r + \frac{3}{V_{\text{m},r}^2} \right) \left( V_{\text{m},r} - \frac{1}{3} \right) &= \frac{8}{3} T_r.
@@ -730,13 +733,9 @@ Calculate the value of the compressibility factor for a van der Waals fluid at t
 
 ````
 
-Here is the updated subsection text, modeled after your Two-Level System example, with an improved description and the embedded frame pointing to your new deployment.
-
----
-
 ### Computational Studio: Real Gas
 
-Explore deviations from ideal behavior by dynamically comparing the Ideal Gas, Van der Waals (vdW), and Peng-Robinson (PR) equations of state. Adjust temperature and pressure to visualize how intermolecular forces impact the compressibility factor () and  isotherms, particularly near the critical point.
+Explore deviations from ideal behavior by dynamically comparing the ideal-gas, van der Waals (vdW), and Peng–Robinson (PR) equations of state. Adjust temperature and pressure to visualize how intermolecular forces impact the compressibility factor ($Z$) and $P$–$V_\text{m}$ isotherms, particularly near the critical point.
 
 <!-- <div style="width: 100%; border: 1px solid #cbd5e1; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.08);">
 <iframe
@@ -747,17 +746,14 @@ loading="lazy"
 ></iframe>
 </div> -->
 
-<!-- If the embed does not load, -->
-You can open the studio in a new tab:
-<a href="https://chem-4020-5020-ugp4.vercel.app/" target="_blank" rel="noopener">
-Real Gas Computational Studio
-</a>.
+<!-- If the embed does not load: -->
+You can open the studio in a new tab: <a href="https://chem-4020-5020-ugp4.vercel.app/" target="_blank" rel="noopener">Real Gas Computational Studio</a>.
 
 ## Worked Example
 
 ### van der Waals critical constants and $Z_c$ for CO$_2$
 
-Use the van der Waals parameters (as in the section plots)  
+Use the van der Waals parameters used in the section plots:
 $a_m = 3.6551\ \mathrm{L^2\,bar\,mol^{-2}}$, $b_m=0.042816\ \mathrm{L\,mol^{-1}}$, and $R=0.08314\ \mathrm{L\,bar\,mol^{-1}\,K^{-1}}$.
 
 The van der Waals critical constants are
@@ -800,12 +796,12 @@ T_c=\frac{8a_m}{27b_mR}.
 
 1. Why can a gas be “coincidentally ideal” (i.e., $Z=1$) even when interactions are not negligible?
 2. What physical effects are represented by the $a/V_{\mathrm m}^2$ and $b$ corrections in the van der Waals EOS?
-3. At fixed $T$, how does increasing $P$ typically shift $Z$ for real gases and why?
-4. Why does the reduced-variable form imply similar behavior across different substances near corresponding reduced conditions?
+3. At fixed $T$, how does $Z$ typically change as $P$ increases, and why?
+4. Why does the reduced-variable form imply similar behavior across different substances at corresponding reduced conditions?
 
 ## Key Takeaways
 
-- Non-ideality is quantified by $Z=PV/(nRT)$; $Z<1$ suggests net attractions and $Z>1$ suggests net repulsions.
-- The van der Waals EOS adds an attraction parameter $a$ and an excluded-volume parameter $b$.
+- Nonideality is quantified by $Z=PV/(nRT)$; $Z<1$ suggests net attractions and $Z>1$ suggests net repulsions.
+- The van der Waals EOS introduces an attraction parameter $a$ and an excluded-volume parameter $b$.
 - Critical constants follow directly from the cubic form of the van der Waals EOS, with $Z_c=3/8$.
 - Using reduced variables $(T_r,P_r,V_r)$ yields the corresponding-states form shared by all van der Waals fluids.
