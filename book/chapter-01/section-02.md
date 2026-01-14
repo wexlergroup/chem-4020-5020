@@ -91,7 +91,7 @@ def plot_container_2d(offset=0.2):
 
     ax.annotate("", xy=(0, 0.25 * Lz), xytext=(0.5 * Lx, 0.25 * Lz),
                 arrowprops=dict(arrowstyle="<-", color='red'))
-    ax.text(0.25 * Lx, 0.25 * Lz + offset, "$v_z$", color='red', fontsize=12, ha='center', va='center')
+    ax.text(0.25 * Lx, 0.25 * Lz + offset, "$v_x$", color='red', fontsize=12, ha='center', va='center')
 
     # Length indicators
     ax.annotate("", xy=(0, -offset), xytext=(Lx, -offset),
