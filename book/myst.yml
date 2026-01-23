@@ -62,6 +62,7 @@ project:
     - title: Appendices
       children:
         - file: appendices/appendix-a.md
+        - file: appendices/appendix-b.md
         # - file: appendices/appendix-c.md
 site:
   options:
