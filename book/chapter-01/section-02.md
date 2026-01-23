@@ -185,40 +185,39 @@ where $k_{\mathrm{B}}$ is the Boltzmann constant and $T$ is the absolute tempera
 **1. Kinetic Energy of a Single Particle**  
 Consider a single particle with mass $m$ and speed $v$. Its translational kinetic energy is
 
-```{}
+```{math}
 E_{\text{p},\,\mathrm{kin}} \;=\; \frac{1}{2}\,m\,v^{2}.
 ```
 
 **2. Total Kinetic Energy of $N$ Particles**  
 For $N$ particles with masses $m_1, m_2, \ldots, m_N$ and respective speeds $v_1, v_2, \ldots, v_N$, the total translational kinetic energy is
 
-```{}
+```{math}
 E_{\mathrm{kin}}\left(m_1,\ldots,m_N\right) \;=\; \frac{1}{2}\,\sum_{i=1}^{N} m_i\,v_i^2.
 ```
 
 If all particles are identical with mass $m$, this simplifies to
 
-```{}
+```{math}
 E_{\mathrm{kin}} \;=\; \frac{1}{2}\,m\,\sum_{i=1}^{N} v_i^2.
 ```
 
 **3. Defining the Average of the Speed Squared**  
 Define the mean-square speed
 
-```{}
+```{math}
 \langle v^2 \rangle \;=\; \frac{1}{N}\,\sum_{i=1}^{N} v_i^2,
 ```
 
 so that
 
-```{}
+```{math}
 \sum_{i=1}^{N} v_i^2 \;=\; N\,\langle v^2 \rangle.
 ```
 
 Substituting back gives
 
-````{}
-:class: important
+````{important}
 ```{math}
 E_{\mathrm{kin}} \;=\; \frac{1}{2}\,N\,m\,\langle v^2 \rangle.
 ```
@@ -227,39 +226,39 @@ E_{\mathrm{kin}} \;=\; \frac{1}{2}\,N\,m\,\langle v^2 \rangle.
 **4. Relating Pressure to Kinetic Energy**  
 From Eq. {eq}`pressure-kinetic-theory`, the pressure $P$ in a volume $V$ can be written as
 
-```{}
+```{math}
 P \;=\; \frac{N\,m\,\langle v^2 \rangle}{3\,V}.
 ```
 
 Recognizing that $N m \langle v^2 \rangle / 2 = E_{\mathrm{kin}}$, we obtain
 
-```{}
+```{math}
 P \;=\; \frac{2\,E_{\mathrm{kin}}}{3\,V}.
 ```
 
 **5. Equating to the Ideal-Gas Equation of State**  
 For an ideal gas (discussed in [Section 3](section-03.md)),
 
-```{}
+```{math}
 P \;=\; \frac{N\,k_{\mathrm{B}}\,T}{V}.
 ```
 
 Equating the two expressions for $P$,
 
-```{}
+```{math}
 \frac{2\,E_{\mathrm{kin}}}{3\,V} \;=\; \frac{N\,k_{\mathrm{B}}\,T}{V},
 ```
 
 and solving for $E_{\mathrm{kin}}$ gives
 
-```{}
+```{math}
 E_{\mathrm{kin}} \;=\; \frac{3}{2}\,N\,k_{\mathrm{B}}\,T.
 ```
 
 **6. Average Kinetic Energy Per Particle (Equipartition Theorem)**  
 Dividing by $N$ yields the average kinetic energy per particle:
 
-````{}
+````{important}
 ```{math}
 \langle E_{\mathrm{kin}} \rangle 
 \;=\; \frac{E_{\mathrm{kin}}}{N}
@@ -270,41 +269,6 @@ Dividing by $N$ yields the average kinetic energy per particle:
 
 Each translational degree of freedom contributes $k_{\mathrm{B}}T/2$ to the average kinetic energy.
 `````
-
----
-
-### Estimating Particle Speeds
-
-Rearranging Eq. {eq}`equipartition-theorem` gives the root-mean-square (rms) speed:
-
-```{math}
-:label: rms-speed
-v_{\mathrm{rms}} = \sqrt{\frac{3 k_{\mathrm{B}} T}{m}}.
-```
-
-This expression shows that:
-
-- Hotter gases (larger $T$) have faster particles.
-- At fixed temperature, lighter particles (smaller $m$) move faster than heavier ones.
-
-````{admonition} Example: Speed of Air Molecules at Room Temperature
-:class: dropdown
-
-Air is roughly 78% nitrogen (N$_2$) by volume. A reasonable estimate for the speed of air molecules near 300 K is therefore the rms speed of an N$_2$ molecule at 300 K.
-
-Using the molar mass of N$_2$, $M = 28.0134\,\mathrm{g\,mol^{-1}}$,[^1] we find
-
-```{}
-v_{\mathrm{rms}} = \sqrt{\frac{3 k_{\mathrm{B}} T}{M / N_{\mathrm{A}}}}
-               \approx 517\,\mathrm{m/s}
-               \approx 1{,}156\,\mathrm{mph}.
-```
-
-This is significantly faster than a Boeing 747-8 airliner at cruising speed (about 660 mph).[^2]
-
-[^1]: [https://webbook.nist.gov/cgi/cbook.cgi?Formula=N2&NoIon=on&Units=SI](https://webbook.nist.gov/cgi/cbook.cgi?Formula=N2&NoIon=on&Units=SI)  
-[^2]: [https://www.boeing.com/commercial/747-8/design-highlights#technologically-advanced](https://www.boeing.com/commercial/747-8/design-highlights#technologically-advanced)
-````
 
 ---
 
@@ -338,7 +302,8 @@ v_{\mathrm{mp}} = \sqrt{\frac{2k_{\mathrm{B}}T}{m}} \qquad \text{(speed at the p
 \langle v\rangle = \int_0^\infty v\,f(v)\,dv = \sqrt{\frac{8k_{\mathrm{B}}T}{\pi m}}.
 ```
 
-The rms speed (from Eq. {eq}`rms-speed`) is
+<!-- The rms speed (from Eq. {eq}`rms-speed`) is -->
+The rms speed is
 
 ```{math}
 v_{\mathrm{rms}} = \sqrt{\langle v^2\rangle} = \sqrt{\frac{3k_{\mathrm{B}}T}{m}}.

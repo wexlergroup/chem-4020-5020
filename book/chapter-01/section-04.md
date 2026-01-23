@@ -548,19 +548,19 @@ V_\text{m}^3 - \left( b_\text{m} + \frac{R T}{P} \right) V_\text{m}^2 + \frac{a_
 
 **1. Expand Equation {eq}`van-der-waals-eos` and subtract $RT$ from both sides:**
 
-```{}
+```{math}
 P V_\text{m} - P b_\text{m} + \frac{a_\text{m}}{V_\text{m}} - \frac{a_\text{m} b_\text{m}}{V_\text{m}^2} - R T = 0.
 ```
 
 **2. Multiply both sides by $V_\text{m}^2 / P$:**
 
-```{}
+```{math}
 V_\text{m}^3 - b_\text{m} V_\text{m}^2 + \frac{a_\text{m}}{P} V_\text{m} - \frac{a_\text{m} b_\text{m}}{P} - \frac{R T}{P} V_\text{m}^2 = 0.
 ```
 
 **3. Group terms:**
 
-```{}
+```{math}
 V_\text{m}^3 - \left( b_\text{m} + \frac{R T}{P} \right) V_\text{m}^2 + \frac{a_\text{m}}{P} V_\text{m} - \frac{a_\text{m} b_\text{m}}{P} = 0.
 ```
 ````
@@ -584,7 +584,7 @@ V_{\text{m},c} = 3 b_\text{m}, \quad P_{\text{c}} = \frac{a_\text{m}}{27 b_\text
 
 **1. Set coefficients equal and solve for powers of $V_{\text{m},c}$:**
 
-```{}
+```{math}
 V_{\text{m},c} = \frac{1}{3} \left( b_\text{m} + \frac{R T_{\text{c}}}{P_{\text{c}}} \right), \quad
 V_{\text{m},c}^2 = \frac{a_\text{m}}{3 P_{\text{c}}}, \quad
 V_{\text{m},c}^3 = \frac{a_\text{m} b_\text{m}}{P_{\text{c}}}.
@@ -592,7 +592,7 @@ V_{\text{m},c}^3 = \frac{a_\text{m} b_\text{m}}{P_{\text{c}}}.
 
 **2. Divide $V_{\text{m},c}^3$ by $V_{\text{m},c}^2$ to eliminate $P_{\text{c}}$:**
 
-```{}
+```{math}
 \begin{aligned}
 \frac{V_{\text{m},c}^3}{V_{\text{m},c}^2} &= \frac{a_\text{m} b_\text{m}}{P_{\text{c}}} \cdot \frac{3 P_{\text{c}}}{a_\text{m}} \\
 V_{\text{m},c} &= 3 b_\text{m}.
@@ -601,7 +601,7 @@ V_{\text{m},c} &= 3 b_\text{m}.
 
 **3. Substitute into $V_{\text{m},c}^3$ and solve for $P_{\text{c}}$:**
 
-```{}
+```{math}
 \begin{aligned}
 V_{\text{m},c}^3 &= \frac{a_\text{m} b_\text{m}}{P_{\text{c}}} \\
 27 b_\text{m}^3 &= \frac{a_\text{m} b_\text{m}}{P_{\text{c}}} \\
@@ -611,7 +611,7 @@ P_{\text{c}} &= \frac{a_\text{m}}{27 b_\text{m}^2}.
 
 **4. Substitute these results into $V_{\text{m},c}$ and solve for $T_{\text{c}}$:**
 
-```{}
+```{math}
 \begin{aligned}
 V_{\text{m},c} &= \frac{1}{3} \left( b_\text{m} + \frac{R T_{\text{c}}}{P_{\text{c}}} \right) \\
 3 b_\text{m} &= \frac{1}{3} \left( b_\text{m} + R T_{\text{c}} \cdot \frac{27 b_\text{m}^2}{a_\text{m}} \right) \\
@@ -712,19 +712,19 @@ Calculate the compressibility factor of a van der Waals fluid at the critical po
 
 **1. Substitute the reduced-variable definitions into Equation {eq}`van-der-waals-eos`:**
 
-```{}
+```{math}
 \left( P_r P_c + \frac{a_\text{m}}{V_{\text{m},r}^2 V_{\text{m},c}^2} \right) \left( V_{\text{m},r} V_{\text{m},c} - b_\text{m} \right) = R T_r T_c.
 ```
 
 **2. Divide both sides by $P_c V_{\text{m},c}$:**
 
-```{}
+```{math}
 \left( P_r + \frac{a_\text{m}}{V_{\text{m},r}^2 V_{\text{m},c}^2 P_c} \right) \left( V_{\text{m},r} - \frac{b_\text{m}}{V_{\text{m},c}} \right) = \frac{R T_c}{P_c V_{\text{m},c}} T_r.
 ```
 
 **3. Substitute $P_c$, $V_{\text{m},c}$, and $T_c$ in terms of $a_\text{m}$, $b_\text{m}$, and $R$:**
 
-```{}
+```{math}
 \begin{aligned}
 \left( P_r + \frac{a_\text{m}}{V_{\text{m},r}^2} \cdot \frac{1}{9 b_\text{m}^2} \cdot \frac{27 b_\text{m}^2}{a_\text{m}} \right) \left( V_{\text{m},r} - \frac{b_\text{m}}{3 b_\text{m}} \right) &= R \cdot \frac{8 a_\text{m}}{27 b_\text{m} R} \cdot \frac{27 b_\text{m}^2}{a_\text{m}} \cdot \frac{1}{3 b_\text{m}} T_r \\
 \left( P_r + \frac{3}{V_{\text{m},r}^2} \right) \left( V_{\text{m},r} - \frac{1}{3} \right) &= \frac{8}{3} T_r.
@@ -737,16 +737,6 @@ Calculate the compressibility factor of a van der Waals fluid at the critical po
 
 Explore deviations from ideal behavior by dynamically comparing the ideal-gas, van der Waals (vdW), and Peng–Robinson (PR) equations of state. Adjust temperature and pressure to visualize how intermolecular forces impact the compressibility factor ($Z$) and $P$–$V_\text{m}$ isotherms, particularly near the critical point.
 
-<!-- <div style="width: 100%; border: 1px solid #cbd5e1; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.08);">
-<iframe
-src="https://chem-4020-5020-ugp4.vercel.app/"
-title="Real Gas Computational Studio"
-style="width: 100%; height: 850px; border: 0;"
-loading="lazy"
-></iframe>
-</div> -->
-
-<!-- If the embed does not load: -->
 You can open the studio in a new tab: [Real Gas Computational Studio](https://chem-4020-5020-ugp4.vercel.app/).
 
 ## Worked Example

@@ -193,41 +193,6 @@ Rearranging Eq. {eq}`ideal-gas-equation-of-state`, a simple estimate for a typic
 
 This expression shows that increasing temperature or reducing pressure *increases* the typical separation between gas particles.
 
-````{admonition} Example: Distance Between Air Molecules at 300 K and 1 bar
-:class: dropdown
-
-Using Eq. {eq}`average-distance-between-particles` with $P=1.00\times10^{5}\,\mathrm{Pa}$:
-
-```{}
-\langle d \rangle 
-= \left( \frac{k_{\mathrm{B}} \cdot 300\,\mathrm{K}}{1.00 \times 10^5\,\mathrm{Pa}} \right)^{1/3}
-\approx 3.46 \times 10^{-9}\,\mathrm{m} \;=\; 34.6\,\text{Å}.
-```
-
-In air, Ar atoms (about 0.934% of air molecules) can be modeled with the Lennard-Jones potential:
-
-```{}
-E_\text{pot}(r) 
-= 4\epsilon \,\left[\left(\frac{\sigma}{r}\right)^{12} - \left(\frac{\sigma}{r}\right)^6\right],
-\quad \epsilon = 0.0103\,\text{eV},\;\; \sigma = 3.4\,\text{Å}.
-```
-
-At $r = \langle d \rangle$,
-
-```{}
-E_\text{pot} \approx -3.8\times 10^{-8}\,\text{eV},
-```
-
-which is small compared to the thermal kinetic energy,
-
-```{}
-\langle E_\text{kin} \rangle 
-\approx \frac{3}{2} k_{\mathrm{B}} T \;\approx\; 0.039\,\text{eV}.
-```
-
-Because $\lvert E_\text{pot} \rvert$ is negligible relative to $\langle E_\text{kin} \rangle$, the Ar atoms behave almost as if they are non-interacting, validating the ideal-gas approximation.
-````
-
 ### Absolute Temperature Scale
 
 ```{code-cell} ipython3
