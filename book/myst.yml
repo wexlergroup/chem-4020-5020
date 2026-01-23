@@ -20,7 +20,7 @@ project:
         - file: chapter-01/section-03.md
         - file: chapter-01/section-04.md
         # - file: chapter-01/review.md
-    # - title: Module 2. Statistical Mechanics
+    - title: Module 2. Statistical Mechanics
     #   children:
     #     - file: chapter-02/section-01.md
     #     - file: chapter-02/section-02.md
