@@ -20,10 +20,10 @@ kernelspec:
 
 - **Thermodynamic Systems**
   - **System vs. Surroundings**
-  - **Types**: isolated (no exchange), closed (energy exchange only), open (energy + matter exchange)
+  - **Types**: isolated (no exchange of energy or matter), closed (exchanges energy but not matter), open (exchanges energy and matter)
 - **State Variables and Equilibrium**
-  - **State variables** (e.g., $P$, $V$, $T$) vs. **state functions** (e.g., enthalpy $H$, internal energy $U$)
-  - **Path functions** (e.g., heat $q$, work $w$) depend on how a process is carried out
+  - **State variables** (e.g., $P$, $V$, $T$) and other **state functions** (e.g., internal energy $U$)
+  - **Path functions** (e.g., heat $q$, work $w$) depend on the path taken between states
   - **Equilibrium** implies no net change in macroscopic properties over time
 - **Energy, Heat, and Work**
   - **Kinetic vs. Potential energy**
@@ -42,8 +42,8 @@ kernelspec:
   - Microscopic collisions of particles with container walls
   - Force per unit area results from changes in particle momentum
 - **Equipartition Theorem**
-  - Average translational kinetic energy per particle $\langle E_{\text{kin}} \rangle = \frac{3}{2} k_{\text{B}} T$
-  - Relates temperature to average particle velocity
+  - Average translational kinetic energy per particle $\langle E_{\mathrm{kin}} \rangle = \frac{3}{2} k_{\mathrm{B}} T$
+  - Relates $T$ to the mean-square speed
 
 ### Section 1.3. Ideal Gases
 
@@ -53,7 +53,7 @@ kernelspec:
   - **Gay-Lussac** ($P \propto T$ at constant $V,\,N$)
   - **Avogadro** ($V \propto N$ at constant $P,\,T$)
 - **Ideal Gas Equation**
-  - $PV = N k_{\text{B}} T = n R T$
+  - $PV = N k_{\mathrm{B}} T = n R T$
   - Assumes point-like, non-interacting particles
 - **Absolute Temperature Scale**
   - Kelvin scale derived by extrapolating volumes to zero at $-273.15\,\text{°C}$
@@ -61,14 +61,14 @@ kernelspec:
 ### Section 1.4. Real Gases
 
 - **Deviations from Ideal Behavior**
-  - Become significant at high $P$, high density, or low $T$
+  - Become significant at high $P$ (high density) or low $T$
   - **Compressibility factor** $Z = \frac{PV}{nRT}$ indicates deviation ($Z=1$ ideal; $Z<1$ net attraction; $Z>1$ net repulsion)
 - **van der Waals Equation**
   - Introduces parameters $a$ (accounts for attractions) and $b$ (excluded volume)
-  - Shows characteristic “loop” (liquid–vapor coexistence) below critical temperature
+  - Shows the characteristic van der Waals “loop” below the critical temperature (associated with liquid–vapor coexistence)
 - **Critical Point and Corresponding States**
-  - Critical conditions $(T_c, P_c, V_{\text{m},c})$ mark the end of the liquid–vapor coexistence line
-  - Reduced variables $T_r = T/T_c,\; P_r = P/P_c,\; V_{m,r} = V_m / V_{\text{m},c}$ collapse different substances onto similar curves (principle of corresponding states)
+  - Critical conditions $(T_c, P_c, V_{m,c})$ mark the end of the liquid–vapor coexistence line
+  - Reduced variables $T_r = T/T_c,\; P_r = P/P_c,\; V_{m,r} = V_m / V_{m,c}$ collapse different substances onto similar curves (principle of corresponding states)
 
 ---
 
@@ -77,7 +77,7 @@ kernelspec:
 1. **Ideal Gas Law**
 
    $$
-   PV = N k_{\text{B}} T = n R T.
+   PV = N k_{\mathrm{B}} T = n R T.
    $$
    - **Applicability**: low pressures, relatively high temperatures, or low densities (particles effectively non-interacting).
 
@@ -91,19 +91,19 @@ kernelspec:
 3. **Average Kinetic Energy / Equipartition**
 
    $$
-   \langle E_{\text{kin}} \rangle
-   \;=\; \frac{3}{2} k_{\text{B}} T
+   \langle E_{\mathrm{kin}} \rangle
+   \;=\; \frac{3}{2} k_{\mathrm{B}} T
    \quad\Longleftrightarrow\quad
    \frac{1}{2} m \langle v^2 \rangle
-   = \frac{3}{2} k_{\text{B}} T.
+   = \frac{3}{2} k_{\mathrm{B}} T.
    $$
    - **Applicability**: classical (high-temperature) regime, ignoring quantum effects and molecular internal modes.
 
 4. **Root-Mean-Square (rms) Speed**
 
    $$
-   v_{\text{rms}}
-   = \sqrt{\frac{3 k_{\text{B}} T}{m}}.
+   v_{\mathrm{rms}}
+   = \sqrt{\frac{3 k_{\mathrm{B}} T}{m}}.
    $$
    - **Applicability**: same assumptions as equipartition (kinetic theory of gases).
 
@@ -128,11 +128,11 @@ kernelspec:
 7. **Critical-Point Relationships (van der Waals)**
 
    $$
-   V_{\text{m},c} = 3\,b_m,\quad
+   V_{m,c} = 3\,b_m,\quad
    P_c = \frac{a_m}{27\,b_m^2},\quad
    T_c = \frac{8\,a_m}{27\,b_m\,R}.
    $$
-   - **Interpretation**: defines the critical temperature $T_c$, critical pressure $P_c$, and critical molar volume $V_{\text{m},c}$ for a van der Waals fluid.
+   - **Interpretation**: defines the critical temperature $T_c$, critical pressure $P_c$, and critical molar volume $V_{m,c}$ for a van der Waals fluid.
 
 8. **Corresponding States** (reduced variables)
 
@@ -143,6 +143,6 @@ kernelspec:
    \quad
    P_r=\frac{P}{P_c},\quad
    T_r=\frac{T}{T_c},\quad
-   V_{m,r}=\frac{V_m}{V_{\text{m},c}}.
+   V_{m,r}=\frac{V_m}{V_{m,c}}.
    $$
    - **Applicability**: near or above critical conditions for fluids that approximate van der Waals behavior; demonstrates “universal” behavior across substances when scaled by critical properties.
