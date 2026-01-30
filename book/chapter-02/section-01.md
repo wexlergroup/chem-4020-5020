@@ -19,7 +19,7 @@ kernelspec:
 
 ## Overview and Learning Objectives
 
-Statistical mechanics builds a bridge from microscopic states to macroscopic thermodynamics by treating measurable quantities as ensemble averages. This section introduces expected values, defines the common ensembles (microcanonical, canonical, grand canonical), and states the fundamental postulate for an isolated system.
+Statistical mechanics bridges microscopic states and macroscopic thermodynamics by treating measurable quantities as ensemble averages. This section introduces expected values, defines the common ensembles (microcanonical, canonical, and grand canonical), and states the fundamental postulate for an isolated system.
 
 ```{mermaid}
 %%{init: {"theme": "neutral", "look": "handDrawn", "layout": "elk"}}%%
@@ -68,8 +68,8 @@ flowchart LR
 
 Learning objectives:
 
-- Distinguish an arithmetic average from an ensemble (expected) average $\langle X\rangle$.
-- Define microstates, macrostates, and an ensemble, and identify the constraints for the microcanonical/canonical/grand-canonical ensembles.
+- Distinguish an arithmetic average (sample mean) from an ensemble (expected) average $\langle X\rangle$.
+- Define microstates, macrostates, and an ensemble, and identify the constraints defining the microcanonical, canonical, and grand canonical ensembles.
 - State the fundamental postulate of statistical mechanics for the microcanonical ensemble.
 - Compute microcanonical probabilities $p_i=1/M$ and simple expected values from a discrete distribution.
 
@@ -77,11 +77,11 @@ Learning objectives:
 
 ### Macroscopic Properties as Expected Values of Microscopic Properties
 
-A core principle of statistical mechanics is that **macroscopic thermodynamic properties** can be interpreted as **statistical averages** (or expected values) of microscopic properties.
+A core principle of statistical mechanics is that **macroscopic thermodynamic properties** are **statistical averages** (expected values) of microscopic properties.
 
 #### Arithmetic Average vs. Expected Value
 
-In basic statistics, an **arithmetic average** $\bar{X}$ of a set of numbers $X = \{ X_1, X_2, \ldots, X_M \}$ is:
+In basic statistics, the **arithmetic average** (sample mean) $\bar{X}$ of a dataset $X=\{X_1, X_2, \ldots, X_M\}$ is:
 
 ```{math}
 \bar{X} = \frac{1}{M} \sum_{i=1}^M X_i.
@@ -96,14 +96,14 @@ The arithmetic average of $X = \{ 1, 2, 2, 3, 3, 3, 4, 4, 4, 4 \}$ is
 ```
 ````
 
-In **statistical mechanics**, we often deal with an **expected value**, which accounts for the probabilities $p_i$ of different microscopic states or outcomes. The expected value of a random variable $X$ is:
+In **statistical mechanics**, we typically work with an **expected value**, which weights each outcome by its probability. For a discrete random variable $X$ that takes values $\{X_i\}$ with probabilities $\{p_i\}$, the expected value is
 
 ```{math}
 :label: expected-value
 \langle X \rangle = \sum_{i=1}^M X_i \, p_i,
 ```
 
-where $p_i$ is the probability of the $i$-th value $X_i$, and the sum runs over all possible microstates.
+where $p_i$ is the probability of the $i$-th outcome (microstate), and the sum runs over the microstates included in the ensemble.
 
 ````{admonition} Example of an Expected Value
 :class: tip
@@ -116,31 +116,16 @@ If $X$ takes the values $\{1, 2, 3, 4\}$ with probabilities $p = \{0.1, 0.2, 0.3
 
 ````{admonition} Expected Value of the Number of Tails in 100 Fair Coin Flips
 :class: tip
-Let $X_\text{heads} = 0$ and $X_\text{tails} = 1$. For one flip,
+Let $X=1$ for tails and $X=0$ for heads. For one flip,
 
 ```{math}
 \langle X \rangle_1 = 0 \times 0.5 + 1 \times 0.5 = 0.5.
 ```
 
-Hence, in 100 flips,
+By linearity of expectation, the expected number of tails in 100 flips is
 
 ```{math}
-\langle X \rangle_{100} = 100 \times 0.5 = 50.
-```
-````
-
-````{admonition} Expected Value of the Number of Sixes in 300 Fair Die Rolls
-:class: tip
-Let $X_\text{six} = 1$ and $X_\text{not-six} = 0$. Then, for one roll,
-
-```{math}
-\langle X \rangle_1 = 1 \times \frac{1}{6} + 0 \times \frac{5}{6} = \frac{1}{6}.
-```
-
-For 300 rolls,
-
-```{math}
-\langle X \rangle_{300} = 300 \times \frac{1}{6} = 50.
+\langle N_{\text{tails}}\rangle = 100\,\langle X\rangle_1 = 100 \times 0.5 = 50.
 ```
 ````
 
@@ -148,41 +133,41 @@ For 300 rolls,
 :header-rows: 1
 :name: statistical-variables
 
-* - Statistical Variable
-  - Statistical Mechanical Definition
+* - Symbol
+  - Meaning
 * - $M$
-  - Number of microscopic states (microstates)
+  - Number of possible microstates (outcomes)
 * - $i$
   - Index of a microstate
 * - $X_i$
-  - Value of a microscopic property in the $i$-th microstate
+  - Value of a microscopic property in microstate $i$
 * - $\langle X \rangle$
   - Expected (ensemble) average of $X$
 * - $p_i$
-  - Probability of finding the system in the $i$-th microstate
+  - Probability of finding the system in microstate $i$
 ```
 
-In **thermodynamics**, typical $X$ values might be the **internal energy**, **enthalpy**, or other measurable properties. We will see how to compute such properties by defining appropriate probabilities $p_i$ for the relevant ensemble.
+In **thermodynamics**, typical choices of $X$ include the **internal energy**, **enthalpy**, or other measurable properties. We will compute such quantities by specifying the probabilities $\{p_i\}$ appropriate to the ensemble of interest.
 
 ### Ensembles of Microstates
 
 ```{glossary}
 Ensemble
-: The set of all possible microstates of a system consistent with the macroscopic properties of the system.
+: The set of microstates consistent with specified macroscopic constraints.
 
 Microcanonical ensemble
-: All microstates have the same number of particles, volume, and energy $\left( N, V, E \right)$.
+: Microstates are sampled at fixed $\left(N, V, E\right)$.
 
 Canonical ensemble
-: All microstates have the same number of particles, volume, and temperature $\left( N, V, T \right)$.
+: Microstates are sampled at fixed $\left(N, V, T\right)$.
 
 Grand canonical ensemble
-: All microstates have the same chemical potential, volume, and temperature $\left( \mu, V, T \right)$.
+: Microstates are sampled at fixed $\left(\mu, V, T\right)$.
 ```
 
 ### Probability of a Microstate in the Microcanonical Ensemble
 
-In an **isolated system**—one that exchanges neither energy nor matter with its surroundings—the appropriate statistical description is the **microcanonical ensemble**.
+For an **isolated system**—one that exchanges neither energy nor matter with its surroundings—the appropriate statistical description is the **microcanonical ensemble**.
 
 ```{code-cell} ipython3
 :tags: [hide-input]
@@ -216,7 +201,7 @@ plt.show()
 plt.close(fig)
 ```
 
-An isolated system, exchanging neither energy nor matter with its surroundings.
+An isolated system exchanges neither energy nor matter with its surroundings.
 
 #### Fundamental Postulate of Statistical Mechanics
 
@@ -225,18 +210,18 @@ An isolated system, exchanging neither energy nor matter with its surroundings.
 **For an isolated system (microcanonical ensemble), each accessible microstate is equally probable.**
 ```
 
-Hence, the probability of finding the system in the $i$-th microstate is:
+Therefore, the probability of finding the system in the $i$-th microstate is
 
 ```{math}
 :label: microcanonical-probability
 p_i = \frac{1}{M},
 ```
 
-where $M$ is the total number of microstates compatible with $\left( N, V, E \right)$.
+where $M$ is the total number of accessible microstates compatible with $\left(N, V, E\right)$.
 
 ````{admonition} Isolated Spin-Up Electron in an f Orbital
 :class: tip
-Consider an isolated electron with spin up in an $f$-orbital. The possible quantum states have magnetic quantum numbers $m_l = \{-3, -2, -1, 0, 1, 2, 3\}$, giving $M = 7$. By the fundamental postulate, the probability of each microstate is
+Consider an isolated spin-up electron in an $f$ orbital. The possible quantum states have magnetic quantum numbers $m_\ell = \{-3, -2, -1, 0, 1, 2, 3\}$, giving $M=7$. By the fundamental postulate, the probability of each microstate is
 
 ```{math}
 p_i = \frac{1}{7}.
@@ -245,22 +230,22 @@ p_i = \frac{1}{7}.
 
 ## Worked Example
 
-### Expected value vs. arithmetic mean (dice)
+### Expected value vs. arithmetic mean (die rolls)
 
-A fair die is rolled $M=300$ times. Let $X=1$ if the outcome is a six and $X=0$ otherwise.
+A fair die is rolled $n=300$ times. Let $X_j=1$ if the $j$-th outcome is a six and $X_j=0$ otherwise.
 
 1. **One roll**
 
    ```{math}
-   \langle X\rangle_1 = 1\cdot \frac{1}{6} + 0\cdot \frac{5}{6} = \frac{1}{6}.
+   \langle X_j\rangle = 1\cdot \frac{1}{6} + 0\cdot \frac{5}{6} = \frac{1}{6}.
    ```
 
 2. **Linearity of expectation**
 
-   For independent, identical trials, the expected total number of sixes is the sum of expectations:
+   For independent, identical trials, the expected total number of sixes is the sum of the individual expectations:
 
    ```{math}
-   \langle N_{\text{sixes}}\rangle = \sum_{j=1}^{300}\langle X\rangle_1 = 300\left(\frac{1}{6}\right)=50.
+   \langle N_{\text{sixes}}\rangle = \sum_{j=1}^{300}\langle X_j\rangle = 300\left(\frac{1}{6}\right)=50.
    ```
 
 **Result.** The expected number of sixes in 300 rolls is $50$.
@@ -270,7 +255,7 @@ A fair die is rolled $M=300$ times. Let $X=1$ if the outcome is a six and $X=0$ 
 1. In what sense is “temperature” absent from the microcanonical ensemble description?
 2. Why is the expected value $\langle X\rangle$ more informative than the arithmetic mean of a single dataset when predicting thermodynamic properties?
 3. What physical meaning does “accessible microstate” carry in the fundamental postulate?
-4. How would you modify the probability assignment if only a subset of the $M$ microstates were accessible?
+4. How would you modify the probability assignment if only a subset of the nominal $M$ microstates were accessible?
 
 ## Key Takeaways
 
