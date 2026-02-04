@@ -19,14 +19,14 @@ kernelspec:
 
 ## Overview and Learning Objectives
 
-Once microstate probabilities are known, thermodynamic properties follow from ensemble averages. This section derives the canonical expressions for internal energy, heat capacity, and pressure as derivatives of $\ln Q$. A recurring theme is that fluctuations are not a nuisance—they encode response functions like $C_V$.
+Once microstate probabilities are known, thermodynamic properties follow as ensemble averages. This section derives canonical expressions for internal energy, heat capacity, and pressure in terms of derivatives of $\ln Q$. A recurring theme is that fluctuations are not a nuisance—they encode response functions such as $C_V$.
 
-In Section 2.1, we introduced the concept that *macroscopic properties are expected values of microscopic properties*, emphasizing that these expected values account for the probabilities of different microstates. In Section 2.2, we derived the probability distribution (in the canonical ensemble) for a closed system’s microstates. Now, in this section, we connect these ideas to calculate **ensemble averages** that determine macroscopic properties.
+Section 2.1 emphasized that *macroscopic properties are expectation values of microscopic properties*, with the expectation taken over the microstate probabilities. Section 2.2 derived the canonical probability distribution for a closed system’s microstates. Here, we connect these results by computing **ensemble averages** that determine macroscopic properties.
 
 Learning objectives:
 
-- Compute internal energy as an ensemble average $U=\langle E\rangle$ and as a derivative $U=-(\partial\ln Q/\partial\beta)_{N,V}$.
-- Relate heat capacity to energy fluctuations via $ \sigma_E^2 = k_{\mathrm B}T^2 C_V$.
+- Compute internal energy both as an ensemble average, $U=\langle E\rangle$, and as a derivative, $U=-(\partial\ln Q/\partial\beta)_{N,V}$.
+- Relate heat capacity to energy fluctuations via $\sigma_E^2 = k_{\mathrm B}T^2 C_V$.
 - Compute pressure from the partition function using $P=k_{\mathrm B}T(\partial\ln Q/\partial V)_{N,T}$ (when applicable).
 - Apply these formulas to simple discrete models (e.g., a two-state system).
 
@@ -34,7 +34,7 @@ Learning objectives:
 
 ### Thermodynamic Equilibrium
 
-Recall from Section 1.1 that **thermodynamic equilibrium** is a state of simultaneous mechanical, thermal, and chemical equilibrium. Below are definitions of each type of equilibrium:
+Recall from Section 1.1 that **thermodynamic equilibrium** is a state of simultaneous mechanical, thermal, and chemical equilibrium. Below are working definitions of each type of equilibrium:
 
 ```{glossary}
 Thermal contact
@@ -44,18 +44,18 @@ Chemical contact
 : A state in which two systems can exchange matter.
 
 Mechanical equilibrium
-: A state where the net force on every particle in the system is zero.
+: A state in which the net force on each particle in the system is zero.
 
 Thermal equilibrium
-: A state where there is no net exchange of energy between systems in thermal contact.
+: A state in which there is no net exchange of energy between systems in thermal contact.
 
 Chemical equilibrium
-: A state where there is no net exchange of matter between systems in chemical contact.
+: A state in which there is no net exchange of matter between systems in chemical contact.
 ```
 
 ### Internal Energy
 
-The **internal energy** $U$ of a macroscopic system at thermodynamic equilibrium is defined as the ensemble average $\langle E \rangle$ of the total microscopic energy $E$:
+The **internal energy** $U$ of a macroscopic system at thermodynamic equilibrium is defined as the ensemble average $\langle E \rangle$ of the microstate energy $E$:
 
 ```{math}
 U \;=\; \langle E \rangle \;=\; \sum_{i=1}^M E_i\,p_i,
@@ -70,7 +70,7 @@ For the **canonical ensemble**, using the Boltzmann factor and the partition fun
 U \;=\; \frac{1}{Q} \sum_{i=1}^M E_i\,e^{-\beta E_i},
 ```
 
-where $\beta = 1/(k_{\text{B}} T)$ and
+where $\beta = 1/(k_{\mathrm B} T)$ and
 
 ```{math}
 Q \;=\; \sum_{i=1}^M e^{-\beta E_i}.
@@ -78,12 +78,12 @@ Q \;=\; \sum_{i=1}^M e^{-\beta E_i}.
 
 ```{admonition} Why can we factor out $Q$?
 :class: dropdown
-Since $Q$ is defined at fixed $N, V,$ and $T$, it does not depend on the microstate index $i$. Consequently, $Q$ behaves as a constant with respect to the summation over $i$.
+At fixed $N$, $V$, and $T$ (equivalently fixed $\beta$), $Q$ does not depend on the microstate index $i$. Therefore, it is constant with respect to the summation over $i$ and can be pulled outside the sum.
 ```
 
 #### Partial Derivative of the Partition Function
 
-Taking the partial derivative of $Q$ with respect to $\beta$ yields:
+Taking the partial derivative of $Q$ with respect to $\beta$ gives
 
 ```{math}
 \left(\frac{\partial Q}{\partial \beta}\right)_{N,V}
@@ -91,7 +91,7 @@ Taking the partial derivative of $Q$ with respect to $\beta$ yields:
 =\; -\sum_{i=1}^M E_i\,e^{-\beta E_i}.
 ```
 
-Substitute into the expression for $U$:
+Substituting this result into the expression for $U$ yields
 
 ```{math}
 U 
@@ -129,7 +129,8 @@ which is the ensemble average $\langle E\rangle$.
 
 ````{admonition} Consistency Check
 :class: dropdown
-Since $Q_{\text{two-state}} = e^{-\beta E_1} + e^{-\beta E_2}$, we see
+Using $Q_{\text{two-state}} = e^{-\beta E_1} + e^{-\beta E_2}$,
+
 ```{math}
 U_{\text{two-state}}
 =\; \frac{E_1 e^{-\beta E_1} + E_2 e^{-\beta E_2}}{Q_{\text{two-state}}}
@@ -144,10 +145,7 @@ U_{\text{two-state}}
 import numpy as np
 import matplotlib.pyplot as plt
 from scipy.constants import k, eV
-from scipy.differentiate import derivative
 from labellines import labelLines
-from myst_nb import glue
-from matplotlib.patches import Rectangle
 
 kB = k / eV  # Boltzmann constant in eV/K
 
@@ -191,7 +189,7 @@ plt.show()
 plt.close(fig)
 ```
 
-Internal energy of a two-state system as a function of temperature. The energy difference between the two states is 0.01 eV.
+Internal energy of a two-state system as a function of temperature, for an energy gap of $0.01\ \mathrm{eV}$.
 
 ### Heat Capacity at Constant Volume
 
@@ -204,7 +202,7 @@ C_V
 
 #### Heat Capacity and Energy Fluctuations
 
-In statistics, the variance $\sigma_X^2$ of a random variable $X$ is $\sigma_X^2 = \langle (X - \langle X\rangle)^2\rangle$. In statistical mechanics, $\sigma_E^2$ represents fluctuations in total energy:
+In statistics, the variance $\sigma_X^2$ of a random variable $X$ is $\sigma_X^2 = \langle (X - \langle X\rangle)^2\rangle$. In statistical mechanics, $\sigma_E^2$ quantifies fluctuations in the total energy:
 
 ```{math}
 \sigma_E^2 
@@ -216,68 +214,72 @@ One can show that
 ```{math}
 \sigma_E^2 
 =\; \left(\frac{\partial^2 \ln Q}{\partial \beta^2}\right)_{N,V}
-=\; k_{\text{B}}\,T^2\,C_V,
+=\; k_{\mathrm B}\,T^2\,C_V,
 ```
 
 which implies
 
 ```{math}
 C_V 
-=\; \frac{\sigma_E^2}{k_{\text{B}}\,T^2}.
+=\; \frac{\sigma_E^2}{k_{\mathrm B}\,T^2}.
 ```
 
 ```{admonition} What does the relationship mean physically?
 :class: dropdown
-A larger heat capacity corresponds to bigger energy fluctuations, indicating the system readily absorbs or releases energy. Conversely, smaller energy fluctuations suggest the system is less prone to exchanging energy with its surroundings.
+In the canonical ensemble, a larger heat capacity corresponds to larger equilibrium energy fluctuations at fixed $T$. Smaller energy fluctuations correspond to smaller $C_V$.
 ```
 
 ````{admonition} Complete Derivation of the $C_V$ and $\sigma_E^2$ Relationship
 :class: dropdown
-**1. Demonstrate that $\left( \partial^2 \ln Q / \partial \beta^2 \right)_{N, V} = \sigma_E^2$**
+**1. Show that $\left( \partial^2 \ln Q / \partial \beta^2 \right)_{N, V} = \sigma_E^2$**
 
 ```{math}
 \begin{align*}
-\left( \frac{\partial^2 \ln Q}{\partial \beta^2} \right)_{N, V} &= \left( \frac{\partial}{\partial \beta} \frac{\partial \ln Q}{\partial \beta} \right)_{N, V} \\
+\left( \frac{\partial^2 \ln Q}{\partial \beta^2} \right)_{N, V}
+&= \left( \frac{\partial}{\partial \beta} \frac{\partial \ln Q}{\partial \beta} \right)_{N, V} \\
 &= -\left( \frac{\partial \langle E \rangle}{\partial \beta} \right)_{N, V} \\
 &= -\left( \frac{\partial}{\partial \beta} \sum_{i = 1}^M E_i p_i \right)_{N, V} \\
 &= -\left( \frac{\partial}{\partial \beta} \frac{1}{Q} \sum_{i = 1}^M E_i e^{-\beta E_i} \right)_{N, V} \\
-&= -\left[ \frac{1}{Q} \sum_{i = 1}^M \left( -E_i^2 e^{-\beta E_i} \right) + \left( -\frac{1}{Q^2} \right) \left( \frac{\partial Q}{\partial \beta}\right)_{N, V} \sum_{i = 1}^M E_i e^{-\beta E_i} \right] \\
-&= \frac{1}{Q} \sum_{i = 1}^M E_i^2 e^{-\beta E_i} + \left[ \frac{1}{Q} \left( \frac{\partial Q}{\partial \beta} \right)_{N, V} \right] \frac{1}{Q} \sum_{i = 1}^M E_i e^{-\beta E_i} \\
+&= -\left[ \frac{1}{Q} \sum_{i = 1}^M \left( -E_i^2 e^{-\beta E_i} \right)
++ \left( -\frac{1}{Q^2} \right) \left( \frac{\partial Q}{\partial \beta}\right)_{N, V} \sum_{i = 1}^M E_i e^{-\beta E_i} \right] \\
+&= \frac{1}{Q} \sum_{i = 1}^M E_i^2 e^{-\beta E_i}
++ \left[ \frac{1}{Q} \left( \frac{\partial Q}{\partial \beta} \right)_{N, V} \right] \frac{1}{Q} \sum_{i = 1}^M E_i e^{-\beta E_i} \\
 &= \langle E^2 \rangle + \left[ -\langle E \rangle \right] \langle E \rangle \\
 &= \langle E^2 \rangle - \langle E \rangle^2 \\
 &= \sigma_E^2
 \end{align*}
 ```
 
-**2. Establish that $\left( \partial T / \partial \beta \right)_{N, V} = -k_{\text{B}} T^2$**
+**2. Show that $\partial T / \partial \beta = -k_{\mathrm B} T^2$**
 
 ```{math}
 \begin{align*}
-\beta &= \frac{1}{k_{\text{B}} T} \\
-T &= \frac{1}{k_{\text{B}} \beta} \\
-\frac{\partial T}{\partial \beta} &= -\frac{1}{k_{\text{B}} \beta^2} \\
-&= -\frac{1}{k_{\text{B}} \left( \frac{1}{k_{\text{B}} T} \right)^2} \\
-&= -k_{\text{B}} T^2
+\beta &= \frac{1}{k_{\mathrm B} T} \\
+T &= \frac{1}{k_{\mathrm B} \beta} \\
+\frac{\partial T}{\partial \beta} &= -\frac{1}{k_{\mathrm B} \beta^2} \\
+&= -\frac{1}{k_{\mathrm B} \left( \frac{1}{k_{\mathrm B} T} \right)^2} \\
+&= -k_{\mathrm B} T^2
 \end{align*}
 ```
 
-**3. Prove that $\left( \partial^2 \ln Q / \partial \beta^2 \right)_{N, V} = k_{\text{B}} T^2 C_V$**
+**3. Show that $\left( \partial^2 \ln Q / \partial \beta^2 \right)_{N, V} = k_{\mathrm B} T^2 C_V$**
 
 ```{math}
 \begin{align*}
-\left( \frac{\partial^2 \ln Q}{\partial \beta^2} \right)_{N, V} &= -\left( \frac{\partial \langle E \rangle}{\partial \beta} \right)_{N, V} \\
+\left( \frac{\partial^2 \ln Q}{\partial \beta^2} \right)_{N, V}
+&= -\left( \frac{\partial \langle E \rangle}{\partial \beta} \right)_{N, V} \\
 &= -\left( \frac{\partial \langle E \rangle}{\partial T} \frac{\partial T}{\partial \beta} \right)_{N, V} \\
-&= k_{\text{B}} T^2 \left( \frac{\partial \langle E \rangle}{\partial T} \right)_{N, V} \\
-&= k_{\text{B}} T^2 C_V
+&= k_{\mathrm B} T^2 \left( \frac{\partial \langle E \rangle}{\partial T} \right)_{N, V} \\
+&= k_{\mathrm B} T^2 C_V
 \end{align*}
 ```
 
-**4. Set Results from Step 1 and 3 Equal to Each Other and Solve for $C_V$**
+**4. Combine Steps 1 and 3 and solve for $C_V$**
 
 ```{math}
 \begin{align*}
-\sigma_E^2 &= k_{\text{B}} T^2 C_V \\
-C_V &= \frac{\sigma_E^2}{k_{\text{B}} T^2}
+\sigma_E^2 &= k_{\mathrm B} T^2 C_V \\
+C_V &= \frac{\sigma_E^2}{k_{\mathrm B} T^2}
 \end{align*}
 ```
 ````
@@ -286,21 +288,21 @@ C_V &= \frac{\sigma_E^2}{k_{\text{B}} T^2}
 
 In Module 5, we will derive:
 
-1. $A = -k_{\text{B}}\,T\ln Q$, where $A$ is the Helmholtz free energy.
+1. $A = -k_{\mathrm B}\,T\ln Q$, where $A$ is the Helmholtz free energy.
 2. $P = -\left(\frac{\partial A}{\partial V}\right)_{N,T}$, where $P$ is pressure.
 
-Combining these, we find
+Combining these expressions gives
 
 ```{math}
 P
-=\; k_{\text{B}}\,T \left(\frac{\partial \ln Q}{\partial V}\right)_{N,T}.
+=\; k_{\mathrm B}\,T \left(\frac{\partial \ln Q}{\partial V}\right)_{N,T}.
 ```
 
 ## Worked Example
 
 ### Two-state internal energy and heat capacity
 
-Consider a two-state system with $E_0=0$ and $E_1=\varepsilon$. Let $x\equiv \beta\varepsilon$.
+Consider a two-state system with $E_1=0$ and $E_2=\varepsilon$. Let $x\equiv \beta\varepsilon$.
 
 1. **Partition function**
 
@@ -316,7 +318,8 @@ Consider a two-state system with $E_0=0$ and $E_1=\varepsilon$. Let $x\equiv \be
    ```
 
 3. **Heat capacity at constant volume**
-Differentiate $U$ with respect to $T$ (holding $V,N$ fixed). Using $x=\varepsilon/(k_{\mathrm B}T)$ and $dx/dT=-x/T$,
+
+   Differentiate $U$ with respect to $T$ (holding $N$ and $V$ fixed). Using $x=\varepsilon/(k_{\mathrm B}T)$ and $dx/dT=-x/T$,
 
    ```{math}
    C_V=\left(\frac{\partial U}{\partial T}\right)_{N,V}
@@ -324,7 +327,8 @@ Differentiate $U$ with respect to $T$ (holding $V,N$ fixed). Using $x=\varepsilo
    ```
 
 4. **Numerical illustration**
-For $\varepsilon=0.010\ \mathrm{eV}$ at $T=300\ \mathrm{K}$, $x=0.387$ and $e^{-x}=0.679$, so
+
+   For $\varepsilon=0.010\ \mathrm{eV}$ at $T=300\ \mathrm{K}$, $x=0.387$ and $e^{-x}=0.679$, so
 
    ```{math}
    U = 0.010\ \mathrm{eV}\times \frac{0.679}{1.679}=4.04\times 10^{-3}\ \mathrm{eV},
@@ -338,7 +342,7 @@ For $\varepsilon=0.010\ \mathrm{eV}$ at $T=300\ \mathrm{K}$, $x=0.387$ and $e^{-
 
 1. Why is $U$ obtained from a derivative of $\ln Q$ rather than from $Q$ directly?
 2. What does it mean physically when $C_V$ is large? When it is small?
-3. In the two-state model, why does $C_V\to 0$ both as $T\to 0$ and $T\to\infty$?
+3. In the two-state model, why does $C_V\to 0$ both as $T\to 0$ and as $T\to\infty$?
 4. How do fluctuations in energy relate to the system’s ability to exchange heat with a reservoir?
 
 ## Key Takeaways
