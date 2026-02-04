@@ -19,16 +19,14 @@ kernelspec:
 
 ## Overview and Learning Objectives
 
-The linear rigid rotor captures molecular rotation (especially for diatomics) and provides the rotational partition function used in molecular thermodynamics. This section develops the quantized rotational levels, accounts for degeneracy, and derives the high-temperature approximation $q_{\mathrm{rot}}\approx T/(\sigma\Theta_{\mathrm{rot}})$ along with the associated energy and heat capacity.
-
-This section covers the quantum mechanical treatment of a linear rigid rotor (e.g., a diatomic molecule) and shows how to derive thermodynamic properties from its rotational partition function.
+The linear rigid rotor models molecular rotation (especially for diatomics) and provides the rotational partition function used in molecular thermodynamics. We derive the quantized rotational levels and their degeneracies, develop the high-$T$ approximation $q_{\mathrm{rot}}\approx T/(\sigma\Theta_{\mathrm{rot}})$, and obtain the corresponding rotational contributions to the internal energy and heat capacity.
 
 Learning objectives:
 
-- State the rigid-rotor energy levels $E_J=\hbar^2J(J+1)/(2I)$ and degeneracy $g_J=2J+1$.
-- Write the rotational partition function as a sum over $J$ including degeneracy.
-- Derive the high-temperature approximation and define the rotational temperature $\Theta_{\mathrm{rot}}=\hbar^2/(2k_{\mathrm B}I)$.
-- Compute rotational contributions to $U$ and $C_V$ in the classical limit and interpret the symmetry factor $\sigma$.
+* State the rigid-rotor energy levels $E_J=\hbar^2J(J+1)/(2I)$ and degeneracy $g_J=2J+1$.
+* Write the rotational partition function as a sum over $J$, including degeneracy.
+* Derive the high-$T$ approximation and define the rotational temperature $\Theta_{\mathrm{rot}}=\hbar^2/(2k_{\mathrm{B}}I)$.
+* Compute rotational contributions to $U$ and $C_V$ in the classical limit, and interpret the symmetry factor $\sigma$.
 
 ## Core Ideas and Derivations
 
@@ -82,9 +80,9 @@ plt.show()
 plt.close(fig)
 ```
 
-Energy levels for a linear rigid rotor. The level labeled $E_J$ has degeneracy $g_J = 2J + 1$. For example, the $J=2$ level is split into five degenerate microstates corresponding to $m = -2, -1, 0, 1, 2$.
+Energy levels for a linear rigid rotor. Each level $E_J$ has degeneracy $g_J = 2J + 1$ (magnetic quantum numbers $m=-J,\ldots,J$). For example, the $J=2$ level contains five degenerate microstates with $m=-2,-1,0,1,2$.
 
-For a rigid, linear rotor of moment of inertia $I$, the energy levels are:
+For a linear rigid rotor with moment of inertia $I$, the energy levels are:
 
 ```{math}
 E_J \;=\; \frac{\hbar^2}{2I}\,J\bigl(J+1\bigr)
@@ -92,22 +90,22 @@ E_J \;=\; \frac{\hbar^2}{2I}\,J\bigl(J+1\bigr)
 J = 0, 1, 2, \dots
 ```
 
-Here, $\hbar$ is the reduced Planck constant, and $g_J = 2J + 1$ is the degeneracy of level $E_J$.
+Here, $\hbar$ is the reduced Planck constant, and $g_J=2J+1$ is the degeneracy of the level $E_J$.
 
 ````{admonition} Physical Significance of the Moment of Inertia
 :class: note
-The moment of inertia $I$ measures how mass is distributed around the rotation axis. For a diatomic molecule of atoms A and B, 
+The moment of inertia $I$ measures how mass is distributed about the rotation axis. For a diatomic molecule with atoms A and B,
 ```{math}
   I \;=\; \mu\,r^2, 
   \quad
   \mu = \frac{m_A\,m_B}{m_A + m_B},
 ```
-where $r$ is the bond length and $\mu$ is the reduced mass of the two atoms.
+where $r$ is the bond length and $\mu$ is the reduced mass.
 ````
 
 ### Partition Function for a Linear Rigid Rotor
 
-In the canonical ensemble, the rotational partition function is:
+In the canonical ensemble, the rotational partition function is
 
 ```{math}
 q_{\mathrm{rot}} 
@@ -127,7 +125,7 @@ q_{\mathrm{rot}}
 
 #### High-Temperature Approximation
 
-When $k_\mathrm{B} T \gg \frac{\hbar^2}{2I}$, we can approximate the discrete sum by converting it into an integral. Let us set
+When $k_{\mathrm{B}}T \gg \frac{\hbar^2}{2I}$, we can approximate the discrete sum by treating $J$ as continuous and converting the sum to an integral. Define
 
 ```{math}
 x \;=\; J(J+1),
@@ -135,7 +133,7 @@ x \;=\; J(J+1),
 dx \;=\; (2J+1)\,dJ.
 ```
 
-Hence,
+Then
 
 ```{math}
 q_{\mathrm{rot}}
@@ -146,7 +144,7 @@ q_{\mathrm{rot}}
 \exp\Bigl[-\beta \,\tfrac{\hbar^2}{2I}\,x\Bigr]\;dx.
 ```
 
-Evaluating this integral,
+Evaluating the integral gives
 
 ```{math}
 \int_{0}^{\infty} 
@@ -154,7 +152,7 @@ Evaluating this integral,
 \;=\;
 \frac{1}{\beta \,\frac{\hbar^2}{2I}}
 \;=\;
-\frac{2I\,k_\mathrm{B} T}{\hbar^2}.
+\frac{2I\,k_{\mathrm{B}} T}{\hbar^2}.
 ```
 
 We define the **rotational temperature** $\Theta_{\mathrm{rot}}$ by
@@ -165,23 +163,23 @@ We define the **rotational temperature** $\Theta_{\mathrm{rot}}$ by
 \frac{\hbar^2}{2k_{\mathrm{B}}\,I}.
 ```
 
-Thus, for a heteronuclear diatomic rotor (symmetry factor $\sigma = 1$),
+Thus, for a heteronuclear diatomic rotor (symmetry factor $\sigma=1$),
 
 ```{math}
 q_{\mathrm{rot}}
 \;\approx\;
-\frac{2I\,k_\mathrm{B} T}{\hbar^2}
+\frac{2I\,k_{\mathrm{B}} T}{\hbar^2}
 \;=\;
 \frac{T}{\Theta_{\mathrm{rot}}}.
 ```
 
 ````{admonition} Symmetry Factor $\sigma$
 :class: tip
-For **homonuclear** diatomics, or other symmetric linear rotors, identical orientations in space might be indistinguishable, leading to $\sigma=2$. This modifies the partition function to 
+For **homonuclear** diatomics (and, more generally, symmetric linear rotors), distinct orientations in space may be indistinguishable, leading to $\sigma=2$. This modifies the partition function to
 ```{math}
 q_{\mathrm{rot}} \;\approx\; \frac{T}{\sigma\,\Theta_{\mathrm{rot}}}.
 ```
-Whether or not you include $\sigma$ depends on the level of detail needed (e.g., for absolute entropy calculations).
+Whether you include $\sigma$ depends on the level of detail needed (e.g., for absolute entropy calculations).
 ````
 
 <!-- What is the rotational temperature? -->
@@ -204,7 +202,7 @@ From the high-$T$ approximation (with $\sigma=1$ for simplicity),
 
 #### Internal Energy
 
-The (rotational) internal energy $U_{\mathrm{rot}}$ is given by
+The rotational internal energy (per rotor) is
 
 ```{math}
 U_{\mathrm{rot}} 
@@ -214,9 +212,7 @@ U_{\mathrm{rot}}
 k_{\mathrm{B}}\,T^2 \left(\frac{\partial \ln q_{\mathrm{rot}}}{\partial T}\right)_{N,V}.
 ```
 
-Since
-$\ln q_{\mathrm{rot}} = \ln T - \ln \Theta_{\mathrm{rot}},$
-we get
+Since $\ln q_{\mathrm{rot}}=\ln T-\ln \Theta_{\mathrm{rot}}$, we have
 
 ```{math}
 \frac{\partial \ln q_{\mathrm{rot}}}{\partial T} 
@@ -236,7 +232,7 @@ k_{\mathrm{B}} \, T.
 
 #### Heat Capacity at Constant Volume
 
-The rotational contribution to the heat capacity is
+The rotational contribution to the heat capacity (per rotor) is
 
 ```{math}
 C_V^{(\mathrm{rot})}
@@ -246,37 +242,23 @@ C_V^{(\mathrm{rot})}
 k_{\mathrm{B}}.
 ```
 
-Physically, this means **one linear rotor** contributes $k_{\mathrm{B}}$ to the heat capacity in the classical (high-$T$) limit, corresponding to its two rotational degrees of freedom (each contributes $\tfrac{1}{2}k_{\mathrm{B}}$).
+Physically, this means a single linear rotor contributes $k_{\mathrm{B}}$ to the heat capacity in the classical (high-$T$) limit, corresponding to two rotational degrees of freedom (each contributing $\tfrac{1}{2}k_{\mathrm{B}}$).
 
 ```{note}
-In a more rigorous quantum treatment (and for lower temperatures), the partition function and the resulting averages must use the full sum over $J$. At sufficiently low $T$, only the $J=0$ and $J=1$ levels are significantly populated, which reduces the effective heat capacity below $k_\mathrm{B}$.
+In a more rigorous quantum treatment (and at lower temperatures), the partition function and the resulting averages must use the full sum over $J$. At sufficiently low $T$, only the $J=0$ and $J=1$ levels are significantly populated, which reduces the effective heat capacity below $k_{\mathrm{B}}$.
 ```
 
 ### Computational Studio: Linear Rigid Rotor
 
-Explore how molecular geometry and symmetry impact rotational thermodynamics. Use this studio to visualize the rotor, analyze the population distribution across quantum states (), and compare the partition function and entropy of heteronuclear vs. homonuclear diatomic molecules.
+Explore how molecular geometry and symmetry impact rotational thermodynamics. Use this studio to visualize the rotor, analyze the population distribution across quantum states, and compare the partition function and entropy of heteronuclear vs. homonuclear diatomic molecules.
 
-<!-- <div style="width: 100%; border: 1px solid #cbd5e1; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.08);">
-  <iframe
-    src="https://chem-4020-5020-sk2g.vercel.app/"
-    title="Rigid Rotor Computational Studio"
-    style="width: 100%; height: 900px; border: 0;"
-    loading="lazy"
-  ></iframe>
-</div> -->
-
-<!-- If the embed does not load, -->
-You can open the studio in a new tab:
-<a href="https://chem-4020-5020-sk2g.vercel.app/" target="_blank" rel="noopener">
-Rigid Rotor Computational Studio
-</a>.
+You can open the studio in a new tab: [Rigid Rotor Computational Studio](https://chem-4020-5020-sk2g.vercel.app/).
 
 ## Worked Example
 
 **Rotational temperature and $q_{\mathrm{rot}}$ for CO**
 
-Approximate CO as a rigid rotor with bond length $r=1.128\ \text{\AA}=1.128\times10^{-10}\ \mathrm{m}$.
-Use $m_C=12u$, $m_O=16u$, $u=1.66054\times10^{-27}\ \mathrm{kg}$.
+Approximate CO as a rigid rotor with bond length $r = 1.128\ \text{\AA} = 1.128\times10^{-10}\ \mathrm{m}$. Use $m_C=12u$, $m_O=16u$, and $u=1.66054\times10^{-27}\ \mathrm{kg}$.
 
 1. **Reduced mass**
 
@@ -296,7 +278,7 @@ Use $m_C=12u$, $m_O=16u$, $u=1.66054\times10^{-27}\ \mathrm{kg}$.
 3. **Rotational temperature**
 
    ```{math}
-   \Theta_{\mathrm{rot}}=\frac{\hbar^2}{2k_{\mathrm B}I}
+   \Theta_{\mathrm{rot}}=\frac{\hbar^2}{2k_{\mathrm{B}}I}
    =\frac{(1.055\times10^{-34})^2}{2(1.381\times10^{-23})(1.45\times10^{-46})}
    \approx 2.78\ \mathrm{K}.
    ```
@@ -313,12 +295,12 @@ Use $m_C=12u$, $m_O=16u$, $u=1.66054\times10^{-27}\ \mathrm{kg}$.
 
 1. Why does each $J$ level have degeneracy $2J+1$? What symmetry is responsible?
 2. What changes in the partition function when the molecule is homonuclear rather than heteronuclear?
-3. Why does the classical (high-$T$) rotor have $U_{\mathrm{rot}}=k_{\mathrm B}T$ per molecule?
+3. Why does the classical (high-$T$) rotor have $U_{\mathrm{rot}}=k_{\mathrm{B}}T$ per molecule?
 4. What physical parameter(s) of the molecule increase $\Theta_{\mathrm{rot}}$?
 
 ## Key Takeaways
 
-- Rigid-rotor levels scale as $J(J+1)$ with degeneracy $2J+1$.
-- In the high-$T$ limit, $q_{\mathrm{rot}}\approx T/(\sigma\Theta_{\mathrm{rot}})$.
-- $\Theta_{\mathrm{rot}}$ is set by the moment of inertia $I=\mu r^2$; small, stiff molecules have larger $\Theta_{\mathrm{rot}}$.
-- Rotational contributions approach equipartition values at sufficiently high temperature.
+* Rigid-rotor levels scale as $J(J+1)$ with degeneracy $2J+1$.
+* In the high-$T$ limit, $q_{\mathrm{rot}}\approx T/(\sigma\Theta_{\mathrm{rot}})$.
+* $\Theta_{\mathrm{rot}}$ is set by the moment of inertia $I=\mu r^2$; small, stiff molecules have larger $\Theta_{\mathrm{rot}}$.
+* Rotational contributions approach equipartition values at sufficiently high temperature.
