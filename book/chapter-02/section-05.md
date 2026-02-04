@@ -19,13 +19,11 @@ kernelspec:
 
 ## Overview and Learning Objectives
 
-A particle in a box is the simplest quantized model of translation and provides a clean route to the translational partition function. This section reviews the energy levels for 1D and 3D boxes, derives $q_{\mathrm{trans}}=V/\Lambda^3$ in the high-temperature/large-volume limit, and uses $Q=q^N/N!$ to recover ideal-gas thermodynamic relations.
-
-This section discusses the quantum mechanical treatment of a particle in a box, along with the derivation of key thermodynamic properties using the partition function. We begin with a review of the one-dimensional case, generalize to three dimensions, and then show how the classical partition function emerges in the high-temperature or large-volume limit.
+A particle in a box is the simplest quantized model of translation and provides a clean route to the translational partition function. We review the 1D and 3D energy levels, derive $q_{\mathrm{trans}}=V/\Lambda^3$ in the high-temperature/large-volume limit, and use $Q=q^N/N!$ to recover ideal-gas thermodynamic relations.
 
 Learning objectives:
 
-- Write the quantized energy levels for a particle in a 1D box and generalize to a 3D rectangular box/cube.
+- Write the quantized energy levels for a particle in a 1D box and generalize to a 3D rectangular box and cube.
 - Derive the single-particle partition function and its continuum approximation in the limit of small level spacing.
 - Define the thermal de Broglie wavelength $\Lambda$ and express $q_{\mathrm{trans}}=V/\Lambda^3$.
 - Use $Q=(V/\Lambda^3)^N/N!$ to obtain $U=\tfrac{3}{2}Nk_{\mathrm B}T$, $C_V=\tfrac{3}{2}Nk_{\mathrm B}$, and $P=Nk_{\mathrm B}T/V$.
@@ -78,7 +76,7 @@ plt.show()
 plt.close(fig)
 ```
 
-Boundary conditions, energy levels, and wavefunctions for a particle in a one-dimensional box. The energy levels $E_n$ are shown as horizontal blue lines, while the wavefunctions $\psi_n$ are shown as red curves.
+Energy levels $E_n$ (blue) and wavefunctions $\psi_n$ (red) for a particle in a one-dimensional box with boundaries at $x=\pm L/2$.
 
 For a particle in a one-dimensional box of length $L$, the quantized energy levels are
 
@@ -90,7 +88,7 @@ where $h$ is [Planck’s constant](https://physics.nist.gov/cgi-bin/cuu/Value?h)
 
 #### Particle in a Three-Dimensional Box
 
-In three dimensions, the energy levels become
+In three dimensions, the energy levels are
 
 ```{math}
 E_{n_x, n_y, n_z} = \frac{h^2}{8 m}
@@ -101,7 +99,7 @@ where $n_x$, $n_y$, and $n_z$ are positive integers, and $L_x$, $L_y$, and $L_z$
 
 ##### Particle in a Cube
 
-When the box is a cube of side $L$, $L_x = L_y = L_z = L$. The energy then simplifies to
+For a cube of side $L$, $L_x = L_y = L_z = L$. The energy simplifies to
 
 ```{math}
 E_{n_x, n_y, n_z} 
@@ -110,11 +108,11 @@ E_{n_x, n_y, n_z}
 \left( n_x^2 + n_y^2 + n_z^2 \right),
 ```
 
-where $V = L^3$ is the volume of the cube.
+where $V = L^3$ is the cube volume.
 
 ### Partition Function for a Particle in a Cube
 
-The partition function for a single particle in a three-dimensional cube is:
+The single-particle partition function for a three-dimensional cube is
 
 ```{math}
 \begin{aligned}
@@ -126,7 +124,7 @@ q
 \end{aligned}
 ```
 
-Defining $\alpha = \beta h^2 / (8 m V^{2/3})$, we can rewrite $q$ as:
+Define $\alpha = \beta h^2 / (8 m V^{2/3})$. Then
 
 ```{math}
 :label: eq:partition-function-cube
@@ -136,7 +134,7 @@ q
 
 #### Approximation of the Sum
 
-For large $T$ or large $L$, the sum $\sum_{n=1}^{\infty} e^{-\alpha n^2}$ can be approximated by an integral:
+When the level spacing is small (large $T$ or large $L$), the sum $\sum_{n=1}^{\infty} e^{-\alpha n^2}$ is well approximated by an integral:
 
 ```{math}
 \sum_{n = 1}^{\infty} e^{-\alpha n^2} 
@@ -144,7 +142,7 @@ For large $T$ or large $L$, the sum $\sum_{n=1}^{\infty} e^{-\alpha n^2}$ can be
 = \left(\frac{\pi}{4 \alpha}\right)^{\!\!1/2}.
 ```
 
-Substituting $\alpha = \beta h^2/(8 m V^{2/3})$ gives:
+Substituting $\alpha = \beta h^2/(8 m V^{2/3})$ gives
 
 ```{math}
 \left(\frac{\pi}{4 \alpha}\right)^{\!\!1/2}
@@ -156,13 +154,13 @@ We often define the thermal de Broglie wavelength $\Lambda$ as
 
 ```{math}
 \Lambda 
-= \left(\frac{h^2}{2 \pi m k_{\text{B}} T}\right)^{\!1/2}.
+= \left(\frac{h^2}{2 \pi m k_{\mathrm B} T}\right)^{\!1/2}.
 ```
 
 ````{admonition} What is the thermal de Broglie wavelength?
 :class: tip
 
-The thermal de Broglie wavelength, $\Lambda$, is a characteristic length scale that quantifies the quantum mechanical "spread" of a particle’s wavefunction at a given temperature. When the average distance between particles is much greater than $\Lambda$, the system behaves classically, allowing particles to be treated as distinguishable. Conversely, if the interparticle spacing is on the order of $\Lambda$ or smaller, quantum effects become significant, and the particles must be treated as indistinguishable.
+The thermal de Broglie wavelength, $\Lambda$, is a characteristic length scale for the quantum mechanical delocalization of a particle at temperature $T$. When the typical distance between particles is much larger than $\Lambda$, the system behaves classically and particles can be treated as effectively distinguishable. Conversely, when the interparticle spacing is on the order of $\Lambda$ (or smaller), quantum effects become significant and particle indistinguishability must be accounted for.
 ````
 
 Hence,
@@ -190,13 +188,13 @@ Q
 = \frac{1}{N!}\left(\frac{V}{\Lambda^3}\right)^{\!N}.
 ```
 
-The factor of $N!$ corrects for the indistinguishability of the particles (i.e., permutations of identical particles do not lead to new states).
+The factor of $N!$ corrects for particle indistinguishability: permutations of identical particles do not produce new states.
 
 ### Ensemble Averages for $N$ Particles in a Cube
 
 #### Natural Logarithm of the Partition Function
 
-Taking the logarithm of $Q$:
+Taking the logarithm of $Q$ gives
 
 ```{math}
 \ln Q 
@@ -207,29 +205,29 @@ Often, the Stirling approximation ($\ln N! \approx N \ln N - N$) is used for lar
 
 #### Internal Energy
 
-The internal energy $U$ is found via:
+The internal energy $U$ follows from
 
 ```{math}
 :label: eq:internal-energy-cube
 U 
 = -\left(\frac{\partial \ln Q}{\partial \beta}\right)_{N,V}
 = \frac{3}{2} \frac{N}{\beta}
-= \frac{3}{2} N k_{\text{B}} T.
+= \frac{3}{2} N k_{\mathrm B} T.
 ```
 
 ```{important}
-This result matches the equipartition theorem, implying each of the three translational degrees of freedom contributes $\frac{1}{2} k_{\text{B}} T$ per particle. Note that $U$ is independent of the volume $V$ because the particles do not interact.
+This result is consistent with equipartition: each of the three translational degrees of freedom contributes $\frac{1}{2}k_{\mathrm B}T$ per particle. Note that $U$ is independent of $V$ because the particles do not interact.
 ```
 
 #### Heat Capacity at Constant Volume
 
-From $U = \frac{3}{2} N k_{\text{B}} T$, it follows that:
+From $U = \frac{3}{2}N k_{\mathrm B}T$, it follows that
 
 ```{math}
 :label: eq:heat-capacity-cube
 C_V 
 = \left(\frac{\partial U}{\partial T}\right)_{N,V}
-= \frac{3}{2} N k_{\text{B}}.
+= \frac{3}{2} N k_{\mathrm B}.
 ```
 
 ```{important}
@@ -238,32 +236,32 @@ This temperature-independent $C_V$ is a hallmark of an ideal (monatomic) gas.
 
 #### Pressure
 
-To find the pressure, we use:
+To find the pressure, we use
 
 ```{math}
 :label: eq:pressure-cube
 P 
-= k_{\text{B}} T \left(\frac{\partial \ln Q}{\partial V}\right)_{N,T}
-= \frac{N k_{\text{B}} T}{V},
+= k_{\mathrm B} T \left(\frac{\partial \ln Q}{\partial V}\right)_{N,T}
+= \frac{N k_{\mathrm B} T}{V},
 ```
 
 recovering the ideal gas law.
 
 ### Translational Partition Function
 
-Because the energy levels of a particle in a box primarily account for translational motion, the partition function
+Because the particle-in-a-box spectrum describes translational motion, the single-particle partition function
 
 ```{math}
 :label: eq:translational-partition-function
-q_{\text{trans}} 
+q_{\mathrm{trans}} 
 = \frac{V}{\Lambda^3}
 ```
 
-is called the translational partition function. It underpins much of our classical description of gases when $\Lambda \ll$ (typical particle spacing), ensuring that quantum effects are negligible at normal densities and temperatures.
+is called the translational partition function. It underpins the classical description of dilute gases when $\Lambda \ll$ (typical particle spacing), so quantum effects are negligible at ordinary densities and temperatures.
 
 ### Computational Studio: Ideal Gas
 
-Bridge the gap between microstates and macrostates. Use the interactive studio below to adjust particle count ($N$), volume ($V$), and temperature ($T$), visualizing how these parameters drive the gas's motion while simultaneously observing the real-time derivation of Pressure, Internal Energy, and Entropy from the Partition Function.
+Use the interactive studio below (or open it in a new tab) to vary particle count ($N$), volume ($V$), and temperature ($T$). The studio visualizes how these parameters affect the gas while showing $P$, $U$, and $S$ derived from the partition function.
 
 <!-- <div style="width: 100%; border: 1px solid #cbd5e1; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.08);">
   <iframe
@@ -274,11 +272,7 @@ Bridge the gap between microstates and macrostates. Use the interactive studio b
   ></iframe>
 </div> -->
 
-<!-- If the embed does not load, -->
-You can open the studio in a new tab:
-<a href="https://chem-4020-5020-s763.vercel.app/" target="_blank" rel="noopener">
-  Ideal Gas Computational Studio
-</a>.
+You can open the studio in a new tab: [Ideal Gas Computational Studio](https://chem-4020-5020-s763.vercel.app/).
 
 ## Worked Example
 
@@ -312,13 +306,13 @@ Take helium: $m=4.0026\,u=6.65\times10^{-27}\ \mathrm{kg}$, $T=300\ \mathrm{K}$.
 ## Concept Checks
 
 1. Why does the sum over quantum numbers become well-approximated by an integral at high $T$ or large $V$?
-2. What does the condition “interparticle spacing $\gg \Lambda$” mean physically?
+2. What does the condition "interparticle spacing $\gg \Lambda$" mean physically?
 3. Why does translation give $U\propto T$ but not $U\propto V$ for an ideal gas?
 4. Where does the $1/N!$ factor enter when connecting microscopic states to macroscopic entropy?
 
 ## Key Takeaways
 
 - Quantized translation in a box leads, in the continuum limit, to $q_{\mathrm{trans}}=V/\Lambda^3$.
-- $\Lambda$ sets the scale of quantum wavepacket “size”; classical behavior emerges when $\Lambda$ is small compared to typical spacings.
+- $\Lambda$ sets the scale of quantum wavepacket "size"; classical behavior emerges when $\Lambda$ is small compared to typical spacings.
 - For an ideal monatomic gas, $Q=(V/\Lambda^3)^N/N!$ reproduces $PV=Nk_{\mathrm B}T$ and $U=\tfrac{3}{2}Nk_{\mathrm B}T$.
 - Partition functions connect microscopic spectra to thermodynamic equations of state via derivatives of $\ln Q$.
