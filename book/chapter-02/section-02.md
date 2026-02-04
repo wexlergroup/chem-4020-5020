@@ -19,7 +19,7 @@ kernelspec:
 
 ## Overview and Learning Objectives
 
-The canonicalx ensemble describes a closed system in thermal contact with a large heat bath at fixed temperature. Its central result is the Boltzmann assignment $p_i \propto e^{-\beta E_i}$, normalized by the partition function. This section derives and interprets that probability distribution and introduces a two-state system as a concrete model.
+The canonical ensemble describes a closed system in thermal contact with a large heat bath at fixed temperature. Its central result is the Boltzmann assignment $p_i \propto e^{-\beta E_i}$, normalized by the partition function. This section derives and interprets that probability distribution and introduces a two-state system as a concrete model.
 
 In a **closed system** (energy exchange allowed, matter exchange forbidden) in thermal contact with a heat bath, the appropriate statistical description is the **canonical ensemble**.
 
