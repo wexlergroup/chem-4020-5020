@@ -19,16 +19,14 @@ kernelspec:
 
 ## Overview and Learning Objectives
 
-The quantum harmonic oscillator models vibrations in molecules and lattice modes in solids. This section derives the oscillator partition function, computes ensemble averages such as internal energy and heat capacity, and shows how the classical limit emerges when $T\gg \Theta_{\mathrm{vib}}$.
-
-This section discusses the quantum mechanical treatment of a harmonic oscillator, along with the derivation of key thermodynamic properties using the partition function. We begin with a review of the one-dimensional case, generalize to three dimensions, and then show how the classical partition function emerges in the high-temperature limit.
+The quantum harmonic oscillator is a canonical model for molecular vibrations and lattice modes in solids. In this section we derive the oscillator partition function, compute ensemble averages such as internal energy and heat capacity, and examine how the classical (equipartition) limit emerges when $T\gg \Theta_{\mathrm{vib}}$. We begin with a review of the one-dimensional oscillator, then connect the result to three-dimensional oscillators in the Einstein model.
 
 Learning objectives:
 
-- State the harmonic oscillator energy levels $E_n=\hbar\omega(n+\tfrac12)$ and write the corresponding partition function.
-- Evaluate the geometric series to obtain $q = e^{-\beta\hbar\omega/2}/(1-e^{-\beta\hbar\omega})$.
-- Derive the mean energy $U=\tfrac12\hbar\omega+\hbar\omega/(e^{\beta\hbar\omega}-1)$ and interpret zero-point energy.
-- Use the vibrational temperature $\Theta_{\mathrm{vib}}=\hbar\omega/k_{\mathrm B}$ to analyze low- and high-temperature limits and connect to the Einstein model idea.
+* State the harmonic oscillator energy levels $E_n=\hbar\omega(n+\tfrac12)$ and write the corresponding partition function
+* Evaluate the geometric series to obtain $q = e^{-\beta\hbar\omega/2}/(1-e^{-\beta\hbar\omega})$
+* Derive the mean energy $U=\tfrac12\hbar\omega+\hbar\omega/(e^{\beta\hbar\omega}-1)$ and interpret the zero-point energy
+* Use the vibrational temperature $\Theta_{\mathrm{vib}}=\hbar\omega/k_{\mathrm B}$ to analyze low- and high-temperature limits and connect to the Einstein model
 
 ## Core Ideas and Derivations
 
@@ -154,43 +152,43 @@ plt.show()
 plt.close(fig)
 ```
 
-Enery levels and wavefunctions for a one-dimensional harmonic oscillator. The energy levels $E_n$ are shown as blue lines, while the wavefunctions $\psi_n$ are shown as red curves.
+Energy levels and wavefunctions for a one-dimensional harmonic oscillator. The energy levels $E_n$ are shown as blue lines, while the wavefunctions $\psi_n$ are shown as red curves.
 
-For a one-dimensional harmonic oscillator of frequency $\omega$, the quantized energy levels are given by
+For a one-dimensional harmonic oscillator with angular frequency $\omega$, the quantized energy levels are
 
 ```{math}
 E_n = \hbar \omega \left( n + \frac{1}{2} \right) \quad \text{for} \; n = 0, 1, 2, \ldots,
 ```
 
-where $\hbar$ is the [reduced Planck constant](https://physics.nist.gov/cgi-bin/cuu/Value?hbar) and $n$ is a positive integer.
+where $\hbar$ is the [reduced Planck constant](https://physics.nist.gov/cgi-bin/cuu/Value?hbar) and $n$ is a nonnegative integer.
 
 ### Partition Function for a Harmonic Oscillator
 
-The partition function for a one-dimensional harmonic oscillator is:
+The (single-oscillator) partition function for a one-dimensional harmonic oscillator is
 
 ```{math}
 \begin{aligned}
 q &= \sum_{n=0}^{\infty} e^{-\beta E_n} \\
 &= \sum_{n=0}^{\infty} e^{-\beta \hbar \omega (n + 1/2)} \\
-&= e^{-\beta \hbar \omega / 2} \sum_{n=0}^{\infty} e^{-\beta \hbar \omega n} \\
+&= e^{-\beta \hbar \omega / 2} \sum_{n=0}^{\infty} e^{-\beta \hbar \omega n}.
 \end{aligned}
 ```
 
 #### Evaluation of the Sum
 
-The $\sum_{n=0}^{\infty} e^{-\beta \hbar \omega n}$ term is a geometric series, which can be evaluated as
+The term $\sum_{n=0}^{\infty} e^{-\beta \hbar \omega n}$ is a geometric series. For $|x| < 1$,
 
 ```{math}
-\sum_{n=0}^{\infty} x^n = \frac{1}{1 - x} \quad \text{for} \; |x| < 1.
+\sum_{n=0}^{\infty} x^n = \frac{1}{1 - x}.
 ```
 
-Substituting $x = e^{-\beta \hbar \omega}$ gives:
+Substituting $x = e^{-\beta \hbar \omega}$ gives
 
 ```{math}
 q = \frac{e^{-\beta \hbar \omega / 2}}{1 - e^{-\beta \hbar \omega}}.
 ```
 
-````{admonition} Is $|x| < 1$?
+````{admonition} Check that $|x| < 1$
 :class: dropdown
 ```{math}
 \begin{aligned}
@@ -207,7 +205,7 @@ e^{-\beta \hbar \omega} &< 1 \\
 
 #### Natural Logarithm of the Partition Function
 
-Taking the logarithm of $q$:
+Taking the natural logarithm of $q$ gives
 
 ```{math}
 :label: harmonic_oscillator_lnq
@@ -216,34 +214,37 @@ Taking the logarithm of $q$:
 
 #### Internal Energy
 
-The internal energy $U$ is found via:
+For a single oscillator, the mean energy (internal energy) follows from
 
 ```{math}
-U = -\left( \frac{\partial \ln q}{\partial \beta} \right)_{N, V} = \frac{\hbar \omega}{2} + \frac{\hbar \omega}{e^{\beta \hbar \omega} - 1}.
+U = -\frac{\partial \ln q}{\partial \beta}
+= \frac{\hbar \omega}{2} + \frac{\hbar \omega}{e^{\beta \hbar \omega} - 1}.
 ```
 
 ````{admonition} Derivative of $\ln(1 - e^{-\beta \hbar \omega})$
 :class: dropdown
 ```{math}
 \begin{aligned}
-\left[ \frac{\partial}{\partial \beta} \ln(1 - e^{-\beta \hbar \omega}) \right]_{N, V} &= \left[ \frac{\partial \ln f}{\partial f} \frac{\partial f}{\partial \beta} \right]_{N, V} && \text{where} \; f = 1 - e^{-\beta \hbar \omega} \\
-&= \frac{1}{f} \left[ \frac{\partial}{\partial \beta} (1 - e^{-\beta \hbar \omega}) \right]_{N, V} \\
-&= \frac{\hbar \omega e^{-\beta \hbar \omega}}{1 - e^{-\beta \hbar \omega}} \cdot \frac{e^{\beta \hbar \omega}}{e^{\beta \hbar \omega}} \\
-&= \frac{\hbar \omega}{e^{\beta \hbar \omega} - 1}.
+\frac{\partial}{\partial \beta} \ln(1 - e^{-\beta \hbar \omega})
+&= \frac{1}{1 - e^{-\beta \hbar \omega}}
+\frac{\partial}{\partial \beta}\left(1 - e^{-\beta \hbar \omega}\right) \\
+&= \frac{\hbar \omega\, e^{-\beta \hbar \omega}}{1 - e^{-\beta \hbar \omega}}
+= \frac{\hbar \omega}{e^{\beta \hbar \omega} - 1}.
 \end{aligned}
 ```
 ````
 
-We often define the vibrational temperature $\Theta_{\text{vib}}$ as
+It is often convenient to define the vibrational temperature $\Theta_{\mathrm{vib}}$ as
 
 ```{math}
-\Theta_{\text{vib}} = \frac{\hbar \omega}{k_{\text{B}}}.
+\Theta_{\mathrm{vib}} = \frac{\hbar \omega}{k_{\mathrm B}}.
 ```
 
-Hence,
+Using $\beta \hbar \omega = \Theta_{\mathrm{vib}}/T$, the internal energy can be written as
 
 ```{math}
-U = \frac{\hbar \omega}{2} + \frac{\hbar \omega}{e^{\Theta_{\text{vib}} / T} - 1}.
+U = \frac{\hbar \omega}{2} + \frac{\hbar \omega}{e^{\Theta_{\mathrm{vib}} / T} - 1}
+= k_{\mathrm B}\Theta_{\mathrm{vib}}\left[\frac{1}{2}+\frac{1}{e^{\Theta_{\mathrm{vib}}/T}-1}\right].
 ```
 
 ```{code-cell} ipython3
@@ -293,24 +294,30 @@ Internal energy of a harmonic oscillator as a function of temperature. The zero-
 In Section 2.3, we showed that
 
 ```{math}
-\sigma_E^2 = \left( \frac{\partial^2 \ln q}{\partial \beta^2} \right)_{N, V} = k_{\text{B}} T^2 C_V.
+\sigma_E^2 = \left( \frac{\partial^2 \ln q}{\partial \beta^2} \right) = k_{\mathrm B} T^2 C_V.
 ```
 
-From Equation {eq}`harmonic_oscillator_lnq`, it follows that:
+From Equation {eq}`harmonic_oscillator_lnq`, it follows that
 
 ```{math}
-C_V = k_{\text{B}} \left( \frac{\hbar \omega}{k_{\text{B}} T} \right)^2 \frac{e^{\hbar \omega / k_{\text{B}} T}}{\left( e^{\hbar \omega / k_{\text{B}} T} - 1 \right)^2} = k_{\text{B}} \left( \frac{\Theta_{\text{vib}}}{T} \right)^2 \frac{e^{\Theta_{\text{vib}} / T}}{\left( e^{\Theta_{\text{vib}} / T} - 1 \right)^2}.
+C_V
+= k_{\mathrm B} \left( \frac{\hbar \omega}{k_{\mathrm B} T} \right)^2
+\frac{e^{\hbar \omega / k_{\mathrm B} T}}{\left( e^{\hbar \omega / k_{\mathrm B} T} - 1 \right)^2}
+= k_{\mathrm B} \left( \frac{\Theta_{\mathrm{vib}}}{T} \right)^2
+\frac{e^{\Theta_{\mathrm{vib}} / T}}{\left( e^{\Theta_{\mathrm{vib}} / T} - 1 \right)^2}.
 ```
 
 ````{admonition} Complete Derivation of $C_V$
 :class: dropdown
 ```{math}
 \begin{aligned}
-\sigma_E^2 &= \left[ \frac{\partial^2}{\partial \beta^2} \left( -\frac{\beta \hbar \omega}{2} - \ln(1 - e^{-\beta \hbar \omega}) \right) \right]_{N, V} \\
-&= \left[ \frac{\partial}{\partial \beta} \left( -\frac{\hbar \omega}{2} - \frac{\hbar \omega}{e^{\beta \hbar \omega} - 1} \right) \right]_{N, V} \\
-&= -\hbar \omega \left( \frac{\partial g^{-1}}{\partial g} \frac{\partial g}{\partial \beta} \right)_{N, V} && \text{where} \; g = e^{\beta \hbar \omega} - 1 \\
-&= \frac{\hbar \omega}{g^2} \left[ \frac{\partial}{\partial \beta} \left( e^{\beta \hbar \omega} - 1 \right) \right]_{N, V} \\
-&= \left( \hbar \omega \right)^2 \frac{e^{\beta \hbar \omega}}{\left( e^{\beta \hbar \omega} - 1 \right)^2} \\
+\sigma_E^2
+&= \frac{\partial^2}{\partial \beta^2}\left( -\frac{\beta \hbar \omega}{2} - \ln(1 - e^{-\beta \hbar \omega}) \right) \\
+&= \frac{\partial}{\partial \beta}\left( -\frac{\hbar \omega}{2} - \frac{\hbar \omega}{e^{\beta \hbar \omega} - 1} \right) \\
+&= -\hbar \omega \left( \frac{\partial g^{-1}}{\partial g} \frac{\partial g}{\partial \beta} \right)
+\quad \text{where} \; g = e^{\beta \hbar \omega} - 1 \\
+&= \frac{\hbar \omega}{g^2} \left( \frac{\partial}{\partial \beta} \left( e^{\beta \hbar \omega} - 1 \right) \right) \\
+&= \left( \hbar \omega \right)^2 \frac{e^{\beta \hbar \omega}}{\left( e^{\beta \hbar \omega} - 1 \right)^2}.
 \end{aligned}
 ``` 
 ````
@@ -342,30 +349,17 @@ plt.show()
 plt.close(fig)
 ```
 
-Heat capacity at constant volume of a harmonic oscillator as a function of temperature. The low-temperature limit is shown as a blue arrow, while the high-temperature limit is shown as a red dashed line.
+Heat capacity at constant volume of a harmonic oscillator as a function of temperature. The low-temperature limit is indicated by the blue arrow, while the high-temperature limit is shown as a red dashed line.
 
 ### Computational Studio: Harmonic Oscillator
 
-Explore how the internal energy and heat capacity evolve with the characteristic temperature, visualizing the transition between the quantum freeze-out and the classical high-temperature limits.
+Explore how the internal energy and heat capacity evolve with the characteristic temperature, visualizing the transition between quantum “freeze-out” and the classical high-temperature limit.
 
-<!-- <div style="width: 100%; border: 1px solid #cbd5e1; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.08);">
-  <iframe
-    src="https://chem-4020-5020-dgm3.vercel.app/"
-    title="Harmonic Oscillator Studio"
-    style="width: 100%; height: 850px; border: 0;"
-    loading="lazy"
-  ></iframe>
-</div> -->
-
-<!-- If the embed does not load, -->
-You can open the studio in a new tab:
-<a href="https://chem-4020-5020-dgm3.vercel.app/" target="_blank" rel="noopener">
-  Harmonic Oscillator Studio
-</a>.
+You can open the studio in a new tab: [Harmonic Oscillator Studio](https://chem-4020-5020-dgm3.vercel.app/).
 
 ### Einstein Model
 
-The Einstein model is a simple model for an atomic crystal, where $N$ identical atoms are situated at lattice sites and vibrate (each with the same frequency) about these sites as independent (i.e., non-interacting), three-dimensional harmonic oscillators. Since the atoms are situated at lattice sites, they can be treated as distinguishable. For the Einstein model, the partition function is
+The Einstein model is a simple model for an atomic crystal, where $N$ identical atoms occupy lattice sites and vibrate about these sites as independent (i.e., non-interacting) three-dimensional harmonic oscillators, all with the same frequency. Because the atoms occupy fixed lattice sites, they can be treated as distinguishable. For the Einstein model, the partition function is
 
 ```{math}
 Q = q^{3N} = \left( \frac{e^{-\beta \hbar \omega / 2}}{1 - e^{-\beta \hbar \omega}} \right)^{3N}.
@@ -380,10 +374,10 @@ U = \frac{3}{2} N \hbar \omega + \frac{3N \hbar \omega}{e^{\beta \hbar \omega} -
 and
 
 ```{math}
-C_V = 3 N k_{\text{B}} \left( \frac{\hbar \omega}{k_{\text{B}} T} \right)^2 \frac{e^{\hbar \omega / k_{\text{B}} T}}{\left( e^{\hbar \omega / k_{\text{B}} T} - 1 \right)^2}.
+C_V = 3 N k_{\mathrm B} \left( \frac{\hbar \omega}{k_{\mathrm B} T} \right)^2 \frac{e^{\hbar \omega / k_{\mathrm B} T}}{\left( e^{\hbar \omega / k_{\mathrm B} T} - 1 \right)^2}.
 ```
 
-#### Dulong-Petit Law
+#### Dulong–Petit Law
 
 ```{code-cell} ipython3
 :tags: [hide-input]
@@ -407,7 +401,7 @@ fig, axs = plt.subplot_mosaic([[0]], figsize=(4, 4))
 
 axs[0].scatter(df["Atomic Number"], df["Molar (R)"], color="black")
 axs[0].set_xlabel("Atomic Number")
-axs[0].set_ylabel(r"Heat Capacity ($k_{\text{B}}$)")
+axs[0].set_ylabel(r"Molar heat capacity ($C/R$)")
 
 # Annotate outliers
 outliers = df[df["Absolute Deviation"] > 1]
@@ -415,7 +409,7 @@ for _, row in outliers.iterrows():
     axs[0].annotate(row["Symbol"], (row["Atomic Number"], row["Molar (R)"]))
 
 # Plot Dulong-Petit law
-dulong_petit = axs[0].plot([0, 100], [3, 3], "r--", label="Dulong-Petit law")
+dulong_petit = axs[0].plot([0, 100], [3, 3], "r--", label="Dulong–Petit law")
 labelLines(dulong_petit, zorder=2.5)
 
 plt.tight_layout()
@@ -423,7 +417,7 @@ plt.show()
 plt.close(fig)
 ```
 
-Heat capacity of elemental solids as a function of atomic number. The Dulong-Petit law is shown as a red dashed line.
+Molar heat capacity of elemental solids as a function of atomic number. The Dulong–Petit law is shown as a red dashed line.
 
 ## Worked Example
 
@@ -455,12 +449,12 @@ Take $\Theta_{\mathrm{vib}}=805\ \mathrm{K}$ (the value used in the section plot
 3. **Compute $U$**
 
    ```{math}
-   U = k_{\mathrm B}(805)(0.572)=k_{\mathrm B}(460\ \mathrm{K}).
+   U = k_{\mathrm B}(805\ \mathrm{K})(0.572)=k_{\mathrm B}(460\ \mathrm{K}).
    ```
 
 Per mole, $U_m = R(460\ \mathrm{K})=3.83\ \mathrm{kJ\,mol^{-1}}$.
 
-**Result.** At room temperature the oscillator energy is only modestly above the zero-point value because $T<\Theta_{\mathrm{vib}}$.
+**Result.** At room temperature, the oscillator energy is only modestly above the zero-point value because $T<\Theta_{\mathrm{vib}}$.
 
 ## Concept Checks
 
@@ -471,7 +465,7 @@ Per mole, $U_m = R(460\ \mathrm{K})=3.83\ \mathrm{kJ\,mol^{-1}}$.
 
 ## Key Takeaways
 
-- The harmonic oscillator has evenly spaced energy levels and a closed-form partition function.
-- Zero-point energy $\tfrac12\hbar\omega$ persists at $T=0$.
-- The vibrational temperature $\Theta_{\mathrm{vib}}$ sets the temperature scale for activating vibrational degrees of freedom.
-- In the high-$T$ limit, quantum results approach classical equipartition behavior.
+* The harmonic oscillator has evenly spaced energy levels and a closed-form partition function.
+* Zero-point energy $\tfrac12\hbar\omega$ persists at $T=0$.
+* The vibrational temperature $\Theta_{\mathrm{vib}}$ sets the temperature scale for activating vibrational degrees of freedom.
+* In the high-$T$ limit, quantum results approach classical equipartition behavior.
