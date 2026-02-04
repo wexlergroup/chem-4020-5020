@@ -1,34 +1,17 @@
----
-jupytext:
-  formats: md:myst
-  text_representation:
-    extension: .md
-    format_name: myst
-    format_version: 0.13
-    jupytext_version: 1.11.5
-kernelspec:
-  display_name: Python 3
-  language: python
-  name: python3
----
-
-
 # 2.8. Molecular Statistical Mechanics
 
 [Course-wide Conventions & Notation](../notation.md)
 
 ## Overview and Learning Objectives
 
-Molecular statistical mechanics often proceeds by building the total partition function from translational, rotational, vibrational, and electronic factors. This section collects high-temperature rigid-rotor formulas for different molecular shapes, reviews vibrational and electronic partition functions, and summarizes the standard textbook approximations used to connect molecular constants to thermodynamic properties.
-
-In molecular statistical mechanics, one often needs to calculate the partition function for each degree of freedom (translational, rotational, vibrational, and electronic) to derive thermodynamic properties. This section summarizes common formulas for partition functions of various molecular shapes, under the approximate (rigid-rotor/harmonic-oscillator) models. We use *rotational temperatures* $\Theta_{\text{rot}}$ and *vibrational temperatures* $\Theta_{\text{vib}}$, which convert molecular constants into energy units scaled by Boltzmann’s constant $k_{\text{B}}$.
+Molecular statistical mechanics often builds the total molecular partition function as a product of translational, rotational, vibrational, and electronic factors. This section collects high-temperature rigid-rotor formulas for different molecular shapes, reviews vibrational and electronic partition functions, and summarizes standard textbook approximations used to connect molecular constants to thermodynamic properties. We use *rotational temperatures* $\Theta_{\text{rot}}$ and *vibrational temperatures* $\Theta_{\text{vib}}$, which package molecular constants into energy scales expressed in Kelvin (i.e., divided by Boltzmann’s constant $k_{\text{B}}$).
 
 Learning objectives:
 
-- Identify how molecular shape (linear, spherical top, symmetric top, asymmetric top) affects the rotational partition function.
-- Use the rotational symmetry number $\sigma$ and rotational temperatures $\Theta_{\mathrm{rot}}$ to write high-$T$ expressions for $q_{\mathrm{rot}}$.
-- Write the harmonic-oscillator vibrational partition function for diatomic and polyatomic molecules in terms of $\Theta_{\mathrm{vib}}$.
-- Interpret the electronic partition function and justify the ground-state approximation $q_{\mathrm{elec}}\approx g_1$ when excited states are high in energy.
+* Identify how molecular shape (linear, spherical top, symmetric top, asymmetric top) affects the rotational partition function.
+* Use the rotational symmetry number $\sigma$ and rotational temperatures $\Theta_{\text{rot}}$ to write high-$T$ expressions for $q_{\text{rot}}$.
+* Write the harmonic-oscillator vibrational partition function for diatomic and polyatomic molecules in terms of $\Theta_{\text{vib}}$.
+* Interpret the electronic partition function and justify the ground-state approximation $q_{\text{elec}}\approx g_1$ when excited states are high in energy.
 
 ## Core Ideas and Derivations
 
@@ -36,11 +19,11 @@ Learning objectives:
 
 The *rotational partition function* $q_{\text{rot}}$ depends on:
 
-1. The *rotational constants* (encoded by $\Theta_{\text{rot},A}$, $\Theta_{\text{rot},B}$, $\Theta_{\text{rot},C}$, etc.).
-2. The *rotational symmetry number* $\sigma$.
+1. The rotational constants (encoded as rotational temperatures $\Theta_{\text{rot},A}$, $\Theta_{\text{rot},B}$, $\Theta_{\text{rot},C}$, etc.).
+2. The rotational symmetry number $\sigma$.
 3. The temperature $T$.
 
-Below is a summary table of approximate expressions for the rotational partition functions of rigid rotors in the high-temperature limit $\bigl(T \gg \Theta_{\text{rot}}\bigr)$. Here, $\Theta_{\text{rot}}$ and $T$ are both expressed in Kelvin, making the ratio $T/\Theta_{\text{rot}}$ dimensionless.
+Below is a summary table of approximate expressions for rigid rotors in the high-temperature limit $\bigl(T \gg \Theta_{\text{rot}}\bigr)$. Here, $\Theta_{\text{rot}}$ and $T$ are both expressed in Kelvin, so ratios like $T/\Theta_{\text{rot}}$ are dimensionless. In the symmetric-top expressions below, we take $\Theta_{\text{rot},A}=\Theta_{\text{rot},B}$.
 
 ```{list-table} Rotational Partition Functions of Rigid Rotors
 :header-rows: 1
@@ -67,7 +50,7 @@ Below is a summary table of approximate expressions for the rotational partition
   - $\frac{T}{2\,\Theta_{\text{rot}}}$
   - CO₂, CS₂, XeF₂
 * - **Spherical Top**
-  - 12 for $T_d$ or 24 for $O_h$
+  - 12 ($T_d$) or 24 ($O_h$)
   - $\frac{\sqrt{\pi}}{\sigma}\,\biggl(\frac{T}{\Theta_{\text{rot}}}\biggr)^{3/2}$
   - CH₄, SiH₄, SF₆, etc.
 * - **Symmetric Top**
@@ -79,12 +62,14 @@ Below is a summary table of approximate expressions for the rotational partition
   - $\frac{\sqrt{\pi}}{\sigma}\,\sqrt{\frac{T^3}{\Theta_{\text{rot},A}\,\Theta_{\text{rot},B}\,\Theta_{\text{rot},C}}}$
   - H₂O ($\sigma=2$), NO₂ ($\sigma=2$), SO₂ ($\sigma=2$), most large molecules
 ```
+
 <!-- https://cccbdb.nist.gov/expdiatomicsx.asp -->
+
 <!-- https://cccbdb.nist.gov/exptriatomicsx.asp -->
 
 ### Nonlinear Rigid Rotors
 
-Below is a visualization illustrating *spherical top*, *symmetric top*, and *asymmetric top* molecules. The semi-axes of each ellipsoid are scaled by $\sqrt{\Theta_{\text{rot}, i}}$, emphasizing how the different principal rotational constants (or equivalently, rotational temperatures) define the 3D shape of the "rotational profile."
+Below is a visualization comparing *spherical top*, *symmetric top*, and *asymmetric top* molecules. The ellipsoid semi-axes are scaled by the three principal rotational temperatures $\Theta_{\text{rot},i}$, highlighting how anisotropy in the rotational constants maps onto the 3D “rotational profile.”
 
 ```{code-cell} ipython3
 :tags: [hide-input]
@@ -226,17 +211,17 @@ plt.show()
 plt.close(fig)
 ```
 
-Approximate visualization of rotational shapes for (left) a spherical top (CH₄), (middle) a symmetric top (NH₃), and (right) an asymmetric top (H₂O). The ellipsoids are scaled by $\sqrt{\Theta_{\text{rot}}}$ in each principal axis direction.
+Approximate visualization of rotational shapes: (left) a spherical top (CH₄), (middle) a symmetric top (NH₃), and (right) an asymmetric top (H₂O). The ellipsoid semi-axes are scaled by the chosen $\Theta_{\text{rot},i}$ values along each principal axis.
 
 ### Vibrations of Polyatomic Molecules
 
-For a diatomic molecule approximated by a *harmonic oscillator* of characteristic vibrational temperature $\Theta_{\text{vib}}$, the vibrational partition function is:
+For a diatomic molecule approximated as a *harmonic oscillator* with characteristic vibrational temperature $\Theta_{\text{vib}}$, the vibrational partition function is
 
 ```{math}
 q_{\text{vib}} \;=\; \frac{e^{-\Theta_{\text{vib}}/(2T)}}{\,1 - e^{-\Theta_{\text{vib}}/T}\,}.
 ```
 
-For a polyatomic molecule with $\alpha$ normal modes (where $\alpha = 3N - 6$ for a nonlinear molecule and $\alpha = 3N - 5$ for a linear molecule), the vibrational partition function is the product of each mode’s contribution:
+For a polyatomic molecule with $\alpha$ normal modes (where $\alpha = 3N - 6$ for a nonlinear molecule and $\alpha = 3N - 5$ for a linear molecule), the vibrational partition function factors into a product of each mode’s contribution:
 
 ```{math}
 q_{\text{vib}} \;=\; \prod_{j=1}^\alpha \; \frac{\,e^{-\Theta_{\text{vib},j}/(2T)}\,}{\,1 - e^{-\Theta_{\text{vib},j}/T}\,}.
@@ -246,7 +231,7 @@ Here, $\Theta_{\text{vib},j}$ is the vibrational temperature of the $j$-th norma
 
 ### Electronic Partition Function
 
-The *electronic partition function* is given by
+The *electronic partition function* is
 
 ```{math}
 q_{\text{elec}} \;=\; \sum_{i=1}^{\infty} g_i \, e^{-\beta\,\varepsilon_i}
@@ -254,7 +239,7 @@ q_{\text{elec}} \;=\; \sum_{i=1}^{\infty} g_i \, e^{-\beta\,\varepsilon_i}
 g_1 \;+\; g_2\,e^{-\beta\,(\varepsilon_2 - \varepsilon_1)} \;+\;\cdots,
 ```
 
-where $g_i$ is the degeneracy of the $i$-th electronic state, $\varepsilon_i$ is that state’s electronic energy, and $\beta = 1/(k_{\text{B}} T)$. In most ground-state-dominated situations ($\varepsilon_2 - \varepsilon_1 \gg k_{\text{B}} T$), the higher-lying states contribute negligibly, and $q_{\text{elec}}\approx g_1$.
+where $g_i$ is the degeneracy of the $i$-th electronic state, $\varepsilon_i$ is that state’s electronic energy, and $\beta = 1/(k_{\text{B}} T)$. Taking $\varepsilon_1=0$ as the reference, most ground-state-dominated situations satisfy $\varepsilon_2 - \varepsilon_1 \gg k_{\text{B}} T$, so the higher-lying states contribute negligibly and $q_{\text{elec}}\approx g_1$.
 
 <!-- ```{dropdown} How to Find $g_1$
 :class: term-symbol-components
@@ -272,7 +257,7 @@ where $g_i$ is the degeneracy of the $i$-th electronic state, $\varepsilon_i$ is
 
 ## Summary
 
-The table below collects the main partition function formulas for atoms and molecules under typical textbook approximations (high-temperature limit for rotation, harmonic approximation for vibration, negligible excited electronic states):
+The table below collects the main partition function formulas for atoms and molecules under typical textbook approximations (high-$T$ rotation, harmonic vibration, and negligible population of excited electronic states):
 
 ```{list-table} Partition functions for various systems
 :header-rows: 1
@@ -301,7 +286,7 @@ The table below collects the main partition function formulas for atoms and mole
 * - *Linear*
   - ↓
   - same as diatomic (with adjusted $\sigma$)
-  - $\prod_{j=1}^{\alpha}\,\frac{e^{-\Theta_{\text{vib},j}/(2T)}}{1-e^{-\Theta_{\text{vib},j}/T}} $
+  - $\prod_{j=1}^{\alpha}\,\frac{e^{-\Theta_{\text{vib},j}/(2T)}}{1-e^{-\Theta_{\text{vib},j}/T}}$
   - ↓
 * - *Nonlinear*
   - —
@@ -315,23 +300,23 @@ The table below collects the main partition function formulas for atoms and mole
   - ↓
 * - Symmetric
   - ↓
-  - $\frac{\sqrt{\pi}}{\sigma} \sqrt{\frac{T^3}{\Theta_{\text{rot,A}}\,(\Theta_{\text{rot,C}})^2}}$
+  - $\frac{\sqrt{\pi}}{\sigma}\,\sqrt{\frac{T^3}{\Theta_{\text{rot},A}^2\,\Theta_{\text{rot},C}}}$
   - ↓
   - ↓
 * - Asymmetric
   - ↓
-  - $\frac{\sqrt{\pi}}{\sigma}\,\sqrt{\frac{T^3}{\Theta_{\text{rot,A}}\,\Theta_{\text{rot,B}}\,\Theta_{\text{rot,C}}}}$
+  - $\frac{\sqrt{\pi}}{\sigma}\,\sqrt{\frac{T^3}{\Theta_{\text{rot},A}\,\Theta_{\text{rot},B}\,\Theta_{\text{rot},C}}}$
   - ↓
   - ↓
 ```
 
-The translational partition function $q_{\text{trans}} = \frac{V}{\Lambda^3}$ (with $\Lambda$ the thermal de Broglie wavelength) applies to all gas-phase systems. For most molecules, the total partition function can be approximated by the product
+The translational partition function $q_{\text{trans}} = \frac{V}{\Lambda^3}$ (with $\Lambda$ the thermal de Broglie wavelength) applies to all gas-phase systems. For many molecules, the total partition function is well approximated as the product
 
 ```{math}
 q \;\approx\; q_{\text{trans}}\;q_{\text{rot}}\;q_{\text{vib}}\;q_{\text{elec}},
 ```
 
-with each factor evaluated using the formulas shown above, assuming the relevant excited states are not significantly populated beyond the ground state.
+with each factor evaluated using the formulas above, assuming the relevant excited states are not significantly populated beyond the ground state.
 
 ## Worked Example
 
@@ -340,39 +325,38 @@ with each factor evaluated using the formulas shown above, assuming the relevant
 For a spherical top,
 
 ```{math}
-q_{\mathrm{rot}} \approx \frac{\sqrt{\pi}}{\sigma}\left(\frac{T}{\Theta_{\mathrm{rot}}}\right)^{3/2}.
+q_{\text{rot}} \approx \frac{\sqrt{\pi}}{\sigma}\left(\frac{T}{\Theta_{\text{rot}}}\right)^{3/2}.
 ```
 
-Using the sample rotational temperature in the section visualization for CH$_4$,
-$\Theta_{\mathrm{rot}}=7.54\ \mathrm{K}$, and the tetrahedral symmetry number $\sigma=12$:
+Using the sample rotational temperature in the section visualization for CH$*4$, $\Theta*{\text{rot}}=7.54\ \mathrm{K}$, and the tetrahedral symmetry number $\sigma=12$:
 
-1. **Compute $T/\Theta_{\mathrm{rot}}$ at $T=300\ \mathrm{K}$**
+1. **Compute $T/\Theta_{\text{rot}}$ at $T=300\ \mathrm{K}$**
 
    ```{math}
-   \frac{T}{\Theta_{\mathrm{rot}}}=\frac{300}{7.54}=39.8.
+   \frac{T}{\Theta_{\text{rot}}}=\frac{300}{7.54}=39.8.
    ```
 
-2. **Evaluate $q_{\mathrm{rot}}$**
+2. **Evaluate $q_{\text{rot}}$**
 
    ```{math}
-   q_{\mathrm{rot}}
+   q_{\text{rot}}
    \approx \frac{\sqrt{\pi}}{12}(39.8)^{3/2}
    =\frac{1.772}{12}\,(39.8)\sqrt{39.8}
    \approx 37.
    ```
 
-**Result.** At room temperature the rotational partition function of CH$_4$ is large, indicating many thermally accessible rotational states.
+**Result.** At room temperature, the rotational partition function of CH$_4$ is large, indicating many thermally accessible rotational states.
 
 ## Concept Checks
 
-1. Why do nonlinear molecules typically have $q_{\mathrm{rot}}\propto T^{3/2}$ in the high-$T$ limit rather than $q_{\mathrm{rot}}\propto T$?
-2. What is the physical meaning of the symmetry number $\sigma$, and why does it reduce $q_{\mathrm{rot}}$?
-3. When is it reasonable to approximate $q_{\mathrm{elec}}\approx g_1$?
-4. For a polyatomic molecule, why is $q_{\mathrm{vib}}$ a product over normal modes?
+1. Why do nonlinear molecules typically have $q_{\text{rot}}\propto T^{3/2}$ in the high-$T$ limit rather than $q_{\text{rot}}\propto T$?
+2. What is the physical meaning of the symmetry number $\sigma$, and why does it reduce $q_{\text{rot}}$?
+3. When is it reasonable to approximate $q_{\text{elec}}\approx g_1$?
+4. For a polyatomic molecule, why is $q_{\text{vib}}$ a product over normal modes?
 
 ## Key Takeaways
 
-- Total molecular partition functions are built as products of translation, rotation, vibration, and electronic factors.
-- Rigid-rotor high-$T$ formulas depend on molecular symmetry and rotational temperatures.
-- Harmonic-oscillator vibration introduces $\Theta_{\mathrm{vib}}$ and freezes out at $T\ll\Theta_{\mathrm{vib}}$.
-- Electronic contributions are often dominated by the ground state unless excited states lie within $k_{\mathrm B}T$.
+* Total molecular partition functions are built as products of translational, rotational, vibrational, and electronic factors.
+* Rigid-rotor high-$T$ formulas depend on molecular symmetry and rotational temperatures.
+* Harmonic-oscillator vibration introduces $\Theta_{\text{vib}}$ and freezes out at $T\ll\Theta_{\text{vib}}$.
+* Electronic contributions are often dominated by the ground state unless excited states lie within $k_{\text{B}}T$.

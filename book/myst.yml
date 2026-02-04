@@ -29,7 +29,7 @@ project:
         - file: chapter-02/section-05.md
         - file: chapter-02/section-06.md
         - file: chapter-02/section-07.md
-    #     - file: chapter-02/section-08.md
+        - file: chapter-02/section-08.md
     #     - file: chapter-02/review.md
     # - title: Module 3. First Law & Enthalpy
     #   children:
