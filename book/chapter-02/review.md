@@ -60,7 +60,7 @@ kernelspec:
 
    ```{math}
    p_i \;=\; \frac{e^{-\beta E_i}}{Q},
-   \quad \beta \;=\;\frac{1}{k_{\text{B}}\,T}.
+   \quad \beta \;=\;\frac{1}{k_{\mathrm B}\,T}.
    ```
 
    - **Partition function** $Q$:
@@ -121,7 +121,7 @@ kernelspec:
    \;=\;
    \langle (E - \langle E\rangle)^2\rangle
    \;=\;
-   k_{\text{B}}\,T^2\,C_V.
+   k_{\mathrm B}\,T^2\,C_V.
    ```
 
 3. **Pressure** (brief introduction)
@@ -130,7 +130,7 @@ kernelspec:
    ```{math}
    P
    \;=\;
-   k_{\text{B}}\,T\,
+   k_{\mathrm B}\,T\,
    \bigl(\tfrac{\partial\ln Q}{\partial V}\bigr)_{N,T}.
    ```
 
@@ -139,24 +139,23 @@ kernelspec:
 ### Section 2.4: Molecular Partition Functions
 
 1. **Many Identical and Independent Particles**
-   - For $N$ **distinguishable** particles, each in a one‐particle partition function $q$, the total partition function is
+   - For $N$ independent **distinguishable** particles with one-particle partition function $q$, the total partition function is
 
    ```{math}
-   Q \;=\; q^N
-   \quad (\text{if particles are distinct}).
+   Q \;=\; q^N.
    ```
 
-   - For **indistinguishable** particles (e.g., identical atoms/molecules obeying single occupancy),
+   - For **indistinguishable** particles,
 
    ```{math}
    Q \;=\; \frac{q^N}{N!}.
    ```
 
 2. **Molecular Partition Function**
-   - Within Born–Oppenheimer, a molecule’s energy decomposes into translational, rotational, vibrational, and electronic parts:
+   - Within the Born–Oppenheimer approximation, a molecule’s energy decomposes into translational, rotational, vibrational, and electronic contributions:
 
    ```{math}
-   \varepsilon = \varepsilon_{\text{trans}} + \varepsilon_{\text{rot}} + \varepsilon_{\text{vib}} + \varepsilon_{\text{elec}}.
+   \varepsilon = \varepsilon_{\mathrm{trans}} + \varepsilon_{\mathrm{rot}} + \varepsilon_{\mathrm{vib}} + \varepsilon_{\mathrm{elec}}.
    ```
 
    - Thus,
@@ -164,10 +163,10 @@ kernelspec:
    ```{math}
    q
    \;=\;
-   q_{\text{trans}}\,
-   q_{\text{rot}}\,
-   q_{\text{vib}}\,
-   q_{\text{elec}}.
+   q_{\mathrm{trans}}\,
+   q_{\mathrm{rot}}\,
+   q_{\mathrm{vib}}\,
+   q_{\mathrm{elec}}.
    ```
 
 ---
@@ -205,13 +204,13 @@ kernelspec:
    - At high $T$ or large $L$, we approximate the sum by an integral and obtain the **classical** partition function:
 
    ```{math}
-   q_{\text{trans}}
+   q_{\mathrm{trans}}
    \;=\;
    \frac{V}{\Lambda^3},
    \quad
    \Lambda
    \;=\;
-   \sqrt{\frac{h^2}{2\pi m k_{\text{B}} T}}\,\,
+   \sqrt{\frac{h^2}{2\pi m k_{\mathrm B} T}}\,\,
    \text{(thermal de Broglie wavelength).}
    ```
 
@@ -230,11 +229,11 @@ kernelspec:
    - Leads directly to the ideal gas law and to:
 
    ```{math}
-   U \;=\; \frac{3}{2}\,N\,k_{\text{B}}T,
+   U \;=\; \frac{3}{2}\,N\,k_{\mathrm B}T,
    \quad
-   C_V \;=\; \frac{3}{2}\,N\,k_{\text{B}},
+   C_V \;=\; \frac{3}{2}\,N\,k_{\mathrm B},
    \quad
-   P = \frac{N\,k_{\text{B}}\,T}{V}.
+   P = \frac{N\,k_{\mathrm B}\,T}{V}.
    ```
 
 ---
@@ -279,17 +278,17 @@ kernelspec:
    ```{math}
    C_V
    \;=\;
-   k_{\text{B}}
-   \Bigl(\frac{\hbar\omega}{k_{\text{B}} T}\Bigr)^{2}\,
-   \frac{\,e^{\hbar\omega/(k_{\text{B}}T)}\,}
-        {\bigl(e^{\hbar\omega/(k_{\text{B}}T)} - 1\bigr)^{2}}.
+   k_{\mathrm B}
+   \Bigl(\frac{\hbar\omega}{k_{\mathrm B} T}\Bigr)^{2}\,
+   \frac{\,e^{\hbar\omega/(k_{\mathrm B}T)}\,}
+        {\bigl(e^{\hbar\omega/(k_{\mathrm B}T)} - 1\bigr)^{2}}.
    ```
 
-   - At high temperature ($k_{\text{B}}T \gg \hbar\omega$), each harmonic oscillator recovers the **classical limit** $U \to k_{\text{B}}T$ and $C_V \to k_{\text{B}}$.
+   - At high temperature ($k_{\mathrm B}T \gg \hbar\omega$), each harmonic oscillator recovers the **classical limit** $U \to k_{\mathrm B}T$ and $C_V \to k_{\mathrm B}$.
 
 <!-- 4. **Einstein Model** (for solids)
    - Considers each atom as a 3D harmonic oscillator with the same $\omega$.
-   - Provides a simple route to the Dulong–Petit law ($C_V \approx 3 N k_{\text{B}}$) at high $T$. -->
+   - Provides a simple route to the Dulong–Petit law ($C_V \approx 3 N k_{\mathrm B}$) at high $T$. -->
 
 ---
 
@@ -312,42 +311,42 @@ kernelspec:
    - Exact form:
 
    ```{math}
-   q_{\text{rot}}
+   q_{\mathrm{rot}}
    \;=\;
    \sum_{J=0}^\infty
    (2J + 1)\, e^{-\beta \,\frac{\hbar^2}{2I}\,J\,(J+1)}.
    ```
 
-   - Define the **rotational temperature** $\Theta_{\text{rot}} = \frac{\hbar^2}{2k_{\text{B}}I}$.
-   - **High-temperature limit** ($k_{\text{B}}T \gg \frac{\hbar^2}{2I}$) gives
+   - Define the **rotational temperature** $\Theta_{\mathrm{rot}} = \frac{\hbar^2}{2k_{\mathrm B}I}$.
+   - **High-temperature limit** ($k_{\mathrm B}T \gg \frac{\hbar^2}{2I}$) gives
 
    ```{math}
-   q_{\text{rot}}
+   q_{\mathrm{rot}}
    \;\approx\;
-   \frac{T}{\Theta_{\text{rot}}}
+   \frac{T}{\Theta_{\mathrm{rot}}}
    \quad (\text{for a heteronuclear diatomic}).
    ```
 
    - For a **homonuclear** diatomic, include a symmetry factor $\sigma=2$, so
 
    ```{math}
-   q_{\text{rot}}
+   q_{\mathrm{rot}}
    \;\approx\;
-   \frac{T}{\sigma\,\Theta_{\text{rot}}}.
+   \frac{T}{\sigma\,\Theta_{\mathrm{rot}}}.
    ```
 
 3. **Ensemble Averages** (High-$T$ Approximation)
    - **Internal Energy** ($U_{\text{rot}}$):
 
    ```{math}
-   U_{\text{rot}} \;\approx\; k_{\text{B}}\,T.
+   U_{\text{rot}} \;\approx\; k_{\mathrm B}\,T.
    ```
 
-     (One linear rotor has 2 rotational degrees of freedom $\rightarrow \frac{2}{2} k_{\text{B}}T$.)
+     (One linear rotor has 2 rotational degrees of freedom $\rightarrow \frac{2}{2} k_{\mathrm B}T$.)
    - **Heat Capacity**:
 
    ```{math}
-   C_V^{(\text{rot})} \;\approx\; k_{\text{B}}.
+   C_V^{(\text{rot})} \;\approx\; k_{\mathrm B}.
    ```
 
 ---
@@ -355,24 +354,24 @@ kernelspec:
 ### Section 2.8: Molecular Statistical Mechanics
 
 1. **Combining All Degrees of Freedom**
-   - For a general molecule, the total one‐molecule partition function is
+   - For a general molecule, the total one-molecule partition function is
 
    ```{math}
    q
    \;=\;
-   q_{\text{trans}}\,
-   q_{\text{rot}}\,
-   q_{\text{vib}}\,
-   q_{\text{elec}}.
+   q_{\mathrm{trans}}\,
+   q_{\mathrm{rot}}\,
+   q_{\mathrm{vib}}\,
+   q_{\mathrm{elec}}.
    ```
 
-   - Extends to polyatomic molecules with more complex rotational constants $\Theta_{\text{rot,A}}, \Theta_{\text{rot,B}}, \Theta_{\text{rot,C}}$ and multiple vibrational frequencies $\Theta_{\text{vib},j}$.
+   - Extends to polyatomic molecules with more complex rotational constants $\Theta_{\mathrm{rot},A}, \Theta_{\mathrm{rot},B}, \Theta_{\mathrm{rot},C}$ and multiple vibrational frequencies $\Theta_{\mathrm{vib},j}$.
 
 2. **Symmetry Considerations**
    - Symmetry factor $\sigma$ must be included for molecules with indistinguishable orientations (e.g., homonuclear diatomics, symmetrical polyatomics).
 
 3. **Summary Table**
-   - Often, we tabulate $q_{\text{trans}}, q_{\text{rot}}, q_{\text{vib}}, q_{\text{elec}}$ for different molecule types (linear, nonlinear, spherical top, symmetric top, etc.), applying high-temperature (classical) or more exact quantum results as needed.
+   - Often, we tabulate $q_{\mathrm{trans}}, q_{\mathrm{rot}}, q_{\mathrm{vib}}, q_{\mathrm{elec}}$ for different molecule types (linear, nonlinear, spherical top, symmetric top, etc.), applying high-temperature (classical) or more exact quantum results as needed.
 
 ---
 
@@ -414,7 +413,7 @@ p_i
 \;=\;
 \frac{\,e^{-\beta\,E_i}\,}{Q},
 \quad
-\beta = \frac{1}{k_{\text{B}}\,T}.
+\beta = \frac{1}{k_{\mathrm B}\,T}.
 ```
 
 - **Applicability**: closed system in thermal contact at $T$.
@@ -460,7 +459,7 @@ Also,
 ```{math}
 \sigma_E^2
 \;=\;
-k_{\text{B}}\,T^2\,C_V.
+k_{\mathrm B}\,T^2\,C_V.
 ```
 
 ---
@@ -470,7 +469,7 @@ G. **Pressure (Canonical)**
 ```{math}
 P
 \;=\;
-k_{\text{B}}\,T \,\bigl(\tfrac{\partial \ln Q}{\partial V}\bigr)_{N,T}.
+k_{\mathrm B}\,T \,\bigl(\tfrac{\partial \ln Q}{\partial V}\bigr)_{N,T}.
 ```
 
 ---
@@ -487,24 +486,24 @@ Q
 
 ---
 
-G. **Translational Partition Function** (Particle in a 3D box at high $T$)
+I. **Translational Partition Function** (Particle in a 3D box at high $T$)
 
 ```{math}
-q_{\text{trans}}
+q_{\mathrm{trans}}
 \;=\;
 \frac{V}{\Lambda^3},
 \quad
 \Lambda
 =
-\sqrt{\frac{h^2}{2\pi m k_{\text{B}}T}}.
+\sqrt{\frac{h^2}{2\pi m k_{\mathrm B}T}}.
 ```
 
 ---
 
-I. **Harmonic Oscillator Partition Function (1D)**
+J. **Harmonic Oscillator Partition Function (1D)**
 
 ```{math}
-q_{\text{HO}}
+q_{\mathrm{HO}}
 \;=\;
 \frac{\,e^{-\tfrac{1}{2}\beta\hbar\omega}\,}{1 - e^{-\beta\,\hbar\omega}}.
 ```
@@ -521,41 +520,41 @@ U_{\text{HO}}
 
 ---
 
-J. **Rotational Partition Function (Linear Rotor, High $T$)**
+K. **Rotational Partition Function (Linear Rotor, High $T$)**
 
 ```{math}
-q_{\text{rot}}
+q_{\mathrm{rot}}
 \;\approx\;
-\frac{T}{\sigma\,\Theta_{\text{rot}}},
+\frac{T}{\sigma\,\Theta_{\mathrm{rot}}},
 \quad
-\Theta_{\text{rot}} = \frac{\hbar^2}{2k_{\text{B}}\,I}.
+\Theta_{\mathrm{rot}} = \frac{\hbar^2}{2k_{\mathrm B}\,I}.
 ```
 
 - **Internal Energy**:
 
 ```{math}
-U_{\text{rot}} \;\approx\; k_{\text{B}}\,T.
+U_{\text{rot}} \;\approx\; k_{\mathrm B}\,T.
 ```
 
 - **Heat Capacity**:
 
 ```{math}
-C_V^{(\text{rot})} \;\approx\; k_{\text{B}}.
+C_V^{(\text{rot})} \;\approx\; k_{\mathrm B}.
 ```
 
 ---
 
-K. **Polyatomic Molecules**
+L. **Polyatomic Molecules**
 
 - **General form** (neglecting interactions):
 
 ```{math}
 q
 \;=\;
-q_{\text{trans}}\;
-q_{\text{rot}}\;
-q_{\text{vib}}\;
-q_{\text{elec}}.
+q_{\mathrm{trans}}\;
+q_{\mathrm{rot}}\;
+q_{\mathrm{vib}}\;
+q_{\mathrm{elec}}.
 ```
 
 - For linear vs. nonlinear rotors or multiple vibrational modes, each factor is included appropriately (with possible symmetry factors).
