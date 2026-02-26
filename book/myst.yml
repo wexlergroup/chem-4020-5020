@@ -31,9 +31,9 @@ project:
         - file: chapter-02/section-07.md
         - file: chapter-02/section-08.md
         - file: chapter-02/review.md
-    # - title: Module 3. First Law & Enthalpy
-    #   children:
-    #     - file: chapter-03/section-01.md
+    - title: Module 3. First Law & Enthalpy
+      children:
+        - file: chapter-03/section-01.md
     #     - file: chapter-03/section-02.md
     #     - file: chapter-03/section-03.md
     #     - file: chapter-03/review.md
