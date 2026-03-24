@@ -19,73 +19,32 @@ kernelspec:
 
 ## Overview and Learning Objectives
 
-This section reframes entropy in microscopic terms: as a measure of multiplicity and as a functional of a probability distribution over microstates. Starting from the second law for isolated systems, it introduces Boltzmann’s $S=k_{\mathrm B}\ln\Omega$, the Gibbs/Shannon form $S=-k_{\mathrm B}\sum p_i\ln p_i$, and the canonical relation between entropy, internal energy, and the partition function.
+Sections 4.1 and 4.2 developed entropy entirely from macroscopic reasoning: a state function defined by $dS = \delta q_{\mathrm{rev}}/T$, used to derive engine efficiency limits and the direction of spontaneous heat flow. This section shifts to the **microscopic** side, connecting entropy to the statistical-mechanical framework from Chapter 2. The payoff is substantial: entropy becomes a measure of *how many ways* a system can realize a macrostate, and its connection to the partition function $Q$ provides a direct bridge between microscopic energy levels and macroscopic thermodynamic potentials.
 
-This section shifts from the **macroscopic** entropy statements used with Carnot cycles to a more **microscopic / statistical** interpretation: entropy as a measure of *how many ways* a system can realize a macrostate, and how this connects to probability distributions and the partition function.
+We introduce three successively more general formulas for entropy — Boltzmann's $S = k_{\mathrm{B}}\ln\Omega$ (isolated systems), the Gibbs form $S = -k_{\mathrm{B}}\sum p_i\ln p_i$ (any ensemble), and the canonical identity $S = U/T + k_{\mathrm{B}}\ln Q$ — and show that they are mutually consistent. The section culminates in the identification of the Helmholtz free energy $A = -k_{\mathrm{B}}T\ln Q$, which was foreshadowed in Sections 2.3 and 3.3.
 
 Learning objectives:
 
-- State the second-law condition $dS\ge 0$ for isolated systems and interpret equilibrium as $dS=0$.
-- Use Boltzmann’s formula $S=k_{\mathrm B}\ln\Omega$ and explain why the logarithm ensures extensivity.
-- Compute entropy from a probability distribution via $S=-k_{\mathrm B}\sum_i p_i\ln p_i$.
-- Derive the canonical identity $S = k_{\mathrm B}\ln Q + U/T$ (equivalently $S=k_{\mathrm B}(\ln Q+\beta U)$.
+- State the second-law condition $dS \ge 0$ for isolated systems and interpret equilibrium as $dS = 0$.
+- Use Boltzmann's formula $S = k_{\mathrm{B}}\ln\Omega$ and explain why the logarithm ensures extensivity.
+- Compute entropy from a probability distribution via $S = -k_{\mathrm{B}}\sum_i p_i\ln p_i$.
+- Derive the canonical identity $S = U/T + k_{\mathrm{B}}\ln Q$.
+- Identify the Helmholtz free energy $A = U - TS = -k_{\mathrm{B}}T\ln Q$ as a consequence of the canonical entropy formula.
 
 ## Core Ideas and Derivations
 
-### Roadmap (from the lecture)
+### Entropy Increases Until the System Reaches Equilibrium
 
-**Review** (from earlier sections)
+The second law for an **isolated system** (Section 4.2) requires
 
-1. For an **isolated** system:  
+```{math}
+dS \ge 0,
+```
 
-   ```{math}
-   dS \ge 0.
-   ```
+with equality only at equilibrium. The qualitative picture is:
 
-2. For a **reversible** process (definition of entropy change):  
-
-   ```{math}
-   dS = \frac{\delta q_{\mathrm{rev}}}{T}.
-   ```
-
-3. A useful microscopic expression for heat (when energy levels are fixed):  
-
-   ```{math}
-   \delta q = \sum_{i=1}^{M} E_i\, d p_i.
-   ```
-
-4. For a **closed** system at fixed $N,V,T$ (canonical ensemble), the microstate probabilities are
-
-   ```{math}
-   p_i = \frac{e^{-\beta E_i}}{Q},\qquad \beta \equiv \frac{1}{k_B T}.
-   ```
-
-**New topics** (Class 29)
-
-- Entropy change and the **approach to equilibrium**
-- Entropy and the **number of microstates** (Boltzmann)  
-- Entropy in terms of **probabilities** (Gibbs/Shannon form)  
-- Entropy in terms of the **partition function** $Q$
-
----
-
-### Entropy increases until the system reaches equilibrium
-
-For an **isolated system**, the lecture emphasized this qualitative picture:
-
-- **Out of equilibrium:** entropy increases spontaneously  
-
-  ```{math}
-  dS > 0.
-  ```
-
-- **At equilibrium:** entropy stops changing (it “flattens out”)  
-
-  ```{math}
-  dS = 0.
-  ```
-
-Equilibrium here means: **subject to the constraints** (fixed total energy, volume, particle number, etc.), the system has reached a state where it cannot increase its entropy any further.
+- **Out of equilibrium:** entropy increases spontaneously ($dS > 0$).
+- **At equilibrium:** entropy reaches its maximum value subject to the constraints and stops changing ($dS = 0$).
 
 ```{code-cell} ipython3
 :tags: [hide-input]
@@ -115,244 +74,278 @@ plt.show()
 plt.close(fig)
 ```
 
-This plot is schematic, but it matches the lecture sketch: entropy rises from $S_i$ to $S_f$ during a spontaneous process and then becomes constant at equilibrium.
+Entropy rises from $S_i$ to $S_f$ during a spontaneous process and then becomes constant at equilibrium.
+
+A concrete example from Section 4.2 illustrates this. Two subsystems at different temperatures ($T_A > T_B$) in an insulated box exchange heat, and we showed that
+
+```{math}
+dS = dU_A\!\left(\frac{1}{T_A} - \frac{1}{T_B}\right) > 0
+```
+
+as long as $T_A \neq T_B$. Energy flows from $A$ to $B$, raising $T_B$ and lowering $T_A$, until $T_A = T_B$. At that point the factor $(1/T_A - 1/T_B)$ vanishes, $dS = 0$, and the system has reached thermal equilibrium at the entropy maximum.
 
 ---
 
-### A more generic second law statement: the Clausius inequality
+### The Clausius Inequality
 
-The definition
-
-```{math}
-dS = \frac{\delta q_{\mathrm{rev}}}{T}
-```
-
-is specifically written for a **reversible** heat transfer.
-
-The notes then give a more general statement that covers both reversible and irreversible processes:
+The entropy definition $dS = \delta q_{\mathrm{rev}}/T$ applies specifically to reversible heat transfer. A more general statement, valid for both reversible and irreversible processes, is the **Clausius inequality**:
 
 ```{math}
 dS \ge \frac{\delta q}{T}.
 ```
 
-- **Equality** holds for a **reversible** process:
+- **Equality** holds for a **reversible** process: $dS = \delta q_{\mathrm{rev}}/T$.
+- **Strict inequality** holds for an **irreversible** process: $dS > \delta q/T$.
 
-  ```{math}
-  dS = \frac{\delta q_{\mathrm{rev}}}{T}.
-  ```
+The physical interpretation is that irreversibility *produces* additional entropy beyond the entropy "carried in" by heat flow. For an isolated system ($\delta q = 0$), the Clausius inequality reduces to $dS \ge 0$, recovering the second law.
 
-- **Strict inequality** holds for an **irreversible** process:
+The Clausius inequality also explains why the Carnot engine (Section 4.2) sets the maximum efficiency. Any irreversible engine operating between the same two reservoirs produces entropy internally ($dS_{\mathrm{irrev}} > 0$), so more heat must be rejected to the cold reservoir to compensate, reducing the net work output.
 
-  ```{math}
-  dS > \frac{\delta q}{T}.
-  ```
-
-Interpretation: irreversibility produces additional entropy beyond the entropy “carried in” by heat flow.
-
-> Practical takeaway: entropy is a **state function**, but $\delta q$ is not.  
-> To compute $\Delta S$, you can always choose a *convenient reversible path* between the same initial and final states and use $\int \delta q_{\mathrm{rev}}/T$.
+```{admonition} Practical takeaway
+:class: tip
+Entropy is a **state function**, but $\delta q$ is not. To compute $\Delta S$ for any process — reversible or irreversible — choose a *convenient reversible path* between the same initial and final states and evaluate $\int \delta q_{\mathrm{rev}}/T$. This is the strategy we used in Section 4.1, Example 2 (free expansion).
+```
 
 ---
 
-### Entropy and the number of microstates: Boltzmann’s formula
+### Entropy and the Number of Microstates: Boltzmann's Formula
 
-For an **isolated system**, the lecture connects entropy to the number of accessible microstates:
-
-```{math}
-S = k_B \ln \Omega.
-```
-
-- $k_B$ is the Boltzmann constant.
-- $\Omega$ is the number of microstates compatible with the constraints of the macrostate.
-
-The notes emphasize that, for an isolated system, $\Omega$ can be viewed as the **degeneracy** at the system’s value of the internal energy $U$:
-
-- Fix $U$ (and $N,V$, etc.)
-- Count: “How many different states did I find?”
-
-#### Why the logarithm?
-
-A key property of thermodynamic entropy is that it is **extensive**:
+We now connect entropy to the microscopic picture. For an **isolated system** (microcanonical ensemble), the fundamental postulate of statistical mechanics (Section 2.1) assigns equal probability $p_i = 1/\Omega$ to each of the $\Omega$ accessible microstates. The entropy of such a system is
 
 ```{math}
-S_{\text{total}} = S_A + S_B
+S = k_{\mathrm{B}} \ln \Omega.
 ```
 
-for two independent subsystems $A$ and $B$.
+Here $\Omega$ is the number of microstates compatible with the macroscopic constraints (fixed $U$, $V$, $N$). You can think of $\Omega$ as the degeneracy of the macrostate: fix the total energy and other extensive quantities, then count how many distinct microscopic configurations share those values.
 
-But the number of microstates is multiplicative for independent systems:
+```{admonition} Scope of Boltzmann's formula
+:class: note
+Boltzmann's $S = k_{\mathrm{B}}\ln\Omega$ applies to isolated systems where all accessible microstates are equally probable (the microcanonical ensemble). For systems in thermal contact with a reservoir — where microstates are *not* equally probable — we need the more general Gibbs formula introduced below.
+```
+
+#### Why the Logarithm?
+
+A key property of thermodynamic entropy is that it is **extensive**: for two independent subsystems $A$ and $B$,
+
+```{math}
+S_{\text{total}} = S_A + S_B.
+```
+
+But the number of microstates is *multiplicative* for independent systems:
 
 ```{math}
 \Omega_{\text{total}} = \Omega_A\,\Omega_B.
 ```
 
-Taking the logarithm turns products into sums:
+The logarithm converts the product into a sum:
 
 ```{math}
 S_{\text{total}}
-= k_B \ln(\Omega_A\Omega_B)
-= k_B \ln \Omega_A + k_B \ln \Omega_B
+= k_{\mathrm{B}} \ln(\Omega_A\,\Omega_B)
+= k_{\mathrm{B}} \ln \Omega_A + k_{\mathrm{B}} \ln \Omega_B
 = S_A + S_B.
 ```
 
-That is the “why ln?” point made in the notes.
+Without the logarithm, entropy would not be additive for independent subsystems.
 
 ---
 
-### Entropy in terms of probabilities: the Gibbs entropy
+### Entropy in Terms of Probabilities: The Gibbs Entropy
 
-The lecture then generalizes from “counting microstates” to working with a probability distribution $\{p_i\}$ over microstates $i=1,\dots,M$:
+The Gibbs (or Gibbs–Shannon) formula generalizes Boltzmann's result from "counting equally likely microstates" to working with an arbitrary probability distribution $\{p_i\}$ over microstates $i = 1, \dots, M$:
 
 ```{math}
-S = -k_B \sum_{i=1}^{M} p_i\,\ln p_i.
+S = -k_{\mathrm{B}} \sum_{i=1}^{M} p_i\,\ln p_i.
 ```
 
 This formula has two important features:
 
-1. It reduces to Boltzmann’s $S=k_B\ln\Omega$ for the **microcanonical** case (all accessible microstates equally likely).  
-   If $p_i = 1/\Omega$ for each accessible microstate, then
+1. **It reduces to Boltzmann's formula in the microcanonical case.** If all $\Omega$ accessible microstates are equally likely ($p_i = 1/\Omega$), then
 
    ```{math}
    S
-   = -k_B \sum_{i=1}^{\Omega} \frac{1}{\Omega}\ln\left(\frac{1}{\Omega}\right)
-   = -k_B\ln\left(\frac{1}{\Omega}\right)
-   = k_B\ln\Omega.
+   = -k_{\mathrm{B}} \sum_{i=1}^{\Omega} \frac{1}{\Omega}\ln\!\left(\frac{1}{\Omega}\right)
+   = -k_{\mathrm{B}}\ln\!\left(\frac{1}{\Omega}\right)
+   = k_{\mathrm{B}}\ln\Omega.
    ```
 
-2. It makes sense even when not all microstates are equally likely (e.g., when the system is in contact with a heat bath).
+2. **It applies when microstates are not equally likely** — for instance, when the system is in contact with a heat bath (canonical ensemble). In this case, $p_i = e^{-\beta E_i}/Q$, and different microstates have different probabilities.
 
 ---
 
-### Canonical ensemble and the partition function
+### Canonical Ensemble: Entropy in Terms of the Partition Function
 
-For a **closed system** (fixed $N,V$) in thermal contact with a reservoir at temperature $T$, the canonical ensemble assigns probabilities
+We now evaluate the Gibbs entropy for the canonical ensemble. Recall from Section 2.2 that a closed system (fixed $N$, $V$) in thermal contact with a reservoir at temperature $T$ has microstate probabilities
 
 ```{math}
-p_i(N,V,\beta) = \frac{e^{-\beta E_i(N,V)}}{Q(N,V,\beta)},
+p_i = \frac{e^{-\beta E_i}}{Q},
 \qquad
-\beta \equiv \frac{1}{k_B T}.
+\beta \equiv \frac{1}{k_{\mathrm{B}} T},
 ```
 
-The normalization factor
+where the canonical partition function is
 
 ```{math}
-Q(N,V,\beta) \equiv \sum_{i=1}^{M} e^{-\beta E_i}
+Q \equiv \sum_{i=1}^{M} e^{-\beta E_i}.
 ```
 
-is the **canonical partition function**.
-
-#### Entropy in terms of $U$ and $Q$
+#### Derivation
 
 Starting from the Gibbs entropy,
 
 ```{math}
-S = -k_B \sum_i p_i\ln p_i,
+S = -k_{\mathrm{B}} \sum_i p_i\ln p_i,
 ```
 
-insert $p_i = e^{-\beta E_i}/Q$. Since
-
-```{math}
-\ln p_i = -\beta E_i - \ln Q,
-```
-
-we get
+insert $\ln p_i = -\beta E_i - \ln Q$:
 
 ```{math}
 \begin{aligned}
 S
-&= -k_B \sum_i p_i\,(-\beta E_i - \ln Q) \\
-&= k_B\beta \sum_i p_i E_i + k_B(\ln Q)\sum_i p_i.
+&= -k_{\mathrm{B}} \sum_i p_i\,(-\beta E_i - \ln Q) \\
+&= k_{\mathrm{B}}\beta \sum_i p_i E_i \;+\; k_{\mathrm{B}}(\ln Q)\sum_i p_i.
 \end{aligned}
 ```
 
-Now use $\sum_i p_i = 1$ and define the internal energy
+Using $\sum_i p_i = 1$ and the definition of internal energy from Section 2.3,
 
 ```{math}
-U \equiv \sum_i p_i E_i.
+U \equiv \langle E \rangle = \sum_i p_i E_i,
 ```
 
-Then
+we obtain
 
 ```{math}
-S = k_B\beta U + k_B\ln Q.
+S = k_{\mathrm{B}}\beta U + k_{\mathrm{B}}\ln Q.
 ```
 
-Finally, because $\beta = 1/(k_B T)$,
+Substituting $\beta = 1/(k_{\mathrm{B}} T)$:
 
 ```{math}
 \boxed{
-S = \frac{U}{T} + k_B\ln Q
+S = \frac{U}{T} + k_{\mathrm{B}}\ln Q.
 }
 ```
 
-which is the final result on the last page of the lecture notes.
+This is a central result: it expresses the macroscopic state function $S$ directly in terms of the partition function $Q$ and the internal energy $U$, both of which we know how to compute from microscopic energy levels.
 
 ---
 
-### Microscopic interpretation of heat (review connection)
+### Connection to the Helmholtz Free Energy
 
-The lecture’s “review” line
-
-```{math}
-\delta q = \sum_i E_i\, d p_i
-```
-
-fits naturally with the statistical definition of internal energy
+Rearranging the boxed result gives
 
 ```{math}
-U = \sum_i p_i E_i.
+U - TS = -k_{\mathrm{B}}T\ln Q.
 ```
 
-Differentiating $U$ gives
+The left-hand side is the **Helmholtz free energy**, $A \equiv U - TS$ — a state function whose natural variables are $T$ and $V$. We therefore have
+
+```{math}
+\boxed{
+A = -k_{\mathrm{B}}T\ln Q.
+}
+```
+
+This result was foreshadowed in Section 2.3 (where it was stated as a Module 5 preview) and in Section 3.3 (where we noted that $A = U - TS$ would be "convenient at constant $T$ and $V$"). It is arguably the single most important equation in canonical statistical mechanics: **if you can compute $Q$, you can compute $A$, and from $A$ you can derive all other thermodynamic quantities** — $S$, $U$, $P$, $C_V$, and chemical potentials — by taking appropriate derivatives. We will develop this machinery in a later chapter.
+
+```{admonition} Defining $A$ by the same strategy as $H$
+:class: note
+In Section 3.3, we defined enthalpy as $H = U + PV$ to simplify the First Law at constant pressure. Defining $A = U - TS$ is the same kind of move: a Legendre transform that replaces $S$ (hard to control experimentally) with $T$ (easy to control) as an independent variable. Just as $q_P = \Delta H$ at constant pressure, we will see that $A$ plays a similarly natural role at constant temperature and volume.
+```
+
+---
+
+### Microscopic Interpretation of Heat (Connection to Section 3.2)
+
+The results above connect naturally to the microscopic interpretation of the First Law developed in Section 3.2. Differentiating $U = \sum_i p_i E_i$ gives
 
 ```{math}
 dU = \sum_i p_i\, dE_i + \sum_i E_i\, dp_i.
 ```
 
-This is a helpful way to separate energy changes:
+For a closed system with only $PV$ work, comparing with $dU = \delta q + \delta w = \delta q - P\,dV$, we identified (Section 3.2):
 
-- $\sum_i p_i\, dE_i$: changes due to shifting energy levels (often associated with **work**, e.g., changing volume changes $E_i(V)$)
-- $\sum_i E_i\, dp_i$: changes due to redistributing probabilities among fixed levels (associated with **heat**)
+- **Heat**: $\delta q = \sum_i E_i\, dp_i$ — energy exchange via redistributing probabilities among fixed energy levels.
+- **Work**: $\delta w = \sum_i p_i\, dE_i$ — energy exchange via shifting the energy levels themselves (e.g., changing volume changes the particle-in-a-box levels).
 
-This is the microscopic counterpart to the macroscopic first law bookkeeping.
+The Gibbs entropy formula shows why this decomposition is natural. Since $S = -k_{\mathrm{B}}\sum_i p_i\ln p_i$ depends only on the probabilities $\{p_i\}$, entropy changes when and only when probabilities change — that is, when heat flows. Work, which shifts energy levels without redistributing probabilities, does not change the entropy. This is consistent with the macroscopic result: for a reversible adiabatic process ($\delta q = 0$), $dS = 0$.
 
 ---
 
-## Worked Example
+## Worked Examples
 
-### Entropy of a two-state distribution
+### Example 1: Entropy of a two-state distribution
 
-A system has two microstates with probabilities $p$ and $1-p$. The Gibbs entropy is
+**Problem.** A system has two microstates with probabilities $p$ and $1-p$. Compute the Gibbs entropy and find where it is maximized.
+
+**Solution.** The Gibbs entropy is
 
 ```{math}
-S(p)=-k_{\mathrm B}\left[p\ln p + (1-p)\ln(1-p)\right].
+S(p) = -k_{\mathrm{B}}\left[p\ln p + (1-p)\ln(1-p)\right].
 ```
 
-Take the “maximally uncertain” case $p=1/2$:
+At $p = 1/2$ (maximally uncertain):
 
-1. **Insert $p=1/2$**
+```{math}
+S = -k_{\mathrm{B}}\left[\tfrac{1}{2}\ln\tfrac{1}{2} + \tfrac{1}{2}\ln\tfrac{1}{2}\right]
+= -k_{\mathrm{B}}\ln\tfrac{1}{2}
+= k_{\mathrm{B}}\ln 2.
+```
 
-   ```{math}
-   S = -k_{\mathrm B}\left[\frac12\ln\left(\frac12\right)+\frac12\ln\left(\frac12\right)\right]
-   = -k_{\mathrm B}\left[\ln\left(\frac12\right)\right]
-   = k_{\mathrm B}\ln 2.
-   ```
+To confirm this is a maximum, note that $S(p)$ is concave (its second derivative $d^2S/dp^2 = -k_{\mathrm{B}}/[p(1-p)] < 0$ for $0 < p < 1$) and is zero at the endpoints $p = 0$ and $p = 1$, where one microstate has all the probability and there is no uncertainty.
 
-2. **Interpretation**
-   $S$ is largest at $p=1/2$ because the distribution is most spread out (largest uncertainty / multiplicity).
+**Result.** The maximum entropy $k_{\mathrm{B}}\ln 2$ occurs at $p = 1/2$, where the distribution is most spread out. This is consistent with Boltzmann's formula: two equally likely microstates give $\Omega = 2$ and $S = k_{\mathrm{B}}\ln 2$.
 
-**Result.** A two-state system with equal probabilities has entropy $k_{\mathrm B}\ln 2$.
+---
+
+### Example 2: Entropy of the two-state system from Section 2.2
+
+**Problem.** In Section 2.2, we analyzed a two-state system with energies $E_0 = 0$ and $E_1 = \varepsilon = 0.010\ \mathrm{eV}$ and found $p_0 = 0.596$ and $p_1 = 0.404$ at $T = 300\ \mathrm{K}$. Compute the entropy two ways: (a) from the Gibbs formula, and (b) from the canonical identity $S = U/T + k_{\mathrm{B}}\ln Q$.
+
+**Solution.**
+
+**(a) Gibbs formula.**
+
+```{math}
+S = -k_{\mathrm{B}}\left[0.596\ln(0.596) + 0.404\ln(0.404)\right].
+```
+
+Evaluating: $0.596\ln(0.596) = -0.308$ and $0.404\ln(0.404) = -0.366$, so
+
+```{math}
+S = -k_{\mathrm{B}}(-0.308 - 0.366) = 0.674\,k_{\mathrm{B}} = 9.31 \times 10^{-24}\ \mathrm{J/K}.
+```
+
+**(b) Canonical identity.**
+
+From Section 2.2: $Q = 1.679$, and $U = \varepsilon\,p_1 = (0.010)(0.404) = 4.04 \times 10^{-3}\ \mathrm{eV} = 6.47 \times 10^{-22}\ \mathrm{J}$.
+
+```{math}
+S = \frac{U}{T} + k_{\mathrm{B}}\ln Q = \frac{6.47 \times 10^{-22}}{300} + (1.381 \times 10^{-23})\ln(1.679).
+```
+
+```{math}
+S = 2.16 \times 10^{-24} + 7.16 \times 10^{-24} = 9.31 \times 10^{-24}\ \mathrm{J/K}.
+```
+
+**Result.** Both methods give the same answer, as they must — the canonical identity is derived from the Gibbs formula. Notice that the entropy ($0.674\,k_{\mathrm{B}}$) is less than the maximum ($k_{\mathrm{B}}\ln 2 = 0.693\,k_{\mathrm{B}}$) because the distribution is not perfectly uniform: the ground state is slightly more populated than the excited state at 300 K. At higher temperatures, the two probabilities would become more equal, and $S$ would approach $k_{\mathrm{B}}\ln 2$ from below.
+
+---
 
 ## Concept Checks
 
-1. How does “entropy increases until equilibrium” translate into a statement about probability distributions over microstates?
-2. Why does $S=k_{\mathrm B}\ln\Omega$ require the microcanonical assumption $p_i=1/\Omega$?
-3. What physical meaning does the canonical partition function $Q$ have beyond being a normalization constant?
-4. How can entropy be extensive while probability distributions are normalized to 1?
+1. How does "entropy increases until equilibrium" translate into a statement about probability distributions over microstates?
+2. Why does $S = k_{\mathrm{B}}\ln\Omega$ require the microcanonical assumption $p_i = 1/\Omega$? What goes wrong if you try to apply it to a canonical ensemble?
+3. In the Gibbs entropy formula, why does $S = 0$ when $p_i = 1$ for one state and $p_j = 0$ for all others?
+4. How can entropy be extensive (additive for independent subsystems) while probability distributions are normalized to 1?
+5. Starting from $A = -k_{\mathrm{B}}T\ln Q$, how would you obtain $S$ and $U$ as functions of $T$? (*Hint:* think about which partial derivatives of $A$ give $S$ and $U$.)
 
 ## Key Takeaways
 
-- Entropy is a macroscopic measure of how many microstates (or how much probability weight) a macrostate contains.
-- Boltzmann’s $S=k_{\mathrm B}\ln\Omega$ and Gibbs’s $S=-k_{\mathrm B}\sum p_i\ln p_i$ are consistent in the microcanonical limit.
-- The logarithm ensures entropy additivity for independent subsystems.
-- In the canonical ensemble, $S=k_{\mathrm B}\ln Q + U/T$ ties entropy directly to the partition function.
+- Entropy quantifies how many microstates — or how much probability weight — a macrostate contains.
+- Boltzmann's $S = k_{\mathrm{B}}\ln\Omega$ applies to isolated systems (microcanonical ensemble, equal probabilities). The logarithm ensures extensivity.
+- The Gibbs formula $S = -k_{\mathrm{B}}\sum p_i\ln p_i$ generalizes Boltzmann's result to any probability distribution and reduces to it in the microcanonical limit.
+- In the canonical ensemble, $S = U/T + k_{\mathrm{B}}\ln Q$ ties entropy directly to the partition function.
+- Rearranging gives the Helmholtz free energy $A = U - TS = -k_{\mathrm{B}}T\ln Q$ — the master potential from which all canonical thermodynamic quantities can be derived.
+- The microscopic decomposition $dU = \sum p_i\,dE_i + \sum E_i\,dp_i$ (Section 3.2) is consistent with the entropy picture: only the $\sum E_i\,dp_i$ (heat) term changes probabilities and therefore changes entropy.

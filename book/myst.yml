@@ -37,11 +37,11 @@ project:
         - file: chapter-03/section-02.md
         - file: chapter-03/section-03.md
     #     - file: chapter-03/review.md
-    # - title: Module 4. Second Law & Entropy
-    #   children:
-    #     - file: chapter-04/section-01.md
-    #     - file: chapter-04/section-02.md
-    #     - file: chapter-04/section-03.md
+    - title: Module 4. Second Law & Entropy
+      children:
+        - file: chapter-04/section-01.md
+        - file: chapter-04/section-02.md
+        - file: chapter-04/section-03.md
     #     - file: chapter-04/review.md
     # - title: Module 5. Third Law & Free Energy
     #   children:
