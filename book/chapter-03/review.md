@@ -18,158 +18,232 @@ kernelspec:
 
 ### Section 3.1: Conservation of Energy
 
-1. **Overview**
-   - Energy conservation underlies all of thermodynamics.
-   - Early demonstrations (e.g., Bernoulli, Euler) merged Newton’s mechanics with the idea that total mechanical energy remains constant in an isolated system.
+1. **First Law of Thermodynamics**
+   - The internal energy change of a system equals the heat absorbed plus the work done on it:
 
-2. **Mechanical Equivalent of Heat**
-   - Joule’s experiments showed that mechanical work can be converted into heat in a fixed, quantitative ratio.
-   - For water: $\mathrm{MEH} \approx 4.18\,\mathrm{J}\,\mathrm{g}^{-1}\,\text{°C}^{-1}$, establishing heat as another form of energy transfer.
+   ```{math}
+   \Delta U = q + w.
+   ```
 
-3. **First Law of Thermodynamics**
-   - Statement: $\Delta U = q + w$, where $q$ is heat **absorbed by** the system, $w$ is work **done on** the system.
-   - **Path vs. State Functions**: $U$ is a state function (depends only on the current state), while $q$ and $w$ are path functions (depend on how the process is carried out).
-   - **Sign Convention**: in chemistry, $w>0$ if work is done **on** the system.
+   - In differential form: $dU = \delta q + \delta w$, or equivalently $\delta q = dU - \delta w$.
 
-4. **Types of Work**
-   - Generalized form: $\delta w = \text{(generalized force)} \times \text{(generalized displacement)}$.
-   - Common examples in thermodynamics:
-     - **$P\,dV$ work**: compression/expansion of a gas ($\delta w = -P\,dV$).
-     - **Surface tension**: $\delta w = -\gamma\,dA$.
-     - **Hooke’s law**: $\delta w = k\,(x - x_0)\,dx$.
-   - Example calculations:
-     - Expansion against constant pressure.
-     - Inflating a bubble with surface tension.
-     - Stretching a spring-like fiber obeying Hooke’s law.
+2. **State Functions vs. Path Functions**
+   - $U$ is a **state function**: $\Delta U$ depends only on the initial and final states, and $dU$ is an exact differential ($\oint dU = 0$).
+   - $q$ and $w$ are **path functions**: their values depend on the process path, and $\delta q$, $\delta w$ are inexact differentials.
+
+3. **Sign Convention** (Chemistry Convention)
+   - $q > 0$: heat absorbed by the system.
+   - $w > 0$: work done **on** the system.
+   - For $PV$ work: $\delta w = -P\,dV$, so compression ($dV < 0$) gives $w > 0$.
+
+4. **Generalized Work**
+   - Many work modes share a generalized force $\times$ generalized displacement structure: $PV$ work ($-P\,dV$), surface work ($\gamma\,dA$), elastic work ($k\,dl$), electrical work ($\mathcal{E}\,dq_{\mathrm{el}}$), and chemical work ($\mu\,dN$).
+
+5. **Free Expansion**
+   - Expansion into vacuum: $P_{\mathrm{ext}} = 0$, so $w = 0$. If the container is also insulated, $q = 0$ and $\Delta U = 0$. For an ideal gas, $\Delta T = 0$ as well.
+   - Free expansion is the extreme case of an irreversible process: the gas changes state while doing no work and exchanging no heat.
 
 ---
 
 ### Section 3.2: Applications of the First Law
 
 1. **Thermodynamic Processes**
-   - **Quasi-static**: carried out slowly enough for the system to remain in (near) equilibrium at each step.
-   - **Reversible**: idealized, quasi-static + no dissipative losses; can be undone with no net change in system or surroundings.
-   - **Irreversible**: any real process that breaks one or more reversibility conditions.
+   - **Quasi-static**: carried out infinitesimally slowly; the system remains near equilibrium at all times.
+   - **Reversible**: quasi-static *and* free of dissipative effects (friction, turbulence, viscous drag, etc.); can be reversed with no net change to system or surroundings.
+   - **Irreversible**: any real process that violates one or more conditions for reversibility.
 
-2. **How to Apply the First Law**
-   - **Stepwise Procedure**:
-     1. Choose two independent variables (e.g., $V, T$ or $P, T$).
-     2. Rewrite $\delta q$ and $\delta w$ in terms of differentials of those variables.
-     3. Apply relevant constraints (e.g., isobaric, isochoric, isothermal, adiabatic).
-     4. Use the system’s equation of state (e.g., $PV=nRT$ for an ideal gas).
-     5. Integrate or sum changes to find total $q$, $w$, and $\Delta U$.
+2. **Reversible Work Bounds**
+   - For a given expansion ($\Delta V > 0$), a reversible process does the **maximum** work on the surroundings ($|w_{\mathrm{rev}}| \geq |w_{\mathrm{irrev}}|$).
+   - For a given compression, a reversible process requires the **minimum** work input.
 
-3. **Using $V$ and $T$ as Independent Variables**
-   - **First Law**: $\delta q = dU + P\,dV$.
-   - For an ideal gas ($\partial U/\partial V)_T = 0$):
+3. **Five-Step First Law Workflow**
+   1. Choose two independent variables (e.g., $V, T$ or $P, T$).
+   2. Rewrite the First Law in terms of those variables.
+   3. Apply process constraints (isothermal, isochoric, isobaric, adiabatic).
+   4. Specify the equation of state (e.g., ideal gas).
+   5. Integrate to find $q$, $w$, $\Delta U$.
 
-     ```{math}
-       \delta q 
-       = \left(\frac{\partial U}{\partial T}\right)_V dT + P\,dV.
-     ```
+4. **First Law with $V$ and $T$ as Independent Variables**
+   - General form:
 
-   - Special processes:
-     - **Isochoric** ($dV=0$): $q = \int C_V\,dT$.
-     - **Isothermal** ($dT=0$): $q = \int P\,dV = nRT \ln(V_2/V_1)$.
-     - **Adiabatic** ($q=0$): $\Delta U = w$. For a monoatomic ideal gas, $T\,V^{\tfrac{2}{3}}=\text{const}$.
+   ```{math}
+   \delta q \;=\; C_V \, dT \;+\; \left[\left(\frac{\partial U}{\partial V}\right)_T + P\right] dV.
+   ```
 
-4. **Microscopic Interpretation**
-   - **Internal Energy**: $U = \sum_i p_i E_i$.
-   - **Heat ($q$)** changes probabilities $p_i$.
-   - **Work ($w$)** shifts the energy levels $E_i$ themselves (e.g., compressing the container changes spacing of quantum states).
-   - This perspective unifies macroscopic thermodynamics with microscopic statistical mechanics.
+   - For an ideal gas, $(\partial U/\partial V)_T = 0$, simplifying to $\delta q = C_V\,dT + P\,dV$.
+
+5. **Common Ideal-Gas Processes**
+   - **Isochoric** ($dV = 0$): $w = 0$, $q = C_V\,\Delta T$, $\Delta U = C_V\,\Delta T$.
+   - **Isothermal** ($dT = 0$): $\Delta U = 0$ (ideal gas), $q = -w = Nk_{\mathrm{B}}T\ln(V_2/V_1)$.
+   - **Adiabatic** ($\delta q = 0$): $\Delta U = w = C_V\,\Delta T$, and $TV^{\gamma - 1} = \text{const}$ (equivalently $PV^\gamma = \text{const}$), where $\gamma = C_P/C_V$.
+
+6. **Microscopic Interpretation of the First Law**
+   - From $U = \sum_i p_i E_i$:
+
+   ```{math}
+   dU = \underbrace{\sum_i E_i\, dp_i}_{\delta q} + \underbrace{\sum_i p_i\, dE_i}_{\delta w}.
+   ```
+
+   - **Heat** changes *which states are occupied* (probabilities shift; energy levels fixed).
+   - **Work** changes *the energies of the states* (energy levels shift; probabilities fixed).
 
 ---
 
 ### Section 3.3: Enthalpy
 
-1. **Definition of Enthalpy**
-   - $H = U + PV$.
-   - For a process at constant pressure, $\delta q_P = dH$.
+1. **Definition and Motivation**
+   - **Enthalpy**: $H = U + PV$.
+   - At constant pressure with $PV$-only work: $\delta q_P = dH$, so $q_P = \Delta H$.
+   - Defines a state function that plays the same role at constant $P$ that $U$ plays at constant $V$.
 
-2. **$\Delta H$ and Heat at Constant Pressure**
-   - $\Delta H = q_P$. Calorimetry at $P=\text{const}$ measures enthalpy changes directly.
-   - **Heat Capacity at Constant Pressure**: $C_P = \bigl(\tfrac{\partial H}{\partial T}\bigr)_P$.
+2. **Heat Capacity at Constant Pressure**
 
-3. **Standard Enthalpies**
-   - **Standard State**: $P^\circ=1\text{ bar}$; tabulated data often at $298.15\,\mathrm{K}$.
-   - **Standard Enthalpy of Formation**, $\Delta H_f^\circ$: enthalpy change to form 1 mole of a compound from its elements in their standard states.
-     - By convention, $\Delta H_f^\circ=0$ for any element in its standard state.
-   - **Standard Enthalpy of Reaction**, $\Delta H_{\mathrm{rxn}}^\circ$:
+   ```{math}
+   C_P = \left(\frac{\partial H}{\partial T}\right)_P
+   = \left(\frac{\partial U}{\partial T}\right)_P + P\left(\frac{\partial V}{\partial T}\right)_P.
+   ```
 
-     ```{math}
-       \Delta H_{\mathrm{rxn}}^\circ
-       \;=\;\sum_{\text{products}} \nu_p H_p^\circ 
-       \;-\;\sum_{\text{reactants}} \nu_r H_r^\circ.
-     ```
+   - For an ideal gas: $C_P - C_V = Nk_{\mathrm{B}}$ (or $nR$ per mole), so $C_P > C_V$.
 
-   - **Hess’s Law**: enthalpy changes are path independent; $\Delta H$ of an overall reaction is the algebraic sum of enthalpy changes for its steps.
+3. **When $q_P = \Delta H$ Fails**
+   - The relation holds only when $PV$ work is the sole form of work. Non-$PV$ work at constant pressure (e.g., electrical work in an electrochemical cell) breaks the equivalence.
+
+4. **Standard States and Formation Enthalpies**
+   - Standard pressure: $P^\circ = 1\,\text{bar}$; reference temperature typically 298.15 K.
+   - Standard enthalpy of formation, $\Delta H_f^\circ$: enthalpy change when 1 mol of compound is formed from elements in their standard states.
+   - By convention, $\Delta H_f^\circ = 0$ for elements in their standard states.
+
+5. **Hess's Law**
+   - Because $H$ is a state function, enthalpy changes are path-independent and additive:
+
+   ```{math}
+   \Delta H_{\mathrm{rxn}}^\circ
+   = \sum_{p} \nu_p \,\Delta H_{f,p}^\circ
+   - \sum_{r} \nu_r \,\Delta H_{f,r}^\circ.
+   ```
+
+6. **First Law Toolkit Summary**
+
+   | Constraint | Relevant state function | Key relation |
+   | :---: | :---: | :---: |
+   | Constant $V$ | $U$ | $q_V = \Delta U$ |
+   | Constant $P$ | $H = U + PV$ | $q_P = \Delta H$ |
 
 ---
 
 ## 2. Checklist of Most Important Equations
 
-1. **First Law of Thermodynamics**
+Below is a unified list of the major equations from Sections 3.1–3.3.
 
-   ```{math}
-   \Delta U \;=\; q \;+\; w,
-   ```
+A. **First Law of Thermodynamics**
 
-   - $q$: heat absorbed by the system.
-   - $w$: work done on the system.
-   - **Differential form**: $dU = \delta q + \delta w.$
+```{math}
+\Delta U = q + w
+\qquad\text{(finite)},
+\qquad
+dU = \delta q + \delta w
+\qquad\text{(differential)}.
+```
 
-2. **Pressure–Volume Work (Constant External $P$)**
+- **Applicability**: any closed system. $q > 0$ = heat absorbed by the system; $w > 0$ = work done on the system.
 
-   ```{math}
-   w \;=\; -\,P_{\text{ext}}\;\bigl(V_f - V_i\bigr).
-   ```
+---
 
-   - Sign convention: expansion ($\Delta V>0$) $\Rightarrow$ $w<0$ (system does work on surroundings).
+B. **$PV$ Work**
 
-3. **Heat for Isochoric Process**
+```{math}
+\delta w = -P_{\mathrm{ext}}\,dV
+\qquad\Longrightarrow\qquad
+w = -\int_{V_1}^{V_2} P_{\mathrm{ext}}\,dV.
+```
 
-   ```{math}
-   q_{V} \;=\; \int C_V \, dT
-   \;\;\Longrightarrow\;\;
-   q_{V} = C_V\,\Delta T
-   \;\;\text{if }C_V\approx\text{const.}
-   ```
+- **Applicability**: any expansion or compression. For reversible processes, $P_{\mathrm{ext}} = P$ (system pressure). For irreversible processes, $P_{\mathrm{ext}}$ is determined by the surroundings.
 
-4. **Heat for Isothermal Process (Ideal Gas)**
+---
 
-   ```{math}
-   q_{\text{isoT}} 
-   \;=\; \int_{V_i}^{V_f} P\,dV
-   \;=\; n\,R\,T\,\ln{\bigl(\tfrac{V_f}{V_i}\bigr)}.
-   ```
+C. **First Law in $(V, T)$ Variables** (for $PV$-only work)
 
-5. **Adiabatic Condition (No Heat Exchange)**
+```{math}
+\delta q = C_V\,dT + \left[\left(\frac{\partial U}{\partial V}\right)_T + P\right] dV.
+```
 
-   ```{math}
-   q_{\text{adi}} = 0
-   \;\;\Longrightarrow\;\;
-   \Delta U = w.
-   ```
+- For an ideal gas, $(\partial U/\partial V)_T = 0$, giving $\delta q = C_V\,dT + P\,dV$.
 
-   - For a monoatomic ideal gas: $T\,V^{\,2/3} = \text{constant}.$
+---
 
-6. **Enthalpy Definition**
+D. **Isothermal Reversible Work** (ideal gas)
 
-   ```{math}
-   H \;=\; U + P\,V.
-   ```
+```{math}
+w = -nRT\ln\!\left(\frac{V_2}{V_1}\right),
+\qquad
+q = -w = nRT\ln\!\left(\frac{V_2}{V_1}\right).
+```
 
-   - At constant $P$: $\Delta H = q_P.$
+- $\Delta U = 0$ for an ideal-gas isothermal process.
 
-7. **Standard Enthalpy of Reaction**
+---
 
-   ```{math}
-   \Delta H_{\mathrm{rxn}}^\circ
-   \;=\;
-   \sum_{p} \nu_p\,H_p^\circ
-   \;-\;
-   \sum_{r} \nu_r\,H_r^\circ.
-   ```
+E. **Adiabatic Relations** (ideal gas, reversible)
 
-   - **Hess’s Law** and **enthalpies of formation** provide a straightforward way to compute $\Delta H_{\mathrm{rxn}}^\circ$.
+```{math}
+TV^{\gamma - 1} = \text{const},
+\qquad
+PV^{\gamma} = \text{const},
+\qquad
+\gamma = \frac{C_P}{C_V}.
+```
+
+- For a monatomic ideal gas, $\gamma = 5/3$ and the $TV$ relation becomes $TV^{2/3} = \text{const}$.
+
+---
+
+F. **Isochoric Process** ($dV = 0$)
+
+```{math}
+q_V = \Delta U = \int_{T_1}^{T_2} C_V\,dT.
+```
+
+---
+
+G. **Enthalpy**
+
+```{math}
+H = U + PV.
+```
+
+- At constant pressure with $PV$-only work: $q_P = \Delta H$.
+
+---
+
+H. **Heat Capacity at Constant Pressure**
+
+```{math}
+C_P = \left(\frac{\partial H}{\partial T}\right)_P,
+\qquad
+\Delta H = \int_{T_1}^{T_2} C_P\,dT.
+```
+
+- For an ideal gas: $C_P - C_V = Nk_{\mathrm{B}}$ (per particle) or $C_P - C_V = nR$ (per mole).
+
+---
+
+I. **Hess's Law**
+
+```{math}
+\Delta H_{\mathrm{rxn}}^\circ
+= \sum_{p} \nu_p\,\Delta H_{f,p}^\circ
+- \sum_{r} \nu_r\,\Delta H_{f,r}^\circ.
+```
+
+- **Applicability**: any reaction at standard conditions, using tabulated formation enthalpies.
+
+---
+
+J. **Microscopic First Law**
+
+```{math}
+dU = \underbrace{\sum_i E_i\, dp_i}_{\delta q}
+\;+\; \underbrace{\sum_i p_i\, dE_i}_{\delta w}.
+```
+
+- **Applicability**: closed system with $PV$-only work. Heat redistributes probabilities; work shifts energy levels.
