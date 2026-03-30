@@ -16,56 +16,217 @@ kernelspec:
 
 ## 1. Checklist of Key Concepts
 
-1. **Entropy as a State Function**
-   - **Definition**: For a reversible process, the change in entropy is
+### Section 4.1: Entropy
+
+1. **Exothermicity Does Not Guarantee Spontaneity**
+   - $\Delta H < 0$ (exothermic) often favors spontaneity but does not determine it. Counter-example: mixing of two ideal gases is spontaneous even though $\Delta H = 0$.
+   - A complete account of directionality requires **entropy**.
+
+2. **Definition of Entropy**
+   - Entropy is a state function defined by
 
    ```{math}
-   dS \;=\;\frac{\delta q_\text{rev}}{T}
+   dS = \frac{\delta q_{\mathrm{rev}}}{T}.
    ```
 
-   - **Key Property**: $S$ depends only on the initial and final states—**not** on the path taken.
-   - **Physical Meaning**: Measures dispersal of energy; quantifies how heat “spreads out” in a system.
+   - The finite change between states $A$ and $B$ is $\Delta S = \int_A^B \delta q_{\mathrm{rev}}/T$, evaluated along any reversible path connecting those states.
 
-2. **Spontaneity and the Second Law**
-   - **Clausius Statement**: Heat does not spontaneously flow from cold to hot.
-   - **Entropy Criterion**:
-     - For an **isolated** system, $\Delta S_\text{tot} \ge 0$.
-     - Equality holds only for reversible processes; strict inequality for irreversible ones.
-   - **Macroscopic Implication**: Determines the “arrow of time”—which processes can occur spontaneously.
+3. **Exactness of $\delta q_{\mathrm{rev}}/T$**
+   - $\delta q_{\mathrm{rev}}$ is inexact, but dividing by $T$ produces an exact differential. Verification for an ideal gas: the cross-derivative test on $C_V/T$ and $Nk_{\mathrm{B}}/V$ gives matching mixed partials (both zero).
 
-3. **Carnot Cycle & Maximum Efficiency**
-   - **Reversible Engine**: Comprised of two isotherms $\left( T_h, T_c \right)$ and two adiabats.
-   - **Efficiency**:
+4. **Entropy of Irreversible Processes**
+   - Because $S$ is a state function, $\Delta S$ depends only on the endpoints. To compute $\Delta S$ for an irreversible process, find any convenient reversible path between the same initial and final states and integrate $\delta q_{\mathrm{rev}}/T$ along that path.
+
+5. **Fundamental Thermodynamic Relation**
+   - Combining $\delta q_{\mathrm{rev}} = T\,dS$ and $\delta w_{\mathrm{rev}} = -P\,dV$ in the First Law:
 
    ```{math}
-   \eta_\text{Carnot} \;=\; 1 - \frac{T_c}{T_h}
-   \quad\Longrightarrow\quad
-   \text{This is the upper limit for any heat engine.}
+   dU = T\,dS - P\,dV.
    ```
 
-   - **Significance**: Links thermodynamic reversibility to practical limits on converting heat to work.
+   - The natural variables of $U$ are $S$ and $V$. This relation replaces two inexact differentials ($\delta q$, $\delta w$) with three exact ones ($dU$, $dS$, $dV$).
 
-4. **Microscopic Origin of Entropy**
-   - **Boltzmann’s Formula**:
+---
+
+### Section 4.2: Carnot Cycle
+
+1. **Structure of the Carnot Cycle**
+   - A fully reversible cycle operating between a hot reservoir ($T_{\mathrm{hot}}$) and a cold reservoir ($T_{\mathrm{cold}}$), consisting of four steps:
+     - $A \to B$: reversible isothermal expansion at $T_{\mathrm{hot}}$ (system absorbs heat $q_{AB} > 0$).
+     - $B \to C$: reversible adiabatic expansion (system cools, $q = 0$).
+     - $C \to D$: reversible isothermal compression at $T_{\mathrm{cold}}$ (system releases heat $q_{CD} < 0$).
+     - $D \to A$: reversible adiabatic compression (system warms, $q = 0$).
+
+2. **Entropy Bookkeeping Around the Cycle**
+   - Adiabatic steps are isentropic: $\Delta S_{BC} = \Delta S_{DA} = 0$.
+   - Isothermal steps carry entropy: $\Delta S_{AB} = q_{AB}/T_{\mathrm{hot}}$, $\Delta S_{CD} = q_{CD}/T_{\mathrm{cold}}$.
+   - Over one complete cycle, $\Delta S_{\mathrm{cycle}} = 0$ (state function returns to initial value), so $\Delta S_{AB} = -\Delta S_{CD}$.
+
+3. **Carnot Efficiency**
 
    ```{math}
-   S \;=\; k_B \ln \Omega
+   \eta_{\mathrm{Carnot}} = 1 - \frac{T_{\mathrm{cold}}}{T_{\mathrm{hot}}}.
    ```
 
-   where $\Omega$ is the number of accessible microstates at given $U, V, N$.
-   - **Statistical Interpretation**: Entropy quantifies uncertainty about which microstate the system occupies.
-   - **Approach to Equilibrium**: Systems evolve towards macrostates with higher $\Omega$; thus $S$ increases until equilibrium.
+   - This is the **maximum** possible efficiency for any engine operating between two temperatures. It depends only on the reservoir temperatures.
+
+4. **Direction of Spontaneous Heat Flow**
+   - Two subsystems at different temperatures inside an insulated boundary: $dS = dU_A(1/T_A - 1/T_B)$.
+   - For $dS \ge 0$ (second law), heat must flow from hot to cold ($dU_A < 0$ when $T_A > T_B$).
+   - Equilibrium ($dS = 0$) is reached when $T_A = T_B$.
+
+---
+
+### Section 4.3: Microscopic View of Entropy
+
+1. **Entropy Increases Until Equilibrium** (Isolated Systems)
+   - The second law for an isolated system: $dS \ge 0$, with equality at equilibrium.
+   - Entropy rises during spontaneous processes and reaches its maximum at equilibrium.
+
+2. **The Clausius Inequality**
+
+   ```{math}
+   dS \ge \frac{\delta q}{T}.
+   ```
+
+   - Equality for reversible processes; strict inequality for irreversible processes.
+   - Irreversibility **produces** additional entropy beyond the entropy carried by heat flow.
+   - For an isolated system ($\delta q = 0$): reduces to $dS \ge 0$.
+
+3. **Boltzmann's Formula** (Microcanonical Ensemble)
+
+   ```{math}
+   S = k_{\mathrm{B}} \ln \Omega,
+   ```
+
+   where $\Omega$ is the number of accessible microstates at fixed $U$, $V$, $N$. The logarithm ensures entropy is extensive (additive for independent subsystems).
+
+4. **Gibbs Entropy** (General Probability Distribution)
+
+   ```{math}
+   S = -k_{\mathrm{B}} \sum_i p_i \ln p_i.
+   ```
+
+   - Reduces to Boltzmann's formula when all $\Omega$ microstates are equally probable ($p_i = 1/\Omega$).
+   - Applies to the canonical ensemble ($p_i = e^{-\beta E_i}/Q$) and any other ensemble.
+
+5. **Canonical Entropy Identity**
+   - Evaluating the Gibbs entropy with canonical probabilities yields
+
+   ```{math}
+   S = \frac{U}{T} + k_{\mathrm{B}} \ln Q.
+   ```
+
+   - Directly ties the macroscopic state function $S$ to the partition function $Q$ from Chapter 2.
+
+6. **Helmholtz Free Energy**
+   - Rearranging the canonical entropy identity:
+
+   ```{math}
+   A \equiv U - TS = -k_{\mathrm{B}}T\ln Q.
+   ```
+
+   - Natural variables of $A$ are $T$ and $V$.
+   - All canonical thermodynamic quantities ($S$, $U$, $P$, $C_V$) can be derived from $A$ by differentiation.
+   - Defining $A = U - TS$ is the same Legendre-transform strategy used to define $H = U + PV$ in Section 3.3: replace a hard-to-control variable ($S$) with an easy-to-control one ($T$).
+
+7. **Microscopic Consistency**
+   - The Gibbs entropy depends only on probabilities $\{p_i\}$. Entropy changes when probabilities change (heat), not when energy levels shift (work).
+   - This is consistent with the microscopic First Law from Section 3.2: $\delta q = \sum_i E_i\,dp_i$ and $\delta w = \sum_i p_i\,dE_i$.
 
 ---
 
 ## 2. Checklist of Most Important Equations
 
-| **Equation** | **Variable Definitions** | **Meaning & Use Cases** | **Caveats/Approximations** |
-|:-|:-|:-|:-|
-| $dS = \frac{\delta q_\text{rev}}{T}$ | $\delta q_\text{rev}$: infinitesimal heat in a reversible process<br>$T$: absolute temperature | Fundamental relation defining entropy. Use to compute $\Delta S$ for isothermal, isobaric, mixing, etc. processes. | Valid **only** for reversible paths; for irreversible processes, $\Delta S > \int \delta q/T$. |
-| $dU = T\,dS - P\,dV$ | $U$: internal energy<br>$P$: pressure<br>$V$: volume | **First law** written in natural variables $(S, V)$. Use to derive Maxwell relations and fundamental thermodynamic identities. | Assumes $U=U(S,V)$ is a well-defined state function; neglects non-PV work. |
-| $\eta_\text{Carnot} = 1 - \dfrac{T_c}{T_h}$ | $T_h$, $T_c$: temperatures of hot and cold reservoirs | Sets the **maximum** efficiency for any heat engine operating between $T_h$ and $T_c$. Use in engine design and in defining thermodynamic reversibility. | Requires fully reversible (Carnot) cycle; real engines incur friction, heat leaks, and irreversibilities. |
-| $\Delta S_\text{tot} \ge 0$ | $\Delta S_\text{tot}$: entropy change of system + surroundings | General statement of the **Second Law** for isolated systems. Predicts direction of spontaneous processes. | Equality only for reversible processes; in open or non-isolated systems, must include entropy change of environment. |
-| $S = k_B \ln \Omega$ | $k_B$: Boltzmann constant<br>$\Omega$: number of microstates | Bridges macroscopic entropy with molecular statistics. Use to calculate $S$ from combinatorial counts or partition functions. | Applies to **isolated** systems with well-defined $\Omega$. Counting microstates can be intractable for large systems. |
-| $p_i = \dfrac{e^{-\beta E_i}}{Q}$; $\beta = 1/(k_B T)$ | $E_i$: energy of microstate $i$<br>$Q$: canonical partition function | Probability of occupying microstate $i$ in the canonical ensemble. Use in statistical mechanics to compute ensemble averages. | Assumes equilibrium with a heat bath at fixed $T$; neglects quantum degeneracy unless included in $E_i$. |
-| $S = \frac{U}{T} + k_B \ln Q$ | $Q = \sum_i e^{-\beta E_i}$: partition function | Expresses entropy in terms of the partition function and internal energy. Use to derive free energies, heat capacities, and response functions. | Derived under canonical ensemble assumptions. Valid when $U$ and $Q$ are known or can be approximated. |
+Below is a unified list of the major equations from Sections 4.1–4.3.
+
+A. **Entropy Definition**
+
+```{math}
+dS = \frac{\delta q_{\mathrm{rev}}}{T},
+\qquad
+\Delta S = \int_A^B \frac{\delta q_{\mathrm{rev}}}{T}.
+```
+
+- **Applicability**: any system. The integral must be evaluated along a *reversible* path, but $\Delta S$ itself depends only on the endpoints.
+
+---
+
+B. **Fundamental Thermodynamic Relation**
+
+```{math}
+dU = T\,dS - P\,dV.
+```
+
+- **Applicability**: simple closed system with $PV$-only work. Natural variables of $U$ are $S$ and $V$.
+
+---
+
+C. **Entropy Change for an Ideal Gas** (from $V$ and $T$)
+
+```{math}
+\Delta S = \int_{T_1}^{T_2} \frac{C_V}{T}\,dT + Nk_{\mathrm{B}} \ln\!\left(\frac{V_2}{V_1}\right).
+```
+
+- For a monatomic ideal gas with constant $C_V = \tfrac{3}{2}Nk_{\mathrm{B}}$: $\Delta S = \tfrac{3}{2}Nk_{\mathrm{B}}\ln(T_2/T_1) + Nk_{\mathrm{B}}\ln(V_2/V_1)$.
+
+---
+
+D. **Carnot Efficiency**
+
+```{math}
+\eta_{\mathrm{Carnot}} = 1 - \frac{T_{\mathrm{cold}}}{T_{\mathrm{hot}}}.
+```
+
+- **Applicability**: maximum efficiency for any heat engine operating between two reservoir temperatures.
+
+---
+
+E. **Clausius Inequality**
+
+```{math}
+dS \ge \frac{\delta q}{T}.
+```
+
+- Equality for reversible processes; strict inequality for irreversible processes.
+- For isolated systems ($\delta q = 0$): $dS \ge 0$.
+
+---
+
+F. **Boltzmann Entropy**
+
+```{math}
+S = k_{\mathrm{B}} \ln \Omega.
+```
+
+- **Applicability**: isolated systems (microcanonical ensemble) where all $\Omega$ accessible microstates are equally probable.
+
+---
+
+G. **Gibbs Entropy**
+
+```{math}
+S = -k_{\mathrm{B}} \sum_i p_i \ln p_i.
+```
+
+- **Applicability**: any probability distribution over microstates. Reduces to Boltzmann's formula in the microcanonical limit.
+
+---
+
+H. **Canonical Entropy Identity**
+
+```{math}
+S = \frac{U}{T} + k_{\mathrm{B}} \ln Q.
+```
+
+- **Applicability**: canonical ensemble (fixed $N$, $V$, $T$). Connects macroscopic entropy to the partition function.
+
+---
+
+I. **Helmholtz Free Energy**
+
+```{math}
+A = U - TS = -k_{\mathrm{B}}T \ln Q.
+```
+
+- **Applicability**: canonical ensemble. Natural variables are $T$ and $V$. All other canonical thermodynamic quantities can be obtained by differentiation.
