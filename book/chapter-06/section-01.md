@@ -256,7 +256,7 @@ We use a coarse set of $\bar c_P^{\,\circ}(T)$ values from the **NIST–JANAF th
 T_{tr} = 372.780\ \mathrm{K}\quad\text{(very close to 373.15 K at 1 atm).}
 ```
 
-###### Data used (excerpt)
+### Data used (excerpt)
 
 | Phase | $T$ (K) | $\bar c_P^{\,\circ}$ (J mol$^{-1}$ K$^{-1}$) |
 | --- | ---: | ---: |
