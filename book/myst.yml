@@ -53,7 +53,7 @@ project:
       children:
         - file: chapter-06/section-01.md
         - file: chapter-06/section-02.md
-    #     - file: chapter-06/review.md
+        - file: chapter-06/review.md
     # - title: Module 7. Chemical Equilibrium
     #   children:
     #     - file: chapter-07/section-01.md
