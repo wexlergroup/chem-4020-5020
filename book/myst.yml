@@ -58,7 +58,7 @@ project:
       children:
         - file: chapter-07/section-01.md
         - file: chapter-07/section-02.md
-    #     - file: chapter-07/review.md
+        - file: chapter-07/review.md
     - title: Appendices
       children:
         - file: appendices/appendix-a.md
