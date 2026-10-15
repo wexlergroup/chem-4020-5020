@@ -11,3 +11,4 @@ book/work_and_heat_are_path_functions.png
 book/images/*
 book/collect/*
 book/collect.py
+.venv/
