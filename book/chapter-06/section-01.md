@@ -45,7 +45,7 @@ A schematic $P$–$T$ phase diagram for a single component contains regions wher
 
 <div style="width: 100%; border: 1px solid #cbd5e1; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.08);">
   <iframe
-    src="https://chem-4020-5020-8isb.vercel.app/"
+    src="https://wexlergroup.github.io/chem-4020-5020/computational-studios/phase-diagram-schematic.html"
     title="Phase Diagram Schematic"
     style="width: 100%; height: 850px; border: 0;"
     loading="lazy"

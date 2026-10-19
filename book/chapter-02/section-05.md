@@ -265,14 +265,14 @@ Use the interactive studio below (or open it in a new tab) to vary particle coun
 
 <!-- <div style="width: 100%; border: 1px solid #cbd5e1; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.08);">
   <iframe
-    src="https://chem-4020-5020-s763.vercel.app/"
+    src="https://wexlergroup.github.io/chem-4020-5020/computational-studios/ideal-gas-studio.html"
     title="Ideal Gas Computational Studio"
     style="width: 100%; height: 900px; border: 0;"
     loading="lazy"
   ></iframe>
 </div> -->
 
-You can open the studio in a new tab: [Ideal Gas Computational Studio](https://chem-4020-5020-s763.vercel.app/).
+You can open the studio in a new tab: [Ideal Gas Computational Studio](https://wexlergroup.github.io/chem-4020-5020/computational-studios/ideal-gas-studio.html).
 
 ## Worked Example
 

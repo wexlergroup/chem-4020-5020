@@ -449,7 +449,7 @@ If your numbers differ noticeably, check that you used (1) **kelvin**, (2) **nat
 Interact with real vapor-pressure data for ethanol. The studio transforms the dataset to visualize the Clausius–Clapeyron linearization ($\ln P$ versus $1/T$), lets you dynamically adjust the regression bounds to explore linearity limits, and reports the corresponding $\Delta\bar h_{vap}$ extracted from the slope.
 
 You can open the studio in a new tab:
-<a href="https://chem-4020-5020-a7a7.vercel.app/" target="_blank" rel="noopener">
+<a href="https://wexlergroup.github.io/chem-4020-5020/computational-studios/clausius-clapeyron-studio.html" target="_blank" rel="noopener">
   Clausius–Clapeyron Studio
 </a>.
 

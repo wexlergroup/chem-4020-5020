@@ -737,7 +737,7 @@ Calculate the compressibility factor of a van der Waals fluid at the critical po
 
 Explore deviations from ideal behavior by dynamically comparing the ideal-gas, van der Waals (vdW), and Peng–Robinson (PR) equations of state. Adjust temperature and pressure to visualize how intermolecular forces impact the compressibility factor ($Z$) and $P$–$V_\text{m}$ isotherms, particularly near the critical point.
 
-You can open the studio in a new tab: [Real Gas Computational Studio](https://chem-4020-5020-ugp4.vercel.app/).
+You can open the studio in a new tab: [Real Gas Computational Studio](https://wexlergroup.github.io/chem-4020-5020/computational-studios/real-gas-studio.html).
 
 ## Worked Example
 
