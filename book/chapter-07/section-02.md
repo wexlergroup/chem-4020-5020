@@ -96,7 +96,6 @@ where $q_i$ is the **single-molecule** partition function for species $i$. Each 
 Section 4.3 established
 
 ```{math}
-:label: eq:A-from-Q
 A = -k_{\mathrm B}T\ln Q,
 ```
 

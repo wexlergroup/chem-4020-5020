@@ -388,7 +388,7 @@ The minimum of $G(\xi)$ lies precisely at the $\xi_{eq}$ computed from $K$. Note
 
 <div style="width: 100%; border: 1px solid #cbd5e1; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.08);">
   <iframe
-    src="https://chem-4020-5020-auqq.vercel.app/"
+    src="https://wexlergroup.github.io/chem-4020-5020/computational-studios/equilibrium-visualization.html"
     title="Equilibrium Visualization"
     style="width: 100%; height: 1200px; border: 0;"
     loading="lazy"
