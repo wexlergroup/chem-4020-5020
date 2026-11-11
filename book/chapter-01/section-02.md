@@ -54,6 +54,8 @@ Learning objectives:
 
    where $\vec{F}$ is the net force on a particle, $\vec{p}$ is its linear momentum, and $t$ is time.
 
+Assumptions 2 and 4 are approximations, because real molecules have a finite size and exert forces on one another. [Section 1.3](section-03.md) and [Section 1.4](section-04.md) examine the conditions under which these approximations hold and the models that replace them when they fail.
+
 ---
 
 ### Deriving Pressure from Particle-Wall Collisions
@@ -145,7 +147,27 @@ F_{\text{p}, x} = \frac{\Delta p_x}{\Delta t} = \frac{m v_x^2}{L_x}.
 
 #### Total Pressure
 
-For $N$ identical particles with isotropic motion in a volume $V$, the total pressure $P$ is
+The wall perpendicular to the $x$-axis has area $L_y L_z$. Summing the single-particle forces over $N$ identical particles and dividing by this area gives the pressure on the wall,
+
+```{math}
+P = \frac{1}{L_y L_z} \sum_{i=1}^N \frac{m v_{x,i}^2}{L_x} = \frac{N m \langle v_x^2 \rangle}{V},
+```
+
+where $v_{x,i}$ is the $x$-component of the velocity of the $i$-th particle, $V = L_x L_y L_z$ is the volume of the container, and
+
+```{math}
+\langle v_x^2 \rangle = \frac{1}{N} \sum_{i=1}^N v_{x,i}^2
+```
+
+is the mean of the squared $x$-components.
+
+The speed $v_i$ of the $i$-th particle satisfies $v_i^2 = v_{x,i}^2 + v_{y,i}^2 + v_{z,i}^2$, so that $\langle v^2 \rangle = \langle v_x^2 \rangle + \langle v_y^2 \rangle + \langle v_z^2 \rangle$. Because the particles move randomly in all directions (isotropic motion), no direction is preferred, and
+
+```{math}
+\langle v_x^2 \rangle = \langle v_y^2 \rangle = \langle v_z^2 \rangle = \frac{1}{3} \langle v^2 \rangle.
+```
+
+For $N$ identical particles with isotropic motion in a volume $V$, the total pressure $P$ is therefore
 
 ```{math}
 P = \frac{1}{V} \sum_{i=1}^N \frac{1}{3} m v_i^2,
@@ -319,7 +341,7 @@ v_{\mathrm{mp}} < \langle v\rangle < v_{\mathrm{rms}}.
 
 The Maxwell–Boltzmann curves below illustrate two trends:
 
-- **Lighter gases** (smaller $m$) have distributions shifted to higher speeds.
+- **Lighter gases** (smaller $m$) have distributions that are shifted to higher speeds and are broader.
 - **Higher temperatures** shift the distribution to higher speeds and make it broader.
 
 ```{code-cell} ipython3
