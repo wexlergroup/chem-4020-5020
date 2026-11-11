@@ -201,6 +201,13 @@ Equating Eq. {eq}`pressure-kinetic-theory` with the ideal-gas equation of state,
 
 where $k_{\mathrm{B}}$ is the Boltzmann constant and $T$ is the absolute temperature. This result—often presented as an application of equipartition—shows that temperature is directly proportional to the average translational kinetic energy of the particles.
 
+The square root of the mean-square speed is the root-mean-square (rms) speed. From Eq. {eq}`equipartition-theorem`,
+
+```{math}
+:label: rms-speed
+v_{\mathrm{rms}} = \sqrt{\langle v^2\rangle} = \sqrt{\frac{3k_{\mathrm{B}}T}{m}}.
+```
+
 `````{admonition} Complete Derivation of the Relationship Between Kinetic Energy and Temperature
 :class: dropdown
 
@@ -298,7 +305,7 @@ Each translational degree of freedom contributes $k_{\mathrm{B}}T/2$ to the aver
 
 The rms speed $v_{\mathrm{rms}}$ is a useful *single-number* summary, but in thermal equilibrium a gas has a **distribution** of particle speeds.
 
-For an ideal gas in three dimensions, the **Maxwell–Boltzmann speed distribution** gives the probability density $f(v)$ for finding a molecule with speed between $v$ and $v+dv$:
+For an ideal gas in three dimensions, the **Maxwell–Boltzmann speed distribution** gives the probability density $f(v)$ of molecular speeds, where $f(v)\,dv$ is the probability of finding a molecule with speed between $v$ and $v+dv$:
 
 ```{math}
 :label: maxwell-boltzmann-speed-distribution-eq
@@ -324,8 +331,7 @@ v_{\mathrm{mp}} = \sqrt{\frac{2k_{\mathrm{B}}T}{m}} \qquad \text{(speed at the p
 \langle v\rangle = \int_0^\infty v\,f(v)\,dv = \sqrt{\frac{8k_{\mathrm{B}}T}{\pi m}}.
 ```
 
-<!-- The rms speed (from Eq. {eq}`rms-speed`) is -->
-The rms speed is
+The rms speed (from Eq. {eq}`rms-speed`) is
 
 ```{math}
 v_{\mathrm{rms}} = \sqrt{\langle v^2\rangle} = \sqrt{\frac{3k_{\mathrm{B}}T}{m}}.
