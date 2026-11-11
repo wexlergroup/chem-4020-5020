@@ -1,0 +1,14 @@
+.DS_Store
+.markdownlint.json
+modeling/*
+project/*
+utils/*
+book/_build/*
+_build/*
+book/chapter-*/lecture-*-notes-jc.pdf
+book/chapter-*/lecture-notes/lecture-*-notes-jc.pdf
+book/work_and_heat_are_path_functions.png
+book/images/*
+book/collect/*
+book/collect.py
+.venv/
