@@ -152,7 +152,7 @@ kernelspec:
    ```
 
 2. **Molecular Partition Function**
-   - Within the Born–Oppenheimer approximation, a molecule’s energy decomposes into translational, rotational, vibrational, and electronic contributions:
+   - Within the Born–Oppenheimer, rigid-rotor, and harmonic-oscillator approximations, a molecule’s energy decomposes into translational, rotational, vibrational, and electronic contributions:
 
    ```{math}
    \varepsilon = \varepsilon_{\mathrm{trans}} + \varepsilon_{\mathrm{rot}} + \varepsilon_{\mathrm{vib}} + \varepsilon_{\mathrm{elec}}.
