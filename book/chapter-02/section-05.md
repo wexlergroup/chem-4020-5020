@@ -134,7 +134,7 @@ q
 
 #### Approximation of the Sum
 
-When the level spacing is small (large $T$ or large $L$), the sum $\sum_{n=1}^{\infty} e^{-\alpha n^2}$ is well approximated by an integral:
+The parameter $\alpha$ is the ratio of $h^2/(8 m V^{2/3})$, the energy that sets the spacing between the levels, to $k_{\mathrm B}T$. For helium at 300 K in a volume of 1.00 L, $\alpha = 2.0\times10^{-19}$ (see the worked example below). When $\alpha \ll 1$ (large $T$ or large $V$), the sum $\sum_{n=1}^{\infty} e^{-\alpha n^2}$ is well approximated by an integral:
 
 ```{math}
 \sum_{n = 1}^{\infty} e^{-\alpha n^2} 
@@ -160,7 +160,7 @@ We often define the thermal de Broglie wavelength $\Lambda$ as
 ````{admonition} What is the thermal de Broglie wavelength?
 :class: tip
 
-The thermal de Broglie wavelength, $\Lambda$, is a characteristic length scale for the quantum mechanical delocalization of a particle at temperature $T$. When the typical distance between particles is much larger than $\Lambda$, the system behaves classically and particles can be treated as effectively distinguishable. Conversely, when the interparticle spacing is on the order of $\Lambda$ (or smaller), quantum effects become significant and particle indistinguishability must be accounted for.
+The thermal de Broglie wavelength, $\Lambda$, is a characteristic length scale for the quantum mechanical delocalization of a particle at temperature $T$. When the typical distance between particles is much larger than $\Lambda$, the system behaves classically, and dividing by $N!$ ([Section 2.4](section-04.md)) is the only correction needed for the indistinguishability of the particles. Conversely, when the interparticle spacing is on the order of $\Lambda$ (or smaller), quantum effects become significant, this simple correction fails, and the full quantum treatment of identical particles is required.
 ````
 
 Hence,
@@ -170,7 +170,7 @@ Hence,
 \approx \frac{V^{1/3}}{\Lambda}.
 ```
 
-So the single-particle partition function becomes
+Cubing this result, as in Eq. {eq}`eq:partition-function-cube`, gives the single-particle partition function. Because the error of the approximation is negligible when $\alpha \ll 1$, the result is written as an equality:
 
 ```{math}
 q 
@@ -179,7 +179,7 @@ q
 
 ### Partition Function for $N$ Particles in a Cube
 
-For $N$ identical, non-interacting, indistinguishable particles, the total partition function $Q$ is
+For $N$ identical, non-interacting, indistinguishable particles, [Section 2.4](section-04.md) gives the total partition function $Q$ as
 
 ```{math}
 :label: eq:partition-function-many-particles-cube
@@ -201,11 +201,17 @@ Taking the logarithm of $Q$ gives
 = N \ln \left(\frac{V}{\Lambda^3}\right) - \ln N!.
 ```
 
-Often, the Stirling approximation ($\ln N! \approx N \ln N - N$) is used for large $N$.
+Often, the Stirling approximation ($\ln N! \approx N \ln N - N$) is used for large $N$. The internal energy, heat capacity, and pressure derived below require only derivatives of $\ln Q$. The entropy is obtained from $\ln Q$ in [Section 4.3](../chapter-04/section-03.md) and evaluated for this gas in [Section 5.1](../chapter-05/section-01.md).
 
 #### Internal Energy
 
-The internal energy $U$ follows from
+Because $\Lambda = (\beta h^2/2\pi m)^{1/2}$ is proportional to $\beta^{1/2}$, $\ln Q$ depends on $\beta$ as
+
+```{math}
+\ln Q = -\frac{3}{2} N \ln \beta + (\text{terms that do not depend on } \beta).
+```
+
+The internal energy $U$ then follows from the derivative in [Section 2.3](section-03.md):
 
 ```{math}
 :label: eq:internal-energy-cube
@@ -215,8 +221,9 @@ U
 = \frac{3}{2} N k_{\mathrm B} T.
 ```
 
-```{important}
-This result is consistent with equipartition: each of the three translational degrees of freedom contributes $\frac{1}{2}k_{\mathrm B}T$ per particle. Note that $U$ is independent of $V$ because the particles do not interact.
+```{admonition} Interpreting the result
+:class: important
+Compare $U/N$ with the average translational kinetic energy per particle obtained from kinetic theory in [Section 1.2](../chapter-01/section-02.md), and divide it among the three translational degrees of freedom. The volume does not appear in $U$. Use the expression for $\ln Q$ and the assumptions stated for the particles to explain why.
 ```
 
 #### Heat Capacity at Constant Volume
@@ -236,7 +243,7 @@ This temperature-independent $C_V$ is a hallmark of an ideal (monatomic) gas.
 
 #### Pressure
 
-To find the pressure, we use
+To find the pressure, we use the expression from [Section 2.3](section-03.md),
 
 ```{math}
 :label: eq:pressure-cube
@@ -257,7 +264,7 @@ q_{\mathrm{trans}}
 = \frac{V}{\Lambda^3}
 ```
 
-is called the translational partition function. It underpins the classical description of dilute gases when $\Lambda \ll$ (typical particle spacing), so quantum effects are negligible at ordinary densities and temperatures.
+is called the translational partition function. It underpins the classical description of dilute gases when $\Lambda \ll (V/N)^{1/3}$, the mean spacing between particles, so quantum effects are negligible at ordinary densities and temperatures.
 
 ### Computational Studio: Ideal Gas
 
@@ -290,18 +297,52 @@ Take helium: $m=4.0026\,u=6.65\times10^{-27}\ \mathrm{kg}$, $T=300\ \mathrm{K}$.
 
    ```{math}
    \Lambda=\frac{6.626\times10^{-34}}{\sqrt{2\pi(6.65\times10^{-27})(1.381\times10^{-23})(300)}}
-   \approx 5.0\times10^{-11}\ \mathrm{m}.
+   \approx 5.04\times10^{-11}\ \mathrm{m}.
    ```
 
 2. **Compute the single-particle translational partition function in $V=1.00\ \mathrm{L}=10^{-3}\ \mathrm{m^3}$**
 
    ```{math}
    q_{\mathrm{trans}}=\frac{V}{\Lambda^3}
-   =\frac{10^{-3}}{(5.0\times10^{-11})^3}
+   =\frac{10^{-3}}{(5.04\times10^{-11})^3}
    \approx 7.8\times10^{27}.
    ```
 
-**Result.** $q_{\mathrm{trans}}\gg 1$ in macroscopic volumes, consistent with the continuum approximation used to derive $V/\Lambda^3$.
+3. **Compute $\alpha$ for the same volume, for which $V^{2/3}=10^{-2}\ \mathrm{m^2}$**
+
+   ```{math}
+   \alpha=\frac{h^2}{8mV^{2/3}k_{\mathrm B}T}
+   =\frac{(6.626\times10^{-34})^2}{8(6.65\times10^{-27})(10^{-2})(1.381\times10^{-23})(300)}
+   \approx 2.0\times10^{-19}.
+   ```
+
+4. **Compare the mean spacing between atoms with $\Lambda$ at $P=1.00\ \mathrm{bar}=10^{5}\ \mathrm{Pa}$**
+
+   The ideal gas law gives the number of atoms in the volume,
+
+   ```{math}
+   N=\frac{PV}{k_{\mathrm B}T}
+   =\frac{(10^{5})(10^{-3})}{(1.381\times10^{-23})(300)}
+   \approx 2.41\times10^{22},
+   ```
+
+   so the mean spacing between atoms is
+
+   ```{math}
+   \left(\frac{V}{N}\right)^{1/3}
+   =\left(\frac{10^{-3}}{2.41\times10^{22}}\right)^{1/3}
+   \approx 3.46\times10^{-9}\ \mathrm{m}\approx 69\,\Lambda,
+   ```
+
+   and the number of thermally accessible translational states per atom is
+
+   ```{math}
+   \frac{q_{\mathrm{trans}}}{N}
+   =\frac{7.8\times10^{27}}{2.41\times10^{22}}
+   \approx 3.2\times10^{5}.
+   ```
+
+**Result.** In a macroscopic volume, $\alpha\ll 1$ and $q_{\mathrm{trans}}\gg 1$, consistent with the continuum approximation used to derive $V/\Lambda^3$. At 1 bar, $q_{\mathrm{trans}}$ is also much larger than $N$, which is the condition assumed for $Q=q^N/N!$ in [Section 2.4](section-04.md).
 
 ## Concept Checks
 
