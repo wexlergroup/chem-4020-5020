@@ -90,11 +90,11 @@ Thus, for a fixed amount of energy transfer, the corresponding change in tempera
 \Delta T = \frac{2}{3}\frac{\Delta E_\text{kin}}{N\, k_\text{B}}.
 ```
 
-Because the environment has many more particles than the system ($N_\text{env} \gg N_\text{sys}$), the same energy transfer $\Delta E$ produces a much smaller $\Delta T$ in the environment. For example, if $N_\text{env} = 10N_\text{sys}$ (e.g., $N_\text{sys} = 6.022\times10^{23}$ and $N_\text{env} = 6.022\times10^{24}$ particles), then the same $\Delta E$ yields a temperature change that is ten times smaller for the environment.
+Because the environment has many more particles than the system ($N_\text{env} \gg N_\text{sys}$), the same energy transfer $\Delta E$ produces a much smaller $\Delta T$ in the environment. For example, if $N_\text{env} = 1000N_\text{sys}$ (e.g., $N_\text{sys} = 6.022\times10^{23}$ and $N_\text{env} = 6.022\times10^{26}$ particles), then the same $\Delta E$ yields a temperature change that is one thousand times smaller for the environment.
 
 This illustrates why an environment (a heat bath) can absorb or release energy nearly isothermally: its very large number of particles (and hence high heat capacity) makes the fractional change in average kinetic energy per particle negligible, even while energy is exchanged.
 
-Thus, even though the total kinetic energy of the universe (system plus environment) remains constant, the environment's temperature barely changes because any energy loss or gain is diluted among a huge number of particles.
+Thus, even though the total energy of the universe (system plus environment) remains constant, the environment's temperature barely changes because any energy loss or gain is diluted among a huge number of particles.
 ````
 
 #### Population ratios depend only on energy differences
@@ -141,7 +141,7 @@ If $f$ is well behaved (e.g., continuous, measurable), it must be of the form
 f \left( E_m - E_n \right) = e^{\beta \left( E_m - E_n \right)},
 ```
 
-where $\beta$ is an undetermined constant. We will later identify $\beta = \frac{1}{k_\text{B} T}$.
+where $\beta$ is a constant that this argument does not determine. The dropdown "Alternative derivation roadmap" below shows that $\beta = 1/(k_\text{B} T)$, where $T$ is the temperature of the heat bath. Because $k_\text{B} T$ is an energy, $\beta$ has units of inverse energy. Since $T > 0$, $\beta$ is positive, in agreement with the intuition that lower-energy microstates are more probable.
 
 ````{admonition} Checking the Form of $f$
 :class: dropdown
@@ -159,13 +159,19 @@ f(E_1-E_2)\,f(E_2-E_3)
 
 ### Converting $f$ to a Probability
 
+The same argument applies to any pair of microstates $m$ and $n$, so
+
+```{math}
+\frac{a_n}{a_m} = f \left( E_m - E_n \right) = \frac{e^{\beta E_m}}{e^{\beta E_n}}.
+```
+
 Separating the indices $m$ and $n$,
 
 ```{math}
 a_m e^{\beta E_m} = a_n e^{\beta E_n} = \mathcal{C},
 ```
 
-where $\mathcal{C}$ is a constant. Therefore, the number of systems in a microstate with energy $E_m$ is
+where $\mathcal{C}$ is a constant. Because the equality holds for every pair of microstates, the product $a_m e^{\beta E_m}$ has the same value for all of them. Therefore, the number of systems in a microstate with energy $E_m$ is
 
 ```{math}
 a_m = \mathcal{C} e^{-\beta E_m}.
@@ -174,17 +180,26 @@ a_m = \mathcal{C} e^{-\beta E_m}.
 The constant $\mathcal{C}$ is determined by the normalization condition
 
 ```{math}
-\sum_m a_m = \mathcal{A} = \mathcal{C} \sum_m e^{-\beta E_m}.
+\sum_n a_n = \mathcal{A} = \mathcal{C} \sum_n e^{-\beta E_n}.
 ```
 
 Solving for $\mathcal{C}$ and substituting into the expression for $a_m$ gives
 
 ```{math}
 :label: canonical-ensemble-probability
-p_m = \frac{a_m}{\mathcal{A}} = \frac{e^{-\beta E_m}}{\sum_m e^{-\beta E_m}} = \frac{e^{-\beta E_m}}{Q},
+p_m = \frac{a_m}{\mathcal{A}} = \frac{e^{-\beta E_m}}{\sum_n e^{-\beta E_n}} = \frac{e^{-\beta E_m}}{Q},
 ```
 
-where $p_m$ is the probability of finding the system in microstate $m$ and $Q$ is the **partition function**.
+where $p_m$ is the probability of finding the system in microstate $m$ and
+
+```{math}
+:label: canonical-partition-function
+Q = \sum_n e^{-\beta E_n}
+```
+
+is the **partition function**. The sum runs over all microstates of the system.
+
+The argument above does not show how the heat bath enters the result. The alternative derivation below starts from the isolated combination of the system and the reservoir, and it identifies $\beta$ with the temperature of the heat bath.
 
 ````{admonition} Alternative derivation roadmap: where does $p_i \propto e^{-\beta E_i}$ come from?
 :class: dropdown
@@ -200,7 +215,7 @@ throughout this module. Before we use it heavily, here are two quick (complement
 
 ---
 
-### Setup (common to both routes)
+**Setup (common to both routes)**
 
 - **System** $S$: a *closed* system (fixed $N,V$) with discrete microstates $i=1,2,\dots$ and energies $E_i$.
 - **Reservoir / heat bath** $R$: very large, can exchange energy with $S$, and stays at (approximately) constant temperature $T$.
@@ -214,7 +229,7 @@ The question is: *What is the probability $p_i$ that the system is in microstate
 
 ---
 
-## Route A: “Counting” argument (microcanonical $\rightarrow$ canonical)
+**Route A: “Counting” argument (microcanonical $\rightarrow$ canonical)**
 
 **Idea:** the system is more likely to be in a microstate $i$ if the reservoir has *many* compatible microstates
 when the system has energy $E_i$.
@@ -297,7 +312,7 @@ when the system has energy $E_i$.
 
 ---
 
-## Route B: “Maximum entropy” argument (Gibbs entropy + constraints)
+**Route B: “Maximum entropy” argument (Gibbs entropy + constraints)**
 
 **Idea:** in equilibrium with a heat bath, the system adopts the probability distribution that
 maximizes entropy subject to what is fixed.
@@ -345,7 +360,7 @@ maximizes entropy subject to what is fixed.
 
 ---
 
-## Quick checks / intuition (why this form makes sense)
+**Quick checks / intuition (why this form makes sense)**
 
 - **Energy differences matter, not absolute zero**:
   ```{math}
@@ -368,7 +383,7 @@ exchanges relevant to a large heat bath.
 
 ## Two-State System
 
-Consider a system with two microstates (two “levels”): state 1 with energy $E_1$ and state 2 with energy $E_2$.
+Consider a system with two microstates (two “levels”): state 1 with energy $E_1$ and state 2 with energy $E_2$. We label the states so that $E_2 > E_1$, which makes state 1 the lower-energy state.
 
 ```{list-table} Chemical Contexts Where a Two-State Approximation Might be Appropriate
 :header-rows: 1
@@ -390,8 +405,8 @@ Consider a system with two microstates (two “levels”): state 1 with energy $
   - Defect-free
   - Defective
 * - Protein folding
-  - Unfolded
   - Folded
+  - Unfolded
 ```
 
 ### Partition Function for a Two-State System
@@ -424,6 +439,8 @@ p_2 = 1 - p_1.
 ```
 
 ### Partition Function as the Effective Number of Thermally Accessible Microstates
+
+When energies are measured from the lowest state ($E_1 = 0$), every Boltzmann factor $e^{-\beta E_m}$ is at most 1, and the factor for the lowest state equals 1. The partition function therefore lies between 1 and the total number of microstates, and it can be read as the effective number of microstates that are thermally accessible at temperature $T$. The figure below shows $Q_\text{two-state}$ and the two probabilities as functions of temperature for $E_1 = 0$ and $\Delta E = 0.01\ \mathrm{eV}$. Its annotations mark the low- and high-temperature limits.
 
 ```{code-cell} ipython3
 :tags: [hide-input]
@@ -527,9 +544,9 @@ You can open the studio in a new tab: [Two-Level System Studio](https://wexlergr
 
 ## Worked Example
 
-### Two-level system probabilities
+### Two-state system probabilities
 
-A single particle has two energy levels: $E_0=0$ and $E_1=\varepsilon$, with $\varepsilon=0.010\ \mathrm{eV}$. Find $p_0$ and $p_1$ at $T=300\ \mathrm{K}$.
+A single particle has two states with energies $E_1=0$ and $E_2=\varepsilon$, where $\varepsilon=0.010\ \mathrm{eV}$. Find $p_1$ and $p_2$ at $T=300\ \mathrm{K}$.
 
 Use $p_i = e^{-\beta E_i}/Q$, $Q=1+e^{-\beta\varepsilon}$, and $k_\text{B}=8.617\times 10^{-5}\ \mathrm{eV/K}$.
 
@@ -537,7 +554,7 @@ Use $p_i = e^{-\beta E_i}/Q$, $Q=1+e^{-\beta\varepsilon}$, and $k_\text{B}=8.617
 
    ```{math}
    \beta\varepsilon=\frac{\varepsilon}{k_\text{B}T}
-   =\frac{0.010}{(8.617\times10^{-5})(300)}=0.387.
+   =\frac{0.010\ \mathrm{eV}}{(8.617\times10^{-5}\ \mathrm{eV/K})(300\ \mathrm{K})}=0.387.
    ```
 
 2. **Compute the Boltzmann factor**
@@ -551,17 +568,17 @@ Use $p_i = e^{-\beta E_i}/Q$, $Q=1+e^{-\beta\varepsilon}$, and $k_\text{B}=8.617
    ```{math}
    Q=1+0.679=1.679,
    \qquad
-   p_0=\frac{1}{Q}=0.596,
+   p_1=\frac{1}{Q}=0.596,
    \qquad
-   p_1=\frac{0.679}{Q}=0.404.
+   p_2=\frac{0.679}{Q}=0.404.
    ```
 
-**Result.** At $300\ \mathrm{K}$, about $40\%$ of systems occupy the excited state for this energy gap.
+**Result.** At $300\ \mathrm{K}$, about $40\%$ of systems occupy the higher-energy state (state 2) for this energy gap.
 
 ## Concept Checks
 
 1. Why must the argument of the exponential in $e^{-\beta E}$ be dimensionless?
-2. What happens to $p_1/p_0$ as $T\to 0$? As $T\to\infty$?
+2. What happens to $p_2/p_1$ as $T\to 0$? As $T\to\infty$?
 3. Which part of the canonical derivation relies on the reservoir being much larger than the system?
 4. How does shifting all energies by a constant affect $p_i$, and why?
 
@@ -570,4 +587,4 @@ Use $p_i = e^{-\beta E_i}/Q$, $Q=1+e^{-\beta\varepsilon}$, and $k_\text{B}=8.617
 - In the canonical ensemble, microstate probabilities follow $p_i=e^{-\beta E_i}/Q$ with $\beta=1/(k_\text{B}T)$.
 - The partition function $Q$ normalizes probabilities and encodes thermodynamic information.
 - Probability ratios depend only on **energy differences**, not on the absolute zero of energy.
-- Two-level systems vividly illustrate how temperature controls population of higher-energy states.
+- Two-state systems vividly illustrate how temperature controls population of higher-energy states.

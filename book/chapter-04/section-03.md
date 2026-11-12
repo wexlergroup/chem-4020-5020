@@ -301,7 +301,7 @@ To confirm this is a maximum, note that $S(p)$ is concave (its second derivative
 
 ### Example 2: Entropy of the two-state system from Section 2.2
 
-**Problem.** In Section 2.2, we analyzed a two-state system with energies $E_0 = 0$ and $E_1 = \varepsilon = 0.010\ \mathrm{eV}$ and found $p_0 = 0.596$ and $p_1 = 0.404$ at $T = 300\ \mathrm{K}$. Compute the entropy two ways: (a) from the Gibbs formula, and (b) from the canonical identity $S = U/T + k_{\mathrm{B}}\ln Q$.
+**Problem.** In Section 2.2, we analyzed a two-state system with energies $E_1 = 0$ and $E_2 = \varepsilon = 0.010\ \mathrm{eV}$ and found $p_1 = 0.596$ and $p_2 = 0.404$ at $T = 300\ \mathrm{K}$. Compute the entropy two ways: (a) from the Gibbs formula, and (b) from the canonical identity $S = U/T + k_{\mathrm{B}}\ln Q$.
 
 **Solution.**
 
@@ -319,7 +319,7 @@ S = -k_{\mathrm{B}}(-0.308 - 0.366) = 0.674\,k_{\mathrm{B}} = 9.31 \times 10^{-2
 
 **(b) Canonical identity.**
 
-From Section 2.2: $Q = 1.679$, and $U = \varepsilon\,p_1 = (0.010)(0.404) = 4.04 \times 10^{-3}\ \mathrm{eV} = 6.47 \times 10^{-22}\ \mathrm{J}$.
+From Section 2.2: $Q = 1.679$, and $U = \varepsilon\,p_2 = (0.010)(0.404) = 4.04 \times 10^{-3}\ \mathrm{eV} = 6.47 \times 10^{-22}\ \mathrm{J}$.
 
 ```{math}
 S = \frac{U}{T} + k_{\mathrm{B}}\ln Q = \frac{6.47 \times 10^{-22}}{300} + (1.381 \times 10^{-23})\ln(1.679).
