@@ -15,7 +15,7 @@ kernelspec:
 
 # 5.2. Third Law
 
-[Course-wide Conventions & Notation](../notation.md)
+See also: [Course-wide Conventions & Notation](../notation.md)
 
 ## Overview and Learning Objectives
 

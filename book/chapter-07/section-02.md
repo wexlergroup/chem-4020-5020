@@ -15,7 +15,7 @@ kernelspec:
 
 # 7.2. Equilibrium Constants from Microscopic Properties
 
-[Course-wide Conventions & Notation](../notation.md)
+See also: [Course-wide Conventions & Notation](../notation.md)
 
 ## Overview and Learning Objectives
 

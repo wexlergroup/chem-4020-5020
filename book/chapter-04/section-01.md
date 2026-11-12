@@ -15,7 +15,7 @@ kernelspec:
 
 # 4.1. Entropy
 
-[Course-wide Conventions & Notation](../notation.md)
+See also: [Course-wide Conventions & Notation](../notation.md)
 
 ## Overview and Learning Objectives
 

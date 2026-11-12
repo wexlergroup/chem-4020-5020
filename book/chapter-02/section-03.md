@@ -15,7 +15,7 @@ kernelspec:
 
 # 2.3. Ensemble Averages
 
-[Course-wide Conventions & Notation](../notation.md)
+See also: [Course-wide Conventions & Notation](../notation.md)
 
 ## Overview and Learning Objectives
 

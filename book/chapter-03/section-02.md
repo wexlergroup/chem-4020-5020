@@ -15,7 +15,7 @@ kernelspec:
 
 # 3.2. Applications of the First Law
 
-[Course-wide Conventions & Notation](../notation.md)
+See also: [Course-wide Conventions & Notation](../notation.md)
 
 ## Overview and Learning Objectives
 

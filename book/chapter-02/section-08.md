@@ -14,7 +14,7 @@ kernelspec:
 
 # 2.8. Molecular Statistical Mechanics
 
-[Course-wide Conventions & Notation](../notation.md)
+See also: [Course-wide Conventions & Notation](../notation.md)
 
 ## Overview and Learning Objectives
 

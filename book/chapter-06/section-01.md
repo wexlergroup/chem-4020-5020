@@ -15,7 +15,7 @@ kernelspec:
 
 # 6.1. Phase Diagrams
 
-[Course-wide Conventions & Notation](../notation.md)
+See also: [Course-wide Conventions & Notation](../notation.md)
 
 ## Overview and Learning Objectives
 

@@ -15,7 +15,7 @@ kernelspec:
 
 # 7.1. Equilibrium Constant
 
-[Course-wide Conventions & Notation](../notation.md)
+See also: [Course-wide Conventions & Notation](../notation.md)
 
 ## Overview and Learning Objectives
 

@@ -15,7 +15,7 @@ kernelspec:
 
 # 3.3. Enthalpy
 
-[Course-wide Conventions & Notation](../notation.md)
+See also: [Course-wide Conventions & Notation](../notation.md)
 
 ## Overview and Learning Objectives
 

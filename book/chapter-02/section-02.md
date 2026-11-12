@@ -15,7 +15,7 @@ kernelspec:
 
 # 2.2. Canonical Ensemble
 
-[Course-wide Conventions & Notation](../notation.md)
+See also: [Course-wide Conventions & Notation](../notation.md)
 
 ## Overview and Learning Objectives
 

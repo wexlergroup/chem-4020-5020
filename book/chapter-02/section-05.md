@@ -15,7 +15,7 @@ kernelspec:
 
 # 2.5. Particle in a Box
 
-[Course-wide Conventions & Notation](../notation.md)
+See also: [Course-wide Conventions & Notation](../notation.md)
 
 ## Overview and Learning Objectives
 
