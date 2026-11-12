@@ -15,7 +15,7 @@ kernelspec:
 
 # 2.1. Introduction to Statistical Mechanics
 
-[Course-wide Conventions & Notation](../notation.md)
+See also: [Course-wide Conventions & Notation](../notation.md)
 
 ## Overview and Learning Objectives
 
@@ -81,15 +81,15 @@ A core principle of statistical mechanics is that **macroscopic thermodynamic pr
 
 #### Arithmetic Average vs. Expected Value
 
-In basic statistics, the **arithmetic average** (sample mean) $\bar{X}$ of a dataset $X=\{X_1, X_2, \ldots, X_M\}$ is:
+In basic statistics, the **arithmetic average** (sample mean) $\bar{X}$ of a dataset of $n$ values, $X=\{X_1, X_2, \ldots, X_n\}$, is:
 
 ```{math}
-\bar{X} = \frac{1}{M} \sum_{i=1}^M X_i.
+\bar{X} = \frac{1}{n} \sum_{j=1}^n X_j.
 ```
 
 ````{admonition} Example of an Arithmetic Average
 :class: tip
-The arithmetic average of $X = \{ 1, 2, 2, 3, 3, 3, 4, 4, 4, 4 \}$ is
+The arithmetic average of the $n = 10$ values $X = \{ 1, 2, 2, 3, 3, 3, 4, 4, 4, 4 \}$ is
 
 ```{math}
 \bar{X} = \frac{1}{10} \left(1 + 2 + 2 + 3 + 3 + 3 + 4 + 4 + 4 + 4\right) = 3.
@@ -152,8 +152,14 @@ In **thermodynamics**, typical choices of $X$ include the **internal energy**, *
 ### Ensembles of Microstates
 
 ```{glossary}
+Microstate
+: A complete specification of the microscopic state of a system: the positions and momenta of all particles in classical mechanics, or the quantum state of the system in quantum mechanics.
+
+Macrostate
+: The thermodynamic state of a system, specified by a small number of macroscopic variables such as $\left(N, V, E\right)$. Many microstates are usually consistent with one macrostate.
+
 Ensemble
-: The set of microstates consistent with specified macroscopic constraints.
+: The set of microstates consistent with specified macroscopic constraints. An ensemble can be pictured as a very large collection of copies of the system, each in one of these microstates; $p_i$ is then the fraction of copies in microstate $i$.
 
 Microcanonical ensemble
 : Microstates are sampled at fixed $\left(N, V, E\right)$.
@@ -242,13 +248,17 @@ A fair die is rolled $n=300$ times. Let $X_j=1$ if the $j$-th outcome is a six a
 
 2. **Linearity of expectation**
 
-   For independent, identical trials, the expected total number of sixes is the sum of the individual expectations:
+   The expected total number of sixes is the sum of the individual expected values:
 
    ```{math}
    \langle N_{\text{sixes}}\rangle = \sum_{j=1}^{300}\langle X_j\rangle = 300\left(\frac{1}{6}\right)=50.
    ```
 
-**Result.** The expected number of sixes in 300 rolls is $50$.
+3. **Arithmetic means from simulated rolls**
+
+   In five simulated sets of 300 rolls, the number of sixes was 56, 42, 49, 43, and 41. The arithmetic mean of $X_j$ in each set, $\bar{X} = N_{\text{sixes}}/300$, was therefore 0.187, 0.140, 0.163, 0.143, and 0.137, compared with $\langle X_j\rangle = 1/6 \approx 0.167$.
+
+**Result.** The expected number of sixes in 300 rolls is $50$; the five simulated sets gave between 41 and 56.
 
 ## Concept Checks
 
@@ -260,6 +270,6 @@ A fair die is rolled $n=300$ times. Let $X_j=1$ if the $j$-th outcome is a six a
 ## Key Takeaways
 
 - Macroscopic properties are computed as **expected values** over microstates.
-- An **ensemble** is a probability model for microstates consistent with specified macroscopic constraints.
+- An **ensemble** is the set of microstates consistent with specified macroscopic constraints, together with their probabilities $p_i$.
 - In the microcanonical ensemble, each accessible microstate has equal probability: $p_i=1/M$.
 - Choosing the right ensemble is choosing the right constraints: $(N,V,E)$, $(N,V,T)$, or $(\mu,V,T)$.
