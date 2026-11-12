@@ -14,13 +14,13 @@ kernelspec:
 
 # 1.4. Real Gases
 
-[Course-wide Conventions & Notation](../notation.md)
+See also: [Course-wide Conventions & Notation](../notation.md)
 
 ## Overview and Learning Objectives
 
 Real gases deviate from ideal behavior when finite molecular size and intermolecular forces become important. This section introduces the compressibility factor as a quantitative measure of nonideality and develops the van der Waals equation of state (EOS), including its critical constants and the principle of corresponding states.
 
-At sufficiently high pressures (high densities) or low temperatures, we can no longer treat gases as collections of noninteracting point particles. High pressure/density brings molecules closer together, increasing collision frequency and making both excluded volume and intermolecular interactions more consequential. Lower temperature reduces kinetic energy, so these interactions more strongly perturb $PVT$ behavior. This section develops practical ways to quantify deviations from ideality and introduces the van der Waals EOS—one of the simplest real-gas models and the work recognized by the [Nobel Prize in Physics 1910](https://www.nobelprize.org/prizes/physics/1910/summary/).
+At sufficiently high pressures (high densities) or low temperatures, we can no longer treat gases as collections of noninteracting point particles. High pressure/density brings molecules closer together, increasing collision frequency and making both excluded volume and intermolecular interactions more consequential. Lower temperature reduces kinetic energy, so these interactions more strongly perturb $PVT$ behavior. This section develops practical ways to quantify deviations from ideality and introduces the van der Waals EOS.
 
 Learning objectives:
 
@@ -46,8 +46,8 @@ from labellines import labelLines
 from myst_nb import glue
 from scipy.interpolate import interp1d
 
-# Load the experimental data for water at 300 K
-df = pd.read_csv("../_static/section-04/isothermal-properties-for-water-T=300.csv").iloc[:, [0, 1, 2, 3]]
+# Load the experimental data for water at 776.4 K (T_r = 1.2, above the critical temperature)
+df = pd.read_csv("../_static/section-04/isothermal-properties-for-water-Tr=1.2.csv").iloc[:, [0, 1, 2, 3]]
 df.columns = ["T", "P", "rho_m", "V_m"]  # Rename columns
 
 # Calculate the compressibility factor
@@ -56,7 +56,7 @@ df["Z"] = df["P_Pa"] * df["V_m"] / (R * df["T"])
 
 # Set up figure and axis
 fig, ax = plt.subplots(figsize=(4, 4))
-ax.set_xlim(0, 1000)
+ax.set_xlim(0, 4000)
 ax.set_ylim(0, 2)
 ax.set_xlabel("Pressure (bar)")
 ax.set_ylabel(r"$Z$")
@@ -64,12 +64,12 @@ ax.grid(True, linestyle="--", alpha=0.7)
 
 # Plot experimental compressibility factor
 data_line = ax.plot(df["P"], df["Z"], "b-", label="$Z_\\text{water}$")
-labelLines(data_line, xvals=[400], zorder=2.5)
+labelLines(data_line, xvals=[1600], zorder=2.5)
 
 # Plot ideal gas line
-x_values = np.linspace(0, 1000, 100)
+x_values = np.linspace(0, 4000, 100)
 ideal_line = ax.plot(x_values, np.ones_like(x_values), "r--", label="$Z_\\text{ideal}$")
-labelLines(ideal_line, xvals=[400], zorder=2.5)
+labelLines(ideal_line, xvals=[1600], zorder=2.5)
 
 # Interpolate to find intersection with ideal gas line
 interp_Z = interp1d(df["P"], df["Z"], kind='linear', fill_value="extrapolate")
@@ -83,12 +83,12 @@ min_Z = df.loc[min_Z_index, "Z"]
 
 # Annotate ideal and coincidentally ideal points
 ax.annotate("Ideal",
-            xy=(0, 1), xytext=(200, 1.25),
+            xy=(0, 1), xytext=(1500, 1.3),
             arrowprops=dict(arrowstyle="->"),
             ha='center', va='center', zorder=4)
 
 ax.annotate("Coincidentally\nideal",
-            xy=(intersection_pressure, 1), xytext=(800, 0.75),
+            xy=(intersection_pressure, 1), xytext=(3300, 0.75),
             arrowprops=dict(arrowstyle="->"),
             ha='center', va='center', zorder=4)
 
@@ -98,16 +98,16 @@ ax.axvline(x=intersection_pressure, color="black", linestyle=":")
 
 # Highlight regions of attractive and repulsive behavior
 ax.fill_between([min_pressure, intersection_pressure], 0, 2, color="magenta", alpha=0.2, label="Attractive")
-ax.fill_between([intersection_pressure, 1000], 0, 2, color="gray", alpha=0.2, label="Repulsive")
+ax.fill_between([intersection_pressure, 4000], 0, 2, color="gray", alpha=0.2, label="Repulsive")
 
 # Annotate regions
 x_values_for_attractive = np.linspace(min_pressure, intersection_pressure, 100)
 attractive_line = ax.plot(x_values_for_attractive, np.ones_like(x_values_for_attractive) * min_Z, "m-", label="Attractive", alpha=0.0)
 labelLines(attractive_line, xvals=np.mean([min_pressure, intersection_pressure]), zorder=2.5)
 
-x_values_for_repulsive = np.linspace(intersection_pressure, 1000, 100)
+x_values_for_repulsive = np.linspace(intersection_pressure, 4000, 100)
 repulsive_line = ax.plot(x_values_for_repulsive, np.ones_like(x_values_for_repulsive) * min_Z, "gray", label="Repulsive", alpha=0.0)
-labelLines(repulsive_line, xvals=800, zorder=2.5)
+labelLines(repulsive_line, xvals=3340, zorder=2.5)
 
 # Adjust layout and display
 plt.tight_layout()
@@ -115,7 +115,7 @@ plt.show()
 plt.close(fig)
 ```
 
-Compressibility factor $Z$ for water at 300 K as a function of pressure, with the ideal-gas line ($Z=1$) included for comparison. The dip below $Z=1$ indicates net attractive forces (most pronounced at the minimum in $Z$), while the rise above $Z=1$ at higher pressures reflects repulsive interactions. The intersection with $Z=1$ marks a “coincidentally ideal” state.
+Compressibility factor $Z$ for water at 776 K, above its critical temperature of 647 K, as a function of pressure, with the ideal-gas line ($Z=1$) included for comparison. The dip below $Z=1$ indicates net attractive forces (most pronounced at the minimum in $Z$), while the rise above $Z=1$ at higher pressures reflects repulsive interactions. The intersection with $Z=1$ marks a “coincidentally ideal” state.
 
 One convenient measure of nonideality is the compressibility factor $Z$:
 
@@ -144,8 +144,8 @@ Z = \frac{P V}{N k_\text{B} T} = \frac{P V}{n R T}.
   - Attractive interactions
   - H-bonding and van der Waals interactions
 * - Low
-  - $= 1$
-  - $V_\text{real} = V_\text{ideal}$
+  - $\to 1$
+  - $V_\text{real} \to V_\text{ideal}$
   - Ideal-gas behavior
   - —
 ```
@@ -222,7 +222,7 @@ Vc_vdW = 3 * b_m  # m^3 / mol
 # Experimental phase change data for carbon dioxide
 Tc_exp = 304.18  # K
 Pc_exp = 73.80 * bar_to_Pa  # Pa
-Vc_exp = 0.0919 * L_to_m3  # m^3 / mol
+Vc_exp = 0.0941 * L_to_m3  # m^3 / mol
 
 # van der Waals pressure function
 def van_der_waals_pressure(a, b, T, V):
@@ -274,8 +274,6 @@ plt.close(fig)
 ```
 
 Comparison of experimental and van der Waals isotherms for CO$_2$ at temperatures below, at, and above the critical temperature $T_c$. For $T < T_c$, the van der Waals EOS exhibits the characteristic loop associated with phase separation; at $T = T_c$ the isotherm has an inflection point; and for $T > T_c$ the liquid–vapor transition disappears.
-
-##### Critical Point
 
 ```{code-cell} ipython3
 :tags: [hide-input]
@@ -536,6 +534,10 @@ plt.close(fig)
 
 Van der Waals isotherm for CO$_2$ at $T = 0.9\,T_c$, with the Maxwell construction illustrating how the unphysical loop is replaced by a horizontal tie line defining liquid–vapor coexistence. The critical point at $T = T_c$ is also shown, where the liquid and vapor phases merge.
 
+Within the loop, part of the van der Waals isotherm has a pressure that increases with volume, which is mechanically unstable and is not observed. The Maxwell construction replaces the loop with a horizontal tie line at the coexistence pressure, placed so that the two areas enclosed between the line and the loop are equal; the ends of the tie line give the molar volumes of the coexisting liquid and vapor.
+
+##### Critical Point
+
 Expanding Equation {eq}`van-der-waals-eos` and rearranging terms gives a cubic equation for $V_\text{m}$:
 
 ```{math}
@@ -565,7 +567,7 @@ V_\text{m}^3 - \left( b_\text{m} + \frac{R T}{P} \right) V_\text{m}^2 + \frac{a_
 ```
 ````
 
-At the critical point, the cubic in Equation {eq}`van-der-waals-eos-expanded` has a triple root at $V_{\text{m},c}$, so it can be written as
+Below $T_c$, Equation {eq}`van-der-waals-eos-expanded` has three real roots for pressures within the van der Waals loop; as $T$ rises to $T_c$, these roots merge into one at the inflection point of the critical isotherm. At the critical point, the cubic therefore has a triple root at $V_{\text{m},c}$, so it can be written as
 
 ```{math}
 \left( V_\text{m} - V_{\text{m},c} \right)^3
@@ -744,20 +746,20 @@ You can open the studio in a new tab: [Real Gas Computational Studio](https://we
 ### van der Waals critical constants and $Z_c$ for CO$_2$
 
 Use the van der Waals parameters used in the section plots:
-$a_m = 3.6551\ \mathrm{L^2\,bar\,mol^{-2}}$, $b_m=0.042816\ \mathrm{L\,mol^{-1}}$, and $R=0.08314\ \mathrm{L\,bar\,mol^{-1}\,K^{-1}}$.
+$a_\text{m} = 3.6551\ \mathrm{L^2\,bar\,mol^{-2}}$, $b_\text{m}=0.042816\ \mathrm{L\,mol^{-1}}$, and $R=0.08314\ \mathrm{L\,bar\,mol^{-1}\,K^{-1}}$.
 
 The van der Waals critical constants are
 
 ```{math}
-V_{\mathrm m,c}=3b_m,\qquad
-P_c=\frac{a_m}{27b_m^2},\qquad
-T_c=\frac{8a_m}{27b_mR}.
+V_{\text{m},c}=3b_\text{m},\qquad
+P_c=\frac{a_\text{m}}{27b_\text{m}^2},\qquad
+T_c=\frac{8a_\text{m}}{27b_\text{m}R}.
 ```
 
 1. **Critical volume**
 
    ```{math}
-   V_{\mathrm m,c}=3(0.042816)=0.128448\ \mathrm{L/mol}.
+   V_{\text{m},c}=3(0.042816)=0.128448\ \mathrm{L/mol}.
    ```
 
 2. **Critical pressure**
@@ -775,12 +777,16 @@ T_c=\frac{8a_m}{27b_mR}.
 4. **Critical compressibility factor**
 
    ```{math}
-   Z_c \equiv \frac{P_cV_{\mathrm m,c}}{RT_c}
+   Z_c \equiv \frac{P_cV_{\text{m},c}}{RT_c}
    =\frac{73.85\times 0.12845}{0.08314\times 304.2}
    =0.375=\frac{3}{8}.
    ```
 
-**Result.** The van der Waals model predicts $T_c\approx 304\ \mathrm{K}$, $P_c\approx 74\ \mathrm{bar}$, $V_{\mathrm m,c}\approx 0.128\ \mathrm{L/mol}$, and $Z_c=3/8$.
+5. **Comparison with experiment**
+
+   The predicted $T_c$ and $P_c$ are within 0.1% of the measured values for CO$_2$, $304.1\ \mathrm{K}$ and $73.8\ \mathrm{bar}$, as expected, because van der Waals parameters are usually determined from the measured critical temperature and pressure. The measured critical molar volume, $0.094\ \mathrm{L/mol}$, and the corresponding $Z_c\approx 0.27$ are both smaller than the van der Waals predictions.
+
+**Result.** The van der Waals model predicts $T_c\approx 304\ \mathrm{K}$, $P_c\approx 74\ \mathrm{bar}$, $V_{\text{m},c}\approx 0.128\ \mathrm{L/mol}$, and $Z_c=3/8$.
 
 ## Concept Checks
 
@@ -794,4 +800,4 @@ T_c=\frac{8a_m}{27b_mR}.
 - Nonideality is quantified by $Z=PV/(nRT)$; $Z<1$ suggests net attractions and $Z>1$ suggests net repulsions.
 - The van der Waals EOS introduces an attraction parameter $a$ and an excluded-volume parameter $b$.
 - Critical constants follow directly from the cubic form of the van der Waals EOS, with $Z_c=3/8$.
-- Using reduced variables $(T_r,P_r,V_r)$ yields the corresponding-states form shared by all van der Waals fluids.
+- Using reduced variables $(T_r,P_r,V_{\text{m},r})$ yields the corresponding-states form shared by all van der Waals fluids.
