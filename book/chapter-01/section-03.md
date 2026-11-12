@@ -22,7 +22,6 @@ The ideal-gas model consolidates several empirical gas laws into a single equati
 
 ---
 
-(section:gas-laws)=
 Learning objectives:
 
 - State Boyle’s, Charles’s, Gay–Lussac’s, and Avogadro’s laws and identify the variables held constant in each.
@@ -32,6 +31,7 @@ Learning objectives:
 
 ## Core Ideas and Derivations
 
+(section:gas-laws)=
 ### Gas Laws
 
 ```{code-cell} ipython3
@@ -98,11 +98,36 @@ Four classical gas laws (blue), shown in chronological order: Boyle's law[^1], C
 
 [^1]: [Boyle's original data](https://web.lemoyne.edu/~giunta/classicalcs/boyleform.html)
 
-Real gases *approximately* follow these relationships when at least one of the following conditions is met:
+Written as equations, the four laws are:
 
-- pressure is relatively low,
-- density is relatively low, and/or
-- temperature is sufficiently high.
+````{list-table} Classical gas laws
+:header-rows: 1
+:name: classical-gas-laws
+
+* - Law
+  - Relation
+  - Held constant
+* - Boyle's law
+  - $P = c_{\mathrm{B}} / V$
+  - $T$, $N$
+* - Charles's law
+  - $V = c_{\mathrm{C}}\, T$
+  - $P$, $N$
+* - Gay–Lussac's law
+  - $P = c_{\mathrm{GL}}\, T$
+  - $V$, $N$
+* - Avogadro's law
+  - $V = c_{\mathrm{A}}\, N$
+  - $P$, $T$
+````
+
+Here, $c_{\mathrm{B}}$, $c_{\mathrm{C}}$, $c_{\mathrm{GL}}$, and $c_{\mathrm{A}}$ are constants whose values depend on the variables held constant. Avogadro's law holds with the same constant $c_{\mathrm{A}}$ for every gas: at a given pressure and temperature, equal volumes of different gases contain equal numbers of particles.
+
+Real gases *approximately* follow these relationships under conditions that favor ideal behavior:
+
+- relatively low pressure,
+- relatively low density, and
+- sufficiently high temperature.
 
 These conditions collectively minimize intermolecular interactions, allowing the gas to behave *ideally*.
 
@@ -110,7 +135,7 @@ These conditions collectively minimize intermolecular interactions, allowing the
 
 ### Deriving an Equation of State
 
-In [Section 1](section-01.md), we defined an **equation of state** as a mathematical relationship among state variables. Each gas law above relates *two* state variables (among $P, V, T, N$) under conditions where the other two are held constant. To obtain a single equation of state relating all four variables, we can combine these laws using multivariate calculus (as covered in [Math 233](https://math.wustl.edu/calculus-iii)).
+In [Section 1.1](section-01.md), we defined an **equation of state** as a mathematical relationship among state variables. Each gas law above relates *two* state variables (among $P, V, T, N$) under conditions where the other two are held constant. To obtain a single equation of state relating all four variables, we can combine these laws using multivariate calculus (as covered in [Math 233](https://math.wustl.edu/calculus-iii)).
 
 #### Total Differential
 
@@ -139,7 +164,21 @@ dV = \left( \frac{\partial V}{\partial P} \right)_{T,N} dP \;+\; \left( \frac{\p
 
 #### Partial Derivatives via Gas Laws
 
-Using the gas laws in differential form, one finds
+Each partial derivative follows from the gas law in {numref}`classical-gas-laws` that holds the same two variables constant. Solving Boyle's law for the volume gives $V = c_{\mathrm{B}}/P$, so that
+
+```{math}
+\left( \frac{\partial V}{\partial P} \right)_{T,N} = -\frac{c_{\mathrm{B}}}{P^2} = -\frac{V}{P}.
+```
+
+Charles's law, $V = c_{\mathrm{C}}\,T$, and Avogadro's law, $V = c_{\mathrm{A}}\,N$, give
+
+```{math}
+\left( \frac{\partial V}{\partial T} \right)_{P,N} = c_{\mathrm{C}} = \frac{V}{T}
+\qquad \text{and} \qquad
+\left( \frac{\partial V}{\partial N} \right)_{P,T} = c_{\mathrm{A}} = \frac{V}{N}.
+```
+
+Substituting these three derivatives into the total differential of the volume gives
 
 ```{math}
 dV \;=\; -\frac{V}{P}\,dP \;+\; \frac{V}{T}\,dT \;+\; \frac{V}{N}\,dN.
@@ -153,13 +192,25 @@ d \ln P \;+\; d \ln V \;=\; d \ln T \;+\; d \ln N.
 
 #### Integrating the Total Differential
 
-Integrating from an initial state $(P_i, V_i, T_i, N_i)$ to a final state $(P_f, V_f, T_f, N_f)$ gives
+Integrating each term from an initial state $(P_i, V_i, T_i, N_i)$ to a final state $(P_f, V_f, T_f, N_f)$ gives
+
+```{math}
+\ln \frac{P_f}{P_i} \;+\; \ln \frac{V_f}{V_i} \;=\; \ln \frac{T_f}{T_i} \;+\; \ln \frac{N_f}{N_i}.
+```
+
+Combining the logarithms on each side,
+
+```{math}
+\ln \frac{P_f V_f}{P_i V_i} \;=\; \ln \frac{T_f N_f}{T_i N_i},
+```
+
+and exponentiating and rearranging gives
 
 ```{math}
 \frac{P_f V_f}{N_f T_f} \;=\; \frac{P_i V_i}{N_i T_i}.
 ```
 
-Because the initial and final states are arbitrary, the ratio $PV/(NT)$ must be a constant. Denoting this constant by $k_{\mathrm{B}}$, we arrive at the **ideal-gas equation of state**:
+Because the initial and final states are arbitrary, the ratio $PV/(NT)$ must be a constant. Since Avogadro's law holds with the same constant for every gas, the value of this ratio is also the same for every gas. Denoting it by $k_{\mathrm{B}}$, we arrive at the **ideal-gas equation of state**:
 
 ```{math}
 :label: ideal-gas-equation-of-state
@@ -172,9 +223,9 @@ where $n = N / N_{\mathrm{A}}$ is the number of moles and $R = k_{\mathrm{B}} N_
 
 ### Ideal-Gas Assumptions
 
-A gas described by Eq. {eq}`ideal-gas-equation-of-state` is called *ideal* because, under low pressures, low densities, or high temperatures, we can adopt the simplifying assumptions of kinetic theory:
+A gas described by Eq. {eq}`ideal-gas-equation-of-state` is called *ideal* because, under conditions of low pressure, low density, and high temperature, we can adopt the simplifying assumptions of kinetic theory:
 
-1. Particles have negligible volume (point particles).
+1. Each particle’s size is negligible compared to the average distance between particles (point particles).
 2. Particles experience no intermolecular forces except during elastic collisions.
 3. Collisions conserve total energy and momentum.
 
@@ -236,7 +287,7 @@ The red line is an ordinary least-squares fit; its intercept at $-273.15\,{}^{\c
 
 [^2]: [NIST WebBook: O₂ Data](https://webbook.nist.gov/cgi/inchi/InChI%3D1S/O2/c1-2)
 
-Charles's law states that, at constant (sufficiently low) pressure, the volume per particle is directly proportional to the gas temperature. If temperature is reported on the Celsius scale ($0\,{}^{\circ}\mathrm{C}$ at the freezing point of water and $100\,{}^{\circ}\mathrm{C}$ at the boiling point), plotting $v$ versus $T(\,{}^{\circ}\mathrm{C})$ gives an approximately linear relationship. Extrapolating this line to the (unphysical) point where the volume would vanish identifies a theoretical lower bound at $-273.15\,{}^{\circ}\mathrm{C}$. Shifting the Celsius scale by $273.15$ degrees places this bound at zero:
+Charles's law states that, at constant (sufficiently low) pressure, the volume per particle is directly proportional to the gas temperature. If temperature is reported on the Celsius scale ($0\,{}^{\circ}\mathrm{C}$ at the freezing point of water and $100\,{}^{\circ}\mathrm{C}$ at the boiling point), plotting $T(\,{}^{\circ}\mathrm{C})$ versus $v$ gives an approximately linear relationship. Extrapolating this line to the (unphysical) point where the volume would vanish identifies a theoretical lower bound at $-273.15\,{}^{\circ}\mathrm{C}$. Shifting the Celsius scale by $273.15$ degrees places this bound at zero:
 
 ```{math}
 T(\mathrm{K}) \;=\; T(\,{}^{\circ}\mathrm{C}) \;+\; 273.15.
@@ -273,7 +324,16 @@ with $k_{\mathrm{B}}=1.38065\times10^{-23}\ \mathrm{J/K}$ and $P=1.00\times10^{5
    =3.46\ \mathrm{nm}.
    ```
 
-**Result.** At $300\ \mathrm{K}$ and $1\ \mathrm{bar}$, molecules are typically separated by a few nanometers.
+3. **Compute the number density**
+
+   The number density is the reciprocal of the volume per molecule:
+
+   ```{math}
+   \frac{N}{V}=\frac{P}{k_{\mathrm{B}}T}=\frac{1.00\times10^{5}}{(1.38065\times10^{-23})(300)}
+   =2.41\times10^{25}\ \mathrm{m^{-3}}.
+   ```
+
+**Result.** At $300\ \mathrm{K}$ and $1\ \mathrm{bar}$, an ideal gas contains about $2.4\times10^{25}$ molecules per cubic meter, and the molecules are typically separated by a few nanometers.
 
 ## Concept Checks
 
@@ -285,6 +345,6 @@ with $k_{\mathrm{B}}=1.38065\times10^{-23}\ \mathrm{J/K}$ and $P=1.00\times10^{5
 ## Key Takeaways
 
 - The classical gas laws combine into the ideal-gas equation of state $PV=Nk_{\mathrm{B}}T=nRT$.
-- Ideal behavior is expected at **low density/pressure** or **high temperature**, where interactions are small.
+- Ideal behavior is favored by **low density/pressure** and **high temperature**, where interactions are small.
 - The mean molecular spacing scales as $\langle d\rangle\propto (T/P)^{1/3}$.
-- The Kelvin scale emerges naturally because the gas-law proportionalities require $T>0$ and linearity in $T$.
+- The zero of the Kelvin scale is the temperature at which the extrapolated volume of a gas at low pressure vanishes, $-273.15\,{}^{\circ}\mathrm{C}$.
