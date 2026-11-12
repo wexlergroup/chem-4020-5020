@@ -244,17 +244,17 @@ Intensive property
 : A property independent of system size (e.g., temperature, pressure).
 ```
 
-A hiking analogy helps separate the two kinds of quantities. Between two trailheads, the change in elevation is fixed once the start and end points are chosen, whereas the distance walked depends on the trail taken. Section 3.1 puts this distinction to work for internal energy, heat, and work.
+A hiking analogy helps separate the two kinds of quantities. Between two trailheads, the change in elevation is fixed once the start and end points are chosen, whereas the distance walked depends on the trail taken. [Section 3.1](../chapter-03/section-01.md) puts this distinction to work for internal energy, heat, and work.
 
 #### Describing an Equilibrium State
 
-Not every state variable can be chosen freely. For a fixed amount $n$ of a pure, single-phase gas, specifying any two of $P$, $V$, and $T$ fixes the third through an equation of state, such as the ideal-gas law $PV=nRT$ derived in Section 1.3. Constraints imposed by the boundary, such as walls that cannot move or walls that do not conduct heat, determine which variables are free to change during a process.
+Not every state variable can be chosen freely. For a fixed amount $n$ of a pure, single-phase gas, specifying any two of $P$, $V$, and $T$ fixes the third through an equation of state, such as the ideal-gas law $PV=nRT$ derived in [Section 1.3](section-03.md). Constraints imposed by the boundary, such as walls that cannot move or walls that do not conduct heat, determine which variables are free to change during a process.
 
 Each kind of equilibrium corresponds to an equality across a boundary that permits the relevant exchange:
 
 - **Mechanical equilibrium:** no unbalanced forces; across a movable boundary, the pressure of the system equals that of its surroundings.
 - **Thermal equilibrium:** across a boundary that conducts heat, the temperature of the system equals that of its surroundings.
-- **Chemical equilibrium:** no net change in composition; across a boundary that passes matter, the chemical potential $\mu$ of each species is the same on both sides. The chemical potential is introduced in Section 6.1.
+- **Chemical equilibrium:** no net change in composition; across a boundary that passes matter, the chemical potential $\mu$ of each species is the same on both sides. The chemical potential is introduced in [Section 6.1](../chapter-06/section-01.md).
 
 ---
 

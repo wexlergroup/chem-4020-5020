@@ -34,7 +34,7 @@ kernelspec:
 
 - **Kinetic Theory Assumptions**
   1. Large number of particles (identical, random motion)
-  2. Negligible particle volume compared to container volume
+  2. Negligible particle size compared to the average distance between particles
   3. Collisions are elastic (no energy loss)
   4. No long-range interparticle forces (except during collisions)
   5. Newton’s laws (classical mechanics) apply
@@ -79,7 +79,7 @@ kernelspec:
    $$
    PV = N k_{\mathrm{B}} T = n R T.
    $$
-   - **Applicability**: low pressures, relatively high temperatures, or low densities (particles effectively non-interacting).
+   - **Applicability**: low pressures, low densities, and relatively high temperatures (particles effectively non-interacting).
 
 2. **Pressure from Kinetic Theory**
 

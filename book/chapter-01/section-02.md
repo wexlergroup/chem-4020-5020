@@ -192,7 +192,7 @@ The average translational kinetic energy per particle is
 \langle E_{\mathrm{kin}} \rangle = \frac{1}{2} m \langle v^2 \rangle.
 ```
 
-Equating Eq. {eq}`pressure-kinetic-theory` with the ideal-gas equation of state, $PV = N k_{\mathrm{B}} T$ (discussed in [Section 3](section-03.md)), gives
+Equating Eq. {eq}`pressure-kinetic-theory` with the ideal-gas equation of state, $PV = N k_{\mathrm{B}} T$ (discussed in [Section 1.3](section-03.md)), gives
 
 ```{math}
 :label: equipartition-theorem
@@ -266,7 +266,7 @@ P \;=\; \frac{2\,E_{\mathrm{kin}}}{3\,V}.
 ```
 
 **5. Equating to the Ideal-Gas Equation of State**  
-For an ideal gas (discussed in [Section 3](section-03.md)),
+For an ideal gas (discussed in [Section 1.3](section-03.md)),
 
 ```{math}
 P \;=\; \frac{N\,k_{\mathrm{B}}\,T}{V}.
