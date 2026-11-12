@@ -247,7 +247,7 @@ A = -k_{\mathrm{B}}T\ln Q.
 }
 ```
 
-This result was foreshadowed in Section 2.3 (where it was stated as a Module 5 preview) and in Section 3.3 (where we noted that $A = U - TS$ would be "convenient at constant $T$ and $V$"). It is arguably the single most important equation in canonical statistical mechanics: **if you can compute $Q$, you can compute $A$, and from $A$ you can derive all other thermodynamic quantities** — $S$, $U$, $P$, $C_V$, and chemical potentials — by taking appropriate derivatives. We will develop this machinery in a later chapter.
+This result was foreshadowed in Section 2.3 (where it was stated without derivation) and in Section 3.3 (where we noted that $A = U - TS$ would be "convenient at constant $T$ and $V$"). It is arguably the single most important equation in canonical statistical mechanics: **if you can compute $Q$, you can compute $A$, and from $A$ you can derive all other thermodynamic quantities** — $S$, $U$, $P$, $C_V$, and chemical potentials — by taking appropriate derivatives. We will develop this machinery in a later chapter.
 
 ```{admonition} Defining $A$ by the same strategy as $H$
 :class: note

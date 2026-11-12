@@ -19,9 +19,9 @@ See also: [Course-wide Conventions & Notation](../notation.md)
 
 ## Overview and Learning Objectives
 
-Once microstate probabilities are known, thermodynamic properties follow as ensemble averages. This section derives canonical expressions for internal energy, heat capacity, and pressure in terms of derivatives of $\ln Q$. A recurring theme is that fluctuations are not a nuisance—they encode response functions such as $C_V$.
+Once microstate probabilities are known, thermodynamic properties follow as ensemble averages. This section derives canonical expressions for internal energy, heat capacity, and pressure in terms of derivatives of $\ln Q$. A recurring theme is that fluctuations are not a nuisance—they encode response functions such as $C_V$. A **response function** measures how strongly a property of the system changes when a controlled variable changes; $C_V$ is the response of $U$ to a change in $T$.
 
-Section 2.1 emphasized that *macroscopic properties are expectation values of microscopic properties*, with the expectation taken over the microstate probabilities. Section 2.2 derived the canonical probability distribution for a closed system’s microstates. Here, we connect these results by computing **ensemble averages** that determine macroscopic properties.
+[Section 2.1](section-01.md) emphasized that *macroscopic properties are expectation values of microscopic properties*, with the expectation taken over the microstate probabilities. [Section 2.2](section-02.md) derived the canonical probability distribution for a closed system’s microstates. Here, we connect these results by computing **ensemble averages** that determine macroscopic properties.
 
 Learning objectives:
 
@@ -34,7 +34,7 @@ Learning objectives:
 
 ### Thermodynamic Equilibrium
 
-Recall from Section 1.1 that **thermodynamic equilibrium** is a state of simultaneous mechanical, thermal, and chemical equilibrium. Below are working definitions of each type of equilibrium:
+Recall from [Section 1.1](../chapter-01/section-01.md) that **thermodynamic equilibrium** is a state of simultaneous mechanical, thermal, and chemical equilibrium. Below are working definitions of each type of equilibrium:
 
 ```{glossary}
 Thermal contact
@@ -44,7 +44,7 @@ Chemical contact
 : A state in which two systems can exchange matter.
 
 Mechanical equilibrium
-: A state in which the net force on each particle in the system is zero.
+: A state in which there are no unbalanced forces. Across a movable boundary, the pressure of the system equals that of its surroundings.
 
 Thermal equilibrium
 : A state in which there is no net exchange of energy between systems in thermal contact.
@@ -156,7 +156,7 @@ def partition_function_two_state(E1, E2, T):
 
 # Calculate the partition function for a two-state system
 E1 = 0
-E2 = 0.01  # Energy difference between the two states in eV
+E2 = 0.01  # Energy of state 2 in eV (equal to the energy gap, since E1 = 0)
 T_values = np.linspace(1, 1000, 1000)
 Q_values = [partition_function_two_state(E1, E2, T) for T in T_values]
 
@@ -165,51 +165,69 @@ beta_values = 1 / (kB * T_values)
 ln_Q_values = np.log(Q_values)
 U_values = -np.gradient(ln_Q_values, beta_values)
 
-# Plot the internal energy as a function of temperature
-fig, ax = plt.subplots(figsize=(4, 4))
-ax.plot(T_values, U_values, 'k-')
+# Calculate the heat capacity in units of kB from the two-state result
+# C_V / kB = x^2 e^(-x) / (1 + e^(-x))^2, with x = (E2 - E1) / (kB T)
+x_values = (E2 - E1) * beta_values
+C_V_values = x_values**2 * np.exp(-x_values) / (1 + np.exp(-x_values))**2
+
+fig, axs = plt.subplots(1, 2, figsize=(8, 4))
+
+# Plot the internal energy, relative to E1, as a function of temperature
+ax = axs[0]
+ax.plot(T_values, U_values - E1, 'k-')
 ax.set_xlabel('Temperature (K)')
 ax.set_ylabel('$U_{\\text{two-state}} - E_1$ (eV)')
 ax.grid(True)
 ax.annotate(
-    '$U_{\\text{two-state}} \\rightarrow E_1$', xy=(40, U_values[0] + 0.0001), xytext=(300, 0.001),
+    '$U_{\\text{two-state}} - E_1 \\rightarrow 0$', xy=(40, U_values[0] - E1 + 0.0001), xytext=(300, 0.001),
     arrowprops=dict(arrowstyle='->', color='b'),
     bbox=dict(boxstyle='round,pad=0.3', fc='w', ec='b'),
     ha='center', va='center', color='b'
 )
 x_values_high_T = np.linspace(0, 1000, 1001)
-y_values_high_T = ((E1 + E2) / 2) * np.ones_like(x_values_high_T)
-line = ax.plot(x_values_high_T, y_values_high_T, 'm--', label='$U_{\\text{two-state}} \\rightarrow (E_1 + E_2) / 2$')
+y_values_high_T = ((E2 - E1) / 2) * np.ones_like(x_values_high_T)
+line = ax.plot(x_values_high_T, y_values_high_T, 'm--', label='$U_{\\text{two-state}} - E_1 \\rightarrow (E_2 - E_1) / 2$')
 labelLines(line, zorder=2.5)
 ax.set_xlim(0, 1000)
-ax.set_ylim(0, 0.01)
+ax.set_ylim(0, 0.006)
+
+# Plot the heat capacity at constant volume as a function of temperature
+ax = axs[1]
+ax.plot(T_values, C_V_values, 'k-')
+ax.set_xlabel('Temperature (K)')
+ax.set_ylabel('$C_V / k_{\\mathrm{B}}$')
+ax.grid(True)
+ax.set_xlim(0, 1000)
+ax.set_ylim(0, 0.5)
 
 plt.tight_layout()
 plt.show()
 plt.close(fig)
 ```
 
-Internal energy of a two-state system as a function of temperature, for an energy gap of $0.01\ \mathrm{eV}$.
+Internal energy (left) and heat capacity at constant volume (right; defined in the next subsection) of a two-state system as functions of temperature, for an energy gap of $0.01\ \mathrm{eV}$.
 
 ### Heat Capacity at Constant Volume
 
-From Section 1.1, **heat** is energy transferred due to a temperature difference. The **heat capacity** at constant volume, $C_V$, measures how much heat is required to change a system’s temperature at fixed $N$ and $V$:
+From [Section 1.1](../chapter-01/section-01.md), **heat** is energy transferred due to a temperature difference. The **heat capacity** at constant volume, $C_V$, measures how much heat is required to change a system’s temperature at fixed $N$ and $V$:
 
 ```{math}
 C_V 
 \;=\; \left(\frac{\partial U}{\partial T}\right)_{N,V}.
 ```
 
+The right panel of the figure above shows $C_V$ for the two-state system.
+
 #### Heat Capacity and Energy Fluctuations
 
-In statistics, the variance $\sigma_X^2$ of a random variable $X$ is $\sigma_X^2 = \langle (X - \langle X\rangle)^2\rangle$. In statistical mechanics, $\sigma_E^2$ quantifies fluctuations in the total energy:
+In the canonical ensemble, the energy of the system is not fixed, because the system exchanges energy with the heat bath ([Section 2.2](section-02.md)); the internal energy $U = \langle E\rangle$ is its average. In statistics, the variance $\sigma_X^2$ of a random variable $X$ is $\sigma_X^2 = \langle (X - \langle X\rangle)^2\rangle$. In statistical mechanics, $\sigma_E^2$ quantifies fluctuations in the total energy:
 
 ```{math}
 \sigma_E^2 
-=\; \langle E^2\rangle - \langle E\rangle^2.
+=\; \langle E^2\rangle - \langle E\rangle^2,
 ```
 
-One can show that
+where $\langle E^2\rangle = \sum_{i=1}^M E_i^2\,p_i$. One can show that
 
 ```{math}
 \sigma_E^2 
@@ -226,7 +244,7 @@ C_V
 
 ```{admonition} What does the relationship mean physically?
 :class: dropdown
-In the canonical ensemble, a larger heat capacity corresponds to larger equilibrium energy fluctuations at fixed $T$. Smaller energy fluctuations correspond to smaller $C_V$.
+Consider two systems in contact with heat baths at the same temperature $T$, one with a larger $C_V$ than the other. Use the relationship above to compare their energy fluctuations $\sigma_E^2$.
 ```
 
 ````{admonition} Complete Derivation of the $C_V$ and $\sigma_E^2$ Relationship
@@ -286,10 +304,10 @@ C_V &= \frac{\sigma_E^2}{k_{\mathrm B} T^2}
 
 ### Pressure
 
-In Module 5, we will derive:
+The pressure follows from two results that are derived in later sections:
 
-1. $A = -k_{\mathrm B}\,T\ln Q$, where $A$ is the Helmholtz free energy.
-2. $P = -\left(\frac{\partial A}{\partial V}\right)_{N,T}$, where $P$ is pressure.
+1. $A = -k_{\mathrm B}\,T\ln Q$, where $A$ is the Helmholtz free energy ([Section 4.3](../chapter-04/section-03.md)).
+2. $P = -\left(\frac{\partial A}{\partial V}\right)_{N,T}$, where $P$ is pressure ([Section 5.1](../chapter-05/section-01.md)).
 
 Combining these expressions gives
 
@@ -297,6 +315,8 @@ Combining these expressions gives
 P
 =\; k_{\mathrm B}\,T \left(\frac{\partial \ln Q}{\partial V}\right)_{N,T}.
 ```
+
+[Section 2.5](section-05.md) applies this formula to $N$ particles in a cube and recovers the ideal gas law.
 
 ## Worked Example
 
@@ -328,12 +348,12 @@ Consider a two-state system with $E_1=0$ and $E_2=\varepsilon$. Let $x\equiv \be
 
 4. **Numerical illustration**
 
-   For $\varepsilon=0.010\ \mathrm{eV}$ at $T=300\ \mathrm{K}$, $x=0.387$ and $e^{-x}=0.679$, so
+   For $\varepsilon=0.010\ \mathrm{eV}$ at $T=300\ \mathrm{K}$, $x=0.3868$ and $e^{-x}=0.6792$, so
 
    ```{math}
-   U = 0.010\ \mathrm{eV}\times \frac{0.679}{1.679}=4.04\times 10^{-3}\ \mathrm{eV},
+   U = 0.010\ \mathrm{eV}\times \frac{0.6792}{1.6792}=4.04\times 10^{-3}\ \mathrm{eV},
    \qquad
-   \frac{C_V}{k_{\mathrm B}}=x^2\frac{0.679}{1.679^2}=3.60\times 10^{-2}.
+   \frac{C_V}{k_{\mathrm B}}=(0.3868)^2\,\frac{0.6792}{1.6792^2}=3.60\times 10^{-2}.
    ```
 
 **Result.** $U$ interpolates between 0 and $\varepsilon/2$, while $C_V$ peaks when thermal energy is comparable to $\varepsilon$.
