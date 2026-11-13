@@ -18,6 +18,8 @@ kernelspec:
 
 ### Section 2.1: Introduction to Statistical Mechanics
 
+See [Section 2.1](section-01.md).
+
 1. **Microscopic–Macroscopic Connection**
    - Macroscopic (thermodynamic) properties can be understood as **statistical averages** of microscopic properties.
    - “Expected value” (ensemble average) is the central idea:
@@ -27,10 +29,10 @@ kernelspec:
    ```
 
 2. **Arithmetic Average vs. Expected Value**
-   - Arithmetic average:
+   - Arithmetic average of a dataset of $n$ values:
 
    ```{math}
-   \bar{X} \;=\; \frac{1}{M}\sum_{i=1}^M X_i.
+   \bar{X} \;=\; \frac{1}{n}\sum_{j=1}^n X_j.
    ```
 
    - Expected value:
@@ -46,11 +48,13 @@ kernelspec:
    - **Grand canonical ensemble** $(\mu, V, T)$: system can exchange both energy and particles with a reservoir.
 
 4. **Fundamental Postulate (Microcanonical)**
-   - For an isolated system, **each accessible microstate is equally probable**.
+   - For an isolated system, **each accessible microstate is equally probable**: $p_i = 1/M$, where $M$ is the number of accessible microstates.
 
 ---
 
 ### Section 2.2: Canonical Ensemble
+
+See [Section 2.2](section-02.md).
 
 1. **Closed System**
    - Exchanges energy (heat) with surroundings; no exchange of matter.
@@ -79,7 +83,7 @@ kernelspec:
    Q \;=\; e^{-\beta E_1} + e^{-\beta E_2}.
    ```
 
-   - Probabilities (if $\Delta E = E_2 - E_1$):
+   - Probabilities (with $\Delta E = E_2 - E_1 > 0$):
 
    ```{math}
    p_1 = \frac{1}{1 + e^{-\beta\,\Delta E}},
@@ -94,6 +98,8 @@ kernelspec:
 ---
 
 ### Section 2.3: Ensemble Averages
+
+See [Section 2.3](section-03.md).
 
 1. **Internal Energy**
    - $U \equiv \langle E \rangle$.
@@ -138,6 +144,8 @@ kernelspec:
 
 ### Section 2.4: Molecular Partition Functions
 
+See [Section 2.4](section-04.md).
+
 1. **Many Identical and Independent Particles**
    - For $N$ independent **distinguishable** particles with one-particle partition function $q$, the total partition function is
 
@@ -145,7 +153,7 @@ kernelspec:
    Q \;=\; q^N.
    ```
 
-   - For **indistinguishable** particles,
+   - For independent **indistinguishable** particles, when the thermally accessible one-particle states far outnumber the particles,
 
    ```{math}
    Q \;=\; \frac{q^N}{N!}.
@@ -172,6 +180,8 @@ kernelspec:
 ---
 
 ### Section 2.5: Particle in a Box
+
+See [Section 2.5](section-05.md).
 
 1. **Quantum Levels**
    - For a 1D box $(0 \le x \le L)$,
@@ -201,7 +211,7 @@ kernelspec:
     \Bigr].
     ```
 
-   - At high $T$ or large $L$, we approximate the sum by an integral and obtain the **classical** partition function:
+   - When $\alpha = h^2/(8mV^{2/3}k_{\mathrm B}T) \ll 1$ (large $T$ or large $V$), we approximate the sum by an integral and obtain the **classical** partition function:
 
    ```{math}
    q_{\mathrm{trans}}
@@ -215,7 +225,7 @@ kernelspec:
    ```
 
 3. **Many-Particle System (Ideal Gas)**
-   - For $N$ indistinguishable, non-interacting particles:
+   - For $N$ indistinguishable, non-interacting particles, when $\Lambda \ll (V/N)^{1/3}$, the mean spacing between particles:
 
    ```{math}
    Q
@@ -240,6 +250,8 @@ kernelspec:
 
 ### Section 2.6: Harmonic Oscillator
 
+See [Section 2.6](section-06.md).
+
 1. **Quantum Harmonic Oscillator**
    - Energy levels for a 1D harmonic oscillator of frequency $\omega$:
 
@@ -251,6 +263,8 @@ kernelspec:
    n=0,1,2,\dots
    ```
 
+   - The lowest level, $n = 0$, has the **zero-point energy** $E_0 = \hbar\omega/2$.
+
 2. **Partition Function**
    - Summing over these energy levels:
 
@@ -261,6 +275,8 @@ kernelspec:
    \;=\;
    \frac{e^{-\frac{1}{2}\,\beta\,\hbar\omega}}{1 - e^{-\beta\,\hbar\omega}}.
    ```
+
+   - Define the **vibrational temperature** $\Theta_{\mathrm{vib}} = \hbar\omega/k_{\mathrm B}$, so that $\beta\hbar\omega = \Theta_{\mathrm{vib}}/T$.
 
 3. **Ensemble Averages**
    - **Internal Energy**:
@@ -284,15 +300,26 @@ kernelspec:
         {\bigl(e^{\hbar\omega/(k_{\mathrm B}T)} - 1\bigr)^{2}}.
    ```
 
-   - At high temperature ($k_{\mathrm B}T \gg \hbar\omega$), each harmonic oscillator recovers the **classical limit** $U \to k_{\mathrm B}T$ and $C_V \to k_{\mathrm B}$.
+   - At low temperature ($T \ll \Theta_{\mathrm{vib}}$), $U \to \hbar\omega/2$. At high temperature ($T \gg \Theta_{\mathrm{vib}}$), $U \to k_{\mathrm B}T$. For the limits of $C_V$, see the prompt "Limits of the heat capacity" in [Section 2.6](section-06.md).
 
-<!-- 4. **Einstein Model** (for solids)
-   - Considers each atom as a 3D harmonic oscillator with the same $\omega$.
-   - Provides a simple route to the Dulong–Petit law ($C_V \approx 3 N k_{\mathrm B}$) at high $T$. -->
+4. **Equipartition Theorem**
+   - In classical statistical mechanics, each quadratic term in the energy contributes $\tfrac{1}{2}k_{\mathrm B}T$ to the mean energy.
+
+5. **Einstein Model and Dulong–Petit Law**
+   - The Einstein model treats a crystal of $N$ atoms as $3N$ independent, distinguishable one-dimensional harmonic oscillators with the same $\omega$, so that
+
+   ```{math}
+   Q \;=\; q^{3N},
+   ```
+
+     and $U$ and $C_V$ are $3N$ times the results for a single oscillator.
+   - The Dulong–Petit law is the empirical observation that the molar heat capacity of many elemental solids at room temperature is close to $3R$.
 
 ---
 
 ### Section 2.7: Linear Rigid Rotor
+
+See [Section 2.7](section-07.md).
 
 1. **Energy Levels**
    - For a rigid, linear rotor of moment of inertia $I$:
@@ -317,8 +344,8 @@ kernelspec:
    (2J + 1)\, e^{-\beta \,\frac{\hbar^2}{2I}\,J\,(J+1)}.
    ```
 
-   - Define the **rotational temperature** $\Theta_{\mathrm{rot}} = \frac{\hbar^2}{2k_{\mathrm B}I}$.
-   - **High-temperature limit** ($k_{\mathrm B}T \gg \frac{\hbar^2}{2I}$) gives
+   - Define the **rotational temperature** $\Theta_{\mathrm{rot}} = \frac{\hbar^2}{2k_{\mathrm B}I}$, so that $E_J = k_{\mathrm B}\Theta_{\mathrm{rot}}\,J(J+1)$.
+   - **High-temperature limit** ($T \gg \Theta_{\mathrm{rot}}$) gives
 
    ```{math}
    q_{\mathrm{rot}}
@@ -336,22 +363,24 @@ kernelspec:
    ```
 
 3. **Ensemble Averages** (High-$T$ Approximation)
-   - **Internal Energy** ($U_{\text{rot}}$):
+   - **Internal Energy** ($U_{\mathrm{rot}}$):
 
    ```{math}
-   U_{\text{rot}} \;\approx\; k_{\mathrm B}\,T.
+   U_{\mathrm{rot}} \;\approx\; k_{\mathrm B}\,T.
    ```
 
-     (One linear rotor has 2 rotational degrees of freedom $\rightarrow \frac{2}{2} k_{\mathrm B}T$.)
+     (To compare this result with the equipartition theorem, see the prompt "Comparing with equipartition" in [Section 2.7](section-07.md).)
    - **Heat Capacity**:
 
    ```{math}
-   C_V^{(\text{rot})} \;\approx\; k_{\mathrm B}.
+   C_V^{(\mathrm{rot})} \;\approx\; k_{\mathrm B}.
    ```
 
 ---
 
 ### Section 2.8: Molecular Statistical Mechanics
+
+See [Section 2.8](section-08.md).
 
 1. **Combining All Degrees of Freedom**
    - For a general molecule, the total one-molecule partition function is
@@ -365,13 +394,50 @@ kernelspec:
    q_{\mathrm{elec}}.
    ```
 
-   - Extends to polyatomic molecules with more complex rotational constants $\Theta_{\mathrm{rot},A}, \Theta_{\mathrm{rot},B}, \Theta_{\mathrm{rot},C}$ and multiple vibrational frequencies $\Theta_{\mathrm{vib},j}$.
+   - For a polyatomic molecule, $q_{\mathrm{rot}}$ contains up to three rotational temperatures, $\Theta_{\mathrm{rot},A}$, $\Theta_{\mathrm{rot},B}$, and $\Theta_{\mathrm{rot},C}$, and $q_{\mathrm{vib}}$ contains one vibrational temperature $\Theta_{\mathrm{vib},j}$ for each normal mode.
 
-2. **Symmetry Considerations**
-   - Symmetry number $\sigma$ must be included for molecules with indistinguishable orientations (e.g., homonuclear diatomics, symmetrical polyatomics).
+2. **Rotation of Nonlinear Molecules**
+   - A nonlinear molecule has three principal moments of inertia, $I_A$, $I_B$, and $I_C$, each with a rotational temperature $\Theta_{\mathrm{rot},i} = \hbar^2/(2k_{\mathrm B}I_i)$.
+   - In a **spherical top**, all three are equal; in a **symmetric top**, two are equal; in an **asymmetric top**, all three are different.
+   - High-temperature limit ($T \gg \Theta_{\mathrm{rot},i}$):
 
-3. **Summary Table**
-   - Often, we tabulate $q_{\mathrm{trans}}, q_{\mathrm{rot}}, q_{\mathrm{vib}}, q_{\mathrm{elec}}$ for different molecule types (linear, nonlinear, spherical top, symmetric top, etc.), applying high-temperature (classical) or more exact quantum results as needed.
+   ```{math}
+   q_{\mathrm{rot}}
+   \;\approx\;
+   \frac{\sqrt{\pi}}{\sigma}\,
+   \sqrt{\frac{T^3}{\Theta_{\mathrm{rot},A}\,\Theta_{\mathrm{rot},B}\,\Theta_{\mathrm{rot},C}}}.
+   ```
+
+3. **Symmetry Number**
+   - The symmetry number $\sigma$ is the number of indistinguishable orientations of the molecule that can be reached by rotating it as a rigid body, including the original orientation (for example, 2 for $\mathrm{H_2O}$, 3 for $\mathrm{NH_3}$, and 12 for $\mathrm{CH_4}$).
+
+4. **Vibration of Polyatomic Molecules**
+   - A molecule with $N$ atoms has $3N-6$ normal modes if it is nonlinear and $3N-5$ if it is linear.
+   - In the harmonic approximation,
+
+   ```{math}
+   q_{\mathrm{vib}}
+   \;=\;
+   \prod_{j} \frac{e^{-\Theta_{\mathrm{vib},j}/(2T)}}{1 - e^{-\Theta_{\mathrm{vib},j}/T}},
+   ```
+
+     where the product runs over the normal modes.
+
+5. **Electronic Partition Function**
+   - With energies measured from the ground level ($\varepsilon_1 = 0$),
+
+   ```{math}
+   q_{\mathrm{elec}}
+   \;=\;
+   \sum_{i} g_i\,e^{-\beta\varepsilon_i}
+   \;=\;
+   g_1 + g_2\,e^{-\beta\varepsilon_2} + \cdots,
+   ```
+
+     where $g_i$ is the degeneracy of the $i$-th electronic level. If every term after the first is negligible, $q_{\mathrm{elec}} \approx g_1$.
+
+6. **Summary Table**
+   - The summary table in [Section 2.8](section-08.md) collects $q_{\mathrm{trans}}$, $q_{\mathrm{rot}}$, $q_{\mathrm{vib}}$, and $q_{\mathrm{elec}}$ for atoms, diatomic molecules, and linear and nonlinear polyatomic molecules.
 
 ---
 
@@ -384,9 +450,7 @@ A. **Expected Value of a General Variable**
 ```{math}
 \langle X \rangle
 \;=\;
-\sum_i X_i\,p_i
-\quad\text{or}\quad
-\int X(\omega)\,p(\omega)\,d\omega.
+\sum_i X_i\,p_i.
 ```
 
 - **Applicability**: general definition in statistical mechanics/probability theory.
@@ -402,7 +466,7 @@ p_i
 \quad(\text{for all accessible microstates}).
 ```
 
-- **Applicability**: isolated system, $(N, V, E)$.
+- **Applicability**: isolated system, $(N, V, E)$, with $M$ accessible microstates.
 
 ---
 
@@ -482,7 +546,7 @@ Q
 \frac{q^N}{N!},
 ```
 
-- **Applicability**: identical, indistinguishable particles (e.g., ideal gases).
+- **Applicability**: identical, independent, indistinguishable particles whose thermally accessible one-particle states far outnumber the particles (e.g., gases at ordinary temperatures and pressures). For independent distinguishable particles, $Q = q^N$.
 
 ---
 
@@ -511,11 +575,21 @@ q_{\mathrm{HO}}
 - **Internal Energy**:
 
 ```{math}
-U_{\text{HO}}
+U_{\mathrm{HO}}
 \;=\;
 \frac{\hbar\omega}{2}
 +
 \frac{\hbar\omega}{\,e^{\beta\,\hbar\omega}-1\,}.
+```
+
+- **Heat Capacity** (with $\Theta_{\mathrm{vib}} = \hbar\omega/k_{\mathrm B}$):
+
+```{math}
+C_V^{(\mathrm{HO})}
+\;=\;
+k_{\mathrm B}
+\Bigl(\frac{\Theta_{\mathrm{vib}}}{T}\Bigr)^{2}\,
+\frac{e^{\Theta_{\mathrm{vib}}/T}}{\bigl(e^{\Theta_{\mathrm{vib}}/T} - 1\bigr)^{2}}.
 ```
 
 ---
@@ -533,20 +607,20 @@ q_{\mathrm{rot}}
 - **Internal Energy**:
 
 ```{math}
-U_{\text{rot}} \;\approx\; k_{\mathrm B}\,T.
+U_{\mathrm{rot}} \;\approx\; k_{\mathrm B}\,T.
 ```
 
 - **Heat Capacity**:
 
 ```{math}
-C_V^{(\text{rot})} \;\approx\; k_{\mathrm B}.
+C_V^{(\mathrm{rot})} \;\approx\; k_{\mathrm B}.
 ```
 
 ---
 
 L. **Polyatomic Molecules**
 
-- **General form** (neglecting interactions):
+- **General form** (when the energy of one molecule is a sum of translational, rotational, vibrational, and electronic parts):
 
 ```{math}
 q
@@ -557,4 +631,27 @@ q_{\mathrm{vib}}\;
 q_{\mathrm{elec}}.
 ```
 
-- For linear vs. nonlinear rotors or multiple vibrational modes, each factor is included appropriately (with possible symmetry numbers).
+- **Rotation of a nonlinear molecule** (high $T$):
+
+```{math}
+q_{\mathrm{rot}}
+\;\approx\;
+\frac{\sqrt{\pi}}{\sigma}\,
+\sqrt{\frac{T^3}{\Theta_{\mathrm{rot},A}\,\Theta_{\mathrm{rot},B}\,\Theta_{\mathrm{rot},C}}}.
+```
+
+- **Vibration** (product over the $3N-6$ normal modes of a nonlinear molecule or the $3N-5$ normal modes of a linear molecule with $N$ atoms):
+
+```{math}
+q_{\mathrm{vib}}
+\;=\;
+\prod_{j} \frac{e^{-\Theta_{\mathrm{vib},j}/(2T)}}{1 - e^{-\Theta_{\mathrm{vib},j}/T}}.
+```
+
+- **Electronic** (when every term after the first is negligible):
+
+```{math}
+q_{\mathrm{elec}}
+\;\approx\;
+g_1.
+```
