@@ -82,7 +82,15 @@ plt.close(fig)
 
 Energy levels for a linear rigid rotor. Each level $E_J$ has degeneracy $g_J = 2J + 1$ (magnetic quantum numbers $m=-J,\ldots,J$). For example, the $J=2$ level contains five degenerate microstates with $m=-2,-1,0,1,2$.
 
-For a linear rigid rotor with moment of inertia $I$, the energy levels are:
+A linear rigid rotor is a linear molecule whose bond lengths are fixed. The molecule can rotate about two perpendicular axes, $a$ and $b$, that pass through its center of mass and are perpendicular to the molecular axis. Rotation about the molecular axis is not counted, because the nuclei lie on that axis. In classical mechanics, the rotational energy is
+
+```{math}
+E = \frac{L_a^2}{2I} + \frac{L_b^2}{2I},
+```
+
+where $L_a$ and $L_b$ are the components of the angular momentum along the two axes and $I$ is the moment of inertia, which is the same for both axes.
+
+In quantum mechanics, the rotational energy is quantized. For a linear rigid rotor with moment of inertia $I$, the energy levels are:
 
 ```{math}
 E_J \;=\; \frac{\hbar^2}{2I}\,J\bigl(J+1\bigr)
@@ -90,7 +98,7 @@ E_J \;=\; \frac{\hbar^2}{2I}\,J\bigl(J+1\bigr)
 J = 0, 1, 2, \dots
 ```
 
-Here, $\hbar$ is the reduced Planck constant, and $g_J=2J+1$ is the degeneracy of the level $E_J$.
+Here, $\hbar$ is the reduced Planck constant, $J$ is the rotational quantum number, and $g_J=2J+1$ is the degeneracy of the level $E_J$. The quantum number $m$ specifies the component of the angular momentum along a chosen axis in space, $m\hbar$, and takes the values $m=-J,\ldots,J$. The energy $E_J$ does not depend on $m$.
 
 ````{admonition} Physical Significance of the Moment of Inertia
 :class: note
@@ -98,7 +106,7 @@ The moment of inertia $I$ measures how mass is distributed about the rotation ax
 ```{math}
   I \;=\; \mu\,r^2, 
   \quad
-  \mu = \frac{m_A\,m_B}{m_A + m_B},
+  \mu = \frac{m_{\mathrm{A}}\,m_{\mathrm{B}}}{m_{\mathrm{A}} + m_{\mathrm{B}}},
 ```
 where $r$ is the bond length and $\mu$ is the reduced mass.
 ````
@@ -163,6 +171,8 @@ We define the **rotational temperature** $\Theta_{\mathrm{rot}}$ by
 \frac{\hbar^2}{2k_{\mathrm{B}}\,I}.
 ```
 
+In terms of $\Theta_{\mathrm{rot}}$, the energy levels are $E_J = k_{\mathrm{B}}\Theta_{\mathrm{rot}}\,J(J+1)$, so $\Theta_{\mathrm{rot}}$ sets the temperature scale of the level spacing, and the condition for the high-temperature approximation is $T \gg \Theta_{\mathrm{rot}}$.
+
 Thus, for a heteronuclear diatomic rotor (symmetry factor $\sigma=1$),
 
 ```{math}
@@ -175,22 +185,71 @@ q_{\mathrm{rot}}
 
 ````{admonition} Symmetry Factor $\sigma$
 :class: tip
-For **homonuclear** diatomics (and, more generally, symmetric linear rotors), distinct orientations in space may be indistinguishable, leading to $\sigma=2$. This modifies the partition function to
+For a **homonuclear** diatomic molecule (and, more generally, a symmetric linear molecule such as $\mathrm{CO_2}$), a rotation by 180° about an axis perpendicular to the molecular axis exchanges identical nuclei and gives an orientation that cannot be distinguished from the original. The high-temperature result above counts these two orientations as different states, so it must be divided by the **symmetry factor** $\sigma=2$ (compare the factor of $1/N!$ in [Section 2.4](section-04.md)):
 ```{math}
 q_{\mathrm{rot}} \;\approx\; \frac{T}{\sigma\,\Theta_{\mathrm{rot}}}.
 ```
-Whether you include $\sigma$ depends on the level of detail needed (e.g., for absolute entropy calculations).
+For a heteronuclear diatomic molecule, $\sigma=1$. The symmetry factor is required whenever the value of $q_{\mathrm{rot}}$ matters, as in the entropy ([Section 4.3](../chapter-04/section-03.md)) and in equilibrium constants ([Section 7.2](../chapter-07/section-02.md)). It has no effect on $U_{\mathrm{rot}}$ or $C_V^{(\mathrm{rot})}$, which depend only on the temperature derivative of $\ln q_{\mathrm{rot}}$.
 ````
 
-<!-- What is the rotational temperature? -->
+{numref}`rotational-temperatures` lists $\Theta_{\mathrm{rot}}$ and $\sigma$ for the diatomic molecules whose vibrational temperatures are given in [Section 2.6](section-06.md). The values of $\Theta_{\mathrm{rot}}$ are calculated from the rotational constant $\tilde{B} = h/(8\pi^2 c I)$ as $\Theta_{\mathrm{rot}} = hc\tilde{B}/k_{\mathrm{B}}$, where $c$ is the speed of light and $hc/k_{\mathrm{B}} = 1.43878\ \mathrm{cm\,K}$. The rotational constants and bond lengths are equilibrium values from the [NIST Chemistry WebBook](https://webbook.nist.gov/chemistry/); the rotational constant of $\mathrm{O_2}$ is derived from the constants listed there for its lowest vibrational level.
 
-<!-- What is the exact value of the partition function? -->
+```{list-table} Rotational constants, bond lengths, rotational temperatures, and symmetry factors of selected diatomic molecules
+:header-rows: 1
+:name: rotational-temperatures
+
+* - Molecule
+  - $\tilde{B}$ ($\mathrm{cm^{-1}}$)
+  - $r$ (Å)
+  - $\Theta_{\mathrm{rot}}$ (K)
+  - $\sigma$
+* - $\mathrm{H_2}$
+  - 60.853
+  - 0.7414
+  - 87.55
+  - 2
+* - $\mathrm{HCl}$
+  - 10.593
+  - 1.275
+  - 15.24
+  - 1
+* - $\mathrm{N_2}$
+  - 1.9982
+  - 1.098
+  - 2.875
+  - 2
+* - $\mathrm{CO}$
+  - 1.9313
+  - 1.128
+  - 2.779
+  - 1
+* - $\mathrm{O_2}$
+  - 1.4456
+  - 1.208
+  - 2.080
+  - 2
+* - $\mathrm{Cl_2}$
+  - 0.24399
+  - 1.988
+  - 0.3510
+  - 2
+* - $\mathrm{Br_2}$
+  - 0.082107
+  - 2.281
+  - 0.1181
+  - 2
+* - $\mathrm{I_2}$
+  - 0.037372
+  - 2.666
+  - 0.05377
+  - 2
+```
 
 ### Ensemble Averages
 
 #### Natural Logarithm of the Partition Function
 
-From the high-$T$ approximation (with $\sigma=1$ for simplicity),
+From the high-$T$ approximation (with $\sigma=1$; a different value of $\sigma$ adds only a constant to $\ln q_{\mathrm{rot}}$ and does not change the results below),
 
 ```{math}
 \ln q_{\mathrm{rot}}
@@ -202,7 +261,7 @@ From the high-$T$ approximation (with $\sigma=1$ for simplicity),
 
 #### Internal Energy
 
-The rotational internal energy (per rotor) is
+The rotational internal energy (per rotor) follows from the derivative in [Section 2.3](section-03.md):
 
 ```{math}
 U_{\mathrm{rot}} 
@@ -242,7 +301,12 @@ C_V^{(\mathrm{rot})}
 k_{\mathrm{B}}.
 ```
 
-Physically, this means a single linear rotor contributes $k_{\mathrm{B}}$ to the heat capacity in the classical (high-$T$) limit, corresponding to two rotational degrees of freedom (each contributing $\tfrac{1}{2}k_{\mathrm{B}}$).
+A single linear rotor therefore contributes $k_{\mathrm{B}}$ to the heat capacity in the classical (high-$T$) limit.
+
+```{admonition} Comparing with equipartition
+:class: important
+Count the quadratic terms in the classical rotational energy of the linear rigid rotor, and use the equipartition theorem ([Section 2.6](section-06.md)) to predict $U_{\mathrm{rot}}$ and $C_V^{(\mathrm{rot})}$. Compare the predictions with the results above.
+```
 
 ```{note}
 In a more rigorous quantum treatment (and at lower temperatures), the partition function and the resulting averages must use the full sum over $J$. At sufficiently low $T$, only the $J=0$ and $J=1$ levels are significantly populated, which reduces the effective heat capacity below $k_{\mathrm{B}}$.
@@ -256,14 +320,14 @@ You can open the studio in a new tab: [Rigid Rotor Computational Studio](https:/
 
 ## Worked Example
 
-**Rotational temperature and $q_{\mathrm{rot}}$ for CO**
+### Rotational temperature and $q_{\mathrm{rot}}$ for CO
 
-Approximate CO as a rigid rotor with bond length $r = 1.128\ \text{\AA} = 1.128\times10^{-10}\ \mathrm{m}$. Use $m_C=12u$, $m_O=16u$, and $u=1.66054\times10^{-27}\ \mathrm{kg}$.
+Approximate CO as a rigid rotor with bond length $r = 1.128\ \text{\AA} = 1.128\times10^{-10}\ \mathrm{m}$. Use $m_{\mathrm{C}}=12u$, $m_{\mathrm{O}}=16u$, and $u=1.66054\times10^{-27}\ \mathrm{kg}$.
 
 1. **Reduced mass**
 
    ```{math}
-   \mu=\frac{m_Cm_O}{m_C+m_O}
+   \mu=\frac{m_{\mathrm{C}}m_{\mathrm{O}}}{m_{\mathrm{C}}+m_{\mathrm{O}}}
    =\frac{(12u)(16u)}{28u}=6.857u
    =1.14\times10^{-26}\ \mathrm{kg}.
    ```
@@ -286,10 +350,18 @@ Approximate CO as a rigid rotor with bond length $r = 1.128\ \text{\AA} = 1.128\
 4. **High-$T$ partition function (heteronuclear, $\sigma=1$) at $T=300\ \mathrm{K}$**
 
    ```{math}
-   q_{\mathrm{rot}}\approx \frac{T}{\Theta_{\mathrm{rot}}}=\frac{300}{2.78}\approx 1.08\times10^{2}.
+   q_{\mathrm{rot}}\approx \frac{T}{\Theta_{\mathrm{rot}}}=\frac{300}{2.78}=107.9.
    ```
 
-**Result.** For CO at room temperature, $T\gg \Theta_{\mathrm{rot}}$, so the high-$T$ approximation is well justified.
+5. **Direct sum for comparison**
+
+   Adding the terms of the sum over $J$ numerically (the terms beyond $J=60$ are negligible) gives
+
+   ```{math}
+   q_{\mathrm{rot}}=\sum_{J=0}^{\infty}(2J+1)\,e^{-\Theta_{\mathrm{rot}}J(J+1)/T}=108.2.
+   ```
+
+**Result.** For CO at room temperature, $T\gg \Theta_{\mathrm{rot}}$, and the high-$T$ approximation agrees with the direct sum to within 0.3%.
 
 ## Concept Checks
 
@@ -302,5 +374,5 @@ Approximate CO as a rigid rotor with bond length $r = 1.128\ \text{\AA} = 1.128\
 
 * Rigid-rotor levels scale as $J(J+1)$ with degeneracy $2J+1$.
 * In the high-$T$ limit, $q_{\mathrm{rot}}\approx T/(\sigma\Theta_{\mathrm{rot}})$.
-* $\Theta_{\mathrm{rot}}$ is set by the moment of inertia $I=\mu r^2$; small, stiff molecules have larger $\Theta_{\mathrm{rot}}$.
+* $\Theta_{\mathrm{rot}}$ is set by the moment of inertia $I=\mu r^2$.
 * Rotational contributions approach equipartition values at sufficiently high temperature.
