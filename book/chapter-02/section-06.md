@@ -154,13 +154,33 @@ plt.close(fig)
 
 Energy levels and wavefunctions for a one-dimensional harmonic oscillator. The energy levels $E_n$ are shown as blue lines, while the wavefunctions $\psi_n$ are shown as red curves.
 
-For a one-dimensional harmonic oscillator with angular frequency $\omega$, the quantized energy levels are
+A one-dimensional harmonic oscillator is a particle of mass $m$ that moves in the potential
+
+```{math}
+V(x) = \frac{1}{2} k x^2,
+```
+
+where $x$ is the displacement from the equilibrium position and $k$ is the force constant. A larger force constant corresponds to a stiffer spring or, for a molecular vibration, a stiffer bond. In classical mechanics, the energy of the oscillator is the sum of its kinetic and potential energies,
+
+```{math}
+E = \frac{p_x^2}{2m} + \frac{1}{2} m \omega^2 x^2,
+```
+
+where $p_x$ is the momentum and
+
+```{math}
+\omega = \left( \frac{k}{m} \right)^{1/2}
+```
+
+is the angular frequency. For the vibration of a diatomic molecule, $x$ is the displacement of the bond length from its equilibrium value, and $m$ is replaced by the reduced mass $\mu$ of the two atoms ([Section 2.7](section-07.md)).
+
+In quantum mechanics, the energy of the oscillator is quantized. For a one-dimensional harmonic oscillator with angular frequency $\omega$, the energy levels are
 
 ```{math}
 E_n = \hbar \omega \left( n + \frac{1}{2} \right) \quad \text{for} \; n = 0, 1, 2, \ldots,
 ```
 
-where $\hbar$ is the [reduced Planck constant](https://physics.nist.gov/cgi-bin/cuu/Value?hbar) and $n$ is a nonnegative integer.
+where $\hbar$ is the [reduced Planck constant](https://physics.nist.gov/cgi-bin/cuu/Value?hbar) and $n$ is a nonnegative integer. The lowest level, $n = 0$, has energy $E_0 = \hbar\omega/2$, which is called the **zero-point energy**.
 
 ### Partition Function for a Harmonic Oscillator
 
@@ -287,17 +307,70 @@ plt.close(fig)
 
 Internal energy of a harmonic oscillator as a function of temperature. The zero-point energy is shown as a blue dashed line, while the high-temperature limit is shown as a red dashed line.
 
-<!-- Derivation of low- and high-temperature limits for the internal energy of a harmonic oscillator. -->
+The dashed lines in the figure are the low- and high-temperature limits of $U$. For $T \ll \Theta_{\mathrm{vib}}$, the exponential $e^{\Theta_{\mathrm{vib}}/T}$ is very large, so the second term in the brackets vanishes and
+
+```{math}
+U \to \frac{1}{2} k_{\mathrm B}\Theta_{\mathrm{vib}} = \frac{\hbar \omega}{2},
+```
+
+which is the zero-point energy. For $T \gg \Theta_{\mathrm{vib}}$, the ratio $x = \Theta_{\mathrm{vib}}/T$ is small, and the expansion $e^x \approx 1 + x + x^2/2$ gives
+
+```{math}
+\frac{1}{e^x - 1} \approx \frac{1}{x \left( 1 + x/2 \right)} \approx \frac{1}{x} - \frac{1}{2}.
+```
+
+The constant $\tfrac{1}{2}$ in the brackets cancels, and
+
+```{math}
+U \to k_{\mathrm B}\Theta_{\mathrm{vib}} \, \frac{T}{\Theta_{\mathrm{vib}}} = k_{\mathrm B} T.
+```
+
+This limit can be compared with the equipartition theorem of classical statistical mechanics, which states that each quadratic term in the energy contributes $\tfrac{1}{2}k_{\mathrm B}T$ to the mean energy. For example, the three quadratic terms of the translational kinetic energy, $(p_x^2 + p_y^2 + p_z^2)/2m$, give $\tfrac{3}{2}k_{\mathrm B}T$ ([Section 1.2](../chapter-01/section-02.md)).
+
+The value of $\Theta_{\mathrm{vib}}$ depends on the molecule. {numref}`vibrational-temperatures` lists $\Theta_{\mathrm{vib}}$ for several diatomic molecules, calculated from the harmonic vibrational wavenumber $\tilde{\nu}$ as $\Theta_{\mathrm{vib}} = hc\tilde{\nu}/k_{\mathrm B}$, where $c$ is the speed of light and $hc/k_{\mathrm B} = 1.43878\ \mathrm{cm\,K}$. The plots in this section use the value for $\mathrm{Cl_2}$.
+
+```{list-table} Harmonic vibrational wavenumbers (from the [NIST Chemistry WebBook](https://webbook.nist.gov/chemistry/)) and vibrational temperatures of selected diatomic molecules
+:header-rows: 1
+:name: vibrational-temperatures
+
+* - Molecule
+  - $\tilde{\nu}$ ($\mathrm{cm^{-1}}$)
+  - $\Theta_{\mathrm{vib}}$ (K)
+* - $\mathrm{H_2}$
+  - 4401.21
+  - 6332
+* - $\mathrm{HCl}$
+  - 2990.95
+  - 4303
+* - $\mathrm{N_2}$
+  - 2358.57
+  - 3393
+* - $\mathrm{CO}$
+  - 2169.81
+  - 3122
+* - $\mathrm{O_2}$
+  - 1580.19
+  - 2274
+* - $\mathrm{Cl_2}$
+  - 559.72
+  - 805
+* - $\mathrm{Br_2}$
+  - 325.32
+  - 468
+* - $\mathrm{I_2}$
+  - 214.50
+  - 309
+```
 
 #### Heat Capacity at Constant Volume
 
-In Section 2.3, we showed that
+In [Section 2.3](section-03.md), we showed that
 
 ```{math}
-\sigma_E^2 = \left( \frac{\partial^2 \ln q}{\partial \beta^2} \right) = k_{\mathrm B} T^2 C_V.
+\sigma_E^2 = \left( \frac{\partial^2 \ln Q}{\partial \beta^2} \right)_{N,V} = k_{\mathrm B} T^2 C_V.
 ```
 
-From Equation {eq}`harmonic_oscillator_lnq`, it follows that
+For a single oscillator, $Q = q$, and from Equation {eq}`harmonic_oscillator_lnq`, it follows that
 
 ```{math}
 C_V
@@ -319,7 +392,9 @@ C_V
 &= \frac{\hbar \omega}{g^2} \left( \frac{\partial}{\partial \beta} \left( e^{\beta \hbar \omega} - 1 \right) \right) \\
 &= \left( \hbar \omega \right)^2 \frac{e^{\beta \hbar \omega}}{\left( e^{\beta \hbar \omega} - 1 \right)^2}.
 \end{aligned}
-``` 
+```
+
+Dividing by $k_{\mathrm B} T^2$ and using $\beta = 1/(k_{\mathrm B} T)$ gives the expression for $C_V$ above.
 ````
 
 ```{code-cell} ipython3
@@ -351,6 +426,11 @@ plt.close(fig)
 
 Heat capacity at constant volume of a harmonic oscillator as a function of temperature. The low-temperature limit is indicated by the blue arrow, while the high-temperature limit is shown as a red dashed line.
 
+```{admonition} Limits of the heat capacity
+:class: important
+Take the limits $T \ll \Theta_{\mathrm{vib}}$ and $T \gg \Theta_{\mathrm{vib}}$ of the expression for $C_V$, following the steps used for $U$ above, and compare the results with the figure.
+```
+
 ### Computational Studio: Harmonic Oscillator
 
 Explore how the internal energy and heat capacity evolve with the characteristic temperature, visualizing the transition between quantum “freeze-out” and the classical high-temperature limit.
@@ -359,13 +439,13 @@ You can open the studio in a new tab: [Harmonic Oscillator Studio](https://wexle
 
 ### Einstein Model
 
-The Einstein model is a simple model for an atomic crystal, where $N$ identical atoms occupy lattice sites and vibrate about these sites as independent (i.e., non-interacting) three-dimensional harmonic oscillators, all with the same frequency. Because the atoms occupy fixed lattice sites, they can be treated as distinguishable. For the Einstein model, the partition function is
+The Einstein model is a simple model for an atomic crystal, where $N$ identical atoms occupy lattice sites and vibrate about these sites as independent (i.e., non-interacting) three-dimensional harmonic oscillators, all with the same frequency. Because the atoms occupy fixed lattice sites, they can be treated as distinguishable. Each atom vibrates independently along $x$, $y$, and $z$, so its energy is the sum of the energies of three one-dimensional oscillators, and the crystal is a collection of $3N$ independent, distinguishable one-dimensional oscillators. The partition function is therefore a product of $3N$ factors of $q$ ([Section 2.4](section-04.md)):
 
 ```{math}
 Q = q^{3N} = \left( \frac{e^{-\beta \hbar \omega / 2}}{1 - e^{-\beta \hbar \omega}} \right)^{3N}.
 ```
 
-One can show that
+Because $\ln Q = 3N \ln q$, the internal energy and the heat capacity are $3N$ times the results for a single oscillator:
 
 ```{math}
 U = \frac{3}{2} N \hbar \omega + \frac{3N \hbar \omega}{e^{\beta \hbar \omega} - 1},
@@ -378,6 +458,8 @@ C_V = 3 N k_{\mathrm B} \left( \frac{\hbar \omega}{k_{\mathrm B} T} \right)^2 \f
 ```
 
 #### Dulong–Petit Law
+
+The **Dulong–Petit law** is the empirical observation that the molar heat capacity of many elemental solids at room temperature is close to $3R = 24.9\ \mathrm{J\,mol^{-1}\,K^{-1}}$, where $R$ is the gas constant. The figure below compares the law with molar heat capacities measured at 25 °C. Elements whose heat capacity differs from $3R$ by more than $R$ are labeled.
 
 ```{code-cell} ipython3
 :tags: [hide-input]
@@ -403,10 +485,20 @@ axs[0].scatter(df["Atomic Number"], df["Molar (R)"], color="black")
 axs[0].set_xlabel("Atomic Number")
 axs[0].set_ylabel(r"Molar heat capacity ($C/R$)")
 
-# Annotate outliers
+# Annotate outliers (the two entries for carbon are graphite and diamond)
 outliers = df[df["Absolute Deviation"] > 1]
 for _, row in outliers.iterrows():
-    axs[0].annotate(row["Symbol"], (row["Atomic Number"], row["Molar (R)"]))
+    label, offset, ha = row["Symbol"], (5, 2), "left"
+    if row["Symbol"] == "C":
+        allotrope = "graphite" if "graphite" in str(row["Notes"]) else "diamond"
+        label = f"C ({allotrope})"
+        offset = (5, -2) if allotrope == "graphite" else (5, -6)
+    elif row["Symbol"] == "B":
+        offset = (5, 4)
+    elif row["Atomic Number"] > 90:
+        offset, ha = (-6, -3), "right"
+    axs[0].annotate(label, (row["Atomic Number"], row["Molar (R)"]),
+                    xytext=offset, textcoords="offset points", ha=ha)
 
 # Plot Dulong-Petit law
 dulong_petit = axs[0].plot([0, 100], [3, 3], "r--", label="Dulong–Petit law")
@@ -417,7 +509,12 @@ plt.show()
 plt.close(fig)
 ```
 
-Molar heat capacity of elemental solids as a function of atomic number. The Dulong–Petit law is shown as a red dashed line.
+Molar heat capacity at 25 °C of elemental solids (and liquid mercury) as a function of atomic number. The Dulong–Petit law is shown as a red dashed line.
+
+```{admonition} Comparing the data with the Einstein model
+:class: important
+For one mole of atoms, $N k_{\mathrm B} = R$. Compare the Dulong–Petit law with the heat capacity of the Einstein model. In which temperature range does the model reproduce the law? What does the model suggest about $\Theta_{\mathrm{vib}}$ for the labeled elements that lie below the line (Be, B, and C)?
+```
 
 ## Worked Example
 
@@ -429,7 +526,7 @@ For a harmonic oscillator,
 U = k_{\mathrm B}\Theta_{\mathrm{vib}}\left[\frac{1}{2}+\frac{1}{e^{\Theta_{\mathrm{vib}}/T}-1}\right].
 ```
 
-Take $\Theta_{\mathrm{vib}}=805\ \mathrm{K}$ (the value used in the section plot) and $T=298\ \mathrm{K}$.
+Take $\Theta_{\mathrm{vib}}=805\ \mathrm{K}$ (the value for $\mathrm{Cl_2}$ in {numref}`vibrational-temperatures`) and $T=298\ \mathrm{K}$.
 
 1. **Compute the exponential factor**
 
@@ -443,18 +540,28 @@ Take $\Theta_{\mathrm{vib}}=805\ \mathrm{K}$ (the value used in the section plot
 
    ```{math}
    \frac{1}{2}+\frac{1}{e^{\Theta_{\mathrm{vib}}/T}-1}
-   =\frac{1}{2}+\frac{1}{13.9}=0.572.
+   =\frac{1}{2}+\frac{1}{13.9}=0.5719.
    ```
 
 3. **Compute $U$**
 
    ```{math}
-   U = k_{\mathrm B}(805\ \mathrm{K})(0.572)=k_{\mathrm B}(460\ \mathrm{K}).
+   U = k_{\mathrm B}(805\ \mathrm{K})(0.5719)=k_{\mathrm B}(460.4\ \mathrm{K}).
    ```
 
-Per mole, $U_m = R(460\ \mathrm{K})=3.83\ \mathrm{kJ\,mol^{-1}}$.
+   Per mole, $U_m = R(460.4\ \mathrm{K})=3.83\ \mathrm{kJ\,mol^{-1}}$.
 
-**Result.** At room temperature, the oscillator energy is only modestly above the zero-point value because $T<\Theta_{\mathrm{vib}}$.
+4. **Compute the populations of the two lowest levels**
+
+   The probability of level $n$ is $p_n = e^{-\beta E_n}/q$ ([Section 2.2](section-02.md)). With the partition function derived above, $p_n = e^{-n\Theta_{\mathrm{vib}}/T}\left(1-e^{-\Theta_{\mathrm{vib}}/T}\right)$, so
+
+   ```{math}
+   p_0 = 1-\frac{1}{14.9}=0.933,
+   \qquad
+   p_1 = \frac{1}{14.9}(0.933)=0.063.
+   ```
+
+**Result.** At 298 K, $U$ exceeds the zero-point energy, $k_{\mathrm B}(402.5\ \mathrm{K})$, by 14%, and 93% of the oscillators are in the lowest level.
 
 ## Concept Checks
 
