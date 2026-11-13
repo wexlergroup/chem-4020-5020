@@ -40,7 +40,7 @@ Between 1732 and 1736, Bernoulli and Euler combined the discoveries of Newton (l
 \frac{1}{2} m v^2 = m g h.
 ```
 
-When an object (mass $m$) of height $h$ is dropped, its gravitational potential energy $mgh$ is converted into kinetic energy $\tfrac{1}{2}mv^2$, assuming negligible air resistance.
+When an object of mass $m$ is dropped from a height $h$, its gravitational potential energy $mgh$ is converted into kinetic energy $\tfrac{1}{2}mv^2$, assuming negligible air resistance.
 
 ````{admonition} Apollo 15
 :class: tip
@@ -67,23 +67,23 @@ name: joule-apparatus
 width: 50%
 align: center
 ---
-Joule's apparatus for measuring the mechanical equivalent of heat. The falling weights turn a paddle wheel immersed in water, converting a known amount of mechanical work into a measurable temperature rise. Modern calorimeters (Section 3.3) use the same principle—measuring temperature changes to quantify energy transfers—but with electrical heating in place of falling weights. Engraving from *Harper's New Monthly Magazine* (1869), via [Wikimedia Commons](https://commons.wikimedia.org/wiki/File:Joule%27s_Apparatus_(Harper%27s_Scan).png) (public domain).
+Joule's apparatus for measuring the mechanical equivalent of heat. The falling weights turn a paddle wheel immersed in water, converting a known amount of mechanical work into a measurable temperature rise. Modern calorimeters ([Section 3.3](section-03.md)) use the same principle—measuring temperature changes to quantify energy transfers—but with electrical heating in place of falling weights. Engraving from *Harper's New Monthly Magazine* (1869), via [Wikimedia Commons](https://commons.wikimedia.org/wiki/File:Joule%27s_Apparatus_(Harper%27s_Scan).png) (public domain).
 ```
 
-In 1847, James Prescott Joule measured how mechanical work converts into heat. He famously found that dropping a total of $778$ lb$\cdot$ft of weight (e.g., by turning a paddle in water) raised the temperature of $1$ lb of water by $1\,\text{°F}$. Converting to SI units:
+In 1847, James Prescott Joule measured how mechanical work converts into heat. He famously found that $778\,\mathrm{ft}\cdot\mathrm{lbf}$ of mechanical work (done, for example, by falling weights that turn a paddle in water) raised the temperature of $1$ lb of water by $1\,\text{°F}$. Converting to SI units:
 
 ```{math}
 \mathrm{MEH}
-= \frac{778 \;\mathrm{lb}\cdot\mathrm{ft}}{1\;\mathrm{lb}\,\text{°F}}
+= \frac{778 \;\mathrm{ft}\cdot\mathrm{lbf}}{1\;\mathrm{lb}\,\text{°F}}
 \approx \frac{1{,}055 \;\mathrm{J}}{(453.6 \;\mathrm{g}) \cdot (5/9\,\text{°C})}
-\approx 4.18 \;\mathrm{J}\,\mathrm{g}^{-1}\,\text{°C}^{-1}.
+\approx 4.19 \;\mathrm{J}\,\mathrm{g}^{-1}\,\text{°C}^{-1}.
 ```
 
-Here, $4.18\,\mathrm{J}\,\mathrm{g}^{-1}\,\text{°C}^{-1}$ is the **specific heat** of water—i.e., the heat capacity per gram.
+Here, $4.19\,\mathrm{J}\,\mathrm{g}^{-1}\,\text{°C}^{-1}$ is the **specific heat** of water—i.e., the heat capacity per gram. The specific heat of water varies slightly with temperature; at $25\,\text{°C}$ it is $4.18\,\mathrm{J}\,\mathrm{g}^{-1}\,\text{°C}^{-1}$, the value used in [Section 3.3](section-03.md).
 
 ### First Law of Thermodynamics
 
-Joule's result showed that a definite quantity of mechanical work always produces the same quantity of heat. This interconvertibility means we need a single energy-conservation statement that accounts for both. To include heat ($q$) and work ($w$) in one statement of energy conservation, we write
+Joule's result showed that a definite quantity of mechanical work always produces the same quantity of heat. This interconvertibility means we need a single energy-conservation statement that accounts for both. To include heat ($q$) and work ($w$) in one statement of energy conservation for a closed system (one that exchanges energy but not matter with its surroundings), we write
 
 ```{math}
 :label: first-law-finite
@@ -95,6 +95,8 @@ where
 - $\Delta U$ is the **change in internal energy**,
 - $q$ is the heat **absorbed by** the system,
 - $w$ is the work **done on** the system.
+
+Some textbooks instead define $w$ as the work done **by** the system, so the sign convention of a source should be checked before one of its formulas is used.
 
 #### Differential Form
 
@@ -121,7 +123,7 @@ We write $dU$ (with the standard "$d$") because $U$ is a **state function**—it
 
 In contrast, $\delta q$ and $\delta w$ use "$\delta$" to signal that these are **inexact differentials**: their values depend on the path, and integrating them around a cycle need not give zero. Two processes connecting the same initial and final states can involve different amounts of heat and work, even though they produce the same $\Delta U$.
 
-This distinction becomes central when we define entropy in Chapter 4, where dividing the inexact differential $\delta q$ by $T$ produces the exact differential $dS$.
+This distinction becomes central when we define entropy in [Section 4.1](../chapter-04/section-01.md), where dividing the inexact differential $\delta q$ by $T$ produces the exact differential $dS$.
 
 Some texts use the crossed-$d$ symbol $\text{đ}$ instead of $\delta$ for inexact differentials. We use $\delta$ throughout this course.
 ```
@@ -140,7 +142,7 @@ A gas is compressed ($\Delta V < 0$) and simultaneously heated ($q > 0$). Is $\D
 
 ### Types of Work
 
-In Section 1.1, we defined work as "energy transferred when a force acts over a distance." Mathematically:
+In [Section 1.1](../chapter-01/section-01.md), we defined work as "energy transferred when a force acts over a distance." Mathematically:
 
 ```{math}
 \delta w = \vec{F}\cdot d\vec{r} 
@@ -162,22 +164,22 @@ Many physical processes fit a "generalized force" $\times$ "generalized displace
   - $x$
   - $F \,dx$
   - Lifting a weight
-* - Linear tension $k$
-  - $l=x - x_0$
-  - $k \,dl$
-  - Stretching a spring
+* - Tension $f$
+  - Extension $l = x - x_0$
+  - $f \,dl$
+  - Stretching a spring ($f = kl$ for a Hookean spring)
 * - Surface tension $\gamma$
   - $A$
   - $\gamma \, dA$
   - Blowing a soap bubble
-* - Pressure $P$
+* - Pressure $P_{\mathrm{ext}}$
   - $V$
-  - $-P\,dV$
+  - $-P_{\mathrm{ext}}\,dV$
   - Compressing a gas
-* - Chemical $\mu$
-  - $N$ or $n$
+* - Chemical potential $\mu$ ([Section 6.1](../chapter-06/section-01.md))
+  - Number of molecules $N$
   - $\mu\,dN$
-  - Forming a molecule
+  - Adding molecules to the system
 * - Electrical $\mathcal{E}$
   - Charge $q_{\text{el}}$
   - $\mathcal{E}\,dq_{\text{el}}$
@@ -187,16 +189,25 @@ Many physical processes fit a "generalized force" $\times$ "generalized displace
 ```{admonition} Signs in the work table
 :class: note
 
-All entries in the table above give $\delta w > 0$ when the surroundings do work on the system, consistent with our sign convention ($\Delta U = q + w$). For $PV$ work, the negative sign in $-P\,dV$ ensures that *compression* ($dV < 0$) gives $w > 0$ (energy flows into the system). For surface tension, *increasing* the area ($dA > 0$) requires the surroundings to do work on the system ($w > 0$), so the sign is positive: $\delta w = +\gamma\,dA$.
+All entries in the table above give $\delta w > 0$ when the surroundings do work on the system, consistent with our sign convention ($\Delta U = q + w$). For $PV$ work, the negative sign in $-P_{\mathrm{ext}}\,dV$ ensures that *compression* ($dV < 0$) gives $w > 0$ (energy flows into the system). For surface tension, *increasing* the area ($dA > 0$) requires the surroundings to do work on the system ($w > 0$), so the sign is positive: $\delta w = +\gamma\,dA$.
 
 Note: some texts define surface work from the system's perspective (e.g., "work done by the system to expand the surface"), which flips the sign. Always check the convention.
 ```
 
-In this course, $PV$ work ($-P\,dV$) will be our workhorse, but the generalized structure shows up again when we discuss surface phenomena, electrochemistry, and chemical potentials.
+In this course, $PV$ work will be our workhorse, but the generalized structure shows up again when we discuss surface phenomena, electrochemistry, and chemical potentials. The chemical term applies when molecules enter or leave the system, which is then open rather than closed.
+
+The expression for $PV$ work follows from the definition of work. Consider a gas in a cylinder that is closed by a piston of area $A$. The surroundings exert the external pressure $P_{\mathrm{ext}}$ on the piston, which is a force $F = P_{\mathrm{ext}}A$ directed into the gas. When the piston moves inward by a distance $dx$, the surroundings do the work $\delta w = F\,dx = P_{\mathrm{ext}}A\,dx$ on the gas. The volume of the gas changes by $dV = -A\,dx$, so
+
+```{math}
+:label: pv-work
+\delta w = -P_{\mathrm{ext}}\,dV.
+```
+
+The external pressure equals the pressure $P$ of the gas only when the gas remains in mechanical equilibrium with its surroundings throughout the process. This is the case for the reversible processes defined in [Section 3.2](section-02.md), for which $\delta w = -P\,dV$.
 
 ---
 
-### Worked Examples
+### Calculating Work
 
 The examples below apply the generalized force–displacement framework from {numref}`generalized-work-table` to three different work modes: $PV$ work, surface-tension work, and elastic (spring) work.
 
@@ -305,7 +316,7 @@ plt.close(fig)
 
 #### Example 2. Expanding a Soap Bubble
 
-Calculate the work necessary to expand a soap bubble (two surfaces) with surface tension $\gamma = 0.072\,\mathrm{J/m^2}$ ($= 72\,\mathrm{mN/m}$, the value for a water–air interface at room temperature) from a radius of $1\,\mathrm{cm}$ to $3.25\,\mathrm{cm}$.
+Calculate the work necessary to expand a soap bubble (two surfaces) from a radius of $1\,\mathrm{cm}$ to $3.25\,\mathrm{cm}$. Treat the film as pure water, with surface tension $\gamma = 0.072\,\mathrm{J/m^2}$ ($= 72\,\mathrm{mN/m}$, the value for a water–air interface at room temperature). Soap lowers the surface tension of water, so the work for a real soap film is smaller.
 
 ```{code-cell} ipython3
 :tags: [hide-input]
@@ -487,21 +498,22 @@ Calculate the work required to stretch a fiber obeying Hooke's law, with $k=100\
      = 100\times10^2\,\frac{\mathrm{N}}{\mathrm{m}}
      = 10^4\,\frac{\mathrm{N}}{\mathrm{m}}, 
      \quad
-   l = 0.15\,\mathrm{cm} = 0.15\times10^{-2}\,\mathrm{m}.
+   l_f = 0.15\,\mathrm{cm} = 0.15\times10^{-2}\,\mathrm{m},
    ```
+   where $l_f$ is the final extension.
 
 2. **Write the Work Expression**  
-   Hooke's law for tension: $F = k\,\Delta l$. The infinitesimal work is:
+   Hooke's law gives the tension at the extension $l = x - x_0$ as $f = kl$. From {numref}`generalized-work-table`, the infinitesimal work is:
    ```{math}
-   \delta w = F\,dx = k(x - x_0)\,dx.
+   \delta w = f\,dl = kl\,dl.
    ```
 
 3. **Integrate**  
-   If we stretch from $x_0$ to $x = x_0 + l$:
+   If we stretch from $l = 0$ to $l = l_f$:
    ```{math}
-   w 
-   = \int_{x_0}^{x_0 + l} k\,(x - x_0)\,dx
-   = \frac{1}{2} \,k\,l^2.
+   w
+   = \int_{0}^{l_f} kl\,dl
+   = \frac{1}{2} \,k\,l_f^2.
    ```
 
 4. **Substitute Numbers**  
@@ -546,12 +558,12 @@ A rigid, insulated container is divided in half by a membrane. One side contains
    \Delta U = q + w = 0 + 0 = 0.
    ```
 
-**Result.** In free expansion, $w = 0$, $q = 0$, and $\Delta U = 0$. For an ideal gas (where $U$ depends only on $T$), this means the temperature does not change either. Free expansion is the extreme case of an irreversible process: the gas does no work and exchanges no heat, yet it undergoes a dramatic change of state (its volume doubles).
+**Result.** In free expansion, $w = 0$, $q = 0$, and $\Delta U = 0$. For an ideal gas (where $U$ depends only on $T$; see [Section 2.5](../chapter-02/section-05.md)), this means the temperature does not change either. Free expansion is the extreme case of an irreversible process ([Section 3.2](section-02.md)): the gas does no work and exchanges no heat, yet it undergoes a dramatic change of state (its volume doubles).
 
 ```{admonition} Comparison
 :class: tip
 
-Contrast this with the constant-pressure expansion in Example 1, where the same volume change against $P_{\mathrm{ext}} = 2.5\,\mathrm{bar}$ required $16\,\mathrm{kJ}$ of work. Both processes have the same $\Delta V$, but the work differs because $P_{\mathrm{ext}}$ differs—a concrete illustration of why work is path-dependent.
+Consider two ways to take an ideal gas from $20\,\mathrm{L}$ to $85\,\mathrm{L}$ with the same temperature at the start and at the end. In a free expansion into an evacuated volume of $65\,\mathrm{L}$, $w = 0$. In the expansion of Example 1 against $P_{\mathrm{ext}} = 2.5\,\mathrm{bar}$, carried out in thermal contact with surroundings that return the gas to its initial temperature, $w = -16\,\mathrm{kJ}$. The two processes connect the same initial and final states, so $\Delta U$ is the same for both, but the work differs because $P_{\mathrm{ext}}$ differs. This is a concrete illustration of why work depends on the path.
 ```
 
 ## Concept Checks
@@ -566,6 +578,6 @@ Contrast this with the constant-pressure expansion in Example 1, where the same 
 
 - The First Law ($\Delta U=q+w$) enforces energy conservation by bookkeeping heat and work.
 - Heat and work are **path-dependent** ($\delta q$, $\delta w$ are inexact differentials); internal energy is a **state function** ($dU$ is an exact differential).
-- Many work modes share a generalized force–displacement structure, including $PV$ work $(-P\,dV)$.
+- Many work modes share a generalized force–displacement structure, including $PV$ work $(-P_{\mathrm{ext}}\,dV)$.
 - The magnitude of work equals the area under the pressure curve on a $P$–$V$ diagram. Different paths between the same states enclose different areas.
 - Careful sign conventions prevent systematic mistakes in energy balances.
