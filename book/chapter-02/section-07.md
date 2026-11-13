@@ -26,7 +26,7 @@ Learning objectives:
 * State the rigid-rotor energy levels $E_J=\hbar^2J(J+1)/(2I)$ and degeneracy $g_J=2J+1$.
 * Write the rotational partition function as a sum over $J$, including degeneracy.
 * Derive the high-$T$ approximation and define the rotational temperature $\Theta_{\mathrm{rot}}=\hbar^2/(2k_{\mathrm{B}}I)$.
-* Compute rotational contributions to $U$ and $C_V$ in the classical limit, and interpret the symmetry factor $\sigma$.
+* Compute rotational contributions to $U$ and $C_V$ in the classical limit, and interpret the symmetry number $\sigma$.
 
 ## Core Ideas and Derivations
 
@@ -173,7 +173,7 @@ We define the **rotational temperature** $\Theta_{\mathrm{rot}}$ by
 
 In terms of $\Theta_{\mathrm{rot}}$, the energy levels are $E_J = k_{\mathrm{B}}\Theta_{\mathrm{rot}}\,J(J+1)$, so $\Theta_{\mathrm{rot}}$ sets the temperature scale of the level spacing, and the condition for the high-temperature approximation is $T \gg \Theta_{\mathrm{rot}}$.
 
-Thus, for a heteronuclear diatomic rotor (symmetry factor $\sigma=1$),
+Thus, for a heteronuclear diatomic rotor (symmetry number $\sigma=1$),
 
 ```{math}
 q_{\mathrm{rot}}
@@ -183,18 +183,18 @@ q_{\mathrm{rot}}
 \frac{T}{\Theta_{\mathrm{rot}}}.
 ```
 
-````{admonition} Symmetry Factor $\sigma$
+````{admonition} Symmetry Number $\sigma$
 :class: tip
-For a **homonuclear** diatomic molecule (and, more generally, a symmetric linear molecule such as $\mathrm{CO_2}$), a rotation by 180° about an axis perpendicular to the molecular axis exchanges identical nuclei and gives an orientation that cannot be distinguished from the original. The high-temperature result above counts these two orientations as different states, so it must be divided by the **symmetry factor** $\sigma=2$ (compare the factor of $1/N!$ in [Section 2.4](section-04.md)):
+For a **homonuclear** diatomic molecule (and, more generally, a symmetric linear molecule such as $\mathrm{CO_2}$), a rotation by 180° about an axis perpendicular to the molecular axis exchanges identical nuclei and gives an orientation that cannot be distinguished from the original. The high-temperature result above counts these two orientations as different states, so it must be divided by the **symmetry number** $\sigma=2$ (compare the factor of $1/N!$ in [Section 2.4](section-04.md)):
 ```{math}
 q_{\mathrm{rot}} \;\approx\; \frac{T}{\sigma\,\Theta_{\mathrm{rot}}}.
 ```
-For a heteronuclear diatomic molecule, $\sigma=1$. The symmetry factor is required whenever the value of $q_{\mathrm{rot}}$ matters, as in the entropy ([Section 4.3](../chapter-04/section-03.md)) and in equilibrium constants ([Section 7.2](../chapter-07/section-02.md)). It has no effect on $U_{\mathrm{rot}}$ or $C_V^{(\mathrm{rot})}$, which depend only on the temperature derivative of $\ln q_{\mathrm{rot}}$.
+For a heteronuclear diatomic molecule, $\sigma=1$. The symmetry number is required whenever the value of $q_{\mathrm{rot}}$ matters, as in the entropy ([Section 4.3](../chapter-04/section-03.md)) and in equilibrium constants ([Section 7.2](../chapter-07/section-02.md)). It has no effect on $U_{\mathrm{rot}}$ or $C_V^{(\mathrm{rot})}$, which depend only on the temperature derivative of $\ln q_{\mathrm{rot}}$.
 ````
 
 {numref}`rotational-temperatures` lists $\Theta_{\mathrm{rot}}$ and $\sigma$ for the diatomic molecules whose vibrational temperatures are given in [Section 2.6](section-06.md). The values of $\Theta_{\mathrm{rot}}$ are calculated from the rotational constant $\tilde{B} = h/(8\pi^2 c I)$ as $\Theta_{\mathrm{rot}} = hc\tilde{B}/k_{\mathrm{B}}$, where $c$ is the speed of light and $hc/k_{\mathrm{B}} = 1.43878\ \mathrm{cm\,K}$. The rotational constants and bond lengths are equilibrium values from the [NIST Chemistry WebBook](https://webbook.nist.gov/chemistry/); the rotational constant of $\mathrm{O_2}$ is derived from the constants listed there for its lowest vibrational level.
 
-```{list-table} Rotational constants, bond lengths, rotational temperatures, and symmetry factors of selected diatomic molecules
+```{list-table} Rotational constants, bond lengths, rotational temperatures, and symmetry numbers of selected diatomic molecules
 :header-rows: 1
 :name: rotational-temperatures
 

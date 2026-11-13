@@ -327,7 +327,7 @@ kernelspec:
    \quad (\text{for a heteronuclear diatomic}).
    ```
 
-   - For a **homonuclear** diatomic, include a symmetry factor $\sigma=2$, so
+   - For a **homonuclear** diatomic, include a symmetry number $\sigma=2$, so
 
    ```{math}
    q_{\mathrm{rot}}
@@ -368,7 +368,7 @@ kernelspec:
    - Extends to polyatomic molecules with more complex rotational constants $\Theta_{\mathrm{rot},A}, \Theta_{\mathrm{rot},B}, \Theta_{\mathrm{rot},C}$ and multiple vibrational frequencies $\Theta_{\mathrm{vib},j}$.
 
 2. **Symmetry Considerations**
-   - Symmetry factor $\sigma$ must be included for molecules with indistinguishable orientations (e.g., homonuclear diatomics, symmetrical polyatomics).
+   - Symmetry number $\sigma$ must be included for molecules with indistinguishable orientations (e.g., homonuclear diatomics, symmetrical polyatomics).
 
 3. **Summary Table**
    - Often, we tabulate $q_{\mathrm{trans}}, q_{\mathrm{rot}}, q_{\mathrm{vib}}, q_{\mathrm{elec}}$ for different molecule types (linear, nonlinear, spherical top, symmetric top, etc.), applying high-temperature (classical) or more exact quantum results as needed.
@@ -557,4 +557,4 @@ q_{\mathrm{vib}}\;
 q_{\mathrm{elec}}.
 ```
 
-- For linear vs. nonlinear rotors or multiple vibrational modes, each factor is included appropriately (with possible symmetry factors).
+- For linear vs. nonlinear rotors or multiple vibrational modes, each factor is included appropriately (with possible symmetry numbers).
