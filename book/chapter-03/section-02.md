@@ -21,7 +21,7 @@ See also: [Course-wide Conventions & Notation](../notation.md)
 
 If you heat a gas in a sealed rigid container versus a piston open to the atmosphere, the temperature changes will differ—even for the same amount of heat. Why? The answer lies in how constraints (constant $V$ vs. constant $P$) redirect energy between heat and work. This section develops a systematic workflow for applying the First Law under different process constraints, then illustrates it with common ideal-gas cases and a microscopic interpretation.
 
-We begin by clarifying the definitions of quasi-static, reversible, and irreversible processes. We then outline a step-by-step method for using the First Law under different constraints, derive results for isochoric, isothermal, and adiabatic ideal-gas processes, and end with a microscopic interpretation that connects probability distributions of microstates with heat and work.
+We begin by clarifying the definitions of quasi-static, reversible, and irreversible processes. We then outline a step-by-step method for using the First Law under different constraints, derive results for isochoric, isothermal, and adiabatic ideal-gas processes, and end with a microscopic interpretation that connects probability distributions of microstates with heat and work. Processes at constant pressure are taken up in [Section 3.3](section-03.md).
 
 ---
 
@@ -54,18 +54,18 @@ Dissipative effects
 ```{admonition} Examples: Reversible vs. irreversible
 :class: tip
 
-**Approximately reversible:** Slowly compressing a gas in a well-lubricated, frictionless piston, one infinitesimal step at a time. At each step, the system is in mechanical equilibrium with the surroundings ($P_{\mathrm{int}} \approx P_{\mathrm{ext}}$), and the process can be reversed by an infinitesimal decrease in external pressure.
+**Approximately reversible:** Slowly compressing a gas in a well-lubricated, frictionless piston, one infinitesimal step at a time. At each step, the system is in mechanical equilibrium with the surroundings ($P \approx P_{\mathrm{ext}}$), and the process can be reversed by an infinitesimal decrease in external pressure.
 
-**Irreversible:** Puncturing a membrane so that a gas undergoes free expansion into vacuum (as in Section 3.1). The gas is *never* in equilibrium during the expansion—there is no well-defined pressure for the system as a whole—and no infinitesimal change to the surroundings will reverse the process.
+**Irreversible:** Puncturing a membrane so that a gas undergoes free expansion into vacuum (as in [Section 3.1](section-01.md)). The gas is *never* in equilibrium during the expansion—there is no well-defined pressure for the system as a whole—and no infinitesimal change to the surroundings will reverse the process.
 
-**Key practical consequence:** For a given initial and final state, a reversible expansion does the *maximum* work on the surroundings ($|w_{\mathrm{rev}}| \geq |w_{\mathrm{irrev}}|$ for expansion). This is because, at every infinitesimal step, the system pushes against the highest possible opposing pressure ($P_{\mathrm{ext}} = P$), maximizing $\int P\,dV$.
+**Key practical consequence:** For a given initial and final state, a reversible expansion does the *maximum* work on the surroundings ($|w_{\mathrm{rev}}| \geq |w_{\mathrm{irrev}}|$ for expansion). This is because, at every infinitesimal step, the system pushes against the highest possible opposing pressure ($P_{\mathrm{ext}} = P$), maximizing $\int P_{\mathrm{ext}}\,dV$.
 ```
 
 ---
 
 ### How to Apply the First Law of Thermodynamics
 
-The First Law states (Section 3.1, Eq. {eq}`first-law-differential`):
+The First Law states ([Section 3.1](section-01.md), Eq. {eq}`first-law-differential`):
 
 ```{math}
 dU = \delta q + \delta w,
@@ -90,7 +90,7 @@ Common choices include $(V, T)$ for gases in rigid containers and $(P, T)$ for p
 ````{admonition} Step 2. Rewrite the First Law in Terms of Your Chosen Variables
 :class: dropdown
 
-Start from $\delta q = dU - \delta w$. For $PV$-only work, $\delta w = -P\,dV$, so
+Start from $\delta q = dU - \delta w$. For a reversible process with only $PV$ work, $\delta w = -P\,dV$ ([Section 3.1](section-01.md), Eq. {eq}`pv-work`), so
 
 ```{math}
 \delta q = dU + P\,dV.
@@ -128,8 +128,8 @@ Applying a constraint eliminates one or more terms from your Step 2 expression, 
 ```{admonition} Step 4. Define the System (Equation of State)
 :class: dropdown
 
-- Specify an equation of state if known (e.g., $PV=nRT$ for an ideal gas, or the van der Waals EOS from Section 1.4).
-- Use the equation of state to evaluate partial derivatives—e.g., $\left(\frac{\partial U}{\partial V}\right)_T = 0$ for an ideal gas—that appear in your expression for $\delta q$.
+- Specify an equation of state if known (e.g., $PV=nRT$ for an ideal gas, or the van der Waals EOS from [Section 1.4](../chapter-01/section-04.md)) and an expression for $U$ (e.g., $U = \tfrac{3}{2}Nk_{\mathrm{B}}T$ for a monatomic ideal gas, from [Section 2.5](../chapter-02/section-05.md)).
+- Use them to evaluate $P$ and the partial derivatives of $U$ that appear in your expression for $\delta q$.
 - This step is where the *physics* of the system enters: different substances yield different results for the same constraint.
 ```
 
@@ -151,11 +151,11 @@ Different process constraints (isobaric, isochoric, isothermal, adiabatic) dicta
 
 ### Applying the Workflow: $V$ and $T$ as Independent Variables
 
-For many systems—especially gases—choosing $V$ and $T$ as independent variables simplifies calculations. Let us walk through the five-step workflow for a monatomic ideal gas.
+For many systems—especially gases—choosing $V$ and $T$ as independent variables simplifies calculations. Let us walk through the five-step workflow for a monatomic ideal gas. Steps 3 and 4 can be taken in either order. Here the ideal gas is specified first (Step 4), because this simplifies the expression to which the constraints are then applied (Step 3).
 
 #### Step 1–2: First Law in Terms of $V$ and $T$
 
-Starting from
+Starting from the First Law for a reversible process with only $PV$ work,
 
 ```{math}
 \delta q = dU + P\,dV,
@@ -179,14 +179,14 @@ Substituting:
 
 #### Step 4: Ideal-Gas Simplification
 
-For an ideal gas, $U$ depends only on $T$ (there are no intermolecular interactions to make $U$ depend on $V$), so $\left(\frac{\partial U}{\partial V}\right)_T = 0$. For a monatomic ideal gas specifically,
+For an ideal gas, $U$ depends only on $T$ ([Section 2.5](../chapter-02/section-05.md)), so $\left(\frac{\partial U}{\partial V}\right)_T = 0$. For a monatomic ideal gas specifically,
 
 ```{math}
-U = \frac{3}{2} N k_B T, 
+U = \frac{3}{2} N k_{\mathrm{B}} T,
 \quad
-P = \frac{N k_B T}{V}, 
+P = \frac{N k_{\mathrm{B}} T}{V},
 \quad
-C_V = \left(\frac{\partial U}{\partial T}\right)_V = \frac{3}{2} N k_B.
+C_V = \left(\frac{\partial U}{\partial T}\right)_V = \frac{3}{2} N k_{\mathrm{B}}.
 ```
 
 Equation {eq}`first-law-VT` then simplifies to
@@ -194,7 +194,7 @@ Equation {eq}`first-law-VT` then simplifies to
 ```{math}
 :label: first-law-VT-ideal
 \delta q = C_V \, dT + P \, dV
-\qquad\text{(ideal gas, $PV$-only work).}
+\qquad\text{(ideal gas, reversible process, $PV$-only work).}
 ```
 
 #### Step 3: Process Constraints
@@ -253,7 +253,7 @@ Applying these constraints to Equation {eq}`first-law-VT-ideal`:
    \delta q = C_V\, dT 
    \quad \Longrightarrow \quad
    q = \int_{T_1}^{T_2} C_V \, dT 
-     = \frac{3}{2} N k_B \,\Delta T.
+     = \frac{3}{2} N k_{\mathrm{B}} \,\Delta T.
    ```
 
    Since $w = 0$, we also have $\Delta U = q = C_V \Delta T$.
@@ -263,36 +263,36 @@ Applying these constraints to Equation {eq}`first-law-VT-ideal`:
    For an ideal gas, $\Delta U = 0$ (because $U$ depends only on $T$). The system absorbs heat to offset the work it does:
 
    ```{math}
-   q = \int_{V_1}^{V_2} \frac{N k_B T}{V} \, dV 
-     = N k_B T \ln\!\bigl(\tfrac{V_2}{V_1}\bigr).
+   q = \int_{V_1}^{V_2} \frac{N k_{\mathrm{B}} T}{V} \, dV
+     = N k_{\mathrm{B}} T \ln\!\bigl(\tfrac{V_2}{V_1}\bigr).
    ```
 
-   And $w = -q = -N k_B T \ln(V_2/V_1)$.
+   And $w = -q = -N k_{\mathrm{B}} T \ln(V_2/V_1)$.
 
 3. **Adiabatic ($\delta q = 0$)**
 
    Setting $\delta q = 0$ in Equation {eq}`first-law-VT-ideal`:
 
    ```{math}
-   C_V\, dT = -P\, dV = -\frac{N k_B T}{V}\, dV.
+   C_V\, dT = -P\, dV = -\frac{N k_{\mathrm{B}} T}{V}\, dV.
    ```
 
    Separating variables:
 
    ```{math}
-   \frac{C_V}{T}\, dT = -\frac{N k_B}{V}\, dV
+   \frac{C_V}{T}\, dT = -\frac{N k_{\mathrm{B}}}{V}\, dV
    \quad \Longrightarrow \quad
    \int_{T_1}^{T_2} \frac{C_V}{T}\, dT 
-   = - \int_{V_1}^{V_2} \frac{N k_B}{V}\, dV.
+   = - \int_{V_1}^{V_2} \frac{N k_{\mathrm{B}}}{V}\, dV.
    ```
 
    Integrating both sides:
 
    ```{math}
-   \frac{3}{2} N k_B \ln\frac{T_2}{T_1} = -N k_B \ln\frac{V_2}{V_1}.
+   \frac{3}{2} N k_{\mathrm{B}} \ln\frac{T_2}{T_1} = -N k_{\mathrm{B}} \ln\frac{V_2}{V_1}.
    ```
 
-   Dividing through by $N k_B$:
+   Dividing through by $N k_{\mathrm{B}}$:
 
    ```{math}
    \ln\frac{T_2}{T_1} = -\frac{2}{3}\ln\frac{V_2}{V_1} = \ln\!\left(\frac{V_1}{V_2}\right)^{2/3}.
@@ -306,16 +306,17 @@ Applying these constraints to Equation {eq}`first-law-VT-ideal`:
    \qquad\text{(monatomic ideal gas).}
    ```
 
-   ```{admonition} Where does the exponent $2/3$ come from?
+   ````{admonition} Where does the exponent $2/3$ come from?
    :class: note
 
-   The exponent arises from the ratio $N k_B / C_V = N k_B / (\frac{3}{2} N k_B) = 2/3$. For a general ideal gas, this ratio is $\gamma - 1$, where $\gamma = C_P / C_V$ is the **heat-capacity ratio**. The general adiabatic relation is
+   The exponent arises from the ratio $N k_{\mathrm{B}} / C_V = N k_{\mathrm{B}} / (\frac{3}{2} N k_{\mathrm{B}}) = 2/3$. For a general ideal gas, this ratio is $\gamma - 1$, where $\gamma = C_P / C_V$ is the **heat-capacity ratio** and $C_P$ is the heat capacity at constant pressure ([Section 3.3](section-03.md)). The general adiabatic relation is
 
    ```{math}
    T V^{\gamma - 1} = \text{const},
    ```
 
    which, combined with $PV = nRT$, also gives $PV^\gamma = \text{const}$. We will use these relations when we compare isothermal and adiabatic processes below.
+   ````
 
 ---
 
@@ -370,7 +371,7 @@ ax.annotate('  initial state', xy=(V1 * 1e3, P1_bar), fontsize=10, va='center')
 
 # Compute numerical work values for annotation
 w_iso = -n * R * T1 * np.log(V2 / V1)  # J
-w_adi = (P1 * V1**gamma / (1 - gamma)) * (V2**(1 - gamma) - V1**(1 - gamma))  # J
+w_adi = -(P1 * V1**gamma / (1 - gamma)) * (V2**(1 - gamma) - V1**(1 - gamma))  # J
 
 ax.set_xlabel('Volume (L)', fontsize=11)
 ax.set_ylabel('Pressure (bar)', fontsize=11)
@@ -390,15 +391,19 @@ plt.show()
 plt.close(fig)
 ```
 
-Comparison of reversible isothermal and adiabatic expansions of one mole of a monatomic ideal gas from $(V_1, T_1) = (5\,\mathrm{L}, 300\,\mathrm{K})$ to $V_2 = 20\,\mathrm{L}$. The isothermal curve lies *above* the adiabatic curve at every point, so the area under it is larger: isothermal expansion does more work on the surroundings.
+Comparison of reversible isothermal and adiabatic expansions of one mole of a monatomic ideal gas from $(V_1, T_1) = (5\,\mathrm{L}, 300\,\mathrm{K})$ to $V_2 = 20\,\mathrm{L}$. The boxes give $w$ for each path.
 
-**Why the difference?** During isothermal expansion, heat flows into the gas to maintain a constant temperature, keeping the pressure higher. During adiabatic expansion ($q = 0$), the gas cools as it does work (Eq. {eq}`adiabatic-TV-relation`), so the pressure drops more steeply. The isothermal path therefore pushes against a higher pressure at every volume increment, producing more work.
+```{admonition} Comparing the two paths
+:class: important
+
+Which expansion does more work on the surroundings? Use the First Law to explain why the two curves separate as the gas expands, and say what happens to the temperature along each path.
+```
 
 ---
 
 ### Microscopic Interpretation of the First Law
 
-As developed in Section 2.1, macroscopic thermodynamic properties are ensemble averages over microstates. This perspective gives a powerful physical picture of heat and work at the molecular level.
+As developed in [Section 2.1](../chapter-02/section-01.md), macroscopic thermodynamic properties are ensemble averages over microstates. This perspective gives a powerful physical picture of heat and work at the molecular level.
 
 From a statistical mechanics perspective, the internal energy is
 
@@ -415,7 +420,7 @@ dU
   + \underbrace{\sum_{i=1}^M p_i \, dE_i}_{\text{changing the energies of the states}}.
 ```
 
-For a closed system (constant $N$) with only $PV$ work, the microstate energies depend on volume. Noting that
+For a closed system (constant $N$) with only $PV$ work, the microstate energies depend on the volume, so $dE_i = \left(\frac{\partial E_i}{\partial V}\right)_N dV$. Noting that
 
 ```{math}
 \sum_{i=1}^M p_i \left(\frac{\partial E_i}{\partial V}\right)_N 
@@ -436,7 +441,7 @@ dU
   \;-\; P\, dV.
 ```
 
-Comparing term by term with $dU = \delta q + \delta w = \delta q - P\,dV$, we identify:
+Comparing term by term with $dU = \delta q + \delta w = \delta q - P\,dV$, which holds for a reversible process, we identify:
 
 ```{math}
 \delta q = \sum_{i=1}^M E_i\, dp_i
@@ -460,77 +465,44 @@ The figure below illustrates these two mechanisms. Reading left to right: the in
 import numpy as np
 import matplotlib.pyplot as plt
 
-N_microstates = 5
-E_microstates = np.array([0, 1, 2, 3, 4])
-P_microstates = np.array([0.5, 0.3, 0.1, 0.05, 0.05])
-P_microstates /= P_microstates.sum()
+def boltzmann(E, kT):
+    """Boltzmann probabilities for levels E at thermal energy kT."""
+    weights = np.exp(-E / kT)
+    return weights / weights.sum()
+
+# Energies and kT in units of the initial level spacing
+E_initial = np.array([0.5, 1.5, 2.5, 3.5, 4.5])
+kT_initial = 1.5
+
+panels = [
+    # (title, energies, kT, bar color)
+    ('Initial State', E_initial, kT_initial, 'C1'),
+    ('After Heating ($\\delta q > 0$)\n$\\{p_i\\}$ change; $\\{E_i\\}$ fixed',
+     E_initial, 2 * kT_initial, 'C3'),
+    ('After Compression ($\\delta w > 0$)\n$\\{E_i\\}$ change; $\\{p_i\\}$ fixed',
+     2 * E_initial, 2 * kT_initial, 'C4'),
+]
 
 fig, axs = plt.subplots(1, 3, figsize=(13, 4.5), constrained_layout=True, sharex=True)
 
-# --- Panel 0 (left): Initial state ---
-axs[0].set_title('Initial State', fontsize=11, fontweight='bold')
+for ax, (title, E, kT, color) in zip(axs, panels):
+    p = boltzmann(E, kT)
+    ax.set_title(title, fontsize=11, fontweight='bold')
+    for i in range(len(E)):
+        ax.plot([0, 1], [E[i], E[i]], color='C0', alpha=0.5, lw=1.5)
+        ax.fill_betweenx([E[i], E[i] + 0.15], 0, p[i], color=color, alpha=0.5)
+        ax.text(p[i] + 0.02, E[i] + 0.07, f'$p_{i+1}={p[i]:.2f}$', fontsize=9, ha='left')
+    ax.set_xlabel('Probability')
+    ax.set_xlim(0, 0.75)
+    ax.set_ylim(0, 10)
 
-for i in range(N_microstates):
-    axs[0].plot([0, 1], [E_microstates[i], E_microstates[i]], color='C0', alpha=0.5, lw=1.5)
-    axs[0].fill_betweenx(
-        [E_microstates[i], E_microstates[i] + 0.15], 0, P_microstates[i],
-        color='C1', alpha=0.5
-    )
-    axs[0].text(
-        P_microstates[i] + 0.02, E_microstates[i] + 0.07,
-        f'$p_{i+1}={P_microstates[i]:.2f}$', fontsize=9, ha='left'
-    )
-axs[0].set_xlabel('Probability')
 axs[0].set_ylabel('Energy')
-axs[0].set_xlim(0, 0.75)
-axs[0].set_ylim(-0.5, 9)
-
-# --- Panel 1 (middle): After heating ---
-axs[1].set_title('After Heating ($\\delta q > 0$)\n$\\{p_i\\}$ change; $\\{E_i\\}$ fixed',
-                  fontsize=11, fontweight='bold')
-
-P_heated = np.array([0.35, 0.25, 0.18, 0.12, 0.10])
-P_heated /= P_heated.sum()
-
-for i in range(N_microstates):
-    axs[1].plot([0, 1], [E_microstates[i], E_microstates[i]], color='C0', alpha=0.5, lw=1.5)
-    axs[1].fill_betweenx(
-        [E_microstates[i], E_microstates[i] + 0.15], 0, P_heated[i],
-        color='C3', alpha=0.5
-    )
-    axs[1].text(
-        P_heated[i] + 0.02, E_microstates[i] + 0.07,
-        f'$p_{i+1}={P_heated[i]:.2f}$', fontsize=9, ha='left'
-    )
-axs[1].set_xlabel('Probability')
-axs[1].set_xlim(0, 0.75)
-axs[1].set_ylim(-0.5, 9)
-
-# --- Panel 2 (right): After compression ---
-axs[2].set_title('After Compression ($\\delta w > 0$)\n$\\{E_i\\}$ change; $\\{p_i\\}$ fixed',
-                  fontsize=11, fontweight='bold')
-
-E_compressed = np.array([0, 2, 4, 6, 8])
-
-for i in range(N_microstates):
-    axs[2].plot([0, 1], [E_compressed[i], E_compressed[i]], color='C0', alpha=0.5, lw=1.5)
-    axs[2].fill_betweenx(
-        [E_compressed[i], E_compressed[i] + 0.15], 0, P_microstates[i],
-        color='C4', alpha=0.5
-    )
-    axs[2].text(
-        P_microstates[i] + 0.02, E_compressed[i] + 0.07,
-        f'$p_{i+1}={P_microstates[i]:.2f}$', fontsize=9, ha='left'
-    )
-axs[2].set_xlabel('Probability')
-axs[2].set_xlim(0, 0.75)
-axs[2].set_ylim(-0.5, 9)
 
 plt.show()
 plt.close(fig)
 ```
 
-Schematic of microstate energies (vertical axis) and occupation probabilities (horizontal bars). **Left:** initial state. **Middle:** after heating—the energy levels are unchanged, but the distribution shifts toward higher-energy states ($\sum E_i\,dp_i > 0$). **Right:** after compression—the probabilities are unchanged, but every energy level shifts upward ($\sum p_i\,dE_i > 0$).
+Schematic of microstate energies (vertical axis) and occupation probabilities (horizontal bars). **Left:** initial state. **Middle:** after heating—the energy levels are unchanged, but the distribution shifts toward higher-energy states ($\sum E_i\,dp_i > 0$). **Right:** after compression—the probabilities are unchanged, but every energy level shifts upward ($\sum p_i\,dE_i > 0$). The probabilities in each panel are Boltzmann probabilities ([Section 2.2](../chapter-02/section-02.md)): heating doubles $T$ at fixed levels, and the compression doubles the level spacing and $T$ together, which leaves every $p_i$ unchanged.
 
 ````{admonition} **Think–pair–share**
 :class: important
@@ -540,22 +512,22 @@ In the microscopic picture, heating at *constant volume* changes $\{p_i\}$ while
 ```{admonition} Discussion
 :class: dropdown
 
-**Both.** At constant pressure, adding heat increases $T$, which shifts the probability distribution toward higher-energy states (just as at constant $V$). But at constant $P$, the gas also *expands*, which changes the volume and therefore shifts the energy levels (just as in compression, but in reverse—the levels *decrease*). At constant pressure, $\delta q$ simultaneously changes both $\{p_i\}$ and $\{E_i\}$.
+**Both.** At constant pressure, adding heat increases $T$, which shifts the probability distribution toward higher-energy states (just as at constant $V$). But at constant $P$, the gas also *expands*, which changes the volume and therefore shifts the energy levels (just as in compression, but in reverse—the levels *decrease*). A process at constant pressure therefore changes both $\{p_i\}$ and $\{E_i\}$.
 
-This is one reason $C_P > C_V$: at constant pressure, some of the heat goes into changing energy levels (doing expansion work) rather than solely redistributing probabilities. We will quantify this relationship in Section 3.3.
+[Section 3.3](section-03.md) takes up heating at constant pressure.
 ```
 ````
 
 ## Worked Example
 
-### Isothermal reversible expansion of an ideal gas
+### Isothermal Reversible Expansion of an Ideal Gas
 
 One mole of an ideal gas expands reversibly and isothermally at $T=300\ \mathrm{K}$ from $V_1=5.0\ \mathrm{L}$ to $V_2=20.0\ \mathrm{L}$. Compute $w$, $q$, and $\Delta U$.
 
 ```{admonition} Notation
 :class: note
 
-We switch to per-mole notation ($n$, $R$) for this macroscopic calculation, following the course convention (see [Notation](../notation.md): use $k_B$ for per-particle quantities, $R$ for per-mole quantities).
+We switch to per-mole notation ($n$, $R$) for this macroscopic calculation, following the course convention (see [Notation](../notation.md): use $k_{\mathrm{B}}$ for per-particle quantities, $R$ for per-mole quantities).
 ```
 
 **Assumptions.** Ideal gas, reversible process, isothermal; for an ideal gas $U=U(T)$.
@@ -642,9 +614,9 @@ plt.close(fig)
 
 ## Key Takeaways
 
-- **Reversible processes** serve as idealized benchmarks: reversible expansion maximizes work output; reversible compression minimizes work input.
+- A **reversible** expansion does the maximum work on the surroundings, and a reversible compression requires the minimum work.
 - Choosing independent variables and constraints turns the First Law into solvable differential relations.
 - Ideal-gas isothermal expansion has $\Delta U=0$ and $q=-w$.
 - Adiabatic constraints set $q=0$ and force $T$ to change when work is done; the relation $TV^{\gamma-1} = \text{const}$ governs the temperature–volume coupling.
-- On a $P$–$V$ diagram, work equals the area under the curve. Different paths between the same endpoints yield different areas—a visual proof that work is path-dependent.
+- On a $P$–$V$ diagram, the magnitude of the reversible work equals the area under the curve, so the work depends on the path that is followed.
 - Microscopically, heat changes the probability distribution over fixed energy levels, while work shifts the energy levels themselves.
