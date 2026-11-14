@@ -18,14 +18,17 @@ kernelspec:
 
 ### Section 5.1: Free Energy
 
+See [Section 5.1](section-01.md).
+
 1. **Fundamental Inequality**
-   - Combining the First Law with the Clausius inequality $dS \ge \delta q/T$ and the work bound $\delta w \ge -P\,dV$ gives
+   - For any change between equilibrium states of a closed system with $PV$-only work, $dU = T\,dS - P\,dV$ ([Section 4.1](../chapter-04/section-01.md)).
+   - For a closed system with $PV$-only work that is in thermal and mechanical equilibrium with its surroundings, but not necessarily in equilibrium internally, the First Law and the Clausius inequality $dS \ge \delta q/T$ give
 
    ```{math}
    dU \le T\,dS - P\,dV,
    ```
 
-   with equality for reversible changes. This single inequality encodes the direction of spontaneous evolution for a closed system with $PV$-only work.
+   with equality when every change in the system is reversible. The strict inequality holds when an irreversible process takes place inside the system, and it gives the direction of spontaneous change.
 
 2. **Extremum Principles for Thermodynamic Potentials**
    - Under different experimental constraints, a particular potential is minimized at equilibrium:
@@ -46,7 +49,7 @@ kernelspec:
    | $A$ | $U - TS$ | $dA = -S\,dT - P\,dV$ | $T, V$ |
    | $G$ | $U + PV - TS$ | $dG = -S\,dT + V\,dP$ | $T, P$ |
 
-   - Defining $A$ and $G$ extends the strategy used in Section 3.3 to define $H$.
+   - Defining $A$ and $G$ extends the strategy used in [Section 3.3](../chapter-03/section-03.md) to define $H$.
 
 4. **Conjugate Variables as Derivatives**
    - At equilibrium, intensive variables are read off as slopes of a potential along its natural-variable axes. For example:
@@ -58,17 +61,17 @@ kernelspec:
 
    with analogous identities for $H$, $A$, and $G$.
 
-5. **Euler Relation** (fixed $N$)
-   - For a simple system with fixed composition, $U(S,V)$ is homogeneous of degree 1 in its extensive arguments. Euler's theorem gives
+5. **Euler Relation**
+   - The internal energy $U(S,V,N)$ is homogeneous of degree 1 in its extensive arguments. Euler's theorem gives
 
    ```{math}
-   U = TS - PV.
+   U = TS - PV + \mu N,
    ```
 
-   - Allowing $N$ to vary adds a $\mu N$ term; this will be developed when the chemical potential is introduced.
+   where $\mu = (\partial U/\partial N)_{S,V}$ is the chemical potential ([Section 6.1](../chapter-06/section-01.md)). With $G = U + PV - TS$, it follows that $G = \mu N$.
 
 6. **Helmholtz Free Energy as a Master Potential**
-   - The bridge to statistical mechanics from Section 4.3 is
+   - The bridge to statistical mechanics from [Section 4.3](../chapter-04/section-03.md) is
 
    ```{math}
    A = -k_{\mathrm B}T\ln Q.
@@ -96,14 +99,16 @@ kernelspec:
    - When non-$PV$ work is present, the First Law gains a $\delta w_{\text{non-}PV}$ term. At constant $T$ and $P$:
 
    ```{math}
-   dG\big|_{T,P} = \delta w_{\text{non-}PV,\text{rev}}.
+   dG\big|_{T,P} = \delta w_{\text{non-}PV,\mathrm{rev}}.
    ```
 
-   - $\Delta G$ measures the reversible non-$PV$ work available from a process — the "useful" work beyond unavoidable $PV$ work against the atmosphere. For irreversible processes, the useful work output is strictly less than $|\Delta G|$.
+   - $\Delta G$ measures the reversible non-$PV$ work available from a process — the "useful" work beyond unavoidable $PV$ work against the atmosphere.
 
 ---
 
 ### Section 5.2: Third Law
+
+See [Section 5.2](section-02.md).
 
 1. **Planck's Statement of the Third Law**
    - As $T \to 0\,\mathrm{K}$, the entropy of any pure crystalline substance approaches a constant. For an **ideal crystal** (no defects, impurities, or disorder), that constant is zero:
@@ -115,7 +120,7 @@ kernelspec:
    - This fixes the otherwise-undetermined integration constant in $\Delta S = \int \delta q_{\mathrm{rev}}/T$.
 
 2. **Statistical-Mechanical Justification**
-   - From Boltzmann's formula $S = k_{\mathrm B}\ln\Omega$ (Section 4.3), a unique ground state has $\Omega_0 = 1$, so $S(0) = k_{\mathrm B}\ln 1 = 0$. The third law is the statement that a system with a nondegenerate ground state has zero entropy at absolute zero.
+   - From Boltzmann's formula $S = k_{\mathrm B}\ln\Omega$ ([Section 4.3](../chapter-04/section-03.md)), a unique ground state has $\Omega_0 = 1$, so $S(0) = k_{\mathrm B}\ln 1 = 0$. The third law is the statement that a system with a nondegenerate ground state has zero entropy at absolute zero.
 
 3. **Residual Entropy**
    - If the ground state is degenerate or the system has frozen-in disorder ($\Omega_0 > 1$), entropy approaches a nonzero constant:
@@ -124,14 +129,13 @@ kernelspec:
    S_{\mathrm{res}} = k_{\mathrm B}\ln\Omega_0.
    ```
 
-   - This does **not** violate the third law: Planck's statement says $S \to$ a constant, not necessarily zero.
    - Examples:
      - **Solid CO** (two nearly isoenergetic orientations per molecule): $\Omega_0 = 2^N$, giving $S_{\mathrm{res,m}} = R\ln 2 \approx 5.76\ \mathrm{J\,mol^{-1}\,K^{-1}}$ (experiment: $\approx 4.6$, indicating partial ordering).
      - **Ice** (Pauling's model with ice rules): $\Omega_0 \approx (3/2)^N$, giving $S_{\mathrm{res,m}} = R\ln(3/2) \approx 3.37\ \mathrm{J\,mol^{-1}\,K^{-1}}$ (experiment: $\approx 3.41$).
 
 4. **Heat Capacities Must Vanish as $T \to 0$**
    - For the integral $S(T) = S(0) + \int_0^T (C_P/T')\,dT'$ to converge, $C_P$ (and similarly $C_V$) must go to zero at $T = 0$.
-   - Classical equipartition gives a temperature-independent $C_V$ and therefore **violates** the third law. Quantum statistical mechanics resolves the contradiction: the Einstein and Debye heat capacities (Section 2.6) vanish as $T \to 0$ because vibrational modes freeze out.
+   - This requirement can be compared with the classical (equipartition) heat capacity and with the Einstein heat capacity of [Section 2.6](../chapter-02/section-06.md).
 
 5. **Unattainability of Absolute Zero** (Nernst form)
    - No finite sequence of thermodynamic operations can cool a system to exactly $T = 0$. Each successive cooling step removes less entropy than the previous one; the process converges but never reaches zero.
@@ -149,14 +153,16 @@ kernelspec:
 
 ### Section 5.3: Ammonia Formation
 
+See [Section 5.3](section-03.md).
+
 1. **Thermodynamics vs. Kinetics**
    - $\Delta G$ determines which direction is favored at equilibrium; activation barriers determine *how fast* equilibrium is reached. These are independent questions.
-   - For $\mathrm{N_2 + 3\,H_2 \to 2\,NH_3}$ at 298.15 K: $\Delta H_r^\circ \approx -92\ \mathrm{kJ\,mol^{-1}}$, $\Delta S_r^\circ \approx -198\ \mathrm{J\,K^{-1}\,mol^{-1}}$, $\Delta G_r^\circ \approx -33\ \mathrm{kJ\,mol^{-1}}$. Thermodynamically spontaneous but kinetically inert because of the $\mathrm{N\equiv N}$ triple bond.
-   - A **catalyst** lowers the activation barrier without changing $\Delta G_r^\circ$ or the equilibrium constant — it accelerates forward and reverse reactions equally.
+   - For $\mathrm{N_2 + 3\,H_2 \to 2\,NH_3}$ at 298.15 K: $\Delta_r H^\circ \approx -92\ \mathrm{kJ\,mol^{-1}}$, $\Delta_r S^\circ \approx -198\ \mathrm{J\,K^{-1}\,mol^{-1}}$, $\Delta_r G^\circ \approx -33\ \mathrm{kJ\,mol^{-1}}$. Thermodynamically spontaneous but kinetically inert because of the $\mathrm{N\equiv N}$ triple bond.
+   - A **catalyst** lowers the activation barrier without changing $\Delta_r G^\circ$ or the equilibrium constant — it accelerates forward and reverse reactions equally.
 
-2. **Temperature Effect for $\Delta S_r^\circ < 0$**
-   - From $\Delta G_r^\circ = \Delta H_r^\circ - T\,\Delta S_r^\circ$, a negative $\Delta S_r^\circ$ means $-T\,\Delta S_r^\circ > 0$ grows with $T$, driving $\Delta G_r^\circ$ upward.
-   - At high enough $T$, $\Delta G_r^\circ$ changes sign and the reaction becomes non-spontaneous at 1 bar.
+2. **Temperature Effect for $\Delta_r S^\circ < 0$**
+   - From $\Delta_r G^\circ = \Delta_r H^\circ - T\,\Delta_r S^\circ$, a negative $\Delta_r S^\circ$ means $-T\,\Delta_r S^\circ > 0$ grows with $T$, driving $\Delta_r G^\circ$ upward.
+   - At high enough $T$, $\Delta_r G^\circ$ changes sign and the reaction becomes non-spontaneous at 1 bar.
 
 3. **Temperature Corrections to $\Delta H$ and $\Delta S$**
    - From constant-$P$ integration:
@@ -177,13 +183,13 @@ kernelspec:
 
    - Linear $\mathrm{N_2, H_2}$: $f = 5$, $C_P = \tfrac{7}{2}R$.
    - Nonlinear $\mathrm{NH_3}$: $f = 6$, $C_P = 4R$.
-   - For the ammonia reaction: $\Delta C_{P,r} = 2(4R) - (7R/2) - 3(7R/2) = -6R$.
+   - For the ammonia reaction: $\Delta_r C_P = 2(4R) - (7R/2) - 3(7R/2) = -6R$.
 
 5. **Result at 500 °C**
-   - Applying constant-$C_P$ corrections from 298.15 K to 773.15 K gives $\Delta H_r^\circ(773) \approx -115.6\ \mathrm{kJ\,mol^{-1}}$, $\Delta S_r^\circ(773) \approx -245.4\ \mathrm{J\,K^{-1}\,mol^{-1}}$, and
+   - Applying constant-$C_P$ corrections from 298.15 K to 773.15 K gives $\Delta_r H^\circ(773) \approx -115.7\ \mathrm{kJ\,mol^{-1}}$, $\Delta_r S^\circ(773) \approx -245.5\ \mathrm{J\,K^{-1}\,mol^{-1}}$, and
 
    ```{math}
-   \Delta G_r^\circ(773) \approx +74.1\ \mathrm{kJ\,mol^{-1}}.
+   \Delta_r G^\circ(773) \approx +74.1\ \mathrm{kJ\,mol^{-1}}.
    ```
 
    - The reaction is non-spontaneous at 1 bar — the central dilemma of Haber–Bosch.
@@ -198,23 +204,23 @@ kernelspec:
    - For a reaction with stoichiometric change $\Delta\nu$ in moles of gas:
 
    ```{math}
-   \Delta G_r(T, P) \approx \Delta G_r^\circ(T) + \Delta\nu\,RT\ln\!\left(\frac{P}{P^\circ}\right).
+   \Delta_r G(T, P) \approx \Delta_r G^\circ(T) + \Delta\nu\,RT\ln\!\left(\frac{P}{P^\circ}\right).
    ```
 
-   - For $\mathrm{N_2 + 3\,H_2 \to 2\,NH_3}$: $\Delta\nu = 2 - 4 = -2$, so increasing $P$ lowers $\Delta G_r$ (Le Châtelier: high pressure favors the side with fewer gas molecules).
+   - For $\mathrm{N_2 + 3\,H_2 \to 2\,NH_3}$: $\Delta\nu = 2 - 4 = -2$, so increasing $P$ lowers $\Delta_r G$ (Le Châtelier: high pressure favors the side with fewer gas molecules).
 
 7. **Restoring Spontaneity with Pressure**
-   - Setting $\Delta G_r = 0$ and solving for $P$:
+   - Setting $\Delta_r G = 0$ and solving for $P$:
 
    ```{math}
-   P = P^\circ\exp\!\left(-\frac{\Delta G_r^\circ(T)}{\Delta\nu\,RT}\right).
+   P = P^\circ\exp\!\left(-\frac{\Delta_r G^\circ(T)}{\Delta\nu\,RT}\right).
    ```
 
-   - At 500 °C: $P \approx 320\ \mathrm{bar}$. At 400 °C: $P \approx 87\ \mathrm{bar}$. The Haber–Bosch operating window (400–500 °C, 150–350 bar) is the engineering compromise predicted by these estimates.
+   - At 500 °C: $P \approx 320\ \mathrm{bar}$. At 400 °C: $P \approx 86\ \mathrm{bar}$. The Haber–Bosch operating window (400–500 °C, 150–350 bar) is the engineering compromise predicted by these estimates.
 
 8. **Engineering Knobs Summary**
-   - **Catalyst**: speeds up both directions; does *not* change $\Delta G_r^\circ$ or $K$.
-   - **Temperature**: raises rate (Arrhenius) but pushes $\Delta G_r^\circ$ upward when $\Delta S_r^\circ < 0$.
+   - **Catalyst**: speeds up both directions; does *not* change $\Delta_r G^\circ$ or $K$.
+   - **Temperature**: raises rate (Arrhenius) but pushes $\Delta_r G^\circ$ upward when $\Delta_r S^\circ < 0$.
    - **Pressure**: compensates for the temperature penalty when $\Delta\nu < 0$.
 
 ---
@@ -229,7 +235,7 @@ A. **Fundamental Inequality**
 dU \le T\,dS - P\,dV.
 ```
 
-- **Applicability**: closed system with $PV$-only work. Equality for reversible processes; strict inequality for spontaneous irreversible processes.
+- **Applicability**: closed system with $PV$-only work, in thermal and mechanical equilibrium with its surroundings. Equality when every change in the system is reversible; strict inequality when an irreversible process takes place inside the system.
 
 ---
 
@@ -297,10 +303,10 @@ S = Nk_{\mathrm B}\!\left[\ln\!\left(\frac{V}{N\Lambda^3}\right) + \frac{5}{2}\r
 G. **Gibbs Free Energy and Non-$PV$ Work**
 
 ```{math}
-dG\big|_{T,P} = \delta w_{\text{non-}PV,\text{rev}}.
+dG\big|_{T,P} = \delta w_{\text{non-}PV,\mathrm{rev}}.
 ```
 
-- **Applicability**: reversible process at constant $T$ and $P$. $\Delta G$ equals the reversible non-$PV$ work; for irreversible processes, $|\Delta G|$ is an upper bound on useful work output.
+- **Applicability**: reversible process at constant $T$ and $P$. $\Delta G$ equals the reversible non-$PV$ work.
 
 ---
 
@@ -311,7 +317,7 @@ S(0\,\mathrm{K}) = 0 \quad\text{(ideal crystal)},\qquad
 S_{\mathrm{res}} = k_{\mathrm B}\ln\Omega_0 \quad\text{(degenerate ground state)}.
 ```
 
-- Fixes the entropy reference point; residual entropy reflects ground-state multiplicity, not a failure of the third law.
+- Fixes the entropy reference point; residual entropy reflects ground-state multiplicity.
 
 ---
 
@@ -328,11 +334,11 @@ S^\circ(T) = \int_0^T \frac{C_P(T')}{T'}\,dT' + \sum_{\text{transitions}} \frac{
 J. **Temperature Corrections to Reaction Thermodynamics** (constant $C_P$)
 
 ```{math}
-\Delta H_r^\circ(T_f) = \Delta H_r^\circ(T_i) + \Delta C_{P,r}(T_f - T_i),
+\Delta_r H^\circ(T_f) = \Delta_r H^\circ(T_i) + \Delta_r C_P(T_f - T_i),
 ```
 
 ```{math}
-\Delta S_r^\circ(T_f) = \Delta S_r^\circ(T_i) + \Delta C_{P,r}\ln\!\left(\frac{T_f}{T_i}\right).
+\Delta_r S^\circ(T_f) = \Delta_r S^\circ(T_i) + \Delta_r C_P\ln\!\left(\frac{T_f}{T_i}\right).
 ```
 
 - **Applicability**: reaction data from a reference temperature $T_i$ to a target temperature $T_f$, assuming temperature-independent heat capacities over the interval.
@@ -348,7 +354,7 @@ G(T,P) - G^\circ(T) = RT\ln\!\left(\frac{P}{P^\circ}\right).
 - **Applicability**: pure ideal gas at constant $T$. For a reaction with stoichiometric gas change $\Delta\nu$:
 
 ```{math}
-\Delta G_r(T,P) \approx \Delta G_r^\circ(T) + \Delta\nu\,RT\ln\!\left(\frac{P}{P^\circ}\right).
+\Delta_r G(T,P) \approx \Delta_r G^\circ(T) + \Delta\nu\,RT\ln\!\left(\frac{P}{P^\circ}\right).
 ```
 
-- For $\Delta\nu < 0$, higher pressure lowers $\Delta G_r$ and favors products.
+- For $\Delta\nu < 0$, higher pressure lowers $\Delta_r G$ and favors products.
