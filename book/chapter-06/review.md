@@ -18,9 +18,11 @@ kernelspec:
 
 ### Section 6.1: Phase Diagrams
 
+See [Section 6.1](section-01.md).
+
 1. **One-Component $P$–$T$ Phase Diagram**
    - **Single-phase regions** (solid, liquid, gas) are separated by **coexistence curves** on which two phases are simultaneously in equilibrium.
-   - **Triple point:** the unique $(T_{tp}, P_{tp})$ at which solid, liquid, and gas coexist.
+   - **Triple point:** the unique $(T_{\mathrm{tp}}, P_{\mathrm{tp}})$ at which solid, liquid, and gas coexist.
    - **Critical point:** the point at which the liquid–vapor coexistence curve *terminates*; beyond it, liquid and gas become indistinguishable (a **supercritical fluid**).
    - The solid–liquid line does not terminate in a critical point because solid and liquid differ qualitatively (long-range translational order), while liquid and gas differ only quantitatively.
 
@@ -38,7 +40,7 @@ kernelspec:
    \mu_i \equiv \left(\frac{\partial G}{\partial n_i}\right)_{T,P,\,n_{j\neq i}}.
    ```
 
-   - $\mu_i$ is **intensive** — the "price per mole" of adding substance to a phase — which makes it the natural variable for comparing phases of different size.
+   - $\mu_i$ is **intensive**: it is the "price per mole" of adding substance to a phase.
 
 3. **Pure Substance: $\mu = \bar g$**
    - For a one-component system the Euler relation gives $G = \mu n$, so the chemical potential equals the molar Gibbs free energy:
@@ -50,7 +52,7 @@ kernelspec:
    - This is the Euler relation of [Section 5.1](../chapter-05/section-01.md), $G = \mu N$, written per mole.
 
 4. **Phase-Equilibrium Condition**
-   - Transferring $dn_\alpha$ moles from phase $\alpha$ to phase $\beta$ at fixed $T$ and $P$ gives $dG = (\mu_\alpha - \mu_\beta)\,dn_\alpha$. Requiring $dG = 0$ for arbitrary transfers yields
+   - Letting the amount of phase $\alpha$ change by $dn_\alpha$ at fixed $T$ and $P$, with $dn_\beta = -dn_\alpha$, gives $dG = (\mu_\alpha - \mu_\beta)\,dn_\alpha$. Requiring $dG = 0$ for an arbitrary small $dn_\alpha$ yields
 
    ```{math}
    \mu_\alpha(T,P) = \mu_\beta(T,P).
@@ -61,91 +63,96 @@ kernelspec:
 5. **Graphical View: $\bar g$ vs. $T$ at Fixed $P$**
    - From $dG = -S\,dT + V\,dP$: $(\partial \bar g/\partial T)_P = -\bar s$.
    - Every phase has *negative* slope; the larger $\bar s$, the steeper (more negative) the slope.
-   - Since $\bar s_g > \bar s_l > \bar s_s$, the gas line is steepest, then liquid, then solid. Each intersection marks a first-order transition at which the stable (lowest-$\bar g$) phase changes.
+   - Since $\bar s_{\mathrm{g}} > \bar s_{\mathrm{l}} > \bar s_{\mathrm{s}}$, the gas line is steepest, then liquid, then solid. Each intersection marks a first-order transition at which the stable (lowest-$\bar g$) phase changes.
 
 6. **Graphical View: $\bar g$ vs. $P$ at Fixed $T$**
    - From $dG = -S\,dT + V\,dP$: $(\partial \bar g/\partial P)_T = \bar v$.
    - Every phase has *positive* slope; the larger $\bar v$, the steeper the slope.
-   - Since $\bar v_g \gg \bar v_l \gtrsim \bar v_s$, compressing the system favors condensed phases over gas.
-   - **Water anomaly:** $\bar v_s > \bar v_l$, so the ice curve rises *faster* than the liquid curve and increasing $P$ near $T_{fus}$ can melt ice.
+   - Since $\bar v_{\mathrm{g}} \gg \bar v_{\mathrm{l}} \gtrsim \bar v_{\mathrm{s}}$, compressing the system favors condensed phases over gas.
+   - **Water anomaly:** $\bar v_{\mathrm{s}} > \bar v_{\mathrm{l}}$ (ice is less dense than liquid water). Concept Check 5 of Section 6.1 asks what follows for the two curves.
 
 7. **Latent Heat and Entropy Jump at a First-Order Transition**
    - A **first-order transition** is one at which the first derivatives of $G$ ($S$ and $V$) are discontinuous across the coexistence curve.
-   - At coexistence, $\mu_\alpha = \mu_\beta$ gives $\Delta \bar g_{tr} = 0$; combined with $\Delta \bar g = \Delta \bar h - T\,\Delta \bar s$:
+   - At coexistence, $\mu_\alpha = \mu_\beta$ gives $\Delta \bar g_{\mathrm{trs}} = 0$; combined with $\Delta \bar g = \Delta \bar h - T\,\Delta \bar s$:
 
    ```{math}
-   \Delta \bar h_{tr} = T_{tr}\,\Delta \bar s_{tr}.
+   \Delta \bar h_{\mathrm{trs}} = T_{\mathrm{trs}}\,\Delta \bar s_{\mathrm{trs}}.
    ```
 
-   - One calorimetric measurement ($\Delta \bar h_{tr}$) therefore supplies both quantities.
+   - One calorimetric measurement ($\Delta \bar h_{\mathrm{trs}}$) therefore supplies both quantities.
 
 8. **Trouton's Rule and Water as an Exception**
    - For many ordinary liquids at the normal boiling point,
 
    ```{math}
-   \Delta \bar s_{vap} \approx 85.9\ \mathrm{J\,mol^{-1}\,K^{-1}} \approx 10.3\,R.
+   \Delta \bar s_{\mathrm{vap}} \approx 85.9\ \mathrm{J\,mol^{-1}\,K^{-1}} \approx 10.3\,R.
    ```
 
-   - Approximate constancy reflects that the entropy cost of vaporization is dominated by the phase change itself (volume increase, loss of short-range order) rather than the liquid's chemical identity.
-   - Hydrogen-bonded liquids (water, lower alcohols) exceed the Trouton value because the liquid is more ordered than "average," so vaporization releases more entropy. For water, $\Delta \bar s_{vap} \approx 109\ \mathrm{J\,mol^{-1}\,K^{-1}}$, roughly 25% above Trouton.
+   - Approximate constancy reflects that the entropy gained on vaporization is dominated by the phase change itself (volume increase, loss of short-range order) rather than the liquid's chemical identity.
+   - Hydrogen-bonded liquids (water, the lower alcohols, ammonia) lie well above the Trouton value. For water, $\Delta \bar s_{\mathrm{vap}} \approx 109\ \mathrm{J\,mol^{-1}\,K^{-1}}$, roughly 25% above Trouton. Liquids that boil at very low temperatures (neon, hydrogen, helium) lie well below it.
 
 ---
 
 ### Section 6.2: Clapeyron and Clausius–Clapeyron
+
+See [Section 6.2](section-02.md).
 
 1. **Derivation of the Clapeyron Equation**
    - Displacing along a coexistence curve preserves $\mu_\alpha = \mu_\beta$, so $d\mu_\alpha = d\mu_\beta$.
    - Using the molar Gibbs differential $d\mu = -\bar s\,dT + \bar v\,dP$ for each phase and collecting terms gives the **Clapeyron equation**:
 
    ```{math}
-   \frac{dP}{dT} = \frac{\Delta\bar s_{tr}}{\Delta\bar v_{tr}} = \frac{\Delta\bar h_{tr}}{T\,\Delta\bar v_{tr}}.
+   \frac{dP}{dT} = \frac{\Delta\bar s_{\mathrm{trs}}}{\Delta\bar v_{\mathrm{trs}}} = \frac{\Delta\bar h_{\mathrm{trs}}}{T\,\Delta\bar v_{\mathrm{trs}}}.
    ```
 
    - Exact for any first-order transition between pure phases.
 
 2. **Sign and Magnitude of $dP/dT$**
-   - The **sign** is set by $\Delta\bar v$, since $\Delta\bar h$ and $T$ are positive at any "normal" transition. Most substances have $\bar v_l > \bar v_s$ (positive melting slope) and $\bar v_g \gg \bar v_l$ (positive boiling slope).
+   - The **sign** is set by $\Delta\bar v$, since $\Delta\bar h$ and $T$ are positive at any "normal" transition. Most substances have $\bar v_{\mathrm{l}} > \bar v_{\mathrm{s}}$ (positive melting slope) and $\bar v_{\mathrm{g}} \gg \bar v_{\mathrm{l}}$ (positive boiling slope).
    - The **magnitude** is set by $\Delta\bar v$: solid–liquid transitions have very small $\Delta\bar v$ and therefore nearly vertical coexistence curves; liquid–vapor transitions have very large $\Delta\bar v$ and shallow coexistence curves.
    - This is why melting points are nearly pressure-independent at ordinary pressures while boiling points shift strongly.
 
 3. **Water: Negative-Slope Ice–Water Line**
-   - Because $\bar v_s > \bar v_l$ for water, $\Delta\bar v_{fus} < 0$ and therefore $dP/dT < 0$ along the ice–water line. Numerically, $dP/dT \approx -135\ \mathrm{bar\,K^{-1}}$, equivalently $dT/dP \approx -7.4\ \mathrm{mK\,bar^{-1}}$.
+   - Because $\bar v_{\mathrm{s}} > \bar v_{\mathrm{l}}$ for water, $\Delta\bar v_{\mathrm{fus}} < 0$ and therefore $dP/dT < 0$ along the ice–water line. Numerically, $dP/dT \approx -135\ \mathrm{bar\,K^{-1}}$, equivalently $dT/dP \approx -7.4\ \mathrm{mK\,bar^{-1}}$.
    - The effect is far too small to explain ice skating by "pressure melting"; surface friction and a pre-existing liquid layer dominate.
 
 4. **Liquid–Vapor Approximation**
    - Two approximations collapse the Clapeyron equation into a far more useful form for the liquid–vapor line:
-     - $\bar v_g \gg \bar v_l$, so $\Delta\bar v_{vap} \approx \bar v_g$ (for water at 1 atm the ratio exceeds $10^3$).
-     - The vapor is treated as an ideal gas, $\bar v_g = RT/P_{sat}$.
+     - $\bar v_{\mathrm{g}} \gg \bar v_{\mathrm{l}}$, so $\Delta\bar v_{\mathrm{vap}} \approx \bar v_{\mathrm{g}}$ (for water at 1 atm the ratio exceeds $10^3$).
+     - The vapor is treated as an ideal gas, $\bar v_{\mathrm{g}} = RT/P_{\mathrm{sat}}$.
 
 5. **Clausius–Clapeyron Equation (Differential Form)**
 
    ```{math}
-   \frac{d\ln P_{sat}}{dT} = \frac{\Delta\bar h_{vap}}{RT^2}.
+   \frac{d\ln P_{\mathrm{sat}}}{dT} = \frac{\Delta\bar h_{\mathrm{vap}}}{RT^2}.
    ```
 
-   - The $T^{-2}$ dependence (rather than $T^{-1}$) traces to the two factors of $T$ introduced by the approximations: one from the explicit $T$ in Clapeyron, one from the $RT$ in $\bar v_g$.
+   - The $T^{-2}$ dependence (rather than $T^{-1}$) traces to two steps of the derivation, each of which brings in a factor of $T$.
 
-6. **Clausius–Clapeyron Equation (Integrated Form, Constant $\Delta\bar h_{vap}$)**
+6. **Clausius–Clapeyron Equation (Integrated Form, Constant $\Delta\bar h_{\mathrm{vap}}$)**
 
    ```{math}
-   \ln\!\left(\frac{P_2}{P_1}\right) = -\frac{\Delta\bar h_{vap}}{R}\left(\frac{1}{T_2} - \frac{1}{T_1}\right).
+   \ln\!\left(\frac{P_2}{P_1}\right) = -\frac{\Delta\bar h_{\mathrm{vap}}}{R}\left(\frac{1}{T_2} - \frac{1}{T_1}\right).
    ```
 
-   - **Two-point form:** two $(T,P)$ points give $\Delta\bar h_{vap}$ directly.
-   - **Linearized form:** a plot of $\ln P_{sat}$ vs. $1/T$ should be a straight line with slope $-\Delta\bar h_{vap}/R$, *if* the constant-$\Delta\bar h_{vap}$ approximation holds.
+   - **Two-point form:** two $(T,P)$ points give $\Delta\bar h_{\mathrm{vap}}$ directly.
+   - **Linearized form:** a plot of $\ln P_{\mathrm{sat}}$ vs. $1/T$ should be a straight line with slope $-\Delta\bar h_{\mathrm{vap}}/R$, *if* the constant-$\Delta\bar h_{\mathrm{vap}}$ approximation holds.
 
-7. **Diagnosing Breakdown and Recovering $\Delta\bar h_{vap}(T)$**
-   - A $\ln P$-vs-$1/T$ plot can look straight even when $\Delta\bar h_{vap}$ is varying. A **residual plot** is the reliable diagnostic: systematic curvature (not random scatter) indicates breakdown of the constant-$\Delta\bar h_{vap}$ assumption.
-   - A **local-slope estimate** from finite differences gives
+7. **Diagnosing Breakdown and the Local Slope**
+   - A $\ln P$-vs-$1/T$ plot can look straight even when $\Delta\bar h_{\mathrm{vap}}$ is varying. A **residual plot** is the reliable diagnostic: systematic curvature (not random scatter) indicates breakdown of the constant-$\Delta\bar h_{\mathrm{vap}}$ assumption.
+   - The **local slope** from finite differences obeys the exact relation
 
    ```{math}
-   \Delta\bar h_{vap}(T) = R\,T^2\,\frac{d\ln P_{sat}}{dT}.
+   R\,T^2\,\frac{d\ln P_{\mathrm{sat}}}{dT} = \frac{\Delta\bar h_{\mathrm{vap}}}{\Delta Z},
+   \qquad
+   \Delta Z \equiv \frac{P_{\mathrm{sat}}\,\Delta\bar v_{\mathrm{vap}}}{RT}.
    ```
 
-   - $\Delta\bar h_{vap}(T)$ decreases with rising $T$ and vanishes at the critical point, where the liquid and vapor phases merge.
+   - Where the vapor is nearly ideal ($\Delta Z \approx 1$), the local slope estimates $\Delta\bar h_{\mathrm{vap}}(T)$; it exceeds $\Delta\bar h_{\mathrm{vap}}$ as the vapor becomes denser (by 8 % for water at 180 °C).
+   - $\Delta\bar h_{\mathrm{vap}}(T)$ decreases with rising $T$. At the critical point, where the liquid and vapor phases merge, $\Delta\bar h_{\mathrm{vap}}$ and $\Delta\bar v_{\mathrm{vap}}$ vanish together.
 
-8. **Molecular Reading of $\Delta\bar h_{vap}$**
-   - For water, $\Delta\bar h_{vap} \approx 40\ \mathrm{kJ\,mol^{-1}}$ is consistent with breaking roughly two hydrogen bonds per molecule (each worth $\sim 20\ \mathrm{kJ\,mol^{-1}}$) on going from liquid to vapor — the macroscopic shadow of the intermolecular interactions behind the partition functions of Chapter 2.
+8. **Molecular Reading of $\Delta\bar h_{\mathrm{vap}}$**
+   - For water, $\Delta\bar h_{\mathrm{vap}} \approx 40\ \mathrm{kJ\,mol^{-1}}$ is consistent with breaking roughly two hydrogen bonds per molecule (each worth $\sim 20\ \mathrm{kJ\,mol^{-1}}$) on going from liquid to vapor — the macroscopic shadow of the intermolecular forces of [Section 1.4](../chapter-01/section-04.md).
 
 ---
 
@@ -208,27 +215,27 @@ E. **Slopes of $\bar g$ Along Natural Axes**
 F. **Latent Heat / Entropy Jump at a First-Order Transition**
 
 ```{math}
-\Delta \bar h_{tr} = T_{tr}\,\Delta \bar s_{tr}.
+\Delta \bar h_{\mathrm{trs}} = T_{\mathrm{trs}}\,\Delta \bar s_{\mathrm{trs}}.
 ```
 
-- **Applicability**: any first-order transition $\alpha \to \beta$ at coexistence $(T_{tr}, P_{tr})$. Follows directly from $\Delta \bar g_{tr} = 0$ on the coexistence curve.
+- **Applicability**: any first-order transition $\alpha \to \beta$ at coexistence $(T_{\mathrm{trs}}, P_{\mathrm{trs}})$. Follows directly from $\Delta \bar g_{\mathrm{trs}} = 0$ on the coexistence curve.
 
 ---
 
 G. **Trouton's Rule**
 
 ```{math}
-\Delta \bar s_{vap} \approx 85.9\ \mathrm{J\,mol^{-1}\,K^{-1}} \approx 10.3\,R.
+\Delta \bar s_{\mathrm{vap}} \approx 85.9\ \mathrm{J\,mol^{-1}\,K^{-1}} \approx 10.3\,R.
 ```
 
-- **Applicability**: empirical benchmark at the *normal* boiling point for ordinary (non-hydrogen-bonded, non-associated) liquids. Substantial upward deviations indicate unusual order in the liquid.
+- **Applicability**: empirical benchmark at the *normal* boiling point for ordinary (non-hydrogen-bonded, non-associated) liquids. Hydrogen-bonded liquids lie well above it, and liquids that boil at very low temperatures lie well below it.
 
 ---
 
 H. **Clapeyron Equation**
 
 ```{math}
-\frac{dP}{dT} = \frac{\Delta\bar s_{tr}}{\Delta\bar v_{tr}} = \frac{\Delta\bar h_{tr}}{T\,\Delta\bar v_{tr}}.
+\frac{dP}{dT} = \frac{\Delta\bar s_{\mathrm{trs}}}{\Delta\bar v_{\mathrm{trs}}} = \frac{\Delta\bar h_{\mathrm{trs}}}{T\,\Delta\bar v_{\mathrm{trs}}}.
 ```
 
 - **Applicability**: exact for any first-order transition between pure phases. The sign of $dP/dT$ is set by $\Delta\bar v$; the magnitude is dominated by $|\Delta\bar v|$ (small for solid–liquid, large for liquid–vapor).
@@ -238,27 +245,29 @@ H. **Clapeyron Equation**
 I. **Clausius–Clapeyron Equation (Differential Form)**
 
 ```{math}
-\frac{d\ln P_{sat}}{dT} = \frac{\Delta\bar h_{vap}}{RT^2}.
+\frac{d\ln P_{\mathrm{sat}}}{dT} = \frac{\Delta\bar h_{\mathrm{vap}}}{RT^2}.
 ```
 
-- **Applicability**: liquid–vapor coexistence under two approximations — $\bar v_g \gg \bar v_l$ and an ideal vapor.
+- **Applicability**: liquid–vapor coexistence under two approximations — $\bar v_{\mathrm{g}} \gg \bar v_{\mathrm{l}}$ and an ideal vapor.
 
 ---
 
 J. **Clausius–Clapeyron Equation (Integrated Form)**
 
 ```{math}
-\ln\!\left(\frac{P_2}{P_1}\right) = -\frac{\Delta\bar h_{vap}}{R}\left(\frac{1}{T_2} - \frac{1}{T_1}\right).
+\ln\!\left(\frac{P_2}{P_1}\right) = -\frac{\Delta\bar h_{\mathrm{vap}}}{R}\left(\frac{1}{T_2} - \frac{1}{T_1}\right).
 ```
 
-- **Applicability**: liquid–vapor coexistence with $\Delta\bar h_{vap}$ approximately constant over the interval $[T_1, T_2]$. A plot of $\ln P_{sat}$ vs. $1/T$ is a straight line with slope $-\Delta\bar h_{vap}/R$.
+- **Applicability**: liquid–vapor coexistence with $\Delta\bar h_{\mathrm{vap}}$ approximately constant over the interval $[T_1, T_2]$. A plot of $\ln P_{\mathrm{sat}}$ vs. $1/T$ is a straight line with slope $-\Delta\bar h_{\mathrm{vap}}/R$.
 
 ---
 
-K. **Local-Slope Estimate of $\Delta\bar h_{vap}(T)$**
+K. **Local Slope of the Vapor-Pressure Curve**
 
 ```{math}
-\Delta\bar h_{vap}(T) = R\,T^2\,\frac{d\ln P_{sat}}{dT}.
+R\,T^2\,\frac{d\ln P_{\mathrm{sat}}}{dT} = \frac{\Delta\bar h_{\mathrm{vap}}}{\Delta Z},
+\qquad
+\Delta Z \equiv \frac{P_{\mathrm{sat}}\,\Delta\bar v_{\mathrm{vap}}}{RT}.
 ```
 
-- **Applicability**: recovers the temperature-dependent enthalpy of vaporization from vapor-pressure data via finite differences. $\Delta\bar h_{vap}(T) \to 0$ as $T \to T_c$.
+- **Applicability**: exact along the liquid–vapor coexistence curve. Where the vapor is nearly ideal ($\Delta Z \approx 1$), the local slope from finite differences of vapor-pressure data estimates the temperature-dependent $\Delta\bar h_{\mathrm{vap}}(T)$. As $T \to T_c$, $\Delta\bar h_{\mathrm{vap}} \to 0$ and $\Delta\bar v_{\mathrm{vap}} \to 0$ together.
