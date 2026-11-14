@@ -19,9 +19,9 @@ See also: [Course-wide Conventions & Notation](../notation.md)
 
 ## Overview and Learning Objectives
 
-The first and second laws tell us *how* energy and entropy change but leave the entropy scale with an undetermined reference point — the integration constant in $\Delta S = \int \delta q_{\mathrm{rev}}/T$ is never fixed. The third law resolves this by specifying what happens to entropy as $T \to 0$. Using Boltzmann's formula (Section 4.3), we explain why an ideal crystal has $S(0) = 0$, examine how ground-state degeneracy or frozen-in disorder produces a nonzero *residual entropy*, and note two further consequences: heat capacities must vanish as $T \to 0$, and absolute zero itself is unattainable in a finite number of steps.
+The first and second laws tell us *how* energy and entropy change but leave the entropy scale with an undetermined reference point — the integration constant in $\Delta S = \int \delta q_{\mathrm{rev}}/T$ is never fixed. The third law resolves this by specifying what happens to entropy as $T \to 0$. Using Boltzmann's formula ([Section 4.3](../chapter-04/section-03.md)), we explain why an ideal crystal has $S(0) = 0$, examine how ground-state degeneracy or frozen-in disorder produces a nonzero *residual entropy*, and note two further consequences: heat capacities must vanish as $T \to 0$, and absolute zero itself is unattainable in a finite number of steps.
 
-With the entropy reference point fixed, we can compute **absolute** (third-law) entropies $S^\circ(T)$ for any substance by integrating $C_P/T$ from $0$ to $T$ and adding any phase-transition contributions. These absolute entropies are the basis for tabulated $\Delta_r S^\circ$ and $\Delta_r G^\circ$ values that we will put to use in Section 5.3.
+With the entropy reference point fixed, we can compute **absolute** (third-law) entropies $S^\circ(T)$ for any substance by integrating $C_P/T$ from $0$ to $T$ and adding any phase-transition contributions. These absolute entropies are the basis for tabulated $\Delta_r S^\circ$ and $\Delta_r G^\circ$ values that we will put to use in [Section 5.3](section-03.md).
 
 ---
 
@@ -30,14 +30,14 @@ Learning objectives:
 - State Planck's formulation of the third law and define what is meant by a pure crystalline substance and an ideal crystal.
 - Use $S = k_{\mathrm B}\ln\Omega$ to justify $S(0) = 0$ for an ideal crystal with a unique ground state.
 - Compute residual entropy $S_{\mathrm{res}} = k_{\mathrm B}\ln\Omega_0$ (or per mole, $R\ln\Omega_0$) for degenerate or disordered ground states.
-- Explain why $C_V$ and $C_P$ must vanish as $T \to 0$ and connect this to the quantum behavior of heat capacities (Section 2.6).
+- Explain why $C_V$ and $C_P$ must vanish as $T \to 0$ and connect this to the quantum behavior of heat capacities ([Section 2.6](../chapter-02/section-06.md)).
 - Describe, qualitatively, why absolute zero is unattainable.
 
 ## Core Ideas and Derivations
 
-### Third law of thermodynamics
+### Third Law of Thermodynamics
 
-#### Planck's statement
+#### Planck's Statement
 
 **Planck's statement of the third law:**
 
@@ -50,9 +50,9 @@ A key special case is the **ideal (perfect) crystal** — one with no defects (n
 S(0\,\mathrm{K}) = 0 \quad \text{(ideal crystal)}.
 ```
 
-#### Why the ideal crystal has $S(0) = 0$
+#### Why the Ideal Crystal Has $S(0) = 0$
 
-Recall from Section 4.3 that Boltzmann's formula gives the entropy of an isolated system as
+Recall from [Section 4.3](../chapter-04/section-03.md) that Boltzmann's formula gives the entropy of an isolated system as
 
 ```{math}
 S = k_{\mathrm B}\ln\Omega,
@@ -66,13 +66,13 @@ S(0) = k_{\mathrm B}\ln 1 = 0.
 
 The third law, from the statistical-mechanical viewpoint, is the statement that a system with a unique ground state has zero entropy at absolute zero.
 
-#### Real crystals: defects and disorder
+#### Real Crystals: Defects and Disorder
 
 Real materials can deviate from this picture. Even at very low temperature, a crystal may contain — or "freeze in" — structural or chemical disorder: vacancies, impurities, grain boundaries, stacking faults, or orientational disorder of molecular units. These imperfections increase the number of distinct microscopic arrangements compatible with the same macroscopic state (i.e., increase $\Omega_0$), leading to a nonzero entropy as $T \to 0$.
 
 ---
 
-### Residual entropy
+### Residual Entropy
 
 If a system retains **more than one** accessible microscopic arrangement as $T \to 0$, its entropy approaches a nonzero constant called the **residual entropy**:
 
@@ -81,7 +81,7 @@ If a system retains **more than one** accessible microscopic arrangement as $T \
 S_{\mathrm{res}} = \lim_{T\to 0}\,S(T) = k_{\mathrm B}\ln\Omega_0.
 ```
 
-#### Example: orientational disorder in solid CO
+#### Example: Orientational Disorder in Solid CO
 
 Solid CO at very low temperature provides a classic example. The CO molecule has a small dipole moment, and the two orientations CO and OC are nearly isoenergetic. If each of $N$ molecules can be frozen in either orientation with roughly equal probability, the ground-state multiplicity is
 
@@ -101,24 +101,23 @@ Per mole, using $R = N_Ak_{\mathrm B}$:
 S_{\mathrm{res,m}} = R\ln 2 \approx 5.76\ \mathrm{J\,mol^{-1}\,K^{-1}}.
 ```
 
-```{admonition} Comparison with experiment
+```{admonition} Comparison with Experiment
 :class: dropdown
 
 The experimentally measured residual entropy of CO is approximately $4.6\ \mathrm{J\,mol^{-1}\,K^{-1}}$, somewhat less than the $R\ln 2 = 5.76\ \mathrm{J\,mol^{-1}\,K^{-1}}$ predicted by the fully random two-orientation model. The discrepancy indicates that CO is not *completely* disordered at low temperature — neighboring molecules have weak orientational correlations that partially reduce the number of accessible configurations. The simple $2^N$ estimate captures the right order of magnitude but overcounts somewhat.
 ```
 
-#### Reconciling residual entropy with the third law
+```{admonition} Residual Entropy and the Third Law
+:class: important
 
-Planck's statement says $S \to$ **a constant** as $T \to 0$, not that the constant must be zero.
+Return to Planck's statement at the start of this section and to the definition of the residual entropy, Eq. {eq}`eq:residual-entropy`. Which values of $\Omega_0$ does the statement allow? Is solid CO a counterexample to Planck's statement, to Eq. {eq}`eq:third-law`, or to neither?
+```
 
-- For an **ideal crystal**: $\Omega_0 = 1 \Rightarrow S(0) = 0$.
-- For a crystal with **frozen-in disorder**: $\Omega_0 > 1 \Rightarrow S(0) = k_{\mathrm B}\ln\Omega_0 > 0$.
-
-Residual entropy is not a violation of the third law — it reflects that the system is not a perfectly ordered crystal at $0\,\mathrm{K}$. The third law's practical utility lies in establishing a universal reference point for entropy: any ideal crystal has $S(0) = 0$, and deviations from zero are ascribed to measurable disorder.
+The third law's practical utility lies in establishing a universal reference point for entropy: any ideal crystal has $S(0) = 0$.
 
 ---
 
-### Consequence: heat capacities vanish as $T \to 0$
+### Consequence: Heat Capacities Vanish as $T \to 0$
 
 The third law has a direct implication for heat capacities. At constant pressure, the entropy at temperature $T$ is related to the entropy at $0\,\mathrm{K}$ by
 
@@ -126,7 +125,7 @@ The third law has a direct implication for heat capacities. At constant pressure
 S(T) = S(0) + \int_0^T \frac{C_P(T')}{T'}\,dT'.
 ```
 
-For this integral to converge (i.e., for $S(T)$ to be finite), $C_P$ must go to zero at least as fast as $T$ does. More precisely:
+For this integral to converge (i.e., for $S(T)$ to be finite), $C_P$ must vanish as $T \to 0$. If $C_P$ approached a nonzero constant, the integrand $C_P/T'$ would grow as $1/T'$, and the integral would diverge logarithmically at its lower limit. Therefore:
 
 ```{math}
 C_P \to 0 \quad \text{as} \quad T \to 0.
@@ -134,29 +133,29 @@ C_P \to 0 \quad \text{as} \quad T \to 0.
 
 The same argument applies to $C_V$. This is a nontrivial prediction: it says that the ability of any substance to absorb heat must diminish as absolute zero is approached.
 
-```{admonition} Connection to Chapter 2
-:class: tip
+````{admonition} Connection to Module 2
+:class: important
 
-In Section 2.6 we saw this behavior explicitly. The Einstein model of an atomic crystal gives a heat capacity
+[Section 2.6](../chapter-02/section-06.md) derived the heat capacity of the Einstein model of an atomic crystal, which in terms of $\Theta_{\mathrm{vib}} = \hbar\omega/k_{\mathrm B}$ reads
 
-$$
-C_V = 3Nk_{\mathrm B}\left(\frac{\Theta_{\mathrm{vib}}}{T}\right)^2 \frac{e^{\Theta_{\mathrm{vib}}/T}}{(e^{\Theta_{\mathrm{vib}}/T}-1)^2},
-$$
-
-which goes to zero exponentially as $T \to 0$ because the quantum vibrational levels "freeze out." The classical (equipartition) prediction $C_V = 3Nk_{\mathrm B}$, by contrast, is temperature-independent and violates the third law. The resolution is that equipartition is a high-temperature approximation; quantum mechanics is needed at low $T$.
+```{math}
+C_V = 3Nk_{\mathrm B}\left(\frac{\Theta_{\mathrm{vib}}}{T}\right)^2 \frac{e^{\Theta_{\mathrm{vib}}/T}}{(e^{\Theta_{\mathrm{vib}}/T}-1)^2}.
 ```
+
+Find its limit as $T \to 0$, and compare it with the classical (equipartition) value $C_V = 3Nk_{\mathrm B}$. Which of the two is compatible with the third law?
+````
 
 ---
 
-### Consequence: unattainability of absolute zero
+### Consequence: Unattainability of Absolute Zero
 
 A closely related statement — sometimes called the **Nernst form** of the third law — is that no finite sequence of thermodynamic operations can bring a system to exactly $T = 0\,\mathrm{K}$.
 
-The intuitive argument is as follows. Cooling typically works by removing entropy (e.g., by adiabatic demagnetization or expansion). As $T \to 0$, the entropy of the system approaches a minimum, and each successive cooling step removes less and less entropy — the "gap" between successive stages shrinks and the process converges but never quite reaches zero. In practice, temperatures below $1\ \mathrm{nK}$ have been achieved in laboratory settings, but $T = 0$ remains a limit, not an endpoint.
+The intuitive argument is as follows. Cooling to very low temperature typically alternates two steps, as in adiabatic demagnetization: an isothermal step that removes entropy from the system, and an adiabatic step that lowers the temperature at constant entropy. As $T \to 0$, the entropy of the system approaches the same limiting value whatever the magnetic field (or other control variable), so each successive pair of steps removes less entropy and lowers the temperature by less. The sequence converges but never quite reaches zero. In practice, temperatures below $1\ \mathrm{nK}$ have been achieved in laboratory settings, but $T = 0$ remains a limit, not an endpoint.
 
 ---
 
-### Absolute entropies
+### Absolute Entropies
 
 With $S(0) = 0$ established for ideal crystals, we can compute the **absolute (third-law) entropy** of any substance at temperature $T$ and pressure $P^\circ$:
 
@@ -167,35 +166,35 @@ S^\circ(T) = \int_0^T \frac{C_P(T')}{T'}\,dT' + \sum_{\text{transitions}} \frac{
 
 where the sum runs over any phase transitions (melting, boiling, etc.) between $0$ and $T$, each contributing $\Delta H_{\mathrm{trs}}/T_{\mathrm{trs}}$ to the entropy.
 
-These absolute entropies are tabulated in standard references (NIST WebBook, JANAF tables) as $S^\circ(298.15\ \mathrm{K})$. Combined with standard enthalpies of formation, they provide the reaction entropies and Gibbs energies that we will use in Section 5.3 to analyze the Haber–Bosch process.
+These absolute entropies are tabulated in standard references (NIST WebBook, JANAF tables) as $S^\circ(298.15\ \mathrm{K})$. Combined with standard enthalpies of formation, they provide the reaction entropies and Gibbs energies that we will use in [Section 5.3](section-03.md) to analyze the Haber–Bosch process.
 
 ---
 
 ## Worked Examples
 
-### Example 1: Residual entropy of solid CO
+### Example 1: Entropy of a Crystal at Low Temperature
 
-**Problem.** Solid CO has $N$ molecules per crystal, each of which can adopt either of two orientations (CO or OC) as $T \to 0$. Estimate the molar residual entropy assuming complete disorder.
+**Problem.** Calorimetric measurements cannot reach $0\,\mathrm{K}$, so the lowest part of the integral in Eq. {eq}`eq:absolute-entropy` is obtained by extrapolation. At sufficiently low temperature, the heat capacity of a nonmetallic crystal is proportional to $T^3$ (the Debye $T^3$ law): $C_P = aT^3$. A crystal has a measured molar heat capacity of $0.24\ \mathrm{J\,mol^{-1}\,K^{-1}}$ at $10\ \mathrm{K}$, and the $T^3$ law holds below this temperature. Find its molar entropy at $10\ \mathrm{K}$, assuming an ideal crystal.
 
 **Solution.**
 
-If all $2^N$ orientational configurations are equally accessible, then $\Omega_0 = 2^N$ and
+For an ideal crystal $S(0) = 0$, and no phase transition lies below $10\ \mathrm{K}$, so
 
 ```{math}
-S_{\mathrm{res}} = k_{\mathrm B}\ln(2^N) = Nk_{\mathrm B}\ln 2.
+S(T) = \int_0^T \frac{C_P(T')}{T'}\,dT' = \int_0^T a\,T'^2\,dT' = \frac{aT^3}{3} = \frac{C_P(T)}{3}.
 ```
 
-Per mole:
+At $T = 10\ \mathrm{K}$:
 
 ```{math}
-S_{\mathrm{res,m}} = R\ln 2 = (8.314\ \mathrm{J\,mol^{-1}\,K^{-1}})\ln 2 = 5.76\ \mathrm{J\,mol^{-1}\,K^{-1}}.
+S_{\mathrm{m}}(10\ \mathrm{K}) = \frac{0.24\ \mathrm{J\,mol^{-1}\,K^{-1}}}{3} = 0.080\ \mathrm{J\,mol^{-1}\,K^{-1}}.
 ```
 
-**Result.** Even as $T \to 0$, a disordered crystal can retain a finite entropy determined by the degeneracy of its ground state. The experimental value ($\approx 4.6\ \mathrm{J\,mol^{-1}\,K^{-1}}$) is somewhat smaller, indicating partial orientational ordering.
+**Result.** Where the $T^3$ law holds, the entropy is one third of the heat capacity at the same temperature, so a single measured value fixes the contribution of the unmeasured range. The integral converges because $C_P$ vanishes as $T \to 0$.
 
 ---
 
-### Example 2: Residual entropy of ice (Pauling model)
+### Example 2: Residual Entropy of Ice (Pauling Model)
 
 **Problem.** In Linus Pauling's 1935 model of ice, each oxygen atom is tetrahedrally coordinated to four neighbors, with two hydrogen atoms nearby (covalent O–H bonds) and two farther away (hydrogen bonds). Pauling showed that the number of configurations consistent with the "ice rules" (exactly two H atoms close to each O) gives a ground-state multiplicity of approximately $\Omega_0 \approx (3/2)^N$ for $N$ water molecules. Estimate the molar residual entropy.
 
@@ -213,7 +212,13 @@ Per mole:
 S_{\mathrm{res,m}} = R\ln\!\left(\frac{3}{2}\right) = (8.314)\ln(1.5) = 3.37\ \mathrm{J\,mol^{-1}\,K^{-1}}.
 ```
 
-**Result.** The predicted residual entropy is $3.37\ \mathrm{J\,mol^{-1}\,K^{-1}}$, in remarkable agreement with the experimental value of approximately $3.41\ \mathrm{J\,mol^{-1}\,K^{-1}}$. The key insight is that $\Omega_0$ is not simply $2^N$ (two positions per H atom without constraints) but is reduced by the ice rules, which require exactly two short and two long O–H distances around each oxygen. Pauling's combinatorial analysis captures this constraint, and the agreement with experiment confirms that the proton disorder in ice is well described by the ice rules even at the lowest accessible temperatures.
+**Result.** The predicted residual entropy is $3.37\ \mathrm{J\,mol^{-1}\,K^{-1}}$, in remarkable agreement with the experimental value of approximately $3.41\ \mathrm{J\,mol^{-1}\,K^{-1}}$. Without the ice rules, the $2N$ hydrogen atoms of $N$ molecules, each with two possible positions, would have $2^{2N} = 4^N$ arrangements. The ice rules reduce this number, and the agreement with experiment confirms that the proton disorder in ice is well described by the ice rules even at the lowest accessible temperatures.
+
+```{admonition} Pauling's Count
+:class: important
+
+Reconstruct Pauling's estimate. Each hydrogen atom lies between two neighboring oxygen atoms and has two possible positions, close to one oxygen atom or close to the other. (a) Around one oxygen atom, the four neighboring hydrogen atoms have $2^4 = 16$ arrangements. How many of them place exactly two hydrogen atoms close to that oxygen atom, as the ice rules require? (b) Treat the $N$ oxygen atoms as independent, and combine the fraction from (a) with the $4^N$ unconstrained arrangements to obtain $\Omega_0$.
+```
 
 ## Concept Checks
 
@@ -227,6 +232,6 @@ S_{\mathrm{res,m}} = R\ln\!\left(\frac{3}{2}\right) = (8.314)\ln(1.5) = 3.37\ \m
 
 - The third law states that $S \to$ a constant as $T \to 0$; for ideal crystals, that constant is zero, fixing the entropy scale.
 - Boltzmann's formula explains $S(0) = 0$ when the ground state is unique ($\Omega_0 = 1$).
-- Residual entropy ($S_{\mathrm{res}} = k_{\mathrm B}\ln\Omega_0 > 0$) arises from ground-state degeneracy or frozen-in disorder, not from a failure of the third law.
-- The third law requires heat capacities to vanish at absolute zero — a prediction confirmed by quantum statistical mechanics (Section 2.6) and violated by classical equipartition.
+- Residual entropy ($S_{\mathrm{res}} = k_{\mathrm B}\ln\Omega_0 > 0$) arises from ground-state degeneracy or frozen-in disorder.
+- The third law requires heat capacities to vanish at absolute zero, a prediction that can be tested against the heat capacities of [Section 2.6](../chapter-02/section-06.md).
 - Absolute (third-law) entropies $S^\circ(T)$ are computed by integrating $C_P/T$ from $0$ to $T$ and provide the standard entropy values used in thermochemistry.
