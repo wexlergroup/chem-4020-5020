@@ -5,9 +5,43 @@ import * as THREE from 'three';
 const MARGIN = { top: 40, right: 40, bottom: 60, left: 80 };
 const MIN_T = 200, MAX_T = 700; // Kelvin
 const MIN_P = 1, MAX_P = 100000000; // Pascals (Log scale)
-const TRIPLE_POINT = { t: 273.16, p: 611.66 };
-const CRITICAL_POINT = { t: 647.1, p: 22064000 };
+const TRIPLE_POINT = { t: 273.16, p: 611.657 };
+const CRITICAL_POINT = { t: 647.096, p: 22064000 };
 const STD_PRESSURE = 101325; // 1 atm
+const ICE_IH_MIN_T = 251.165; // K, lower end of the ice Ih melting curve
+
+// --- PHASE BOUNDARIES OF WATER (IAPWS correlations, pressures in Pa) ---
+// The same three functions draw the curves and name the phase under the
+// pointer, so the drawing and the readout cannot disagree.
+
+// Liquid-vapor: saturation pressure, triple point to critical point.
+const saturationPressure = (t) => {
+  const tau = 1 - t / CRITICAL_POINT.t;
+  const a = [-7.85951783, 1.84408259, -11.7866497, 22.6807411, -15.9618719, 1.80122502];
+  const e = [1, 1.5, 3, 3.5, 4, 7.5];
+  const sum = a.reduce((acc, ai, i) => acc + ai * Math.pow(tau, e[i]), 0);
+  return CRITICAL_POINT.p * Math.exp((CRITICAL_POINT.t / t) * sum);
+};
+
+// Solid-vapor: sublimation pressure of ice Ih, below the triple point.
+const sublimationPressure = (t) => {
+  const theta = t / TRIPLE_POINT.t;
+  const a = [-21.2144006, 27.3203819, -6.10598130];
+  const b = [0.00333333333, 1.20666667, 1.70333333];
+  const sum = a.reduce((acc, ai, i) => acc + ai * Math.pow(theta, b[i]), 0);
+  return TRIPLE_POINT.p * Math.exp(sum / theta);
+};
+
+// Solid-liquid: melting pressure of ice Ih. It rises as the temperature
+// falls (negative slope) and leaves the plotted range near 264 K.
+const meltingPressure = (t) => {
+  if (t < ICE_IH_MIN_T) return Infinity;
+  const theta = t / TRIPLE_POINT.t;
+  const a = [1195393.37, 80818.3159, 3338.26860];
+  const b = [3.0, 25.75, 103.75];
+  const sum = a.reduce((acc, ai, i) => acc + ai * (1 - Math.pow(theta, b[i])), 0);
+  return TRIPLE_POINT.p * (1 + sum);
+};
 
 // --- HELPER FUNCTIONS ---
 const mapT = (t, width) => {
@@ -37,20 +71,14 @@ const invMapP = (y, height) => {
 };
 
 const getPhase = (t, p) => {
-  if (p < TRIPLE_POINT.p) {
-    if (t > TRIPLE_POINT.t) return 'vapor';
-    // Sublimation curve approx
-    const boundaryP = 611 * Math.exp(-20 * (1 - t / 273));
-    return p < boundaryP ? 'vapor' : 'solid';
-  } else {
-    if (t < 273) return 'solid';
-    if (t > 647 && p > 22064000) return 'supercritical';
-    
-    // Saturation curve approx
-    const pSat = 611 * Math.exp((17.27 * (t - 273.16)) / (t - 35.86));
-    if (p > pSat) return 'liquid';
-    return 'vapor';
+  if (t >= CRITICAL_POINT.t) {
+    return p >= CRITICAL_POINT.p ? 'supercritical' : 'vapor';
   }
+  if (t < TRIPLE_POINT.t) {
+    if (p < sublimationPressure(t)) return 'vapor';
+    return p > meltingPressure(t) ? 'liquid' : 'solid';
+  }
+  return p > saturationPressure(t) ? 'liquid' : 'vapor';
 };
 
 // --- COMPONENTS ---
@@ -87,13 +115,17 @@ const PhaseDiagram = ({ onPhaseSelect, currentPhase }) => {
     const plotLeft = MARGIN.left;
     const plotRight = width - MARGIN.right;
 
+    // On a narrow plot (a phone), label every other tick and leave out
+    // the small annotations, which would overlap.
+    const narrow = plotRight - plotLeft < 200;
+
     // X-Axis (Temp)
     for (let t = 200; t <= 700; t += 50) {
       let x = mapT(t, width);
       ctx.beginPath();
       ctx.moveTo(x, plotTop); ctx.lineTo(x, plotBottom + 5);
       ctx.stroke();
-      ctx.fillText(t, x, plotBottom + 18);
+      if (!narrow || t % 200 === 0) ctx.fillText(t, x, plotBottom + 18);
     }
     ctx.fillText("Temperature (K)", (plotLeft + plotRight) / 2, plotBottom + 35);
 
@@ -107,18 +139,24 @@ const PhaseDiagram = ({ onPhaseSelect, currentPhase }) => {
       ctx.moveTo(plotLeft - 5, y); ctx.lineTo(plotRight, y);
       ctx.stroke();
       
-      let label = `10^${e}`;
-      if (e === 0) label = "1 Pa";
-      if (e === 5) label = "1 bar";
-      if (e === 8) label = "100 MPa";
-      ctx.fillText(label, plotLeft - 10, y);
+      if (e === 0 || e === 5 || e === 8) {
+        const label = e === 0 ? "1 Pa" : e === 5 ? "1 bar" : "100 MPa";
+        ctx.fillText(label, plotLeft - 10, y);
+      } else {
+        // "10" with a raised exponent
+        ctx.font = '8px sans-serif';
+        const expWidth = ctx.measureText(String(e)).width;
+        ctx.fillText(String(e), plotLeft - 10, y - 4);
+        ctx.font = '10px sans-serif';
+        ctx.fillText("10", plotLeft - 11 - expWidth, y);
+      }
     }
 
     ctx.save();
     ctx.translate(20, (plotTop + plotBottom) / 2);
     ctx.rotate(-Math.PI / 2);
     ctx.textAlign = 'center';
-    ctx.fillText("Pressure (Log Scale)", 0, 0);
+    ctx.fillText("Pressure (Pa, log scale)", 0, 0);
     ctx.restore();
 
     // Axes Box
@@ -133,26 +171,45 @@ const PhaseDiagram = ({ onPhaseSelect, currentPhase }) => {
     const cpX = mapT(CRITICAL_POINT.t, width);
     const cpY = mapP(CRITICAL_POINT.p, height);
 
-    // Sublimation
-    ctx.beginPath();
-    ctx.strokeStyle = '#94a3b8';
-    ctx.moveTo(mapT(MIN_T, width), mapP(1, height));
-    ctx.quadraticCurveTo(mapT(250, width), mapP(100, height), tpX, tpY);
-    ctx.stroke();
+    // Each boundary is drawn from the function that getPhase uses.
+    const strokeCurve = (color, points) => {
+      ctx.beginPath();
+      ctx.strokeStyle = color;
+      points.forEach(([t, p], i) => {
+        const x = mapT(t, width);
+        const y = mapP(Math.min(Math.max(p, MIN_P), MAX_P), height);
+        if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+      });
+      ctx.stroke();
+    };
+    const N_SEG = 200;
 
-    // Melting (Negative Slope)
-    ctx.beginPath();
-    ctx.strokeStyle = '#60a5fa';
-    ctx.moveTo(tpX, tpY);
-    ctx.lineTo(mapT(250, width), mapP(MAX_P, height));
-    ctx.stroke();
+    // Sublimation: from the bottom of the plot up to the triple point
+    const sublimation = [];
+    for (let i = 0; i <= N_SEG; i++) {
+      const t = MIN_T + (TRIPLE_POINT.t - MIN_T) * (i / N_SEG);
+      const p = sublimationPressure(t);
+      if (p >= MIN_P) sublimation.push([t, p]);
+    }
+    strokeCurve('#94a3b8', sublimation);
 
-    // Vaporization
-    ctx.beginPath();
-    ctx.strokeStyle = '#f87171';
-    ctx.moveTo(tpX, tpY);
-    ctx.quadraticCurveTo(mapT(450, width), mapP(100000, height), cpX, cpY);
-    ctx.stroke();
+    // Melting (negative slope): from the triple point up to the top of the plot
+    const melting = [];
+    for (let i = 0; i <= N_SEG; i++) {
+      const t = TRIPLE_POINT.t - (TRIPLE_POINT.t - ICE_IH_MIN_T) * (i / N_SEG);
+      const p = meltingPressure(t);
+      melting.push([t, p]);
+      if (p >= MAX_P) break;
+    }
+    strokeCurve('#60a5fa', melting);
+
+    // Vaporization: from the triple point to the critical point
+    const vaporization = [];
+    for (let i = 0; i <= N_SEG; i++) {
+      const t = TRIPLE_POINT.t + (CRITICAL_POINT.t - TRIPLE_POINT.t) * (i / N_SEG);
+      vaporization.push([t, saturationPressure(t)]);
+    }
+    strokeCurve('#f87171', vaporization);
 
     // --- MARKERS ---
     // 1 atm
@@ -167,36 +224,50 @@ const PhaseDiagram = ({ onPhaseSelect, currentPhase }) => {
     
     ctx.fillStyle = '#fbbf24';
     ctx.textAlign = 'left';
-    ctx.fillText("1 atm", plotRight - 35, y1atm - 5);
+    if (!narrow) ctx.fillText("1 atm", plotRight - 35, y1atm + 13);
 
     ctx.setLineDash([]);
     
     // Points
-    const drawPoint = (x, y, color, label, offset = 0) => {
+    const drawPoint = (x, y, color, label, align, dx, dy) => {
       ctx.fillStyle = color;
       ctx.beginPath();
       ctx.arc(x, y, 4, 0, Math.PI * 2);
       ctx.fill();
-      ctx.fillText(label, x + 8, y + offset);
+      ctx.textAlign = align;
+      if (!narrow) ctx.fillText(label, x + dx, y + dy);
     };
 
-    drawPoint(cpX, cpY, '#f87171', 'Critical Point');
-    drawPoint(tpX, tpY, '#60a5fa', 'Triple Point', 15);
+    // The critical-point label is right-aligned at the edge of the plot and
+    // sits just below the vaporization curve, so that it stays inside the
+    // panel and clear of the curve at any size.
+    const cpLabel = 'Critical Point';
+    const cpLabelLeftT = invMapT(plotRight - 6 - ctx.measureText(cpLabel).width, width);
+    const cpLabelY = Math.max(cpY, mapP(saturationPressure(cpLabelLeftT), height)) + 15;
+    drawPoint(cpX, cpY, '#f87171', cpLabel, 'right', plotRight - 6 - cpX, cpLabelY - cpY);
+    drawPoint(tpX, tpY, '#60a5fa', 'Triple Point', 'left', 8, 15);
 
-    // Annotations
-    ctx.font = 'bold 16px sans-serif';
+    // Annotations. The font follows the width of the plot, and each label
+    // is centered in its own region, clear of the axis labels.
+    const plotWidth = plotRight - plotLeft;
+    const regionFont = Math.max(11, Math.min(16, Math.round(plotWidth / 22)));
+    ctx.font = `bold ${regionFont}px sans-serif`;
     ctx.fillStyle = 'rgba(255,255,255,0.8)';
     ctx.textAlign = 'center';
-    ctx.fillText('SOLID (ICE)', mapT(215, width), mapP(100000, height));
-    ctx.fillText('LIQUID', mapT(350, width), mapP(10000000, height));
+    ctx.fillText('ICE', mapT(236, width), mapP(100000, height));
+    ctx.fillText('LIQUID', mapT(365, width), mapP(1000000, height));
     ctx.fillText('VAPOR', mapT(500, width), mapP(1000, height));
-    
-    // Slope Note
+
+    // Slope note, to the right of the melting line
     ctx.font = 'italic 11px sans-serif';
     ctx.fillStyle = '#60a5fa';
-    ctx.textAlign = 'right';
-    ctx.fillText("Negative Slope", mapT(250, width) - 10, mapP(10000000, height));
-    ctx.fillText("(Ice less dense)", mapT(250, width) - 10, mapP(10000000, height) + 12);
+    ctx.textAlign = 'left';
+    const noteX = mapT(TRIPLE_POINT.t, width) + 8;
+    const noteY = mapP(40000000, height);
+    if (!narrow) {
+      ctx.fillText("negative slope", noteX, noteY);
+      ctx.fillText("(ice is less dense)", noteX, noteY + 12);
+    }
 
   }, []);
 
