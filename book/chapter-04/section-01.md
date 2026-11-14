@@ -21,9 +21,9 @@ See also: [Course-wide Conventions & Notation](../notation.md)
 
 Entropy completes the thermodynamic description of spontaneity by accounting for the dispersal of energy and matter. This section motivates entropy through examples where enthalpy alone fails, defines entropy as a state function via reversible heat, and derives the fundamental relation $dU=T\,dS-P\,dV$ for simple compressible systems.
 
-In Chapter 3, we established the First Law toolkit: internal energy $U$, enthalpy $H$, heat capacities $C_V$ and $C_P$, and the five-step workflow for computing $q$, $w$, and $\Delta U$ under various process constraints. That toolkit tells us *how much* energy is exchanged — but not *which direction* a process will spontaneously proceed. We will see that **exothermicity** ($\Delta H < 0$) often favors spontaneity but does not fully determine it. The missing piece is **entropy**, a state function that provides crucial insight into the direction of spontaneous change.
+In Module 3, we established the First Law toolkit: internal energy $U$, enthalpy $H$, heat capacities $C_V$ and $C_P$, and the five-step workflow for computing $q$, $w$, and $\Delta U$ under various process constraints. That toolkit tells us *how much* energy is exchanged — but not *which direction* a process will spontaneously proceed. We will see that **exothermicity** ($\Delta H < 0$) often favors spontaneity but does not fully determine it. The missing piece is **entropy**, a state function that provides crucial insight into the direction of spontaneous change.
 
-In Chapter 2, we built a statistical-mechanical framework in which macroscopic properties emerge as ensemble averages over microstates. Entropy turns out to have a particularly natural microscopic interpretation: it measures how many microstates are consistent with a given macrostate. This section introduces entropy from the macroscopic side; Section 4.3 will close the loop by connecting entropy to the partition function $Q$.
+In Module 2, we built a statistical-mechanical framework in which macroscopic properties emerge as ensemble averages over microstates. Entropy turns out to have a particularly natural microscopic interpretation: it measures how many microstates are consistent with a given macrostate. This section introduces entropy from the macroscopic side; [Section 4.3](section-03.md) will close the loop by connecting entropy to the partition function $Q$.
 
 Learning objectives:
 
@@ -54,27 +54,24 @@ Consider the formation of two moles of liquid water from hydrogen and oxygen gas
 \ce{2H2(g) + O2(g) -> 2H2O(l)}
 ```
 
-The standard enthalpy change for this reaction is $-571.66$ kJ for two moles of H$_2$O(l), indicating an exothermic process. The reaction releases heat:
+The standard enthalpy change for this reaction is $-571.66\ \mathrm{kJ}$ for two moles of $\mathrm{H_2O(l)}$, so the reaction is exothermic.
 
 ```{admonition} Exothermicity in Chemical Terms
 :class: tip
 In chemical terms, **exothermicity** is often associated with the formation of stronger chemical bonds in the products than those in the reactants. In this example, forming $\ce{H-O}$ bonds in water releases more energy than what was required to break $\ce{H-H}$ and $\ce{O=O}$ bonds.
 ```
 
-It is fortunate that water formation is exothermic, as this makes the reaction more likely to proceed spontaneously under standard conditions.
+The formation of water is spontaneous under standard conditions, and the heat that it releases favors this direction.
 
 #### A Counter Example: Mixing of Two Ideal Gases
 
-If we mix two ideal gases, such as Ar and Kr, their intermolecular interactions are negligible (ideal-gas behavior), so $\Delta H = 0$. Nonetheless, mixing occurs spontaneously once the partition is removed.
+If we mix two ideal gases, such as Ar and Kr, their intermolecular interactions are negligible (ideal-gas behavior), so $\Delta H = 0$. Nonetheless, mixing occurs spontaneously once the stopper is opened.
 
 ```{code-cell} ipython3
 :tags: [hide-input]
 
 import numpy as np
 import matplotlib.pyplot as plt
-from scipy.constants import k, eV
-from labellines import labelLines
-from myst_nb import glue
 
 rng = np.random.default_rng(8251991)
 
@@ -158,13 +155,7 @@ plt.close(fig)
 
 Mixing of two ideal gases before and after opening the stopper that separates them.
 
-Even though $\Delta H = 0$, the process is still **spontaneous**. If you were shown the "before" and "after" snapshots without additional labels, you would know the natural direction of mixing. This spontaneous behavior underscores that **enthalpy** alone cannot capture whether a process will occur without additional driving forces. That driving force is **entropy** — and we can already anticipate why. From each gas's perspective, removing the partition is equivalent to a free expansion: the volume accessible to each gas doubles. As we will show below, doubling the available volume at constant temperature increases the entropy by $nR\ln 2$ per component. For a symmetric mixture of $n$ moles each of Ar and Kr,
-
-```{math}
-\Delta S_{\mathrm{mix}} = 2 \times nR\ln 2 > 0.
-```
-
-The entropy of the mixed state exceeds that of the separated state, so mixing is the spontaneous direction. (We will derive the result $\Delta S = nR\ln(V_2/V_1)$ in full below; we quote it here to motivate what follows.)
+Even though $\Delta H = 0$, the process is still **spontaneous**. If you were shown the "before" and "after" snapshots without additional labels, you would know the natural direction of mixing. This spontaneous behavior underscores that **enthalpy** alone cannot capture whether a process will occur without additional driving forces. That driving force is **entropy**, which the rest of this section defines.
 
 ### Definition of Entropy
 
@@ -175,60 +166,72 @@ Entropy
 
 #### The General Claim
 
-In Section 3.1, we noted a key distinction: $dU$ is an exact differential, while $\delta q$ and $\delta w$ are inexact — their values depend on the path. We also foreshadowed that "dividing the inexact differential $\delta q$ by $T$ produces the exact differential $dS$."
+In [Section 3.1](../chapter-03/section-01.md), we noted a key distinction: $dU$ is an exact differential, while $\delta q$ and $\delta w$ are inexact — their values depend on the path. We also noted that dividing the reversible heat $\delta q_{\mathrm{rev}}$ by $T$ produces the exact differential $dS$.
 
-It can be shown — via the Clausius theorem (a consequence of the second law) or by identifying $1/T$ as an integrating factor (Appendix A) — that $\delta q_{\mathrm{rev}}/T$ is always an exact differential, regardless of the substance. We therefore *define* entropy through
+It can be shown from the Clausius theorem (a consequence of the Second Law) that $\delta q_{\mathrm{rev}}/T$ is always an exact differential, regardless of the substance. The factor $1/T$ is called an integrating factor for $\delta q_{\mathrm{rev}}$; [Appendix A](../appendices/appendix-a.md) reviews exact and inexact differentials. We therefore *define* entropy through
 
 ```{math}
-dS \;=\; \frac{\delta q_{\text{rev}}}{T}.
+dS \;=\; \frac{\delta q_{\mathrm{rev}}}{T}.
 ```
 
 The change in entropy between two states $A$ and $B$ is
 
 ```{math}
-\Delta S \;=\; \int_{A}^{B} \frac{\delta q_{\text{rev}}}{T}.
+\Delta S \;=\; \int_{A}^{B} \frac{\delta q_{\mathrm{rev}}}{T}.
 ```
 
 Because $dS$ is exact, $\Delta S$ depends only on the initial and final states — not on the path. However, computing $\Delta S$ requires evaluating the integral along a *reversible* path (since $dS = \delta q_{\mathrm{rev}}/T$ holds only for reversible processes). For an irreversible process between the same two states, we construct any convenient reversible path connecting them and integrate along that path instead.
-
-```{admonition} Why does this work for irreversible processes?
-:class: tip
-Entropy is a state function, so $\Delta S$ between two states is the same regardless of whether the actual process is reversible or irreversible. An irreversible process generates additional entropy (more on this in Section 4.3), but the *change in system entropy* $\Delta S$ can always be computed by finding a reversible path between the same endpoints. The system doesn't "know" which path you use for the calculation — it only knows the initial and final states.
-```
 
 #### Verification: Ideal Gas
 
 Rather than proving the general result, let us verify that $\delta q_{\mathrm{rev}}/T$ is exact for an ideal gas — a case where we can check directly.
 
-From Section 3.2, the First Law for a reversible process with only $PV$ work, using $V$ and $T$ as independent variables, gives
+From [Section 3.2](../chapter-03/section-02.md), the First Law for a reversible process with only $PV$ work, using $V$ and $T$ as independent variables, gives
 
 ```{math}
-\delta q_{\text{rev}} = C_V\,dT + \left[\left(\frac{\partial U}{\partial V}\right)_T + P\right] dV.
+\delta q_{\mathrm{rev}} = C_V\,dT + \left[\left(\frac{\partial U}{\partial V}\right)_T + P\right] dV.
 ```
 
 For any ideal gas (not just monatomic), $(\partial U/\partial V)_T = 0$ and $P = Nk_{\mathrm{B}}T/V$, so
 
 ```{math}
-\delta q_{\text{rev}} = C_V\,dT + \frac{Nk_{\mathrm{B}}T}{V}\,dV.
+\delta q_{\mathrm{rev}} = C_V\,dT + \frac{Nk_{\mathrm{B}}T}{V}\,dV.
 ```
 
-This is inexact: the cross-derivative test gives $(\partial C_V/\partial V)_T = 0$ but $\partial(Nk_{\mathrm{B}}T/V)/\partial T\big|_V = Nk_{\mathrm{B}}/V \neq 0$.
+To decide whether a differential is exact, we use the **cross-derivative test**. A differential $f(x,y)\,dx + g(x,y)\,dy$ is exact if and only if
+
+```{math}
+\left(\frac{\partial f}{\partial y}\right)_x = \left(\frac{\partial g}{\partial x}\right)_y,
+```
+
+because the two sides are then the mixed second derivatives of a single function, which do not depend on the order of differentiation.
+
+Here $x = T$, $y = V$, $f = C_V$, and $g = Nk_{\mathrm{B}}T/V$. For an ideal gas, $U$ depends only on $T$, so $C_V = (\partial U/\partial T)_V$ depends only on $T$ as well, and $(\partial C_V/\partial V)_T = 0$. However, $\left(\partial(Nk_{\mathrm{B}}T/V)/\partial T\right)_V = Nk_{\mathrm{B}}/V \neq 0$. The two derivatives differ, so $\delta q_{\mathrm{rev}}$ is inexact.
 
 Now divide by $T$:
 
 ```{math}
-\frac{\delta q_{\text{rev}}}{T} \;=\; \frac{C_V}{T}\,dT \;+\; \frac{Nk_{\mathrm{B}}}{V}\,dV.
+\frac{\delta q_{\mathrm{rev}}}{T} \;=\; \frac{C_V}{T}\,dT \;+\; \frac{Nk_{\mathrm{B}}}{V}\,dV.
 ```
 
-Apply the cross-derivative test to $M(T,V) = C_V/T$ and $N(T,V) = Nk_{\mathrm{B}}/V$:
+Apply the cross-derivative test with $f = C_V/T$ and $g = Nk_{\mathrm{B}}/V$:
 
 ```{math}
-\left(\frac{\partial M}{\partial V}\right)_T = \frac{\partial}{\partial V}\left(\frac{C_V}{T}\right)_T = 0,
+\left(\frac{\partial f}{\partial V}\right)_T = \left(\frac{\partial (C_V/T)}{\partial V}\right)_T = 0,
 \qquad
-\left(\frac{\partial N}{\partial T}\right)_V = \frac{\partial}{\partial T}\left(\frac{Nk_{\mathrm{B}}}{V}\right)_V = 0.
+\left(\frac{\partial g}{\partial T}\right)_V = \left(\frac{\partial (Nk_{\mathrm{B}}/V)}{\partial T}\right)_V = 0.
 ```
 
-Both mixed partials are zero, so they are equal: $\delta q_{\mathrm{rev}}/T$ is exact. Dividing by $T$ converted an inexact differential into an exact one, confirming the entropy definition for this case.
+Both derivatives are zero, so they are equal: $\delta q_{\mathrm{rev}}/T$ is exact. Dividing by $T$ converted an inexact differential into an exact one, confirming the entropy definition for this case.
+
+Integrating between two states gives the entropy change of an ideal gas:
+
+```{math}
+:label: ideal-gas-entropy-change
+\Delta S = \int_{T_1}^{T_2}\frac{C_V}{T}\,dT + Nk_{\mathrm{B}}\ln\left(\frac{V_2}{V_1}\right).
+```
+
+At constant temperature only the second term remains (Example 1 below).
 
 ```{admonition} The monatomic case
 :class: dropdown
@@ -242,10 +245,10 @@ which is manifestly the total differential of $S = Nk_{\mathrm{B}}\ln(T^{3/2}V) 
 
 ### Fundamental Thermodynamic Relation
 
-From the definition of entropy, $\delta q_{\text{rev}} = T\,dS$. For a simple closed system with only $PV$ work ($\delta w_{\mathrm{rev}} = -P\,dV$), the First Law gives
+From the definition of entropy, $\delta q_{\mathrm{rev}} = T\,dS$. For a simple closed system with only $PV$ work ($\delta w_{\mathrm{rev}} = -P\,dV$), the First Law gives
 
 ```{math}
-dU = \delta q_{\text{rev}} + \delta w_{\text{rev}} = T\,dS - P\,dV.
+dU = \delta q_{\mathrm{rev}} + \delta w_{\mathrm{rev}} = T\,dS - P\,dV.
 ```
 
 This is the **fundamental thermodynamic relation** for a simple compressible system:
@@ -256,6 +259,8 @@ dU = T\,dS - P\,dV.
 
 Notice what has happened: the First Law in the form $dU = \delta q + \delta w$ involves two *inexact* differentials that combine to give one exact differential. The fundamental relation rewrites the same physics using *three exact differentials* — $dU$, $dS$, and $dV$. The path-dependent $\delta q_{\mathrm{rev}}$ has been replaced by the state-function product $T\,dS$, and the path-dependent $\delta w_{\mathrm{rev}}$ by $-P\,dV$. Converting inexact differentials into exact ones is the central mathematical achievement of introducing entropy.
 
+The relation was derived for a reversible process, but it contains only state functions and their differentials. It therefore holds for any infinitesimal change between equilibrium states of a closed system with only $PV$ work, whether the change is reversible or not. What is lost in an irreversible change is the identification of the two terms: $T\,dS$ is then not the heat, and $-P\,dV$ is not the work.
+
 Here, $U$ is naturally expressed as a function of the **extensive** variables $S$ and $V$. In systems with additional types of work (e.g., electrical, surface, magnetic), the more general relation becomes
 
 ```{math}
@@ -264,12 +269,12 @@ dU \;=\; T\,dS \;+\; \sum_{i} \vec{F}_{i}\cdot d\vec{x}_{i}.
 
 ```{admonition} Natural Variables
 :class: tip
-A state function's **natural variables** are those that appear as independent variables in its total differential. For internal energy $U$, the natural variables are $S$ and $V$ for a simple system with only $PV$ work. Note that while we can always write $U$ as a function of other variables (like $T$ and $V$), doing so loses information — the natural-variable form $U(S,V)$ encodes everything about the system's thermodynamics, while $U(T,V)$ does not. We will return to this point when we introduce free energies later in the course.
+A state function's **natural variables** are those that appear as independent variables in its total differential. For internal energy $U$, the natural variables are $S$ and $V$ for a simple system with only $PV$ work. Note that while we can always write $U$ as a function of other variables (like $T$ and $V$), doing so loses information — the natural-variable form $U(S,V)$ encodes everything about the system's thermodynamics, while $U(T,V)$ does not. We will return to this point when we introduce free energies in [Section 5.1](../chapter-05/section-01.md).
 ```
 
 ## Worked Examples
 
-### Example 1: Isothermal expansion (reversible)
+### Example 1: Isothermal Expansion (Reversible)
 
 **Problem.** Compute $\Delta S$ when one mole of an ideal gas expands reversibly and isothermally from $V_1$ to $V_2 = 2V_1$.
 
@@ -288,16 +293,16 @@ Along a reversible isotherm of an ideal gas, $dU = 0$ (since $U$ depends only on
 With $n = 1\ \mathrm{mol}$ and $V_2 = 2V_1$:
 
 ```{math}
-\Delta S = R\ln 2 = (8.314)\ln 2 = 5.76\ \mathrm{J\,mol^{-1}\,K^{-1}}.
+\Delta S = (1\ \mathrm{mol})(8.314\ \mathrm{J\,mol^{-1}\,K^{-1}})\ln 2 = 5.76\ \mathrm{J\,K^{-1}}.
 ```
 
-**Result.** Doubling the volume reversibly at constant $T$ increases the entropy by $R\ln 2$ per mole. This is the result we quoted earlier when computing $\Delta S_{\mathrm{mix}}$ for ideal-gas mixing.
+**Result.** Doubling the volume reversibly at constant $T$ increases the entropy by $R\ln 2$ per mole.
 
 ---
 
-### Example 2: Free expansion (irreversible)
+### Example 2: Free Expansion (Irreversible)
 
-**Problem.** Compute $\Delta S$ when one mole of an ideal gas undergoes free expansion from $V_1$ to $V_2 = 2V_1$ inside a rigid, insulated container (as in the Section 3.1 worked example).
+**Problem.** Compute $\Delta S$ when one mole of an ideal gas undergoes free expansion from $V_1$ to $V_2 = 2V_1$ inside a rigid, insulated container (as in the worked example of [Section 3.1](../chapter-03/section-01.md)).
 
 **Solution.** In the free expansion, $P_{\mathrm{ext}} = 0$, so $w = 0$. The container is insulated, so $q = 0$. By the First Law, $\Delta U = 0$, which means $\Delta T = 0$ for an ideal gas.
 
@@ -306,14 +311,26 @@ But $q = 0$ does *not* mean $\Delta S = 0$! The definition $dS = \delta q_{\math
 The initial and final states have the same $T$ but different $V$ — exactly the endpoints of Example 1. Since $S$ is a state function,
 
 ```{math}
-\Delta S_{\mathrm{free\ expansion}} = \Delta S_{\mathrm{rev.\ isotherm}} = nR\ln\left(\frac{V_2}{V_1}\right) = R\ln 2 = 5.76\ \mathrm{J\,mol^{-1}\,K^{-1}}.
+\Delta S_{\mathrm{free\ expansion}} = \Delta S_{\mathrm{rev.\ isotherm}} = nR\ln\left(\frac{V_2}{V_1}\right) = 5.76\ \mathrm{J\,K^{-1}}.
 ```
 
-**Result.** The entropy change is the same as for the reversible isothermal expansion — because entropy is a state function. What differs between the two processes is the entropy of the *surroundings*: in the reversible case, $\Delta S_{\mathrm{surr}} = -R\ln 2$ (the reservoir loses heat $q_{\mathrm{rev}}$ at temperature $T$), so $\Delta S_{\mathrm{total}} = 0$. In the free expansion, $\Delta S_{\mathrm{surr}} = 0$ (no heat exchanged), so $\Delta S_{\mathrm{total}} = R\ln 2 > 0$ — entropy was *produced* by the irreversible process.
+**Result.** The entropy change of the gas is the same as for the reversible isothermal expansion, because entropy is a state function.
 
 ```{admonition} Key lesson
 :class: note
 For an irreversible process, $\Delta S_{\mathrm{system}}$ is found by constructing any reversible path between the same endpoints. The actual (irreversible) path enters only when computing $\Delta S_{\mathrm{surroundings}}$ and $\Delta S_{\mathrm{total}}$.
+```
+
+```{admonition} The Surroundings and the Total
+:class: important
+Examples 1 and 2 change the entropy of the gas by the same amount. For each of the two expansions, find the heat exchanged with the surroundings, the entropy change of the surroundings, and the total entropy change. In Example 1 the surroundings are a reservoir at the temperature $T$ of the gas.
+```
+
+[Section 4.2](section-02.md) states the Second Law in terms of the total entropy of an isolated system.
+
+```{admonition} Return to the Mixing of Two Gases
+:class: important
+When the stopper is opened, each gas spreads into twice its initial volume at constant temperature, and the two ideal gases do not interact. Use the results of Examples 1 and 2 to find $\Delta S$ for each gas, and then $\Delta S_{\mathrm{mix}}$ for $n$ moles of each. Compare the sign of $\Delta S_{\mathrm{mix}}$ with $\Delta H = 0$.
 ```
 
 ## Concept Checks
@@ -329,5 +346,5 @@ For an irreversible process, $\Delta S_{\mathrm{system}}$ is found by constructi
 - Spontaneity depends on more than enthalpy; entropy accounts for dispersal and multiplicity of accessible states.
 - Entropy is defined by $dS = \delta q_{\mathrm{rev}}/T$ and is a **state function**: its value depends only on the state, not the path.
 - Dividing $\delta q_{\mathrm{rev}}$ by $T$ converts an inexact differential into an exact one — this is the central mathematical role of entropy.
-- For reversible $PV$-only processes, $dU = T\,dS - P\,dV$ is the fundamental thermodynamic relation, expressing the First Law entirely in terms of exact differentials.
+- For a closed system with only $PV$ work, $dU = T\,dS - P\,dV$ is the fundamental thermodynamic relation, expressing the First Law entirely in terms of exact differentials. It is derived for a reversible process and holds for any change between equilibrium states.
 - Entropy changes for irreversible processes are computed by finding a convenient reversible path between the same initial and final states and integrating $\delta q_{\mathrm{rev}}/T$ along that path.

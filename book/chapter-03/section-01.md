@@ -123,7 +123,7 @@ We write $dU$ (with the standard "$d$") because $U$ is a **state function**—it
 
 In contrast, $\delta q$ and $\delta w$ use "$\delta$" to signal that these are **inexact differentials**: their values depend on the path, and integrating them around a cycle need not give zero. Two processes connecting the same initial and final states can involve different amounts of heat and work, even though they produce the same $\Delta U$.
 
-This distinction becomes central when we define entropy in [Section 4.1](../chapter-04/section-01.md), where dividing the inexact differential $\delta q$ by $T$ produces the exact differential $dS$.
+This distinction becomes central when we define entropy in [Section 4.1](../chapter-04/section-01.md), where dividing the reversible heat $\delta q_{\mathrm{rev}}$ by $T$ produces the exact differential $dS$.
 
 Some texts use the crossed-$d$ symbol $\text{đ}$ instead of $\delta$ for inexact differentials. We use $\delta$ throughout this course.
 ```

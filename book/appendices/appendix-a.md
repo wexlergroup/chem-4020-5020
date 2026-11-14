@@ -32,4 +32,4 @@ In thermodynamics, we encounter both exact and inexact differentials:
 
 * **Inexact differentials**: These have unequal mixed partial derivatives and do not integrate to a single function (examples include the differentials for heat and work).
 
-The idea of seeking a method to convert an inexact differential into an exact one is a key step in the derivation of entropy. In fact, by applying an integrating factor—in this case, $1/T$—we can transform the inexact differential of heat $\delta q$ into the exact differential $dS = \delta q/T$. This approach was central to the original formulation of entropy.
+The idea of seeking a method to convert an inexact differential into an exact one is a key step in the derivation of entropy. In fact, by applying an integrating factor—in this case, $1/T$—we can transform the inexact differential of the reversible heat, $\delta q_{\mathrm{rev}}$, into the exact differential $dS = \delta q_{\mathrm{rev}}/T$ ([Section 4.1](../chapter-04/section-01.md)). This approach was central to the original formulation of entropy.
