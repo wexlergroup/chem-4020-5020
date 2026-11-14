@@ -226,7 +226,7 @@ Reconstruct Pauling's estimate. Each hydrogen atom lies between two neighboring 
 2. What physical features distinguish an ideal crystal from a real crystal, and how do these features affect $\Omega_0$?
 3. How can a system have residual entropy without violating the third law?
 4. Why does the third law require $C_P \to 0$ as $T \to 0$, and how is this consistent with the quantum heat capacities derived in Section 2.6?
-5. In the Pauling ice model, why is $\Omega_0 = (3/2)^N$ rather than $2^N$ or $1$?
+5. In the Pauling ice model, why is $\Omega_0 = (3/2)^N$ rather than $4^N$ or $1$?
 
 ## Key Takeaways
 
