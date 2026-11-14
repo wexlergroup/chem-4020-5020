@@ -24,7 +24,7 @@ The Carnot cycle is a fully reversible heat-engine cycle that sets the maximum e
 This section connects **entropy** to the performance limits of heat engines using the **Carnot cycle**. It develops four linked ideas:
 
 1. **Entropy and reversible heat.**
-   From Section 4.1, the differential definition of entropy for a reversible path is
+   From [Section 4.1](section-01.md), the differential definition of entropy for a reversible path is
 
    ```{math}
    dS = \frac{\delta q_{\mathrm{rev}}}{T}.
@@ -69,105 +69,100 @@ Learning objectives:
 
 ### The Cycle
 
-The figure below plots the Carnot cycle on a **pressure–volume (P–V) diagram** for an ideal gas.
+The figure below plots the Carnot cycle on a **pressure–volume ($P$–$V$) diagram** for one mole of a monatomic ideal gas between reservoirs at $500\ \mathrm{K}$ and $300\ \mathrm{K}$, the temperatures of the Worked Example below.
 The key geometric features are:
 
-- The **isotherms** (red/blue) follow the ideal-gas relation $P = nRT/V$ at fixed temperature.
-- The **adiabats** (dashed/dotted) are *steeper* than the isotherms and follow $PV^\gamma = \text{constant}$
-  for a reversible adiabatic process of an ideal gas (Section 3.2).
+- The **isotherms** (red at $T_{\mathrm{hot}}$, blue at $T_{\mathrm{cold}}$) follow the ideal-gas relation $P = nRT/V$ at fixed temperature. The thin lines continue them beyond the cycle.
+- The **adiabats** (dotted and dashed) are *steeper* than the isotherms and follow $PV^\gamma = \text{constant}$
+  for a reversible adiabatic process of an ideal gas ([Section 3.2](../chapter-03/section-02.md)).
 
 ```{code-cell} ipython3
 :tags: [hide-input]
 
 import numpy as np
-import matplotlib.cm as cm
 import matplotlib.pyplot as plt
-from scipy.constants import R as R_J_per_K_mol
-from labellines import labelLines
-from myst_nb import glue
+from scipy.constants import R as R_J
 
-# Constants
-R = R_J_per_K_mol / 1000  # J/K/mol to kJ/K/mol (keeps PV values numerically small for plotting)
+# One mole of a monatomic ideal gas between the reservoirs of the Worked Example
+R = R_J / 100        # L bar K^-1 mol^-1
+n = 1.0              # mol
+gamma = 5 / 3
+T_hot, T_cold = 500.0, 300.0   # K
+V_A, V_B = 1.0, 2.6            # L
 
-# Isothermal Process for Ideal Gas
-def P_isothermal_ideal_gas(V, T, n):
+# Reversible adiabats: T V^(gamma - 1) = constant
+ratio = (T_hot / T_cold) ** (1 / (gamma - 1))
+V_C, V_D = V_B * ratio, V_A * ratio
+
+def P_isotherm(V, T):
     return n * R * T / V
 
-# Adiabatic Process for Ideal Gas
-def P_adiabatic_ideal_gas(V, V1, P1, gamma=5/3):
-    return P1 * (V1 / V) ** gamma
+def P_adiabat(V, V0, T0):
+    return P_isotherm(V0, T0) * (V0 / V) ** gamma
 
-# Intersection of two pressure curves
-def intersection(P1, P2, V):
-    return V[np.argmin(np.abs(P1 - P2))]
+steps = [
+    ("A", "B", V_A, V_B, lambda V: P_isotherm(V, T_hot), "r-",
+     r"A$\rightarrow$B isothermal expansion ($T_{\mathrm{hot}}$)"),
+    ("B", "C", V_B, V_C, lambda V: P_adiabat(V, V_B, T_hot), "k:",
+     r"B$\rightarrow$C adiabatic expansion"),
+    ("C", "D", V_C, V_D, lambda V: P_isotherm(V, T_cold), "b-",
+     r"C$\rightarrow$D isothermal compression ($T_{\mathrm{cold}}$)"),
+    ("D", "A", V_D, V_A, lambda V: P_adiabat(V, V_A, T_hot), "k--",
+     r"D$\rightarrow$A adiabatic compression"),
+]
 
-# Plotting the Carnot Cycle
-fig, axs = plt.subplots(1, 1, figsize=(4, 4))
+fig, ax = plt.subplots(figsize=(6, 4.2))
 
-# Calculate the pressure for each segment of the cycle
-V = np.linspace(0.1, 5, 1000)  # L
-T_hot = 298.15  # K
-T_cold = 273.15  # K
-n = 1  # mol
-V_A = 0.5  # L
-V_C = 1.0  # L
-P_AB = P_isothermal_ideal_gas(V, T_hot, n)
-P_DA = P_adiabatic_ideal_gas(V, V_A, P_isothermal_ideal_gas(V_A, T_hot, n))
-P_CD = P_isothermal_ideal_gas(V, T_cold, n)
-P_BC = P_adiabatic_ideal_gas(V, V_C, P_isothermal_ideal_gas(V_C, T_cold, n))
+# Faint isotherms for reference
+V_all = np.linspace(0.8, 6.2, 400)
+ax.plot(V_all, P_isotherm(V_all, T_hot), "r-", lw=0.6, alpha=0.35)
+ax.plot(V_all, P_isotherm(V_all, T_cold), "b-", lw=0.6, alpha=0.35)
 
-# Plot the segments
-isotherm_1 = axs.plot(V, P_AB, "r-", label=r'A$\rightarrow$B isothermal expansion ($T_{\text{hot}}$)')
-adiabat_1 = axs.plot(V, P_BC, "k:", label=r'B$\rightarrow$C adiabatic expansion', zorder=-10)
-isotherm_2 = axs.plot(V, P_CD, "b-", label=r'C$\rightarrow$D isothermal compression ($T_{\text{cold}}$)')
-adiabat_2 = axs.plot(V, P_DA, "k--", label=r'D$\rightarrow$A adiabatic compression', zorder=-10)
+# The four steps, each with an arrow that shows its direction
+for start, end, V1, V2, P_of_V, style, label in steps:
+    V = np.linspace(V1, V2, 200)
+    ax.plot(V, P_of_V(V), style, lw=2.2, label=label)
+    Vm = np.sqrt(V1 * V2)
+    dV = 0.02 * (V2 - V1)
+    ax.annotate("", xy=(Vm + dV, P_of_V(Vm + dV)), xytext=(Vm - dV, P_of_V(Vm - dV)),
+                arrowprops=dict(arrowstyle="-|>", color=style[0], lw=0, mutation_scale=16))
 
-# Legend
-axs.legend(bbox_to_anchor=(1.05, 1), loc='upper left', borderaxespad=0., title="Steps")
+# Corner points
+corners = {"A": (V_A, P_isotherm(V_A, T_hot)), "B": (V_B, P_isotherm(V_B, T_hot)),
+           "C": (V_C, P_isotherm(V_C, T_cold)), "D": (V_D, P_isotherm(V_D, T_cold))}
+offsets = {"A": (9, 6), "B": (8, 8), "C": (8, 8), "D": (-8, -9)}
+for name, (Vc, Pc) in corners.items():
+    ax.plot(Vc, Pc, "ks", markerfacecolor="w", zorder=5)
+    ax.annotate(name, (Vc, Pc), textcoords="offset points", xytext=offsets[name], ha="center", va="center")
 
-# Mark the points
-axs.plot(V_A, P_isothermal_ideal_gas(V_A, T_hot, n), "ks", markerfacecolor='none')
-axs.annotate("A", (V_A, P_isothermal_ideal_gas(V_A, T_hot, n)), textcoords="offset points", xytext=(10, 10), ha='center', va='center')
-V_B = intersection(P_AB, P_BC, V)
-P_B = P_isothermal_ideal_gas(V_B, T_hot, n)
-axs.plot(V_B, P_B, "ks", markerfacecolor='none')
-axs.annotate("B", (V_B, P_B), textcoords="offset points", xytext=(10, 10), ha='center', va='center')
-V_C = intersection(P_BC, P_CD, V)
-P_C = P_isothermal_ideal_gas(V_C, T_cold, n)
-axs.plot(V_C, P_C, "ks", markerfacecolor='none')
-axs.annotate("C", (V_C, P_C), textcoords="offset points", xytext=(-10, -10), ha='center', va='center')
-V_D = intersection(P_CD, P_DA, V)
-P_D = P_isothermal_ideal_gas(V_D, T_cold, n)
-axs.plot(V_D, P_D, "ks", markerfacecolor='none')
-axs.annotate("D", (V_D, P_D), textcoords="offset points", xytext=(-10, -10), ha='center', va='center')
+# Heat enters on the hot isotherm and leaves on the cold isotherm
+V_in = 1.7
+ax.annotate("", xy=(V_in, P_isotherm(V_in, T_hot) + 0.6), xytext=(V_in + 0.7, P_isotherm(V_in, T_hot) + 9),
+            arrowprops=dict(arrowstyle="-|>", color="r", lw=1.5, mutation_scale=14))
+ax.text(V_in + 0.75, P_isotherm(V_in, T_hot) + 9.3, "heat in\n" + r"($q_{AB} > 0$)", color="r", ha="center", va="bottom")
+V_out = 3.8
+ax.annotate("", xy=(V_out - 0.6, 1.8), xytext=(V_out, P_isotherm(V_out, T_cold) - 0.5),
+            arrowprops=dict(arrowstyle="-|>", color="b", lw=1.5, mutation_scale=14))
+ax.text(V_out - 0.7, 1.4, "heat out " + r"($q_{CD} < 0$)", color="b", ha="right", va="center")
 
-axs.set_xlim(0.4, 1.1)
-axs.set_ylim(2, 6)
-
-axs.set_xticks([V_A, V_B, V_C, V_D])
-axs.set_xticklabels([r"$V_A$", r"$V_B$", r"$V_C$", r"$V_D$"])
-
-P_A = P_isothermal_ideal_gas(V_A, T_hot, n)
-axs.set_yticks([P_A, P_B, P_C, P_D])
-axs.set_yticklabels([r"$P_A$", r"$P_B$", r"$P_C$", r"$P_D$"])
-
-# Add heat-flow annotations (matches the lecture sketch: heat in on the hot isotherm, heat out on the cold isotherm)
-x = (V_B + V_D) / 2
-y = (P_B + P_D) / 2
-axs.annotate("system\nabsorbs\nheat", (x, y - 0.1), textcoords="offset points", xytext=(50, 50), ha='center', va='center', fontsize=10, color='r', arrowprops=dict(facecolor='r', shrink=0.05, edgecolor='w', width=2, headwidth=8, headlength=8))
-axs.annotate("system\nreleases\nheat", (x, y - 0.1), textcoords="offset points", xytext=(-50, -50), ha='center', va='center', fontsize=10, color='b', arrowprops=dict(facecolor='b', shrink=0.05, edgecolor='w', width=2, headwidth=8, headlength=8))
-
-axs.grid()
+ax.set_xlim(0.6, 6.1)
+ax.set_ylim(0, 46)
+ax.set_xticks([corners[c][0] for c in "ADBC"])
+ax.set_xticklabels([r"$V_A$", r"$V_D$", r"$V_B$", r"$V_C$"])
+ax.set_yticks([corners[c][1] for c in "ABDC"])
+ax.set_yticklabels([r"$P_A$", r"$P_B$", r"$P_D$", r"$P_C$"])
+ax.set_xlabel(r"Volume $V$")
+ax.set_ylabel(r"Pressure $P$")
+ax.grid(alpha=0.4)
+ax.legend(loc="upper right", title="Steps", fontsize=8.5)
 
 plt.show()
 plt.close(fig)
 ```
 
-The Carnot cycle for an ideal gas. The isothermal expansion and compression curves follow the ideal-gas equation
-(Boyle's-law form at fixed $T$), while the adiabatic expansion and compression curves follow the adiabatic equation
-(which produces a steeper curve than the isotherms).
+The Carnot cycle for one mole of a monatomic ideal gas between $T_{\mathrm{hot}} = 500\ \mathrm{K}$ and $T_{\mathrm{cold}} = 300\ \mathrm{K}$. The arrows on the curves give the direction of each step. Heat enters the system on the hot isotherm and leaves it on the cold isotherm. The adiabats, which are steeper than the isotherms, exchange no heat.
 
-#### Step-by-step thermodynamic description
+#### Step-by-Step Thermodynamic Description
 
 | Step | Process type | Thermal contact | Heat $q$ | Entropy change $\Delta S$ | Qualitative work |
 | --- | --- | --- | --- | --- | --- |
@@ -179,11 +174,11 @@ The Carnot cycle for an ideal gas. The isothermal expansion and compression curv
 Two quick consequences:
 
 - Because adiabatic steps have $q=0$, the reversible definition $dS = \delta q_{\mathrm{rev}}/T$ gives
-  $\Delta S = 0$ on the adiabats (**entropy is constant** on a reversible adiabat — such a process is called *isentropic*).
+  $\Delta S = 0$ on the adiabats (**entropy is constant** on a reversible adiabat — such a process is called *isentropic*). Compare the free expansion in Example 2 of [Section 4.1](section-01.md), which is adiabatic but not reversible.
 - Over one full cycle, the system returns to its initial state, so
 
   ```{math}
-  \Delta S_{\text{cycle}}
+  \Delta S_{\mathrm{cycle}}
   = \Delta S_{AB} + \Delta S_{BC} + \Delta S_{CD} + \Delta S_{DA}
   = \Delta S_{AB} + \Delta S_{CD}
   = 0,
@@ -193,12 +188,12 @@ Two quick consequences:
 
 ---
 
-### How to Operate a Carnot Cycle/Engine
+### How to Operate a Carnot Engine
 
 The Carnot cycle can be realized conceptually with a gas-filled cylinder, a piston loaded with weights, and two thermal reservoirs. The core idea: you alternate between (i) placing the gas in contact with a thermal reservoir so it can exchange heat *reversibly* at a fixed temperature (isotherms), and (ii) insulating the gas so it cannot exchange heat (adiabats).
 
 1. **$A\to B$: isothermal expansion at $T_{\mathrm{hot}}$**
-   Put the cylinder in contact with the hot thermal source. Remove weights slowly so the piston rises
+   Put the cylinder in contact with the hot reservoir. Remove weights slowly so the piston rises
    quasi-statically. The system **absorbs heat** $q_{AB}$ from the hot reservoir to keep $T$ constant,
    while doing work on the weights.
 
@@ -208,7 +203,7 @@ The Carnot cycle can be realized conceptually with a gas-filled cylinder, a pist
    from $T_{\mathrm{hot}}$ to $T_{\mathrm{cold}}$.
 
 3. **$C\to D$: isothermal compression at $T_{\mathrm{cold}}$**
-   Put the cylinder in contact with the cold thermal source. Add weights slowly so the piston lowers.
+   Put the cylinder in contact with the cold reservoir. Add weights slowly so the piston lowers.
    The surroundings do work on the gas, and the gas **releases heat** $q_{CD}$ to the cold reservoir to keep $T$ constant.
 
 4. **$D\to A$: adiabatic compression (insulated)**
@@ -221,79 +216,59 @@ The schematic below illustrates each step, showing the thermal contact, piston p
 ```{code-cell} ipython3
 :tags: [hide-input]
 
-import numpy as np
-import matplotlib.cm as cm
 import matplotlib.pyplot as plt
-from scipy.constants import R as R_J_per_K_mol
-from labellines import labelLines
-from myst_nb import glue
 
-fig, axs = plt.subplot_mosaic([[0, 1, 2, 3]], figsize=(8, 4), constrained_layout=True, sharex=True, sharey=True)
+fig, axs = plt.subplots(1, 4, figsize=(8, 4), constrained_layout=True, sharex=True, sharey=True)
 
 # Each panel shows the END state of the corresponding step.
-# Step 1: A→B (isothermal expansion at T_hot) → ends at state B
-# Step 2: B→C (adiabatic expansion)            → ends at state C
-# Step 3: C→D (isothermal compression at T_cold) → ends at state D
-# Step 4: D→A (adiabatic compression)          → ends at state A
-
-titles = [
-    r'Step 1: A$\to$B',
-    r'Step 2: B$\to$C',
-    r'Step 3: C$\to$D',
-    r'Step 4: D$\to$A',
-]
-# Piston heights at the END state of each step (B, C, D, A)
-piston_height = [3.5, 4.5, 2.5, 1.5]
-# State labels at the END of each step
+titles = [r"Step 1: A$\to$B", r"Step 2: B$\to$C", r"Step 3: C$\to$D", r"Step 4: D$\to$A"]
 end_state = ["B", "C", "D", "A"]
-# Thermal contact during each step
-thermal_label = [r'$T_{\text{hot}}$', 'insulation', r'$T_{\text{cold}}$', 'insulation']
+piston_height = [3.5, 4.5, 2.5, 1.5]   # schematic, not to scale
+contact = ["hot reservoir\n" + r"$T_{\mathrm{hot}}$", "insulation",
+           "cold reservoir\n" + r"$T_{\mathrm{cold}}$", "insulation"]
+contact_color = ["mistyrose", "0.88", "lightcyan", "0.88"]
 
-for i in range(4):
-    axs[i].set_title(titles[i], fontsize=10)
+for i, ax in enumerate(axs):
+    h = piston_height[i]
+    ax.set_title(titles[i], fontsize=10)
 
-    # Cylinder
-    axs[i].plot([0, 0], [5, 0], 'k-')
-    cylinder = axs[i].plot([0, 3], [0, 0], 'k-', label='cylinder')
-    axs[i].plot([3, 3], [0, 5], 'k-')
-    labelLines(cylinder, xvals=[1.5], fontsize=10, color='k')
+    # Cylinder walls and base
+    ax.plot([0, 0, 3, 3], [5.6, 0, 0, 5.6], "k-", lw=1.5)
 
-    # Thermal source / insulation block
-    axs[i].plot([0, 0], [-1, -2], 'k:')
-    thermal_source = axs[i].plot([0, 3], [-2, -2], 'k:', label='thermal source')
-    axs[i].plot([3, 3], [-2, -1], 'k:')
-    axs[i].plot([3, 0], [-1, -1], 'k:')
-    labelLines(thermal_source, xvals=[1.5], fontsize=10, color='k')
-    axs[i].text(1.5, -1.5, thermal_label[i], fontsize=10, ha='center', va='center')
+    # Piston and rod
+    ax.plot([0, 3], [h, h], "k-", lw=3)
+    ax.plot([1.5, 1.5], [h, 6.2], "k-", lw=2)
+    ax.text(0.7, h + 0.3, "piston", fontsize=9, ha="center", va="bottom")
 
-    # Piston
-    axs[i].plot([1.5, 1.5], [piston_height[i], 6], 'k-', lw=2)
-    piston = axs[i].plot([0, 3], [piston_height[i], piston_height[i]], 'k-', lw=2, label='piston')
-    labelLines(piston, xvals=[1.5], fontsize=10, color='k')
+    # State of the gas at the end of the step
+    ax.text(2.0, 0.6, rf"$V_{end_state[i]},\ P_{end_state[i]}$", fontsize=10, ha="center", va="center")
 
-    # P, V labels at end state
-    label = '$V_{\\text{' + end_state[i] + '}}, P_{\\text{' + end_state[i] + '}}$'
-    axs[i].text(1.5, 0.75, label, fontsize=10, ha='center', va='center')
+    # Thermal contact during the step
+    ax.add_patch(plt.Rectangle((0, -2.4), 3, 2.0, facecolor=contact_color[i], edgecolor="k",
+                               linestyle="-" if i % 2 == 0 else ":"))
+    ax.text(1.5, -1.4, contact[i], fontsize=9, ha="center", va="center")
 
-    # Heat transfer annotations (only on isothermal steps)
-    if i == 0:  # A→B: system absorbs heat from hot reservoir
-        axs[i].annotate("heat in", (0.5, 0.75), textcoords="offset points", xytext=(0, -60), ha='center', va='center', fontsize=10, color='r', arrowprops=dict(facecolor='r', shrink=0.05, edgecolor='w', width=2, headwidth=8, headlength=8))
-    if i == 2:  # C→D: system releases heat to cold reservoir
-        axs[i].annotate("heat out", (0.5, -1.5), textcoords="offset points", xytext=(0, 60), ha='center', va='center', fontsize=10, color='r', arrowprops=dict(facecolor='r', shrink=0.05, edgecolor='w', width=2, headwidth=8, headlength=8))
+    arrow = dict(arrowstyle="-|>", lw=1.8, mutation_scale=14)
+    if i == 0:   # heat enters the gas; the gas does work
+        ax.annotate("", xy=(0.6, 1.0), xytext=(0.6, -0.6), arrowprops=dict(color="r", **arrow))
+        ax.text(0.6, 1.1, "heat in", fontsize=9, color="r", ha="center", va="bottom")
+        ax.annotate("", xy=(2.3, h + 1.5), xytext=(2.3, h + 0.2), arrowprops=dict(color="b", **arrow))
+        ax.text(2.3, h + 1.6, "work done\nby gas", fontsize=9, color="b", ha="center", va="bottom")
+    if i == 2:   # heat leaves the gas; work is done on the gas
+        ax.annotate("", xy=(0.6, -0.6), xytext=(0.6, 1.0), arrowprops=dict(color="r", **arrow))
+        ax.text(0.6, 1.1, "heat out", fontsize=9, color="r", ha="center", va="bottom")
+        ax.annotate("", xy=(2.3, h + 0.2), xytext=(2.3, h + 1.5), arrowprops=dict(color="b", **arrow))
+        ax.text(2.3, h + 1.6, "work done\non gas", fontsize=9, color="b", ha="center", va="bottom")
 
-    # Work annotations (only on the two most illustrative steps)
-    if i == 0:  # A→B: expansion, system does work
-        axs[i].annotate("work done by system", (1.5, piston_height[i] - 0.1), textcoords="offset points", xytext=(0, -30), ha='center', va='center', fontsize=10, color='b', arrowprops=dict(facecolor='b', shrink=0.05, edgecolor='w', width=2, headwidth=8, headlength=8))
-    if i == 2:  # C→D: compression, surroundings do work
-        axs[i].annotate("work done on system", (1.5, piston_height[i] - 1.5), textcoords="offset points", xytext=(0, 30), ha='center', va='center', fontsize=10, color='b', arrowprops=dict(facecolor='b', shrink=0.05, edgecolor='w', width=2, headwidth=8, headlength=8))
-
-    # Axis settings
-    axs[i].set_ylim(-3, 6)
+    ax.set_xlim(-0.3, 3.3)
+    ax.set_ylim(-2.6, 6.3)
+    ax.axis("off")
 
 plt.show()
+plt.close(fig)
 ```
 
-Schematic of the four Carnot-cycle steps. Each panel shows the thermal contact during that step and the piston position at its endpoint. Heat exchange occurs only during the isothermal steps (Steps 1 and 3); the adiabatic steps (Steps 2 and 4) are insulated.
+Schematic of the four Carnot-cycle steps. Each panel shows the thermal contact during that step and the piston position at its endpoint (not to scale). Heat exchange occurs only during the isothermal steps (Steps 1 and 3); the adiabatic steps (Steps 2 and 4) are insulated. Work is exchanged in all four steps, and the arrows show it for Steps 1 and 3.
 
 ---
 
@@ -334,7 +309,7 @@ Now use the entropy definition on the isotherms:
 Because the full reversible cycle returns the system to its initial state,
 
 ```{math}
-\Delta S_{\text{cycle}} = \Delta S_{AB} + \Delta S_{CD} = 0
+\Delta S_{\mathrm{cycle}} = \Delta S_{AB} + \Delta S_{CD} = 0
 \quad\Rightarrow\quad
 \Delta S_{CD} = -\Delta S_{AB}.
 ```
@@ -348,20 +323,15 @@ Substitute $q_{AB} = T_{\mathrm{hot}}\,\Delta S_{AB}$ and $q_{CD} = T_{\mathrm{c
 ```
 
 **Interpretation:** the maximum possible fraction of hot-reservoir heat that can be converted to work depends
-*only* on the two reservoir temperatures. Lowering $T_{\mathrm{cold}}$ or raising $T_{\mathrm{hot}}$ increases the
-maximum possible efficiency.
+*only* on the two reservoir temperatures.
 
-```{admonition} Why is the Carnot engine the best possible?
-:class: dropdown
-
-The derivation above assumed a *fully reversible* cycle. Any real engine involves irreversibilities (friction, finite-rate heat transfer, turbulence), which produce entropy and reduce the work output for a given heat input. The Carnot cycle, being reversible, has no such losses. One can show using the Clausius inequality (Section 4.3) that any engine operating between the same two reservoirs must satisfy $\eta \leq \eta_{\mathrm{Carnot}}$.
-```
+The derivation above gives the efficiency of a fully reversible cycle. [Section 4.3](section-03.md) uses the Clausius inequality to show that no engine operating between the same two reservoirs can have a higher efficiency.
 
 ---
 
 ### The Second Law: Entropy and the Direction of Heat Flow
 
-We can use the fundamental relation from Section 4.1 to derive the direction of spontaneous heat flow. Consider a simple composite system:
+We can use the fundamental relation from [Section 4.1](section-01.md) to derive the direction of spontaneous heat flow. Consider a simple composite system:
 
 - Two subsystems $A$ and $B$ are inside an **insulating boundary** (no heat exchange with the surroundings).
 - Each subsystem has fixed volume (so $dV_A = dV_B = 0$).
@@ -383,7 +353,7 @@ S = S_A + S_B
 dS = dS_A + dS_B.
 ```
 
-At fixed volume, the fundamental relation $dU = T\,dS - P\,dV$ reduces to $dU = T\,dS$. Therefore
+At fixed volume, the fundamental relation $dU = T\,dS - P\,dV$ reduces to $dU = T\,dS$. The relation applies to each subsystem even though the exchange of heat between them is irreversible, because it contains only state functions ([Section 4.1](section-01.md)). Therefore
 
 ```{math}
 dS_A = \frac{dU_A}{T_A},\qquad dS_B = \frac{dU_B}{T_B}.
@@ -411,15 +381,18 @@ That is exactly the familiar conclusion:
 Attempting to make heat flow from cold to hot without any other change would make $dS < 0$ for the isolated
 composite system, which violates the second law.
 
-Notice that this argument also tells us when the process stops: equilibrium ($dS = 0$) is reached when $T_A = T_B$, at which point the factor $(1/T_A - 1/T_B)$ vanishes regardless of $dU_A$. We will develop this point further in Section 4.3 when we discuss the approach to equilibrium.
+```{admonition} When Does the Flow of Heat Stop?
+:class: important
+The expression for $dS$ contains the factor $(1/T_A - 1/T_B)$. Follow this factor, and with it $dS$, as heat flows and the two temperatures approach each other. [Section 4.3](section-03.md) returns to this point when it discusses the approach to equilibrium.
+```
 
 ---
 
 ## Worked Example
 
-### Carnot efficiency and reversible entropy bookkeeping
+### Carnot Efficiency and Reversible Entropy Bookkeeping
 
-An ideal Carnot engine operates between $T_{\mathrm{hot}}=500\ \mathrm{K}$ and $T_{\mathrm{cold}}=300\ \mathrm{K}$. Suppose the system absorbs $q_{\mathrm{hot}}=1000\ \mathrm{J}$ from the hot reservoir during the isothermal expansion step.
+An ideal Carnot engine operates between $T_{\mathrm{hot}}=500\ \mathrm{K}$ and $T_{\mathrm{cold}}=300\ \mathrm{K}$. Suppose the system absorbs $q_{AB}=1000\ \mathrm{J}$ from the hot reservoir during the isothermal expansion step.
 
 1. **Maximum efficiency**
 
@@ -431,7 +404,7 @@ An ideal Carnot engine operates between $T_{\mathrm{hot}}=500\ \mathrm{K}$ and $
    So $40\%$ of the absorbed heat is converted to net work output:
 
    ```{math}
-   W_{\mathrm{out}} = \eta\,q_{\mathrm{hot}} = 0.40 \times 1000 = 400\ \mathrm{J}.
+   W_{\mathrm{out}} = \eta\,q_{AB} = 0.40 \times 1000 = 400\ \mathrm{J}.
    ```
 
    In the course sign convention ($w > 0$ = work done *on* the system), the engine does work on the surroundings, so
@@ -442,10 +415,10 @@ An ideal Carnot engine operates between $T_{\mathrm{hot}}=500\ \mathrm{K}$ and $
 
 2. **Heat rejected**
 
-   Energy conservation over the cycle ($\Delta U = 0$) gives $q_{\mathrm{hot}} + q_{\mathrm{cold}} + w_{\mathrm{cycle}} = 0$:
+   Energy conservation over the cycle ($\Delta U = 0$) gives $q_{AB} + q_{CD} + w_{\mathrm{cycle}} = 0$:
 
    ```{math}
-   q_{\mathrm{cold}} = -q_{\mathrm{hot}} - w_{\mathrm{cycle}} = -1000 - (-400) = -600\ \mathrm{J}.
+   q_{CD} = -q_{AB} - w_{\mathrm{cycle}} = -1000 - (-400) = -600\ \mathrm{J}.
    ```
 
    The negative sign confirms that the system releases 600 J to the cold reservoir, as expected.
@@ -455,11 +428,11 @@ An ideal Carnot engine operates between $T_{\mathrm{hot}}=500\ \mathrm{K}$ and $
    Each reservoir exchanges heat reversibly at its own fixed temperature. From the *reservoir's* perspective, the heat it receives is opposite in sign to what the system exchanges (the system's gain is the reservoir's loss):
 
    ```{math}
-   \Delta S_{\mathrm{hot}} = \frac{-q_{\mathrm{hot}}}{T_{\mathrm{hot}}}= \frac{-1000}{500}=-2.0\ \mathrm{J/K},
+   \Delta S_{\mathrm{hot}} = \frac{-q_{AB}}{T_{\mathrm{hot}}}= \frac{-1000}{500}=-2.0\ \mathrm{J/K},
    ```
 
    ```{math}
-   \Delta S_{\mathrm{cold}} = \frac{-q_{\mathrm{cold}}}{T_{\mathrm{cold}}}= \frac{-(-600)}{300}=+2.0\ \mathrm{J/K}.
+   \Delta S_{\mathrm{cold}} = \frac{-q_{CD}}{T_{\mathrm{cold}}}= \frac{-(-600)}{300}=+2.0\ \mathrm{J/K}.
    ```
 
    The hot reservoir loses entropy (it gave up heat); the cold reservoir gains entropy (it absorbed heat).
@@ -476,8 +449,8 @@ An ideal Carnot engine operates between $T_{\mathrm{hot}}=500\ \mathrm{K}$ and $
 
 ## Key Takeaways
 
-- A Carnot engine is fully reversible and therefore sets the **maximum** possible efficiency between two temperatures.
+- A Carnot engine is fully reversible. No engine operating between the same two reservoirs has a higher efficiency ([Section 4.3](section-03.md)).
 - Reversible isotherms exchange heat at fixed $T$; reversible adiabats exchange no heat and keep $S$ constant (isentropic).
 - The Carnot efficiency depends only on reservoir temperatures: $\eta_{\mathrm{Carnot}}=1-T_{\mathrm{cold}}/T_{\mathrm{hot}}$.
 - The entropy bookkeeping rule $dS = \delta q_{\mathrm{rev}}/T$ applied to a cycle yields the efficiency formula directly.
-- Second-law reasoning ($dS \geq 0$ for an isolated system) implies that spontaneous heat flow goes from hot to cold, and that thermal equilibrium corresponds to $T_A = T_B$.
+- Second-law reasoning ($dS \geq 0$ for an isolated system) implies that spontaneous heat flow goes from hot to cold.
