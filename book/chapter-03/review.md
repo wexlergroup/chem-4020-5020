@@ -126,17 +126,17 @@ See [Section 3.3](section-03.md).
 5. **Standard States and Formation Enthalpies**
    - Standard pressure: $P^\circ = 1\,\text{bar}$; reference temperature typically 298.15 K.
    - The standard state of an element is its most stable form at $P^\circ$. Phosphorus is the usual exception: its reference state is white phosphorus.
-   - Standard enthalpy of reaction: $\Delta H_{\mathrm{rxn}}^\circ = \sum_p \nu_p H_p^\circ - \sum_r \nu_r H_r^\circ$, where $H_p^\circ$ and $H_r^\circ$ are standard molar enthalpies. Only differences of enthalpy can be measured.
-   - Standard enthalpy of formation, $\Delta H_f^\circ$: enthalpy change when 1 mol of a compound in its standard state is formed from its elements in their standard states.
-   - By convention, $\Delta H_f^\circ = 0$ for elements in their standard states.
+   - Standard enthalpy of reaction: $\Delta_r H^\circ = \sum_p \nu_p H_p^\circ - \sum_r \nu_r H_r^\circ$, where $H_p^\circ$ and $H_r^\circ$ are standard molar enthalpies. Only differences of enthalpy can be measured.
+   - Standard enthalpy of formation, $\Delta_f H^\circ$: enthalpy change when 1 mol of a compound in its standard state is formed from its elements in their standard states.
+   - By convention, $\Delta_f H^\circ = 0$ for elements in their standard states.
 
 6. **Hess's Law**
    - Because $H$ is a state function, enthalpy changes are path-independent and additive:
 
    ```{math}
-   \Delta H_{\mathrm{rxn}}^\circ
-   = \sum_{p} \nu_p \,\Delta H_{f,p}^\circ
-   - \sum_{r} \nu_r \,\Delta H_{f,r}^\circ.
+   \Delta_r H^\circ
+   = \sum_{p} \nu_p \,\Delta_f H_p^\circ
+   - \sum_{r} \nu_r \,\Delta_f H_r^\circ.
    ```
 
 7. **First Law Toolkit Summary**
@@ -249,9 +249,9 @@ C_P = \left(\frac{\partial H}{\partial T}\right)_P,
 I. **Hess's Law**
 
 ```{math}
-\Delta H_{\mathrm{rxn}}^\circ
-= \sum_{p} \nu_p\,\Delta H_{f,p}^\circ
-- \sum_{r} \nu_r\,\Delta H_{f,r}^\circ.
+\Delta_r H^\circ
+= \sum_{p} \nu_p\,\Delta_f H_p^\circ
+- \sum_{r} \nu_r\,\Delta_f H_r^\circ.
 ```
 
 - **Applicability**: any reaction at standard conditions, using tabulated formation enthalpies.

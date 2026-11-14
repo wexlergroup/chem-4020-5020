@@ -76,6 +76,7 @@ P^\circ = 1\ \mathrm{bar}.
 Notes:
 
 - Standard-state quantities can still depend on temperature (e.g., $\Delta G^\circ(T)$).
+- Reaction and formation quantities carry a subscript on the $\Delta$: $\Delta_r H^\circ$, $\Delta_r S^\circ$, and $\Delta_r G^\circ$ for a reaction as written, and $\Delta_f H^\circ$ for the formation of a compound from its elements in their standard states. They are molar quantities, per mole of reaction as written.
 - When we use activities, the standard state corresponds to unit activity ($a=1$).
 
 ---

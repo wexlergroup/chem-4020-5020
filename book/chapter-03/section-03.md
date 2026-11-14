@@ -31,7 +31,7 @@ Learning objectives:
 - Distinguish conditions under which $q_P = \Delta H$ holds from those where it does not (e.g., non-$PV$ work at constant pressure).
 - Define heat capacity at constant pressure $C_P$ and use it to compute enthalpy changes over temperature intervals.
 - Explain standard states and the meaning of standard enthalpy of formation and reaction.
-- Apply Hess's Law to compute $\Delta H_{\mathrm{rxn}}^\circ$ from formation enthalpies.
+- Apply Hess's Law to compute $\Delta_r H^\circ$ from formation enthalpies.
 
 ## Core Ideas and Derivations
 
@@ -285,10 +285,10 @@ Standard conditions are defined as $P^\circ = 1\text{ bar}$. The superscript $^\
 
 #### Standard Enthalpy of Formation
 
-The **standard enthalpy of formation**, $\Delta H_f^\circ$, is the enthalpy change when **1 mole** of a compound in its standard state is formed from its constituent elements **in their standard states**.
+The **standard enthalpy of formation**, $\Delta_f H^\circ$, is the enthalpy change when **1 mole** of a compound in its standard state is formed from its constituent elements **in their standard states**.
 
 - The standard state of an element is its most stable form at $P^\circ = 1\text{ bar}$ (and a specified $T$).
-- By convention, $\Delta H_f^\circ$ for an element **in its standard state** is **zero**.
+- By convention, $\Delta_f H^\circ$ for an element **in its standard state** is **zero**.
 
 ```{list-table} Standard States of the Elements
 :header-rows: 1
@@ -338,11 +338,11 @@ For reference, the specific crystal structures defining the standard state of ea
 
 #### Standard Enthalpy of Reaction
 
-The **standard enthalpy of reaction**, $\Delta H_{\mathrm{rxn}}^\circ$, is the enthalpy change when a reaction is carried out under standard conditions. Mathematically:
+The **standard enthalpy of reaction**, $\Delta_r H^\circ$, is the enthalpy change when a reaction is carried out under standard conditions. Mathematically:
 
 ```{math}
 :label: standard_enthalpy_reaction
-\Delta H_{\mathrm{rxn}}^\circ
+\Delta_r H^\circ
 \;=\;\sum_{\text{products}} \nu_p \,H_p^\circ \;-\; \sum_{\text{reactants}} \nu_r \,H_r^\circ,
 ```
 
@@ -353,13 +353,13 @@ where $\nu_p$ and $\nu_r$ are the (positive) stoichiometric coefficients of prod
 
 **Hess's Law**: Because enthalpy is a state function, enthalpy changes are **additive** and **path independent**. The enthalpy change for a reaction depends only on the initial and final states, not on the route taken between them.
 
-As a consequence, $\Delta H_{\mathrm{rxn}}^\circ$ can be computed from tabulated formation enthalpies:
+As a consequence, $\Delta_r H^\circ$ can be computed from tabulated formation enthalpies:
 
 ```{math}
 :label: hess-law-unsigned
-\Delta H_{\mathrm{rxn}}^\circ 
-\;=\; \sum_{p} \nu_p \,\Delta H_{f,p}^\circ 
-\;-\;\sum_{r} \nu_r \,\Delta H_{f,r}^\circ.
+\Delta_r H^\circ
+\;=\; \sum_{p} \nu_p \,\Delta_f H_p^\circ
+\;-\;\sum_{r} \nu_r \,\Delta_f H_r^\circ.
 ```
 
 ```{admonition} Alternative notation with signed stoichiometric coefficients
@@ -367,7 +367,7 @@ As a consequence, $\Delta H_{\mathrm{rxn}}^\circ$ can be computed from tabulated
 
 Some texts use *signed* stoichiometric coefficients $\nu_i$, defined as positive for products and negative for reactants. In that convention, Hess's Law takes the compact form
 
-$$\Delta H_{\mathrm{rxn}}^\circ = \sum_{i} \nu_i \,\Delta H_{f,i}^\circ.$$
+$$\Delta_r H^\circ = \sum_{i} \nu_i \,\Delta_f H_i^\circ.$$
 
 Both forms are equivalent. For example, in the reaction $\mathrm{CH_4}(g) + 2\,\mathrm{O_2}(g) \to \mathrm{CO_2}(g) + 2\,\mathrm{H_2O}(g)$, the signed coefficients are $\nu_{\mathrm{CH_4}} = -1$, $\nu_{\mathrm{O_2}} = -2$, $\nu_{\mathrm{CO_2}} = +1$, $\nu_{\mathrm{H_2O}} = +2$.
 ```
@@ -383,15 +383,15 @@ Consider the steam–methane reforming reaction:
 Applying Equation {eq}`hess-law-unsigned`:
 
 ```{math}
-\Delta H_{\mathrm{rxn}}^\circ 
-= \Bigl[\Delta H_{f}^\circ(\mathrm{CO}) + 3\,\underbrace{\Delta H_{f}^\circ(\mathrm{H_2})}_{=\,0}\Bigr]
-- \Bigl[\Delta H_{f}^\circ(\mathrm{CH_4}) + \Delta H_{f}^\circ(\mathrm{H_2O})\Bigr].
+\Delta_r H^\circ
+= \Bigl[\Delta_f H^\circ(\mathrm{CO}) + 3\,\underbrace{\Delta_f H^\circ(\mathrm{H_2})}_{=\,0}\Bigr]
+- \Bigl[\Delta_f H^\circ(\mathrm{CH_4}) + \Delta_f H^\circ(\mathrm{H_2O})\Bigr].
 ```
 
-Note that $\Delta H_f^\circ(\mathrm{H_2}) = 0$ because $\mathrm{H_2}(g)$ is hydrogen's standard state. With $\Delta H_f^\circ(\mathrm{CO}) = -110.5$, $\Delta H_f^\circ(\mathrm{CH_4}) = -74.8$, and $\Delta H_f^\circ(\mathrm{H_2O}) = -241.8\ \mathrm{kJ\,mol^{-1}}$ for the gases at 298.15 K,
+Note that $\Delta_f H^\circ(\mathrm{H_2}) = 0$ because $\mathrm{H_2}(g)$ is hydrogen's standard state. With $\Delta_f H^\circ(\mathrm{CO}) = -110.5$, $\Delta_f H^\circ(\mathrm{CH_4}) = -74.8$, and $\Delta_f H^\circ(\mathrm{H_2O}) = -241.8\ \mathrm{kJ\,mol^{-1}}$ for the gases at 298.15 K,
 
 ```{math}
-\Delta H_{\mathrm{rxn}}^\circ
+\Delta_r H^\circ
 = \bigl[(-110.5) + 3(0)\bigr] - \bigl[(-74.8) + (-241.8)\bigr]
 = +206.1\ \mathrm{kJ\,mol^{-1}}.
 ```
@@ -400,27 +400,27 @@ Alternatively, we can see *why* this works by decomposing the reaction into form
 
 ````{dropdown} Breakdown into formation reactions
 ```{math}
-\begin{align*}
-\mathrm{CH_4}(g) &\longrightarrow \mathrm{C}(s, \mathrm{graphite}) + 2 \mathrm{H_2}(g) &\quad \Delta H^{\circ}_{\mathrm{rxn}} &= -\Delta H^{\circ}_{f, \mathrm{CH_4}} \\
-\mathrm{H_2O}(g) &\longrightarrow \mathrm{H_2}(g) + \tfrac{1}{2} \mathrm{O_2}(g) &\quad \Delta H^{\circ}_{\mathrm{rxn}} &= -\Delta H^{\circ}_{f, \mathrm{H_2O}} \\
-\mathrm{C}(s, \mathrm{graphite}) + \tfrac{1}{2} \mathrm{O_2}(g) &\longrightarrow \mathrm{CO}(g) &\quad \Delta H^{\circ}_{\mathrm{rxn}} &= \Delta H^{\circ}_{f, \mathrm{CO}}
-\end{align*}
+\begin{aligned}
+&\mathrm{CH_4}(g) \longrightarrow \mathrm{C}(s, \mathrm{graphite}) + 2 \mathrm{H_2}(g) &\qquad &\Delta_r H^{\circ} = -\Delta_f H^{\circ}(\mathrm{CH_4}) \\
+&\mathrm{H_2O}(g) \longrightarrow \mathrm{H_2}(g) + \tfrac{1}{2} \mathrm{O_2}(g) &\qquad &\Delta_r H^{\circ} = -\Delta_f H^{\circ}(\mathrm{H_2O}) \\
+&\mathrm{C}(s, \mathrm{graphite}) + \tfrac{1}{2} \mathrm{O_2}(g) \longrightarrow \mathrm{CO}(g) &\qquad &\Delta_r H^{\circ} = \Delta_f H^{\circ}(\mathrm{CO})
+\end{aligned}
 ```
 
 Summing gives the net reaction, and the enthalpy changes add:
 
 ```{math}
-\Delta H_{\mathrm{rxn}}^\circ 
-= -\Delta H_{f}^\circ(\mathrm{CH_4})
-- \Delta H_{f}^\circ(\mathrm{H_2O})
-+ \Delta H_{f}^\circ(\mathrm{CO}).
+\Delta_r H^\circ
+= -\Delta_f H^\circ(\mathrm{CH_4})
+- \Delta_f H^\circ(\mathrm{H_2O})
++ \Delta_f H^\circ(\mathrm{CO}).
 ```
 ````
 
 Either approach gives the same result, thanks to Hess's Law.
 `````
 
-The enthalpy-level diagram below visualizes the path independence that underlies Hess's Law. The direct route (green arrow) and the stepwise route through the elements (orange and purple arrows) connect the same initial and final states, so they produce the same $\Delta H_{\mathrm{rxn}}^\circ$.
+The enthalpy-level diagram below visualizes the path independence that underlies Hess's Law. The direct route (green arrow) and the stepwise route through the elements (orange and purple arrows) connect the same initial and final states, so they produce the same $\Delta_r H^\circ$.
 
 ```{code-cell} ipython3
 :tags: [hide-input]
@@ -466,13 +466,13 @@ arrow((5.0, H_elements), (6.0, H_products), 'C4')     # elements -> products
 arrow((2.0, H_reactants), (6.0, H_products), 'C2')    # direct path
 
 ax.text(2.35, H_reactants / 2 + 25,
-        r'$-\sum \nu_r\,\Delta H_{f,r}^\circ$' + f'\n$= {-H_reactants:+.1f}$',
+        r'$-\sum \nu_r\,\Delta_f H_r^\circ$' + f'\n$= {-H_reactants:+.1f}$',
         fontsize=10, ha='right', va='center', color='C1')
 ax.text(5.65, H_products / 2 + 5,
-        r'$\sum \nu_p\,\Delta H_{f,p}^\circ$' + f'\n$= {H_products:+.1f}$',
+        r'$\sum \nu_p\,\Delta_f H_p^\circ$' + f'\n$= {H_products:+.1f}$',
         fontsize=10, ha='left', va='center', color='C4')
 ax.text(4.3, (H_reactants + H_products) / 2 - 22,
-        r'$\Delta H_{\mathrm{rxn}}^\circ$' + f'$ = {dH_rxn:+.1f}$',
+        r'$\Delta_r H^\circ$' + f'$ = {dH_rxn:+.1f}$',
         fontsize=11, ha='left', va='top', color='C2')
 
 ax.set_ylabel(r'Enthalpy relative to the elements (kJ mol$^{-1}$)', fontsize=10)
@@ -487,7 +487,7 @@ plt.show()
 plt.close(fig)
 ```
 
-Enthalpy-level diagram for the steam–methane reforming reaction, drawn to scale in $\mathrm{kJ\,mol^{-1}}$ with the elements in their standard states as the zero. The direct path (green arrow) and the stepwise path through the elements (orange and purple arrows) both connect reactants to products. Because $H$ is a state function, both paths give the same $\Delta H_{\mathrm{rxn}}^\circ$. This is Hess's Law.
+Enthalpy-level diagram for the steam–methane reforming reaction, drawn to scale in $\mathrm{kJ\,mol^{-1}}$ with the elements in their standard states as the zero. The direct path (green arrow) and the stepwise path through the elements (orange and purple arrows) both connect reactants to products. Because $H$ is a state function, both paths give the same $\Delta_r H^\circ$. This is Hess's Law.
 
 ---
 
@@ -500,20 +500,20 @@ Enthalpy completes our First Law toolkit for the most common laboratory conditio
 | Constant $V$ (bomb calorimeter) | $U$ | $q_V = \Delta U$ |
 | Constant $P$ (open beaker, coffee-cup calorimeter) | $H = U + PV$ | $q_P = \Delta H$ |
 
-Hess's Law lets us combine tabulated formation data to predict $\Delta H_{\mathrm{rxn}}^\circ$ for *any* reaction without measuring it directly. In [Section 5.3](../chapter-05/section-03.md), we will see how the temperature dependence of $\Delta H$ (via $C_P$) allows us to extrapolate thermochemical data to other temperatures—an essential tool for real-world applications where reactions rarely occur at exactly 298 K.
+Hess's Law lets us combine tabulated formation data to predict $\Delta_r H^\circ$ for *any* reaction without measuring it directly. In [Section 5.3](../chapter-05/section-03.md), we will see how the temperature dependence of $\Delta H$ (via $C_P$) allows us to extrapolate thermochemical data to other temperatures—an essential tool for real-world applications where reactions rarely occur at exactly 298 K.
 
 ---
 
 ````{admonition} **Try it: Hess's Law practice**
 :class: important
 
-Compute $\Delta H_{\mathrm{rxn}}^\circ$ for the combustion of methane:
+Compute $\Delta_r H^\circ$ for the combustion of methane:
 
 $$\mathrm{CH_4}(g) + 2\,\mathrm{O_2}(g) \longrightarrow \mathrm{CO_2}(g) + 2\,\mathrm{H_2O}(g).$$
 
 Use the following standard enthalpies of formation:
 
-| Species | $\Delta H_f^\circ$ (kJ/mol) |
+| Species | $\Delta_f H^\circ$ (kJ/mol) |
 |:-------:|:---------------------------:|
 | $\mathrm{CH_4}(g)$ | $-74.8$ |
 | $\mathrm{CO_2}(g)$ | $-393.5$ |
@@ -527,20 +527,20 @@ Set up the Hess's Law calculation before checking the solution.
 
 Applying Equation {eq}`hess-law-unsigned`:
 
-$$\Delta H_{\mathrm{rxn}}^\circ 
-= \bigl[\Delta H_f^\circ(\mathrm{CO_2}) + 2\,\Delta H_f^\circ(\mathrm{H_2O})\bigr]
-- \bigl[\Delta H_f^\circ(\mathrm{CH_4}) + 2\,\underbrace{\Delta H_f^\circ(\mathrm{O_2})}_{=\,0}\bigr].$$
+$$\Delta_r H^\circ
+= \bigl[\Delta_f H^\circ(\mathrm{CO_2}) + 2\,\Delta_f H^\circ(\mathrm{H_2O})\bigr]
+- \bigl[\Delta_f H^\circ(\mathrm{CH_4}) + 2\,\underbrace{\Delta_f H^\circ(\mathrm{O_2})}_{=\,0}\bigr].$$
 
 Substituting numerical values:
 
-$$\Delta H_{\mathrm{rxn}}^\circ 
+$$\Delta_r H^\circ
 = \bigl[(-393.5) + 2(-241.8)\bigr] - \bigl[(-74.8) + 0\bigr]$$
 
 $$= (-393.5 - 483.6) - (-74.8)$$
 
 $$= -877.1 + 74.8 = \boxed{-802.3\,\mathrm{kJ/mol}}.$$
 
-The large negative value confirms that methane combustion is strongly exothermic, consistent with its use as a fuel. Note that $\Delta H_f^\circ(\mathrm{O_2}) = 0$ because $\mathrm{O_2}(g)$ is oxygen's standard state.
+The large negative value confirms that methane combustion is strongly exothermic, consistent with its use as a fuel. Note that $\Delta_f H^\circ(\mathrm{O_2}) = 0$ because $\mathrm{O_2}(g)$ is oxygen's standard state.
 ```
 ````
 
@@ -587,5 +587,5 @@ The specific heat of water is $4.18\,\mathrm{J\,g^{-1}\,K^{-1}}$. For $1\,\mathr
 - Enthalpy is defined by $H=U+PV$ and satisfies $q_P=\Delta H$ for constant-pressure processes with $PV$-only work.
 - Defining $H$ is an example of a general thermodynamic strategy: when the natural variables for a problem don't match your existing state function, define a new one. We will use this strategy again for the Helmholtz and Gibbs free energies.
 - Heat capacities relate temperature changes to enthalpy changes via $\Delta H=\int C_P\,dT$.
-- Standard enthalpy changes (formation, reaction) provide a consistent bookkeeping framework. The key convention is $\Delta H_f^\circ = 0$ for elements in their standard states.
-- Hess's Law lets you build $\Delta H_{\mathrm{rxn}}^\circ$ from tabulated formation enthalpies.
+- Standard enthalpy changes (formation, reaction) provide a consistent bookkeeping framework. The key convention is $\Delta_f H^\circ = 0$ for elements in their standard states.
+- Hess's Law lets you build $\Delta_r H^\circ$ from tabulated formation enthalpies.
