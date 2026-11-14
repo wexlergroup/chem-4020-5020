@@ -105,6 +105,13 @@ Rule of thumb:
 - Use $k_{\mathrm{B}}$ for **per-particle** (stat mech / microscopic) quantities.
 - Use $R$ for **per-mole** (thermo / macroscopic) quantities.
 
+Molar quantities (the value of an extensive quantity per mole of substance) are marked in two ways:
+
+- a subscript m, as in the molar volume $V_m$ of Module 1 and the molar residual entropy $S_{\mathrm{res,m}}$ of Module 5;
+- a lowercase letter with an overbar, as in $\bar g$, $\bar h$, $\bar s$, and $\bar v$ of Module 6.
+
+Both mean the same thing: $\bar v = V_m = V/n$.
+
 ---
 
 ## Reserved symbols and notation choices
@@ -150,6 +157,7 @@ When the same letter appears in different contexts (e.g., $Q$ as a partition fun
 | Standard-state pressure | $P^\circ$ | reference pressure (1 bar) |
 | Per-particle constant | $k_{\mathrm{B}}$ | J K$^{-1}$ per particle |
 | Per-mole constant | $R$ | J mol$^{-1}$ K$^{-1}$ |
+| Molar quantity | $V_m$, $\bar v$ | value per mole, $V/n$ (subscript m in Modules 1 and 5, overbar in Module 6) |
 | Compressibility factor | $Z$ | deviation from ideal gas ($Z=1$ ideal) |
 | Partition functions | $q,\ Q$ | state counting in stat mech |
 | Reaction quotient / equilibrium constant | $Q,\ K$ | composition measure / equilibrium value |
