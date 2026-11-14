@@ -88,9 +88,9 @@ where the sum runs over the chemical components $i$ and the **chemical potential
 
 In words: $\mu_i$ is how much the Gibbs free energy changes when one mole of component $i$ is added while holding $T$, $P$, and the amounts of all other components fixed. A "component" here means the minimum number of independent chemical species required to specify the composition of every phase in the system; for a pure substance the component count is one and there is a single chemical potential $\mu$.
 
-:::{admonition} Picking up a thread from Chapter 5
+:::{admonition} Picking up a thread from Module 5
 :class: note
-In Section 5.1 we noted (in the dropdown "A curious consequence for $G$") that holding $N$ fixed and applying the Euler relation gives the paradoxical result $G = 0$ for a one-component system, and promised to return to the issue once the chemical potential was in hand. With $\mu$ now defined, the resolution is immediate: the Euler relation for the Gibbs free energy of a one-component system is
+[Section 5.1](../chapter-05/section-01.md) stated the Euler relation $U = TS - PV + \mu N$ and its consequence $G = \mu N$ for a one-component system, before the chemical potential was defined. In terms of the amount $n$ in moles and the chemical potential per mole defined above, the relation reads
 
 ```{math}
 :label: eq:G-equals-mu-n

@@ -47,7 +47,7 @@ kernelspec:
    \mu = \frac{G}{n} \equiv \bar g.
    ```
 
-   - This resolves the apparent paradox in Section 5.1 that $G$ alone appeared to vanish for a one-component system at fixed $N$.
+   - This is the Euler relation of [Section 5.1](../chapter-05/section-01.md), $G = \mu N$, written per mole.
 
 4. **Phase-Equilibrium Condition**
    - Transferring $dn_\alpha$ moles from phase $\alpha$ to phase $\beta$ at fixed $T$ and $P$ gives $dG = (\mu_\alpha - \mu_\beta)\,dn_\alpha$. Requiring $dG = 0$ for arbitrary transfers yields
