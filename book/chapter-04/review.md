@@ -18,6 +18,8 @@ kernelspec:
 
 ### Section 4.1: Entropy
 
+See [Section 4.1](section-01.md).
+
 1. **Exothermicity Does Not Guarantee Spontaneity**
    - $\Delta H < 0$ (exothermic) often favors spontaneity but does not determine it. Counter-example: mixing of two ideal gases is spontaneous even though $\Delta H = 0$.
    - A complete account of directionality requires **entropy**.
@@ -45,10 +47,17 @@ kernelspec:
    ```
 
    - The natural variables of $U$ are $S$ and $V$. This relation replaces two inexact differentials ($\delta q$, $\delta w$) with three exact ones ($dU$, $dS$, $dV$).
+   - The relation is derived for a reversible process and holds for any change between equilibrium states, because it contains only state functions.
+
+6. **Two Expansions Between the Same States** (Ideal Gas)
+   - Reversible isothermal expansion: $\Delta S = nR\ln(V_2/V_1)$.
+   - Free expansion into vacuum: $q = 0$ and $w = 0$, with the same $\Delta S$, because $S$ is a state function.
 
 ---
 
 ### Section 4.2: Carnot Cycle
+
+See [Section 4.2](section-02.md).
 
 1. **Structure of the Carnot Cycle**
    - A fully reversible cycle operating between a hot reservoir ($T_{\mathrm{hot}}$) and a cold reservoir ($T_{\mathrm{cold}}$), consisting of four steps:
@@ -63,6 +72,8 @@ kernelspec:
    - Over one complete cycle, $\Delta S_{\mathrm{cycle}} = 0$ (state function returns to initial value), so $\Delta S_{AB} = -\Delta S_{CD}$.
 
 3. **Carnot Efficiency**
+   - The efficiency of an engine is the fraction of the absorbed heat that becomes net work output: $\eta = W_{\mathrm{out}}/q_{AB} = (q_{AB} + q_{CD})/q_{AB}$.
+   - For the Carnot cycle:
 
    ```{math}
    \eta_{\mathrm{Carnot}} = 1 - \frac{T_{\mathrm{cold}}}{T_{\mathrm{hot}}}.
@@ -70,14 +81,18 @@ kernelspec:
 
    - This is the **maximum** possible efficiency for any engine operating between two temperatures. It depends only on the reservoir temperatures.
 
-4. **Direction of Spontaneous Heat Flow**
+4. **Second Law for an Isolated System**
+   - Spontaneous change requires $dS \ge 0$, with equality for a reversible change.
+
+5. **Direction of Spontaneous Heat Flow**
    - Two subsystems at different temperatures inside an insulated boundary: $dS = dU_A(1/T_A - 1/T_B)$.
-   - For $dS \ge 0$ (second law), heat must flow from hot to cold ($dU_A < 0$ when $T_A > T_B$).
-   - Equilibrium ($dS = 0$) is reached when $T_A = T_B$.
+   - For $dS \ge 0$, heat must flow from hot to cold ($dU_A < 0$ when $T_A > T_B$).
 
 ---
 
 ### Section 4.3: Microscopic View of Entropy
+
+See [Section 4.3](section-03.md).
 
 1. **Entropy Increases Until Equilibrium** (Isolated Systems)
    - The second law for an isolated system: $dS \ge 0$, with equality at equilibrium.
@@ -90,8 +105,10 @@ kernelspec:
    ```
 
    - Equality for reversible processes; strict inequality for irreversible processes.
+   - $T$ is the temperature at which the heat is transferred to the system (for a reservoir, the temperature of the reservoir).
    - Irreversibility **produces** additional entropy beyond the entropy carried by heat flow.
    - For an isolated system ($\delta q = 0$): reduces to $dS \ge 0$.
+   - Summed over one cycle of any engine between two reservoirs, it gives $\eta \le \eta_{\mathrm{Carnot}}$.
 
 3. **Boltzmann's Formula** (Microcanonical Ensemble)
 
@@ -117,7 +134,7 @@ kernelspec:
    S = \frac{U}{T} + k_{\mathrm{B}} \ln Q.
    ```
 
-   - Directly ties the macroscopic state function $S$ to the partition function $Q$ from Chapter 2.
+   - Directly ties the macroscopic state function $S$ to the partition function $Q$ from Module 2.
 
 6. **Helmholtz Free Energy**
    - Rearranging the canonical entropy identity:
@@ -128,11 +145,12 @@ kernelspec:
 
    - Natural variables of $A$ are $T$ and $V$.
    - All canonical thermodynamic quantities ($S$, $U$, $P$, $C_V$) can be derived from $A$ by differentiation.
-   - Defining $A = U - TS$ is the same Legendre-transform strategy used to define $H = U + PV$ in Section 3.3: replace a hard-to-control variable ($S$) with an easy-to-control one ($T$).
+   - Defining $A = U - TS$ is the same Legendre-transform strategy used to define $H = U + PV$ in [Section 3.3](../chapter-03/section-03.md): replace a hard-to-control variable ($S$) with an easy-to-control one ($T$).
 
 7. **Microscopic Consistency**
-   - The Gibbs entropy depends only on probabilities $\{p_i\}$. Entropy changes when probabilities change (heat), not when energy levels shift (work).
-   - This is consistent with the microscopic First Law from Section 3.2: $\delta q = \sum_i E_i\,dp_i$ and $\delta w = \sum_i p_i\,dE_i$.
+   - For a reversible process, the Gibbs entropy with canonical probabilities gives $dS = \tfrac{1}{T}\sum_i E_i\,dp_i = \delta q_{\mathrm{rev}}/T$, the definition of entropy in Section 4.1.
+   - This is consistent with the microscopic First Law from [Section 3.2](../chapter-03/section-02.md): $\delta q_{\mathrm{rev}} = \sum_i E_i\,dp_i$ and $\delta w_{\mathrm{rev}} = \sum_i p_i\,dE_i$.
+   - The restriction to reversible processes matters: in a free expansion the entropy increases although no heat flows.
 
 ---
 
@@ -158,7 +176,7 @@ B. **Fundamental Thermodynamic Relation**
 dU = T\,dS - P\,dV.
 ```
 
-- **Applicability**: simple closed system with $PV$-only work. Natural variables of $U$ are $S$ and $V$.
+- **Applicability**: simple closed system with $PV$-only work, for any change between equilibrium states. Natural variables of $U$ are $S$ and $V$.
 
 ---
 
@@ -178,7 +196,7 @@ D. **Carnot Efficiency**
 \eta_{\mathrm{Carnot}} = 1 - \frac{T_{\mathrm{cold}}}{T_{\mathrm{hot}}}.
 ```
 
-- **Applicability**: maximum efficiency for any heat engine operating between two reservoir temperatures.
+- **Applicability**: maximum efficiency for any heat engine operating between two reservoir temperatures. The efficiency is defined as $\eta = W_{\mathrm{out}}/q_{AB}$.
 
 ---
 
@@ -188,7 +206,7 @@ E. **Clausius Inequality**
 dS \ge \frac{\delta q}{T}.
 ```
 
-- Equality for reversible processes; strict inequality for irreversible processes.
+- Equality for reversible processes; strict inequality for irreversible processes. $T$ is the temperature at which the heat is transferred.
 - For isolated systems ($\delta q = 0$): $dS \ge 0$.
 
 ---
