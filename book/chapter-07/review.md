@@ -366,3 +366,404 @@ K ={}&
 ```
 
 - **Applicability**: the specific $\Delta\nu = 0$ benchmark reaction in the rigid-rotor/harmonic-oscillator approximation. Separates $K$ into translational (mass), rotational (symmetry and $\Theta_{\mathrm{rot}}$), vibrational (hot-mode), and bond-energy factors — each traceable to identifiable molecular structure.
+
+## 3. Practice Problems
+
+Each problem is a multi-part question of exam length. Work through it on paper before you open the solution.
+
+### Problem 1. Nitric oxide in hot air
+
+Draws on [Section 7.1](section-01.md).
+
+Nitric oxide forms from the nitrogen and oxygen of air in flames and engines:
+
+```{math}
+\mathrm{N_2}(g)+\mathrm{O_2}(g)\;\rightleftharpoons\;2\,\mathrm{NO}(g).
+```
+
+Model air as $4.00\ \mathrm{mol}$ of $\mathrm{N_2}$ and $1.00\ \mathrm{mol}$ of $\mathrm{O_2}$. The table lists data for $\mathrm{NO}(g)$ from the [NIST-JANAF tables](https://janaf.nist.gov/). Use $R=8.3145\ \mathrm{J\,mol^{-1}\,K^{-1}}$.
+
+| $T$ (K) | $\Delta_f G^\circ$ ($\mathrm{kJ\,mol^{-1}}$) | $\Delta_f H^\circ$ ($\mathrm{kJ\,mol^{-1}}$) |
+|---:|---:|---:|
+| 1000 | 77.775 | 90.437 |
+| 2000 | 65.060 | 90.494 |
+
+**(a)** Find $\Delta_r G^\circ$ and $K$ at $2000\ \mathrm{K}$.
+
+**(b)** Write $K$ in terms of the extent of reaction at equilibrium, $\xi_{\mathrm{eq}}$. Find $\xi_{\mathrm{eq}}$ and the mole fraction of $\mathrm{NO}$ at $2000\ \mathrm{K}$.
+
+**(c)** Estimate $K$ at $2500\ \mathrm{K}$ with the van't Hoff equation and $\Delta_r H^\circ$ at $2000\ \mathrm{K}$. Compare the estimate with $K=3.52\times10^{-3}$ from the same tables.
+
+**(d)** The equilibrium mixture of part (b) is cooled to $1000\ \mathrm{K}$ so quickly that its composition does not change. Find $Q_p$, $K$, and $\Delta_r G$ at $1000\ \mathrm{K}$. In which direction is the reaction spontaneous?
+
+````{admonition} Solution
+:class: dropdown
+
+1. **$\Delta_r G^\circ$ and $K$ at $2000\ \mathrm{K}$**
+
+   $\mathrm{N_2}$ and $\mathrm{O_2}$ are elements in their reference states, so $\Delta_f G^\circ=0$ for both and
+
+   ```{math}
+   \begin{aligned}
+   \Delta_r G^\circ&=2\,\Delta_f G^\circ(\mathrm{NO})=2(65.060)=130.12\ \mathrm{kJ\,mol^{-1}},\\
+   K&=\exp\left(-\frac{\Delta_r G^\circ}{RT}\right)=\exp\left(-\frac{130\,120}{(8.3145)(2000)}\right)\\
+   &=e^{-7.8249}=4.00\times10^{-4}.
+   \end{aligned}
+   ```
+
+2. **$K$ in terms of $\xi_{\mathrm{eq}}$**
+
+   With $dn_i=\nu_i\,d\xi$, the amounts are $n_{\mathrm{N_2}}=4-\xi$, $n_{\mathrm{O_2}}=1-\xi$, and $n_{\mathrm{NO}}=2\xi$, and the total is $5\ \mathrm{mol}$ at every $\xi$. With $P_i=y_iP$,
+
+   ```{math}
+   K=\frac{(P_{\mathrm{NO}}/P^\circ)^2}{(P_{\mathrm{N_2}}/P^\circ)(P_{\mathrm{O_2}}/P^\circ)}
+   =\frac{y_{\mathrm{NO}}^2}{y_{\mathrm{N_2}}\,y_{\mathrm{O_2}}}
+   =\frac{4\,\xi_{\mathrm{eq}}^2}{(4-\xi_{\mathrm{eq}})(1-\xi_{\mathrm{eq}})}.
+   ```
+
+   The total pressure cancels because $\Delta\nu=0$.
+
+3. **Equilibrium composition**
+
+   Clearing the fraction gives a quadratic equation,
+
+   ```{math}
+   (4-K)\,\xi_{\mathrm{eq}}^2+5K\,\xi_{\mathrm{eq}}-4K=0 ,
+   ```
+
+   whose positive root is
+
+   ```{math}
+   \begin{aligned}
+   \xi_{\mathrm{eq}}&=\frac{-5K+\sqrt{25K^2+16K(4-K)}}{2(4-K)}\\
+   &=\frac{-0.001998+0.159937}{7.9992}=0.0197\ \mathrm{mol}.
+   \end{aligned}
+   ```
+
+   The mole fraction of nitric oxide is $y_{\mathrm{NO}}=2\xi_{\mathrm{eq}}/5=0.0079$. Because $\xi_{\mathrm{eq}}\ll1$, the estimate $\xi_{\mathrm{eq}}\approx\sqrt{K}=0.0200$ is already close.
+
+4. **van't Hoff estimate at $2500\ \mathrm{K}$**
+
+   $\Delta_r H^\circ=2\,\Delta_f H^\circ(\mathrm{NO})=2(90.494)=180.99\ \mathrm{kJ\,mol^{-1}}$ at $2000\ \mathrm{K}$. With $T_1=2000\ \mathrm{K}$ and $T_2=2500\ \mathrm{K}$,
+
+   ```{math}
+   \begin{aligned}
+   \ln\left[\frac{K(T_2)}{K(T_1)}\right]&=-\frac{\Delta_r H^\circ}{R}\left(\frac{1}{T_2}-\frac{1}{T_1}\right)\\
+   &=-(21\,768\ \mathrm{K})\left(-1.000\times10^{-4}\ \mathrm{K^{-1}}\right)=2.1768,\\
+   K(T_2)&=(4.00\times10^{-4})\,e^{2.1768}=3.52\times10^{-3}.
+   \end{aligned}
+   ```
+
+   The estimate agrees with the tabulated $3.52\times10^{-3}$ to the digits shown. The reaction is endothermic, and $K$ rises by a factor of 8.8 over $500\ \mathrm{K}$.
+
+5. **The cooled mixture**
+
+   The composition is that of step 3, so $Q_p$ has the value that $K$ had at $2000\ \mathrm{K}$: $Q_p=4.00\times10^{-4}$. At $1000\ \mathrm{K}$, $\Delta_r G^\circ=2(77.775)=155.55\ \mathrm{kJ\,mol^{-1}}$ and
+
+   ```{math}
+   \begin{aligned}
+   K&=\exp\left(-\frac{155\,550}{(8.3145)(1000)}\right)=e^{-18.708}=7.5\times10^{-9},\\
+   \Delta_r G&=\Delta_r G^\circ+RT\ln Q_p\\
+   &=155.55+(8.3145\times10^{-3})(1000)\ln(4.00\times10^{-4})\\
+   &=155.55-65.06=+90.49\ \mathrm{kJ\,mol^{-1}}.
+   \end{aligned}
+   ```
+
+   $Q_p>K$ and $\Delta_r G>0$, so the reverse reaction is spontaneous: nitric oxide should decompose into $\mathrm{N_2}$ and $\mathrm{O_2}$. This result gives the direction of the change and says nothing about its rate.
+
+**Result.** $K=4.00\times10^{-4}$ at $2000\ \mathrm{K}$, with $\xi_{\mathrm{eq}}=0.0197\ \mathrm{mol}$ and $y_{\mathrm{NO}}=0.0079$. The van't Hoff equation gives $K=3.52\times10^{-3}$ at $2500\ \mathrm{K}$. At $1000\ \mathrm{K}$ the frozen mixture has $Q_p=4.00\times10^{-4}>K=7.5\times10^{-9}$ and $\Delta_r G=+90.49\ \mathrm{kJ\,mol^{-1}}$, so the reverse reaction is spontaneous.
+````
+
+### Problem 2. Pressure and the extent of a dissociation
+
+Draws on [Section 7.1](section-01.md).
+
+Phosgene dissociates when it is heated:
+
+```{math}
+\mathrm{COCl_2}(g)\;\rightleftharpoons\;\mathrm{CO}(g)+\mathrm{Cl_2}(g).
+```
+
+At $700\ \mathrm{K}$ the [NIST-JANAF tables](https://janaf.nist.gov/) give $\Delta_f G^\circ=-187.054\ \mathrm{kJ\,mol^{-1}}$ for $\mathrm{COCl_2}(g)$ and $-173.518\ \mathrm{kJ\,mol^{-1}}$ for $\mathrm{CO}(g)$. A vessel initially holds $1.00\ \mathrm{mol}$ of phosgene and no products. Use $R=8.3145\ \mathrm{J\,mol^{-1}\,K^{-1}}$ and $P^\circ=1\ \mathrm{bar}$.
+
+**(a)** Find $\Delta_r G^\circ$ and $K$ at $700\ \mathrm{K}$.
+
+**(b)** Write $K$ in terms of $\xi_{\mathrm{eq}}$ and the total pressure $P$, and solve the expression for $\xi_{\mathrm{eq}}$.
+
+**(c)** Find $\xi_{\mathrm{eq}}$ and the three partial pressures at $P=1.00\ \mathrm{bar}$ and at $P=0.100\ \mathrm{bar}$.
+
+````{admonition} Solution
+:class: dropdown
+
+1. **$\Delta_r G^\circ$ and $K$**
+
+   $\mathrm{Cl_2}(g)$ is an element in its reference state, so its $\Delta_f G^\circ$ is zero.
+
+   ```{math}
+   \begin{aligned}
+   \Delta_r G^\circ&=\left[-173.518+0\right]-\left[-187.054\right]=+13.536\ \mathrm{kJ\,mol^{-1}},\\
+   K&=\exp\left(-\frac{13\,536}{(8.3145)(700)}\right)=e^{-2.3257}=0.0977.
+   \end{aligned}
+   ```
+
+2. **$K$ in terms of $\xi_{\mathrm{eq}}$ and $P$**
+
+   The amounts are $n_{\mathrm{COCl_2}}=1-\xi$ and $n_{\mathrm{CO}}=n_{\mathrm{Cl_2}}=\xi$, with $n_{\mathrm{tot}}=1+\xi$. The mole fractions are
+
+   ```{math}
+   y_{\mathrm{COCl_2}}=\frac{1-\xi}{1+\xi},\qquad y_{\mathrm{CO}}=y_{\mathrm{Cl_2}}=\frac{\xi}{1+\xi}.
+   ```
+
+   With $P_i=y_iP$,
+
+   ```{math}
+   K=\frac{(P_{\mathrm{CO}}/P^\circ)(P_{\mathrm{Cl_2}}/P^\circ)}{P_{\mathrm{COCl_2}}/P^\circ}
+   =\frac{\xi_{\mathrm{eq}}^2}{(1-\xi_{\mathrm{eq}})(1+\xi_{\mathrm{eq}})}\,\frac{P}{P^\circ}
+   =\frac{\xi_{\mathrm{eq}}^2}{1-\xi_{\mathrm{eq}}^2}\,\frac{P}{P^\circ}.
+   ```
+
+   Solving for the extent of reaction gives
+
+   ```{math}
+   \xi_{\mathrm{eq}}=\sqrt{\frac{K}{K+P/P^\circ}}.
+   ```
+
+3. **Two pressures**
+
+   ```{math}
+   \begin{aligned}
+   P=1.00\ \mathrm{bar}:\quad \xi_{\mathrm{eq}}&=\sqrt{\frac{0.0977}{0.0977+1.00}}=0.298\ \mathrm{mol},\\
+   P=0.100\ \mathrm{bar}:\quad \xi_{\mathrm{eq}}&=\sqrt{\frac{0.0977}{0.0977+0.100}}=0.703\ \mathrm{mol}.
+   \end{aligned}
+   ```
+
+   The partial pressures follow from $P_i=y_iP$.
+
+   | $P$ (bar) | $\xi_{\mathrm{eq}}$ (mol) | $P_{\mathrm{COCl_2}}$ (bar) | $P_{\mathrm{CO}}=P_{\mathrm{Cl_2}}$ (bar) |
+   |---:|---:|---:|---:|
+   | 1.00 | 0.298 | 0.540 | 0.230 |
+   | 0.100 | 0.703 | 0.0174 | 0.0413 |
+
+   As a check, $(0.230)^2/0.540=0.098$ and $(0.0413)^2/0.0174=0.098$: both mixtures have $Q_p=K$. The dissociation has $\Delta\nu=+1$, and a tenfold drop in pressure raises $\xi_{\mathrm{eq}}$ from $0.298$ to $0.703\ \mathrm{mol}$ while $K$ stays the same.
+
+**Result.** $\Delta_r G^\circ=+13.536\ \mathrm{kJ\,mol^{-1}}$ and $K=0.0977$ at $700\ \mathrm{K}$. $\xi_{\mathrm{eq}}=\sqrt{K/(K+P/P^\circ)}$, which is $0.298\ \mathrm{mol}$ at $1.00\ \mathrm{bar}$ and $0.703\ \mathrm{mol}$ at $0.100\ \mathrm{bar}$.
+````
+
+### Problem 3. The Gibbs energy minimum of hot carbon dioxide
+
+Draws on [Section 7.1](section-01.md).
+
+At $3000\ \mathrm{K}$ carbon dioxide dissociates appreciably:
+
+```{math}
+\mathrm{CO_2}(g)\;\rightleftharpoons\;\mathrm{CO}(g)+\tfrac{1}{2}\,\mathrm{O_2}(g).
+```
+
+At this temperature the [NIST-JANAF tables](https://janaf.nist.gov/) give $\Delta_f G^\circ=-395.461\ \mathrm{kJ\,mol^{-1}}$ for $\mathrm{CO_2}(g)$ and $-367.826\ \mathrm{kJ\,mol^{-1}}$ for $\mathrm{CO}(g)$. The system starts as $1.00\ \mathrm{mol}$ of $\mathrm{CO_2}$ and stays at $3000\ \mathrm{K}$ and $P=P^\circ=1\ \mathrm{bar}$. Use $R=8.3145\ \mathrm{J\,mol^{-1}\,K^{-1}}$.
+
+**(a)** Find $\Delta_r G^\circ$ and $K$.
+
+**(b)** Write the amounts $n_i(\xi)$ and the mole fractions $y_i(\xi)$. Then write $G(\xi)-G(0)$ in the form used for $\mathrm{NO_2}$ in [Section 7.1](section-01.md).
+
+**(c)** Write $Q_p$ as a function of $\xi$, and confirm that $\xi_{\mathrm{eq}}=0.438\ \mathrm{mol}$ satisfies $Q_p=K$.
+
+**(d)** Evaluate $G(\xi)-G(0)$ at $\xi_{\mathrm{eq}}$ and at $\xi=1\ \mathrm{mol}$. Evaluate the slope $\Delta_r G$ at $\xi=0.200\ \mathrm{mol}$ and at $\xi=0.700\ \mathrm{mol}$.
+
+````{admonition} Solution
+:class: dropdown
+
+1. **$\Delta_r G^\circ$ and $K$**
+
+   ```{math}
+   \begin{aligned}
+   \Delta_r G^\circ&=\left[-367.826+\tfrac{1}{2}(0)\right]-\left[-395.461\right]=+27.635\ \mathrm{kJ\,mol^{-1}},\\
+   K&=\exp\left(-\frac{27\,635}{(8.3145)(3000)}\right)=e^{-1.1079}=0.3303.
+   \end{aligned}
+   ```
+
+2. **Amounts, mole fractions, and $G(\xi)$**
+
+   With $\nu_{\mathrm{CO_2}}=-1$, $\nu_{\mathrm{CO}}=+1$, and $\nu_{\mathrm{O_2}}=+\tfrac{1}{2}$,
+
+   | Species | $n_i$ (mol) | $y_i$ |
+   |---|---|---|
+   | $\mathrm{CO_2}$ | $1-\xi$ | $(1-\xi)/(1+\xi/2)$ |
+   | $\mathrm{CO}$ | $\xi$ | $\xi/(1+\xi/2)$ |
+   | $\mathrm{O_2}$ | $\xi/2$ | $(\xi/2)/(1+\xi/2)$ |
+
+   and $n_{\mathrm{tot}}=1+\xi/2$. At $P=P^\circ$,
+
+   ```{math}
+   \begin{aligned}
+   G(\xi)-G(0)={}&\xi\,\Delta_r G^\circ\\
+   &+RT\left[(1-\xi)\ln y_{\mathrm{CO_2}}+\xi\ln y_{\mathrm{CO}}+\frac{\xi}{2}\ln y_{\mathrm{O_2}}\right].
+   \end{aligned}
+   ```
+
+   The first term is the standard term, and the second is the ideal-mixing term.
+
+3. **The equilibrium condition**
+
+   At $P=P^\circ$,
+
+   ```{math}
+   Q_p=\frac{y_{\mathrm{CO}}\,y_{\mathrm{O_2}}^{1/2}}{y_{\mathrm{CO_2}}}
+   =\frac{\xi}{1-\xi}\left(\frac{\xi/2}{1+\xi/2}\right)^{1/2}.
+   ```
+
+   At $\xi=0.438\ \mathrm{mol}$ the mole fractions are $y_{\mathrm{CO_2}}=0.562/1.219=0.4610$, $y_{\mathrm{CO}}=0.438/1.219=0.3593$, and $y_{\mathrm{O_2}}=0.219/1.219=0.1797$, so
+
+   ```{math}
+   Q_p=\frac{(0.3593)(0.1797)^{1/2}}{0.4610}=0.3304 .
+   ```
+
+   This equals $K=0.3303$ to three figures, so $\xi_{\mathrm{eq}}=0.438\ \mathrm{mol}$.
+
+4. **$G$ at the minimum and at complete reaction**
+
+   Here $RT=(8.3145)(3000)=24.94\ \mathrm{kJ\,mol^{-1}}$. At $\xi_{\mathrm{eq}}$,
+
+   ```{math}
+   \begin{aligned}
+   G-G(0)={}&(0.438)(27.635)\\
+   &+(24.94)\left[0.562\ln0.4610+0.438\ln0.3593+0.219\ln0.1797\right]\\
+   ={}&12.10+(24.94)(-1.2594)=12.10-31.41=-19.31\ \mathrm{kJ}.
+   \end{aligned}
+   ```
+
+   At $\xi=1\ \mathrm{mol}$ the mixture is $1\ \mathrm{mol}$ of $\mathrm{CO}$ and $\tfrac{1}{2}\ \mathrm{mol}$ of $\mathrm{O_2}$, with $y_{\mathrm{CO}}=\tfrac{2}{3}$ and $y_{\mathrm{O_2}}=\tfrac{1}{3}$:
+
+   ```{math}
+   \begin{aligned}
+   G(1)-G(0)&=27.635+(24.94)\left[\ln\tfrac{2}{3}+\tfrac{1}{2}\ln\tfrac{1}{3}\right]\\
+   &=27.635+(24.94)(-0.9548)=27.63-23.82=+3.82\ \mathrm{kJ}.
+   \end{aligned}
+   ```
+
+5. **Slopes on the two sides of the minimum**
+
+   The slope is $\Delta_r G=\Delta_r G^\circ+RT\ln Q_p$, with $Q_p$ from step 3.
+
+   | $\xi$ (mol) | $Q_p$ | $RT\ln Q_p$ ($\mathrm{kJ\,mol^{-1}}$) | $\Delta_r G$ ($\mathrm{kJ\,mol^{-1}}$) |
+   |---:|---:|---:|---:|
+   | 0.200 | 0.0754 | −64.48 | −36.85 |
+   | 0.438 | 0.3303 | −27.63 | 0.00 |
+   | 0.700 | 1.188 | +4.30 | +31.93 |
+
+   The slope is negative at $\xi=0.200\ \mathrm{mol}$, zero at $\xi_{\mathrm{eq}}$, and positive at $\xi=0.700\ \mathrm{mol}$.
+
+**Result.** $K=0.3303$ and $\xi_{\mathrm{eq}}=0.438\ \mathrm{mol}$. Relative to pure $\mathrm{CO_2}$, $G$ is $-19.31\ \mathrm{kJ}$ at $\xi_{\mathrm{eq}}$ and $+3.82\ \mathrm{kJ}$ at $\xi=1\ \mathrm{mol}$. $\Delta_r G$ is $-36.85\ \mathrm{kJ\,mol^{-1}}$ at $\xi=0.200\ \mathrm{mol}$ and $+31.93\ \mathrm{kJ\,mol^{-1}}$ at $\xi=0.700\ \mathrm{mol}$.
+````
+
+### Problem 4. Dissociation of iodine from molecular constants
+
+Draws on [Section 7.2](section-02.md).
+
+Above about $1000\ \mathrm{K}$, iodine vapor contains a measurable fraction of atoms:
+
+```{math}
+\mathrm{I_2}(g)\;\rightleftharpoons\;2\,\mathrm{I}(g).
+```
+
+The table lists the constants of $\mathrm{I_2}$ from [Section 7.2](section-02.md) and those of the atom, whose ground level has the degeneracy $g_1=4$.
+
+| Species | $M$ ($\mathrm{g\,mol^{-1}}$) | $\Theta_{\mathrm{rot}}$ (K) | $\Theta_{\mathrm{vib}}$ (K) | $D_0$ ($\mathrm{kJ\,mol^{-1}}$) | $\sigma$ | $g_1$ |
+| :-- | --: | --: | --: | --: | --: | --: |
+| $\mathrm{I_2}$ | 253.808 | 0.05377 | 309 | 148.81 | 2 | 1 |
+| $\mathrm{I}$ | 126.904 | | | | | 4 |
+
+Take the zero of energy at the separated atoms, as in [Section 7.2](section-02.md), so that $q_{\mathrm{I}}=(V/\Lambda_{\mathrm{I}}^3)\,g_1$. Use $h=6.6261\times10^{-34}\ \mathrm{J\,s}$, $k_{\mathrm B}=1.3806\times10^{-23}\ \mathrm{J\,K^{-1}}$, $N_{\mathrm A}=6.0221\times10^{23}\ \mathrm{mol^{-1}}$, $R=8.3145\ \mathrm{J\,mol^{-1}\,K^{-1}}$, and $P^\circ=1\ \mathrm{bar}$.
+
+**(a)** Find $q/V$ for the atom and for the molecule at $1000\ \mathrm{K}$.
+
+**(b)** Find $K_c$ and $K_p$ at $1000\ \mathrm{K}$.
+
+**(c)** Find $\Delta_r G^\circ$ from $K_p$. Compare it with the [NIST-JANAF](https://janaf.nist.gov/) value $\Delta_f G^\circ(\mathrm{I},g)=24.039\ \mathrm{kJ\,mol^{-1}}$ at $1000\ \mathrm{K}$, for which the reference state of iodine is $\mathrm{I_2}(g)$.
+
+**(d)** One mole of $\mathrm{I_2}$ comes to equilibrium at $1000\ \mathrm{K}$ and a total pressure of $1.00\ \mathrm{bar}$. Find $\xi_{\mathrm{eq}}$ and the two partial pressures.
+
+````{admonition} Solution
+:class: dropdown
+
+1. **The atom**
+
+   The mass of one atom is $m_{\mathrm{I}}=M/N_{\mathrm A}=2.107\times10^{-25}\ \mathrm{kg}$, so
+
+   ```{math}
+   \begin{aligned}
+   \Lambda_{\mathrm{I}}&=\frac{h}{\sqrt{2\pi m_{\mathrm{I}}k_{\mathrm B}T}}\\
+   &=\frac{6.6261\times10^{-34}}{\sqrt{2\pi(2.107\times10^{-25})(1.3806\times10^{-23})(1000)}}\\
+   &=4.901\times10^{-12}\ \mathrm{m},\\
+   \frac{q_{\mathrm{I}}}{V}&=\frac{g_1}{\Lambda_{\mathrm{I}}^3}=\frac{4}{(4.901\times10^{-12}\ \mathrm{m})^3}=3.398\times10^{34}\ \mathrm{m^{-3}}.
+   \end{aligned}
+   ```
+
+2. **The molecule**
+
+   The molecule has twice the mass, so $\Lambda_{\mathrm{I_2}}=\Lambda_{\mathrm{I}}/\sqrt{2}=3.465\times10^{-12}\ \mathrm{m}$ and $1/\Lambda_{\mathrm{I_2}}^3=2.403\times10^{34}\ \mathrm{m^{-3}}$. The other three factors of the diatomic partition function are
+
+   ```{math}
+   \begin{aligned}
+   \frac{T}{\sigma\,\Theta_{\mathrm{rot}}}&=\frac{1000}{2(0.05377)}=9299,\\
+   \frac{1}{1-e^{-\Theta_{\mathrm{vib}}/T}}&=\frac{1}{1-e^{-0.309}}=3.762,\\
+   g_1\,e^{D_0/(RT)}&=\exp\left(\frac{148\,810}{(8.3145)(1000)}\right)=e^{17.8976}=5.927\times10^{7}.
+   \end{aligned}
+   ```
+
+   Their product with the translational factor is
+
+   ```{math}
+   \begin{aligned}
+   \frac{q_{\mathrm{I_2}}}{V}&=(2.403\times10^{34})(9299)(3.762)(5.927\times10^{7})\ \mathrm{m^{-3}}\\
+   &=4.982\times10^{46}\ \mathrm{m^{-3}}.
+   \end{aligned}
+   ```
+
+3. **$K_c$ and $K_p$**
+
+   For this reaction $\nu_{\mathrm{I}}=+2$, $\nu_{\mathrm{I_2}}=-1$, and $\Delta\nu=+1$.
+
+   ```{math}
+   \begin{aligned}
+   K_c&=\frac{(q_{\mathrm{I}}/V)^2}{q_{\mathrm{I_2}}/V}=\frac{(3.398\times10^{34})^2}{4.982\times10^{46}}=2.318\times10^{22}\ \mathrm{m^{-3}},\\
+   K_p&=K_c\,\frac{k_{\mathrm B}T}{P^\circ}=(2.318\times10^{22}\ \mathrm{m^{-3}})\,\frac{(1.3806\times10^{-23})(1000)\ \mathrm{J}}{10^{5}\ \mathrm{Pa}}\\
+   &=3.20\times10^{-3}.
+   \end{aligned}
+   ```
+
+4. **$\Delta_r G^\circ$ and the tabulated value**
+
+   ```{math}
+   \begin{aligned}
+   \Delta_r G^\circ=-RT\ln K_p&=-(8.3145)(1000)\ln(3.20\times10^{-3})\ \mathrm{J\,mol^{-1}}\\
+   &=+47.76\ \mathrm{kJ\,mol^{-1}}.
+   \end{aligned}
+   ```
+
+   The tables give $\Delta_r G^\circ=2(24.039)=48.08\ \mathrm{kJ\,mol^{-1}}$, which corresponds to $K=3.08\times10^{-3}$. The model value of $\Delta_r G^\circ$ is about $0.3\ \mathrm{kJ\,mol^{-1}}$ lower, and its $K_p$ is $4\ \%$ higher.
+
+5. **Composition at $1.00\ \mathrm{bar}$**
+
+   The amounts are $n_{\mathrm{I_2}}=1-\xi$ and $n_{\mathrm{I}}=2\xi$, with $n_{\mathrm{tot}}=1+\xi$. Then
+
+   ```{math}
+   K_p=\frac{(P_{\mathrm{I}}/P^\circ)^2}{P_{\mathrm{I_2}}/P^\circ}
+   =\frac{4\,\xi_{\mathrm{eq}}^2}{1-\xi_{\mathrm{eq}}^2}\,\frac{P}{P^\circ}
+   \qquad\Longrightarrow\qquad
+   \xi_{\mathrm{eq}}=\sqrt{\frac{K_p}{K_p+4P/P^\circ}}.
+   ```
+
+   With $K_p=3.20\times10^{-3}$ and $P=P^\circ$,
+
+   ```{math}
+   \begin{aligned}
+   \xi_{\mathrm{eq}}&=\sqrt{\frac{3.20\times10^{-3}}{4.0032}}=0.0283\ \mathrm{mol},\\
+   P_{\mathrm{I}}&=\frac{2\xi_{\mathrm{eq}}}{1+\xi_{\mathrm{eq}}}\,P=0.0550\ \mathrm{bar},\qquad
+   P_{\mathrm{I_2}}=\frac{1-\xi_{\mathrm{eq}}}{1+\xi_{\mathrm{eq}}}\,P=0.945\ \mathrm{bar}.
+   \end{aligned}
+   ```
+
+   About $2.8\ \%$ of the molecules are dissociated.
+
+**Result.** At $1000\ \mathrm{K}$, $q_{\mathrm{I}}/V=3.398\times10^{34}\ \mathrm{m^{-3}}$ and $q_{\mathrm{I_2}}/V=4.982\times10^{46}\ \mathrm{m^{-3}}$, which give $K_c=2.318\times10^{22}\ \mathrm{m^{-3}}$, $K_p=3.20\times10^{-3}$, and $\Delta_r G^\circ=+47.76\ \mathrm{kJ\,mol^{-1}}$ (NIST-JANAF: $48.08\ \mathrm{kJ\,mol^{-1}}$). At $1.00\ \mathrm{bar}$, $\xi_{\mathrm{eq}}=0.0283\ \mathrm{mol}$, $P_{\mathrm{I}}=0.0550\ \mathrm{bar}$, and $P_{\mathrm{I_2}}=0.945\ \mathrm{bar}$.
+````
