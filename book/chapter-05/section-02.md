@@ -146,6 +146,19 @@ fs.show(draw, alt="Two square lattices of 36 carbon monoxide molecules, each dra
                   "about half of the molecules are flipped end for end at random.")
 ```
 
+[](#fig:solid-CO-interactive) shows one unit cell of the crystal in three dimensions. The molecules sit near the sites of a face-centered cubic lattice, and each one lies along one of the four body diagonals of the cubic cell. Turn the cell, and switch between the ordered structure and a crystal in which each molecule is frozen at random in one of its two orientations.
+
+```{iframe} https://wexlergroup.github.io/chem-4020-5020/computational-studios/solid-carbon-monoxide.html
+:label: fig:solid-CO-interactive
+:width: 100%
+:title: Solid carbon monoxide
+:placeholder: ../_static/solid-carbon-monoxide/solid-carbon-monoxide.png
+
+One unit cell of solid CO in its low-temperature phase, with the 14 molecules at the corners and on the faces of the cell. The switch changes between the ordered structure and a crystal in which each molecule is frozen at random in one of its two head-to-tail orientations. A blue outline marks a molecule that is flipped end for end. The atom positions are those of the X-ray structure of L. Vegard, *Z. Physik* **61**, 185 (1930).
+```
+
+Each press of "Another random arrangement" draws one of the $2^{14} = 16{,}384$ arrangements of the 14 molecules shown. The same count for the $N$ molecules of a crystal gives $\Omega_0 = 2^N$.
+
 ```{admonition} Comparison with Experiment
 :class: dropdown
 
