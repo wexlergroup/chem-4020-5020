@@ -21,6 +21,20 @@ Here are a few key themes to keep in mind this semester:
 3. **Beyond Equilibrium:**
    While the equilibrium perspective provides a foundational understanding, it captures only part of the story. Real systems often evolve over time, influenced by non-equilibrium dynamics and kinetics. Although this course focuses on statistical thermodynamics, a complete picture of chemical behavior ultimately includes these time-dependent processes, which you will explore later in Chem 403.
 
+The course map below lays out the seven modules along these two descriptions of matter. The microscopic description, in terms of molecules and their energy levels, is on top, and the macroscopic description, in terms of properties measured in the laboratory, is at the bottom. The relation written between them at a module is the bridge that the module builds. Select a module to unfold its sections.
+
+<iframe
+  src="https://wexlergroup.github.io/chem-4020-5020/computational-studios/course-map.html"
+  title="Course map"
+  style="width: 100%; height: 330px; border: 0;"
+  loading="lazy"
+></iframe>
+
+```{image} _static/course-map/overview.png
+:class: hidden
+:alt: Course map. Statistical mechanics (Module 2) forms the microscopic strand, and Modules 1 and 3 to 7 form the macroscopic strand. A relation joins the two strands at each module except Module 6: kinetic theory at Module 1, the internal energy as the ensemble average of the energy at Module 3, the Boltzmann formula for the entropy at Module 4, the Helmholtz free energy in terms of the canonical partition function at Module 5, and the equilibrium constant in terms of molecular partition functions at Module 7.
+```
+
 By the end of this course, you will gain a deeper appreciation for how thermodynamics and statistical mechanics provide a unified framework for interpreting the chemical world—one that remains as relevant today as it was more than a century ago.
 
 ---
