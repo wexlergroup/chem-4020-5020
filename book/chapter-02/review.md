@@ -14,6 +14,20 @@ kernelspec:
 
 # Review
 
+The course map shows where this module sits in the course and which relations connect the microscopic and macroscopic descriptions. Select a module to unfold its sections.
+
+<iframe
+  src="https://wexlergroup.github.io/chem-4020-5020/computational-studios/course-map.html?module=2&amp;here=review"
+  title="Course map, opened at Module 2"
+  style="width: 100%; height: 830px; border: 0;"
+  loading="lazy"
+></iframe>
+
+```{image} ../_static/course-map/module-2.png
+:class: hidden
+:alt: Course map with Module 2 unfolded. Statistical mechanics (Module 2) forms the microscopic strand, and Modules 1 and 3 to 7 form the macroscopic strand. A relation joins the two strands at each module except Module 6. Module 2 is the microscopic strand itself. Below the map, one card for each of Sections 2.1 to 2.8 lists the microscopic content, the connecting relations, and the macroscopic content of the section.
+```
+
 ## 1. Checklist of Key Concepts
 
 ### Section 2.1: Introduction to Statistical Mechanics
