@@ -1,388 +1,167 @@
-import React, { useState, useMemo } from 'react';
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, AreaChart, Area } from 'recharts';
-import { Settings, Thermometer, Activity, Info, Zap } from 'lucide-react';
+import React, { useMemo, useState } from 'react';
+import { BarChart, Bar, Cell, LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer, ReferenceLine, ReferenceDot } from 'recharts';
+import { useBook, Studio, Panel, Slider, V, axis, niceTicks, LINE, DASH } from '../../studio-kit/kit.jsx';
 
-const HarmonicOscillatorStudio = () => {
-  // State for the simulation
-  const [theta, setTheta] = useState(100); // Characteristic Temperature (Theta_E) in Kelvin
-  const [maxTemp, setMaxTemp] = useState(500); // Max T for the graph
-  const [showLimits, setShowLimits] = useState(true);
-  const [activeTab, setActiveTab] = useState('cv'); // 'cv' or 'u'
+/*
+  Harmonic oscillator (Section 2.6). One oscillator with the levels E_n = hbar omega (n + 1/2) and the
+  vibrational temperature Theta_vib = hbar omega / k_B. With x = Theta_vib / T:
 
-  // Constants
-  // kB is used conceptually but plots are normalized
-  
-  // Generate data points
-  const data = useMemo(() => {
-    const points = [];
-    const step = maxTemp / 100;
-    
-    // Avoid T=0 division by zero, start small
-    for (let T = 1; T <= maxTemp; T += step) {
-      const x = theta / T; // x = hbar*omega / (kB*T)
-      
-      // Internal Energy U (normalized by kB*Theta)
-      // U = kB*Theta * (1/2 + 1/(e^x - 1))
-      // Plotting U / (kB*Theta)
-      const u_reduced = 0.5 + 1 / (Math.exp(x) - 1);
-      
-      // High T limit for U: U approx kB*T -> U/(kB*Theta) approx T/Theta
-      const u_high_T = T / theta;
-      
-      // Low T limit for U: U approx 0.5 * kB*Theta -> normalized 0.5
-      const u_low_T = 0.5;
+      q   = exp(-x/2) / (1 - exp(-x))               partition function
+      p_n = exp(-n x) (1 - exp(-x))                 probability of level n
+      U   = hbar omega [1/2 + 1/(exp(x) - 1)]       internal energy
+      C_V = k_B x^2 exp(x) / (exp(x) - 1)^2         heat capacity
 
-      // Heat Capacity Cv (normalized by kB)
-      // Cv = kB * x^2 * e^x / (e^x - 1)^2
-      let cv_reduced = 0;
-      if (x < 100) { // Avoid overflow for very low T
-        const numerator = Math.pow(x, 2) * Math.exp(x);
-        const denominator = Math.pow(Math.exp(x) - 1, 2);
-        cv_reduced = numerator / denominator;
-      }
-      
-      // High T limit for Cv: 1 (Dulong-Petit)
-      const cv_high_T = 1;
+  The molecules and their vibrational temperatures are those of the table in Section 2.6
+  (harmonic wavenumbers from the NIST Chemistry WebBook, Theta_vib = 1.43878 cm K times the wavenumber).
+*/
+const MOLECULES = [
+  ['H₂', 6332], ['HCl', 4303], ['N₂', 3393], ['CO', 3122], ['O₂', 2274], ['Cl₂', 805], ['Br₂', 468], ['I₂', 309],
+];
+const START = { theta: 805, T: 298, range: 1000 };
+const LEVELS = 10;                                    // bars for n = 0 to 9, and one bar for all higher levels
 
-      // Low T limit for Cv: x^2 * e^-x
-      const cv_low_T = Math.pow(x, 2) * Math.exp(-x);
+const energy = (x) => 0.5 + 1 / Math.expm1(x);                       // U / hbar omega
+const heat = (x) => (x > 500 ? 0 : x * x * Math.exp(x) / Math.expm1(x) ** 2);   // C_V / k_B
 
-      points.push({
-        T: Math.round(T),
-        x: parseFloat(x.toFixed(2)),
-        u: parseFloat(u_reduced.toFixed(4)),
-        u_high: parseFloat(u_high_T.toFixed(4)),
-        u_low: parseFloat(u_low_T.toFixed(4)),
-        cv: parseFloat(cv_reduced.toFixed(4)),
-        cv_high: 1, // Constant 1 kB
-        cv_low: parseFloat(cv_low_T.toFixed(4)),
-      });
-    }
-    return points;
-  }, [theta, maxTemp]);
-
-  // Calculations for current state display
-  const currentX = theta / (maxTemp / 2); // Sample point in middle
-  const isQuantum = currentX > 2; // Arbitrary threshold for UI feedback
-
+function Tip({ active, payload, label, name, digits }) {
+  if (!active || !payload || !payload.length) return null;
   return (
-    <div className="flex flex-col h-screen bg-slate-50 text-slate-800 font-sans overflow-hidden">
-      {/* Header */}
-      <header className="bg-slate-900 text-white p-4 shadow-lg flex justify-between items-center z-10">
-        <div className="flex items-center gap-2">
-          <Activity className="text-cyan-400" />
-          <h1 className="text-xl font-bold tracking-tight">Harmonic Oscillator <span className="font-light text-cyan-400">Computational Studio</span></h1>
-        </div>
-        <div className="text-xs text-slate-400">
-          Canonical Ensemble • 1D Oscillator
-        </div>
-      </header>
-
-      <div className="flex flex-1 overflow-hidden">
-        {/* Sidebar Controls */}
-        <aside className="w-80 bg-white border-r border-slate-200 p-6 overflow-y-auto flex flex-col gap-8 shadow-sm z-10">
-          
-          {/* Parameter Section */}
-          <section>
-            <h2 className="flex items-center gap-2 text-sm font-bold uppercase text-slate-500 mb-4">
-              <Settings size={16} /> System Parameters
-            </h2>
-            
-            <div className="mb-6">
-              <label className="block text-sm font-medium text-slate-700 mb-2">
-                Characteristic Temp (Θ_E)
-              </label>
-              <div className="flex items-center gap-3">
-                <input
-                  type="range"
-                  min="50"
-                  max="1000"
-                  step="10"
-                  value={theta}
-                  onChange={(e) => setTheta(Number(e.target.value))}
-                  className="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-cyan-600"
-                />
-                <span className="text-cyan-700 font-mono font-bold w-12">{theta}K</span>
-              </div>
-              <p className="text-xs text-slate-500 mt-2">
-                Proportional to frequency (ħω/k_B). Higher Θ_E means "more quantum" at room temp.
-              </p>
-            </div>
-
-            <div className="mb-6">
-              <label className="block text-sm font-medium text-slate-700 mb-2">
-                Temperature Range (Max T)
-              </label>
-              <div className="flex items-center gap-3">
-                <input
-                  type="range"
-                  min="100"
-                  max="2000"
-                  step="50"
-                  value={maxTemp}
-                  onChange={(e) => setMaxTemp(Number(e.target.value))}
-                  className="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-slate-600"
-                />
-                <span className="text-slate-700 font-mono font-bold w-12">{maxTemp}K</span>
-              </div>
-            </div>
-
-            <div className="flex items-center justify-between p-3 bg-slate-100 rounded-lg">
-              <span className="text-sm font-medium text-slate-700">Show Limit Lines</span>
-              <button 
-                onClick={() => setShowLimits(!showLimits)}
-                className={`w-12 h-6 rounded-full transition-colors relative ${showLimits ? 'bg-cyan-600' : 'bg-slate-300'}`}
-              >
-                <div className={`absolute top-1 w-4 h-4 rounded-full bg-white transition-transform ${showLimits ? 'left-7' : 'left-1'}`} />
-              </button>
-            </div>
-          </section>
-
-          {/* Theory Section */}
-          <section className="bg-slate-50 rounded-xl p-4 border border-slate-100">
-             <h2 className="flex items-center gap-2 text-sm font-bold uppercase text-slate-500 mb-4">
-              <Info size={16} /> Physics Core
-            </h2>
-            <div className="space-y-4 text-sm text-slate-600">
-              <div>
-                <strong className="block text-slate-800 mb-1">Partition Function Variable</strong>
-                <div className="font-mono text-xs bg-white p-2 rounded border border-slate-200">
-                  x = <span className="text-purple-600">Θ_E</span> / T
-                </div>
-              </div>
-              <div>
-                <strong className="block text-slate-800 mb-1">Heat Capacity (C_V)</strong>
-                <div className="font-mono text-xs bg-white p-2 rounded border border-slate-200">
-                   k_B · x² · e^x / (e^x - 1)²
-                </div>
-              </div>
-              <div>
-                <strong className="block text-slate-800 mb-1">Energy (U)</strong>
-                <div className="font-mono text-xs bg-white p-2 rounded border border-slate-200">
-                  k_B·Θ_E · (1/2 + 1/(e^x - 1))
-                </div>
-              </div>
-            </div>
-          </section>
-
-          {/* Regime Indicator */}
-          <div className={`mt-auto p-4 rounded-lg border ${isQuantum ? 'bg-purple-50 border-purple-200 text-purple-800' : 'bg-orange-50 border-orange-200 text-orange-800'}`}>
-            <div className="flex items-center gap-2 font-bold mb-1">
-              <Zap size={16} />
-              {isQuantum ? "Quantum Regime" : "Classical Regime"}
-            </div>
-            <p className="text-xs opacity-90">
-              At mid-graph (T ≈ {maxTemp/2}K), thermal energy is {isQuantum ? "less than" : "greater than"} the oscillator spacing.
-            </p>
-          </div>
-        </aside>
-
-        {/* Main Content Area */}
-        <main className="flex-1 flex flex-col min-w-0 bg-slate-50">
-          
-          {/* Tabs */}
-          <div className="flex border-b border-slate-200 bg-white px-6 pt-4">
-            <button
-              onClick={() => setActiveTab('cv')}
-              className={`pb-4 px-6 font-medium text-sm transition-colors relative ${activeTab === 'cv' ? 'text-cyan-600' : 'text-slate-500 hover:text-slate-700'}`}
-            >
-              Heat Capacity C_V(T)
-              {activeTab === 'cv' && <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-cyan-600" />}
-            </button>
-            <button
-              onClick={() => setActiveTab('u')}
-              className={`pb-4 px-6 font-medium text-sm transition-colors relative ${activeTab === 'u' ? 'text-cyan-600' : 'text-slate-500 hover:text-slate-700'}`}
-            >
-              Internal Energy U(T)
-              {activeTab === 'u' && <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-cyan-600" />}
-            </button>
-          </div>
-
-          {/* Chart Container */}
-          <div className="flex-1 p-6 relative">
-            <div className="bg-white rounded-2xl shadow-sm border border-slate-200 h-full p-4 flex flex-col">
-              
-              <div className="mb-4 flex justify-between items-end">
-                <div>
-                   <h3 className="text-lg font-bold text-slate-800">
-                    {activeTab === 'cv' ? 'Heat Capacity Analysis' : 'Internal Energy Analysis'}
-                  </h3>
-                  <p className="text-sm text-slate-500">
-                    {activeTab === 'cv' 
-                      ? 'Visualizing the "freezing out" of degrees of freedom at low temperatures.' 
-                      : 'Visualizing the transition from zero-point energy to equipartition.'}
-                  </p>
-                </div>
-                {/* Legend/Key */}
-                <div className="flex gap-4 text-xs font-medium">
-                  <div className="flex items-center gap-1.5">
-                    <div className="w-3 h-3 rounded-full bg-cyan-500"></div>
-                    <span>Quantum Model</span>
-                  </div>
-                  {showLimits && (
-                    <>
-                      <div className="flex items-center gap-1.5">
-                        <div className="w-3 h-3 rounded-full bg-orange-400 opacity-50"></div>
-                        <span>Classical Limit</span>
-                      </div>
-                      <div className="flex items-center gap-1.5">
-                        <div className="w-3 h-3 rounded-full bg-indigo-400 opacity-50"></div>
-                        <span>Low-T Approx</span>
-                      </div>
-                    </>
-                  )}
-                </div>
-              </div>
-
-              <div className="flex-1 w-full min-h-0">
-                <ResponsiveContainer width="100%" height="100%">
-                  {activeTab === 'cv' ? (
-                    <AreaChart data={data} margin={{ top: 10, right: 30, left: 0, bottom: 0 }}>
-                      <defs>
-                        <linearGradient id="colorCv" x1="0" y1="0" x2="0" y2="1">
-                          <stop offset="5%" stopColor="#0891b2" stopOpacity={0.1}/>
-                          <stop offset="95%" stopColor="#0891b2" stopOpacity={0}/>
-                        </linearGradient>
-                      </defs>
-                      <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#e2e8f0" />
-                      <XAxis 
-                        dataKey="T" 
-                        label={{ value: 'Temperature (K)', position: 'insideBottomRight', offset: -5 }} 
-                        stroke="#64748b"
-                        tick={{fill: '#64748b', fontSize: 12}}
-                      />
-                      <YAxis 
-                        label={{ value: 'Cv / kB', angle: -90, position: 'insideLeft' }} 
-                        stroke="#64748b"
-                        tick={{fill: '#64748b', fontSize: 12}}
-                        domain={[0, 1.2]}
-                      />
-                      <Tooltip 
-                        contentStyle={{ borderRadius: '8px', border: 'none', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)' }}
-                        itemStyle={{ fontSize: '12px' }}
-                        labelStyle={{ color: '#64748b', marginBottom: '0.25rem' }}
-                      />
-                      
-                      {showLimits && (
-                        <Line 
-                          type="monotone" 
-                          dataKey="cv_high" 
-                          stroke="#fb923c" 
-                          strokeWidth={2} 
-                          strokeDasharray="5 5" 
-                          dot={false}
-                          name="Classical Limit (Dulong-Petit)"
-                        />
-                      )}
-
-                      {showLimits && (
-                        <Line 
-                          type="monotone" 
-                          dataKey="cv_low" 
-                          stroke="#818cf8" 
-                          strokeWidth={2} 
-                          strokeDasharray="5 5" 
-                          dot={false}
-                          name="Low-T Approximation"
-                        />
-                      )}
-
-                      <Area 
-                        type="monotone" 
-                        dataKey="cv" 
-                        stroke="#06b6d4" 
-                        strokeWidth={3}
-                        fillOpacity={1} 
-                        fill="url(#colorCv)" 
-                        name="Exact Quantum Model"
-                      />
-                    </AreaChart>
-                  ) : (
-                     <LineChart data={data} margin={{ top: 10, right: 30, left: 0, bottom: 0 }}>
-                      <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#e2e8f0" />
-                      <XAxis 
-                        dataKey="T" 
-                        label={{ value: 'Temperature (K)', position: 'insideBottomRight', offset: -5 }} 
-                        stroke="#64748b"
-                        tick={{fill: '#64748b', fontSize: 12}}
-                      />
-                      <YAxis 
-                        label={{ value: 'U / (kB·Θ)', angle: -90, position: 'insideLeft' }} 
-                        stroke="#64748b"
-                        tick={{fill: '#64748b', fontSize: 12}}
-                      />
-                      <Tooltip 
-                        contentStyle={{ borderRadius: '8px', border: 'none', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)' }}
-                        itemStyle={{ fontSize: '12px' }}
-                        labelStyle={{ color: '#64748b', marginBottom: '0.25rem' }}
-                      />
-                      
-                      {showLimits && (
-                        <Line 
-                          type="monotone" 
-                          dataKey="u_high" 
-                          stroke="#fb923c" 
-                          strokeWidth={2} 
-                          strokeDasharray="5 5" 
-                          dot={false}
-                          name="Classical Equipartition (kB T)"
-                        />
-                      )}
-                       
-                       {showLimits && (
-                        <Line 
-                          type="monotone" 
-                          dataKey="u_low" 
-                          stroke="#818cf8" 
-                          strokeWidth={2} 
-                          strokeDasharray="5 5" 
-                          dot={false}
-                          name="Zero Point Energy"
-                        />
-                      )}
-
-                      <Line 
-                        type="monotone" 
-                        dataKey="u" 
-                        stroke="#06b6d4" 
-                        strokeWidth={3} 
-                        dot={false}
-                        name="Exact Quantum Model"
-                      />
-                    </LineChart>
-                  )}
-                </ResponsiveContainer>
-              </div>
-
-              {/* Annotation Area */}
-              <div className="mt-6 grid grid-cols-2 gap-6 p-4 bg-slate-50 rounded-xl border border-slate-100">
-                  <div>
-                    <h4 className="font-bold text-sm text-slate-800 mb-2 flex items-center gap-2">
-                       <Thermometer size={14} className="text-orange-500" /> High-Temperature Limit (T ≫ Θ_E)
-                    </h4>
-                    <p className="text-xs text-slate-600 leading-relaxed">
-                      As T → ∞, x → 0. The exponential term e^x ≈ 1+x. 
-                      The heat capacity approaches the constant value k_B (Law of Dulong-Petit), 
-                      showing the system behaves classically.
-                    </p>
-                  </div>
-                  <div>
-                    <h4 className="font-bold text-sm text-slate-800 mb-2 flex items-center gap-2">
-                      <Thermometer size={14} className="text-blue-500" /> Low-Temperature Limit (T ≪ Θ_E)
-                    </h4>
-                    <p className="text-xs text-slate-600 leading-relaxed">
-                       As T → 0, x → ∞. The heat capacity drops to zero exponentially (e^(-Θ_E/T)). 
-                       Degrees of freedom "freeze out" because thermal energy k_B T is insufficient 
-                       to bridge the gap ħω.
-                    </p>
-                  </div>
-              </div>
-            </div>
-          </div>
-        </main>
-      </div>
+    <div className="tip">
+      <div><V>T</V> = {Number(label).toFixed(0)} K</div>
+      <div>{name} = {payload[0].payload[payload[0].dataKey].toFixed(digits)}</div>
     </div>
   );
-};
+}
 
-export default HarmonicOscillatorStudio;
+function LevelTip({ active, payload }) {
+  if (!active || !payload || !payload.length) return null;
+  const { n, p } = payload[0].payload;
+  return <div className="tip"><div><V>n</V> = {n}</div><div>probability = {p.toFixed(4)}</div></div>;
+}
+
+export default function HarmonicOscillator() {
+  const { color } = useBook();
+  const [theta, setTheta] = useState(START.theta);      // K
+  const [T, setT] = useState(START.T);                  // K, the temperature of panel (a) and of the markers
+  const [range, setRange] = useState(START.range);      // K, largest temperature on the axes
+
+  const x = theta / T;
+  const levels = useMemo(() => {
+    const bars = [];
+    for (let n = 0; n < LEVELS; n++) bars.push({ n: String(n), p: Math.exp(-n * x) * -Math.expm1(-x) });
+    bars.push({ n: `${LEVELS}+`, p: Math.exp(-LEVELS * x) });         // sum over all levels from n = 10
+    return bars;
+  }, [x]);
+  const curves = useMemo(() => {
+    const points = [];
+    for (let i = 1; i <= 240; i++) {
+      const t = range * i / 240;
+      points.push({ t, u: energy(theta / t), kT: t / theta, zero: 0.5, c: heat(theta / t), one: 1 });
+    }
+    return points;
+  }, [theta, range]);
+
+  const uTicks = niceTicks(Math.max(1.5, energy(theta / range) * 1.02), 4);
+  const uStep = uTicks[1] - uTicks[0], uTop = uTicks[uTicks.length - 1] + (uTicks[uTicks.length - 1] < energy(theta / range) ? uStep : 0);
+  const xAxis = { dataKey: 't', type: 'number', domain: [0, range], ticks: niceTicks(range, 5), ...axis(color) };
+  const margin = { top: 14, right: 12, bottom: -6, left: 0 };
+  const xTitle = <p className="xlabel">Temperature, <V>T</V> (K)</p>;
+  const hw = <>ℏ<V>ω</V></>, kB = <V sub="B">k</V>, Cv = <V sub={<i className="v">V</i>}>C</V>, Th = <>Θ<sub>vib</sub></>;
+  const molecule = MOLECULES.find(([, value]) => value === theta);
+  const changeRange = (value) => { setRange(value); if (T > value) setT(value); };
+  const pick = (value) => setTheta(value);
+
+  return (
+    <Studio title="Harmonic oscillator"
+            lede="One oscillator, such as the vibration of a diatomic molecule, in contact with a heat bath. Choose its vibrational temperature and a temperature, and follow the probabilities of its levels, its internal energy, and its heat capacity.">
+      <div className="panels">
+        <Panel letter="a" title={<>Probabilities of the levels at <V>T</V> = {T.toFixed(0)} K</>}>
+          <div className="chart" style={{ height: 190 }}>
+            <ResponsiveContainer width="100%" height="100%">
+              <BarChart data={levels} margin={margin} barCategoryGap="22%">
+                <XAxis dataKey="n" {...axis(color)} />
+                <YAxis domain={[0, 1]} ticks={[0, 0.25, 0.5, 0.75, 1]} width={44} {...axis(color)} />
+                <Tooltip content={<LevelTip />} cursor={{ fill: color.fill }} isAnimationActive={false} />
+                <Bar dataKey="p" isAnimationActive={false}>
+                  {levels.map((bar, i) => <Cell key={bar.n} fill={i < LEVELS ? color.blue : color.gray} />)}
+                </Bar>
+              </BarChart>
+            </ResponsiveContainer>
+          </div>
+          <p className="xlabel">Level, <V>n</V> (the last bar is the sum over all levels from <V>n</V> = {LEVELS})</p>
+          <p className="note">
+            <span>{Th}/<V>T</V> = {x.toFixed(2)}</span>
+            <span><V sub="0">p</V> = {levels[0].p.toFixed(3)}</span>
+            <span><V sub="1">p</V> = {levels[1].p.toFixed(3)}</span>
+          </p>
+        </Panel>
+      </div>
+
+      <div className="panels two" style={{ marginTop: 14 }}>
+        <Panel letter="b" title={<>Internal energy, <V>U</V>/{hw}</>}>
+          <p className="key">
+            <span style={{ color: color.gray }}><i className="dash" /><span>zero-point energy and {kB}<V>T</V></span></span>
+          </p>
+          <div className="chart" style={{ height: 190 }}>
+            <ResponsiveContainer width="100%" height="100%">
+              <LineChart data={curves} margin={margin}>
+                <XAxis {...xAxis} />
+                <YAxis domain={[0, uTop]} ticks={niceTicks(uTop, Math.round(uTop / uStep))} width={44} allowDataOverflow {...axis(color)} />
+                <Tooltip content={<Tip name={<><V>U</V>/{hw}</>} digits={3} />} isAnimationActive={false} />
+                <Line dataKey="zero" stroke={color.gray} strokeWidth={1.4} strokeDasharray={DASH} dot={false} activeDot={false} isAnimationActive={false} />
+                <Line dataKey="kT" stroke={color.gray} strokeWidth={1.4} strokeDasharray={DASH} dot={false} activeDot={false} isAnimationActive={false} />
+                <Line dataKey="u" stroke={color.text} strokeWidth={LINE} dot={false} isAnimationActive={false} />
+                <ReferenceDot x={T} y={energy(x)} r={4.5} fill={color.vermilion} stroke={color.ground} strokeWidth={1.5} />
+              </LineChart>
+            </ResponsiveContainer>
+          </div>
+          {xTitle}
+          <p className="note"><span><span style={{ color: color.vermilion }}>●</span> at {T.toFixed(0)} K: <V>U</V> = {energy(x).toFixed(3)} {hw}</span></p>
+        </Panel>
+        <Panel letter="c" title={<>Heat capacity, {Cv}/{kB}</>}>
+          <p className="key">
+            <span style={{ color: color.gray }}><i className="dash" /><span>limit at high temperature</span></span>
+          </p>
+          <div className="chart" style={{ height: 190 }}>
+            <ResponsiveContainer width="100%" height="100%">
+              <LineChart data={curves} margin={margin}>
+                <XAxis {...xAxis} />
+                <YAxis domain={[0, 1.2]} ticks={[0, 0.25, 0.5, 0.75, 1]} width={44} {...axis(color)} />
+                <Tooltip content={<Tip name={<>{Cv}/{kB}</>} digits={3} />} isAnimationActive={false} />
+                <Line dataKey="one" stroke={color.gray} strokeWidth={1.4} strokeDasharray={DASH} dot={false} activeDot={false} isAnimationActive={false} />
+                <Line dataKey="c" stroke={color.text} strokeWidth={LINE} dot={false} isAnimationActive={false} />
+                <ReferenceDot x={T} y={heat(x)} r={4.5} fill={color.vermilion} stroke={color.ground} strokeWidth={1.5} />
+              </LineChart>
+            </ResponsiveContainer>
+          </div>
+          {xTitle}
+          <p className="note"><span><span style={{ color: color.vermilion }}>●</span> at {T.toFixed(0)} K: {Cv} = {heat(x).toFixed(3)} {kB}</span></p>
+        </Panel>
+      </div>
+
+      <div className="controls">
+        <div style={{ gridColumn: '1 / -1' }}>
+          <Slider label={<>Vibrational temperature, {Th}</>}
+                  show={<>{theta.toFixed(0)} K{molecule ? `, as for ${molecule[0]}` : ''} (wavenumber {(theta / 1.43878).toFixed(0)} cm<sup>−1</sup>)</>}
+                  value={theta} min={100} max={6500} step={1} onChange={setTheta} />
+          <div className="row" style={{ justifyContent: 'flex-start', marginTop: 6, flexWrap: 'wrap' }}>
+            {MOLECULES.map(([name, value]) => (
+              <button type="button" key={name} aria-pressed={theta === value} onClick={() => pick(value)}>{name}</button>
+            ))}
+          </div>
+        </div>
+        <Slider label={<>Temperature, <V>T</V></>} show={<>{T.toFixed(0)} K</>} value={T} min={10} max={range} step={1} onChange={setT} />
+        <Slider label="Largest temperature shown" show={<>{range.toFixed(0)} K</>} value={range} min={200} max={6000} step={100} onChange={changeRange} />
+        <div className="row">
+          <button type="button" onClick={() => { setTheta(START.theta); setRange(START.range); setT(START.T); }}>Reset</button>
+        </div>
+      </div>
+      <p className="hint">
+        The levels are <V sub={<i className="v">n</i>}>E</V> = {hw}(<V>n</V> + 1/2), and {Th} = {hw}/{kB}. With <V>x</V> = {Th}/<V>T</V>, the
+        probability of level <V>n</V> is <V sub={<i className="v">n</i>}>p</V> = e<sup>−<V>n</V><V>x</V></sup>(1 − e<sup>−<V>x</V></sup>), the internal energy
+        is <V>U</V> = {hw}[1/2 + 1/(e<sup><V>x</V></sup> − 1)], and the heat capacity is {Cv} = {kB}<V>x</V><sup>2</sup>e<sup><V>x</V></sup>/(e<sup><V>x</V></sup> − 1)<sup>2</sup>.
+        The buttons set {Th} to the values of the table in Section 2.6.
+      </p>
+    </Studio>
+  );
+}
