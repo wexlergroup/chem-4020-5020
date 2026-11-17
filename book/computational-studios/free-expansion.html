@@ -1,0 +1,308 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Expansion into a vacuum · Physical Chemistry II</title>
+<!--
+  Expansion into a vacuum: an interactive companion to Section 4.3 (microscopic view of entropy) and to Example 2 of
+  Section 4.1 (free expansion). This file is written by hand (it is not built from development/).
+
+  N particles that do not interact start in the left half of a box. When the partition is opened, they spread over
+  the whole box. The page counts the particles in the left half, n_L, and plots two things against time:
+
+      the fraction in the left half     n_L / N
+      the entropy                       S / k_B = ln Omega, with Omega(n_L) = N! / (n_L! (N - n_L)!)
+
+  Omega(n_L) is the number of ways to choose which n_L of the N particles are in the left half.
+
+      free-expansion.html               the interactive page
+      free-expansion.html?static=1      one still picture, for the PDF of the notes
+      ...&theme=light or dark           fixes the colors (otherwise the page follows the book or the system)
+
+  Inside the notes, the page follows the light or dark mode of the book and sets the height of its own frame.
+
+  Units inside the program: lengths in units of the height of the box (each half is a square of side 1), time in seconds.
+-->
+<style>
+  :root {
+    --ground: #ffffff; --text: #1c1917; --muted: #6b645e; --border: #dedad5; --fill: #f1f0ee;
+    --blue: #0072b2; --on-blue: #ffffff; --axis: #78716c;
+  }
+  :root[data-theme="dark"] {
+    --ground: #1c1917; --text: #f5f5f4; --muted: #a8a29e; --border: #3a3531; --fill: #2a2623;
+    --blue: #56b4e9; --on-blue: #111111; --axis: #a8a29e;
+  }
+  * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body { margin: 0; background: var(--ground); color: var(--text);
+         font: 15px/1.45 Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+  main { max-width: 760px; margin: 0 auto; padding: 24px 16px 40px; }
+  .embedded main { max-width: none; padding: 0 0 12px; }
+  h1 { font-size: 1.5rem; line-height: 1.2; margin: 0 0 6px; }
+  .embedded h1, .embedded .lede, .embedded .hint { display: none; }       /* in the notes, the caption says this */
+  .lede { color: var(--muted); margin: 0 0 18px; max-width: 64ch; }
+  i.v { font-style: italic; font-family: inherit; }
+  .plots { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 18px; align-items: start; }
+  .plot h2 { font-size: 0.98rem; font-weight: 400; line-height: 1.3; margin: 0 0 6px; }
+  .plot h2 b { font-weight: 700; margin-right: 0.5em; }
+  canvas { display: block; width: 100%; }
+  #box { height: 216px; }
+  #curves { height: 264px; }
+  @media (max-width: 600px) { .plots { grid-template-columns: minmax(0, 1fr); } #box { height: 200px; } }
+  .state { display: flex; flex-wrap: wrap; gap: 2px 22px; margin: 8px 0 0; font-size: 0.92rem; font-variant-numeric: tabular-nums; }
+  .controls { margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--border); display: flex; flex-wrap: wrap;
+              gap: 8px 10px; align-items: center; font-size: 0.9rem; }
+  .seg { display: inline-flex; flex-wrap: wrap; gap: 4px; }
+  button { font: inherit; font-size: 0.88rem; color: var(--text); background: var(--fill); border: 1px solid var(--border);
+           border-radius: 999px; padding: 4px 12px; cursor: pointer; }
+  button:hover { border-color: var(--muted); }
+  button[aria-pressed="true"], button.main { background: var(--blue); border-color: var(--blue); color: var(--on-blue); font-weight: 600; }
+  button:focus-visible { outline: 2px solid var(--blue); outline-offset: 2px; }
+  .spacer { flex: 1 1 auto; }
+  .hint { font-size: 0.84rem; color: var(--muted); margin: 12px 0 0; }
+  .static .controls, .static .hint, .static h1, .static .lede { display: none; }
+  .static main { padding: 0; }
+</style>
+</head>
+<body>
+<main>
+  <h1>Expansion into a vacuum</h1>
+  <p class="lede">A gas starts in the left half of a box. Open the partition, and follow how the particles spread over the box and how the number of microstates grows.</p>
+
+  <div class="plots">
+    <section class="plot">
+      <h2><b>a</b>Particles in the box</h2>
+      <canvas id="box" role="img" aria-label="A box with two halves and the particles of the gas"></canvas>
+      <p class="state">
+        <span><i class="v">n<sub>L</sub></i> = <span id="r-n"></span> of <span id="r-N"></span></span>
+        <span>Ω = <span id="r-omega"></span></span>
+        <span><i class="v">S</i> = <span id="r-S"></span> <i class="v">k</i><sub>B</sub></span>
+      </p>
+    </section>
+    <section class="plot">
+      <h2><b>b</b>Fraction in the left half, and entropy</h2>
+      <canvas id="curves" role="img" aria-label="Two plots against time: the fraction of the particles in the left half, and the logarithm of the number of microstates"></canvas>
+    </section>
+  </div>
+
+  <div class="controls">
+    <span>Number of particles <i class="v">N</i></span>
+    <span class="seg" id="number" role="group" aria-label="Number of particles">
+      <button type="button" data-n="10" aria-pressed="false">10</button>
+      <button type="button" data-n="40" aria-pressed="true">40</button>
+      <button type="button" data-n="200" aria-pressed="false">200</button>
+    </span>
+    <span class="spacer"></span>
+    <button type="button" id="run" class="main">Open the partition</button>
+    <button type="button" id="reset">Reset</button>
+  </div>
+  <p class="hint">The particles do not interact, as in an ideal gas. <i class="v">n<sub>L</sub></i> is the number of particles in the left half, and Ω = <i class="v">N</i>!/[<i class="v">n<sub>L</sub></i>! (<i class="v">N</i> − <i class="v">n<sub>L</sub></i>)!] is the number of ways to choose which particles they are. The entropy is <i class="v">S</i> = <i class="v">k</i><sub>B</sub> ln Ω. The dashed lines mark the even split and the largest possible value of ln&nbsp;Ω.</p>
+</main>
+
+<script>
+"use strict";
+const params = new URLSearchParams(location.search);
+const fixed = params.has("static");
+document.body.classList.toggle("static", fixed);
+const $ = id => document.getElementById(id);
+
+/* ---- colors of the book, and the height of the frame ---- */
+let host = null;
+try { if (window.parent !== window) host = window.parent.document.documentElement; } catch (e) { host = null; }
+try { if (window.frameElement) document.body.classList.add("embedded"); } catch (e) {}
+let color = {};
+function theme() {
+  let dark = false;
+  if (params.get("theme")) dark = params.get("theme") === "dark";
+  else if (host) dark = host.classList.contains("dark");
+  else { try { dark = window.matchMedia("(prefers-color-scheme: dark)").matches; } catch (e) {} }
+  document.documentElement.dataset.theme = dark ? "dark" : "light";
+  const css = getComputedStyle(document.documentElement);
+  for (const name of ["ground", "text", "muted", "border", "fill", "blue", "axis"]) color[name] = css.getPropertyValue("--" + name).trim();
+  if (typeof drawAll === "function") drawAll();
+}
+
+function fit() {                                    // inside the notes, make the frame as tall as the content
+  try {
+    const frame = window.frameElement;
+    if (!frame) return;
+    const height = Math.ceil(document.documentElement.getBoundingClientRect().height) + "px";
+    frame.style.height = height;
+    const box = frame.parentElement;                // the book theme wraps a frame in a box with a fixed 5:3 shape
+    if (box && box.style.paddingBottom) { box.style.paddingBottom = "0"; box.style.display = "block"; }
+    if (box && box.style.paddingBottom === "0px") box.style.height = height;
+  } catch (e) {}
+}
+
+/* ---- the gas ---- */
+const SPEED = 0.4;                                  // spread of each velocity component, in box heights per second
+const WINDOW = 30;                                  // seconds of history on the plots
+const SAMPLE = 0.1;                                 // seconds between two points of the history
+const SEED = 4020;
+const N_MAX = 200;
+
+const logFactorial = [0];                           // ln(k!) for k = 0, 1, ..., N_MAX
+for (let k = 1; k <= N_MAX; k++) logFactorial.push(logFactorial[k - 1] + Math.log(k));
+const lnOmega = (n, left) => logFactorial[n] - logFactorial[left] - logFactorial[n - left];   // ln of N! / (n_L! (N - n_L)!)
+const lnOmegaMax = n => lnOmega(n, Math.floor(n / 2));
+
+function generator(seed) {                          // a small random number generator, so that every run starts the same way
+  return function () {
+    seed = (seed + 0x6D2B79F5) | 0;
+    let t = Math.imul(seed ^ (seed >>> 15), 1 | seed);
+    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+}
+
+let N = 40, particles = [], open = false, running = false, time = 0, history = [];
+
+function reset() {                                  // all particles in the left half, partition closed
+  const random = generator(SEED + N);
+  const normal = () => Math.sqrt(-2 * Math.log(1 - random())) * Math.cos(2 * Math.PI * random());
+  particles = [];
+  for (let k = 0; k < N; k++) particles.push({ x: random(), y: random(), vx: SPEED * normal(), vy: SPEED * normal() });
+  open = false; running = false; time = 0;
+  history = [{ t: 0, left: N }];
+}
+const countLeft = () => particles.reduce((count, p) => count + (p.x < 1 ? 1 : 0), 0);
+
+function step(dt) {                                 // free flight with elastic walls; the box runs from x = 0 to 2 and y = 0 to 1
+  const wall = open ? 2 : 1;
+  for (const p of particles) {
+    p.x += p.vx * dt; p.y += p.vy * dt;
+    if (p.x < 0) { p.x = -p.x; p.vx = -p.vx; }
+    if (p.x > wall) { p.x = 2 * wall - p.x; p.vx = -p.vx; }
+    if (p.y < 0) { p.y = -p.y; p.vy = -p.vy; }
+    if (p.y > 1) { p.y = 2 - p.y; p.vy = -p.vy; }
+  }
+  time += dt;
+  if (time - history[history.length - 1].t >= SAMPLE) history.push({ t: time, left: countLeft() });
+  while (history.length > 2 && history[1].t < time - WINDOW) history.shift();
+}
+
+/* ---- drawing ---- */
+const FONT = "Inter, ui-sans-serif, system-ui, sans-serif";
+function prepare(canvas) {
+  const ratio = window.devicePixelRatio || 1, w = canvas.clientWidth, h = canvas.clientHeight;
+  if (canvas.width !== Math.round(w * ratio) || canvas.height !== Math.round(h * ratio)) { canvas.width = Math.round(w * ratio); canvas.height = Math.round(h * ratio); }
+  const g = canvas.getContext("2d");
+  g.setTransform(ratio, 0, 0, ratio, 0, 0); g.clearRect(0, 0, w, h);
+  return [g, w, h];
+}
+// Text made of pieces such as [["n", "italic"], ["L", "sub"], [" / "], ["N", "italic"]], centered on (0, 0).
+function pieces(g, parts) {
+  const fontOf = kind => (kind === "italic" ? "italic 12.5px " : kind === "sub" ? "italic 10px " : "12.5px ") + FONT;
+  let total = 0;
+  for (const [text, kind] of parts) { g.font = fontOf(kind); total += g.measureText(text).width; }
+  let x = -total / 2;
+  g.textAlign = "left"; g.textBaseline = "middle";
+  for (const [text, kind] of parts) { g.font = fontOf(kind); g.fillText(text, x, kind === "sub" ? 4 : 0); x += g.measureText(text).width; }
+}
+
+function drawBox() {
+  const [g, w, h] = prepare($("box"));
+  const height = Math.min((w - 4) / 2, h - 30), width = 2 * height, x0 = (w - width) / 2, y0 = 2;
+  const radius = N <= 10 ? 5.5 : N <= 40 ? 4.2 : 2.6;
+  g.fillStyle = color.fill; g.fillRect(x0, y0, width, height);
+  g.fillStyle = color.blue;
+  for (const p of particles) {                      // a particle keeps its whole disk inside the box
+    const x = x0 + radius + 1 + p.x / 2 * (width - 2 * radius - 2), y = y0 + radius + 1 + p.y * (height - 2 * radius - 2);
+    g.beginPath(); g.arc(x, y, radius, 0, 2 * Math.PI); g.fill();
+  }
+  g.strokeStyle = color.text; g.lineWidth = 1.4; g.strokeRect(x0, y0, width, height);
+  g.beginPath(); g.moveTo(x0 + width / 2, y0); g.lineTo(x0 + width / 2, y0 + height);
+  if (open) { g.strokeStyle = color.axis; g.lineWidth = 1.2; g.setLineDash([4, 3]); }
+  else { g.strokeStyle = color.text; g.lineWidth = 3; }
+  g.stroke(); g.setLineDash([]);
+  g.fillStyle = color.muted; g.font = "12.5px " + FONT; g.textAlign = "center"; g.textBaseline = "top";
+  g.fillText("left half", x0 + width / 4, y0 + height + 8);
+  g.fillText("right half", x0 + 3 * width / 4, y0 + height + 8);
+}
+
+function drawCurves() {
+  const [g, w, h] = prepare($("curves"));
+  const left = 52, right = 8, top = 8, bottom = 26, gap = 18, tall = (h - top - bottom - gap) / 2;
+  const tStart = Math.max(0, time - WINDOW), xOf = t => left + (t - tStart) / WINDOW * (w - left - right);
+  const top2 = top + tall + gap, sMax = lnOmegaMax(N);
+  const charts = [
+    { y0: top, value: point => point.left / N, max: 1.0, ticks: [[0, "0"], [0.5, "0.5"], [1, "1"]], dashed: 0.5,
+      label: [["n", "italic"], ["L", "sub"], [" / "], ["N", "italic"]] },
+    { y0: top2, value: point => lnOmega(N, point.left), max: 1.12 * sMax, ticks: [[0, "0"], [sMax, sMax.toFixed(1)]], dashed: sMax,
+      label: [["S", "italic"], [" / "], ["k", "italic"], ["B", "sub"], [" = ln Ω"]] },
+  ];
+  for (const chart of charts) {
+    const yOf = value => chart.y0 + tall - value / chart.max * tall;
+    g.strokeStyle = color.axis; g.lineWidth = 1.2; g.setLineDash([4, 3]);                     // reference line
+    g.beginPath(); g.moveTo(left, yOf(chart.dashed)); g.lineTo(w - right, yOf(chart.dashed)); g.stroke(); g.setLineDash([]);
+    g.strokeStyle = color.blue; g.lineWidth = 2; g.lineJoin = "round";                        // the history
+    g.beginPath();
+    history.forEach((point, k) => { const x = Math.max(left, xOf(point.t)), y = yOf(chart.value(point)); if (k) g.lineTo(x, y); else g.moveTo(x, y); });
+    if (history.length > 1) g.lineTo(xOf(time), yOf(chart.value({ left: countLeft() })));
+    g.stroke();
+    const last = { left: countLeft() };                                                       // the present state
+    g.fillStyle = color.blue; g.beginPath(); g.arc(xOf(time), yOf(chart.value(last)), 3.5, 0, 2 * Math.PI); g.fill();
+    g.strokeStyle = color.axis; g.lineWidth = 1.2;                                            // axes
+    g.beginPath(); g.moveTo(left, chart.y0 - 2); g.lineTo(left, chart.y0 + tall); g.lineTo(w - right, chart.y0 + tall); g.stroke();
+    g.fillStyle = color.text; g.font = "12px " + FONT; g.textAlign = "right"; g.textBaseline = "middle";
+    for (const [value, text] of chart.ticks) {
+      g.beginPath(); g.moveTo(left - 4, yOf(value)); g.lineTo(left, yOf(value)); g.stroke();
+      g.fillText(text, left - 7, yOf(value));
+    }
+    g.save(); g.translate(11, chart.y0 + tall / 2); g.rotate(-Math.PI / 2); pieces(g, chart.label); g.restore();
+  }
+  g.fillStyle = color.text; g.font = "12.5px " + FONT; g.textAlign = "center"; g.textBaseline = "top";
+  g.fillText("Time", (left + w - right) / 2, top2 + tall + 8);
+}
+
+function omegaText(ln) {                            // the number of microstates, as an integer or as a power of ten
+  if (ln < Math.log(1e6)) return Math.round(Math.exp(ln)).toLocaleString("en-US");
+  const power = Math.floor(ln / Math.LN10), factor = Math.exp(ln - power * Math.LN10);
+  return factor.toFixed(1) + " × 10<sup>" + power + "</sup>";
+}
+
+function drawAll() {
+  if (!particles.length) return;
+  drawBox(); drawCurves();
+  const left = countLeft(), ln = lnOmega(N, left);
+  $("r-n").textContent = left; $("r-N").textContent = N;
+  $("r-omega").innerHTML = omegaText(ln);
+  $("r-S").textContent = ln.toFixed(1);
+  $("run").textContent = !open ? "Open the partition" : running ? "Pause" : "Continue";
+  $("run").classList.toggle("main", !open);
+  for (const button of $("number").querySelectorAll("button")) button.setAttribute("aria-pressed", String(+button.dataset.n === N));
+}
+
+/* ---- running ---- */
+let before = null;
+function frame(now) {
+  if (!running) { before = null; return; }
+  if (before !== null) step(Math.min(0.05, (now - before) / 1000));
+  before = now;
+  drawAll();
+  requestAnimationFrame(frame);
+}
+function start() { if (!running) { running = true; before = null; requestAnimationFrame(frame); } }
+function stop() { running = false; }
+
+/* ---- controls ---- */
+$("run").addEventListener("click", () => {
+  if (!open) { open = true; start(); } else if (running) stop(); else start();
+  drawAll();
+});
+$("reset").addEventListener("click", () => { reset(); drawAll(); });
+for (const button of $("number").querySelectorAll("button")) button.addEventListener("click", () => { N = +button.dataset.n; reset(); drawAll(); });
+document.addEventListener("visibilitychange", () => { if (document.hidden && running) { stop(); drawAll(); } });
+
+/* ---- run ---- */
+reset();
+if (fixed) { open = true; for (let k = 0; k < 14 * 60; k++) step(1 / 60); }       // the still picture: 14 seconds after opening
+theme();
+if (host) new MutationObserver(theme).observe(host, { attributes: true, attributeFilter: ["class"] });
+else { try { window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", theme); } catch (e) {} }
+try { new ResizeObserver(() => { fit(); drawAll(); }).observe(document.body); } catch (e) {}
+window.addEventListener("load", () => { fit(); drawAll(); });
+</script>
+</body>
+</html>
