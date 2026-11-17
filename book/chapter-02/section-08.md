@@ -51,6 +51,17 @@ Nonlinear molecules are classified by their principal moments of inertia:
 * In a **symmetric top**, two are equal. Examples are $\mathrm{NH_3}$ and $\mathrm{C_6H_6}$.
 * In an **asymmetric top**, all three are different. An example is $\mathrm{H_2O}$.
 
+[](#fig:tops) shows one molecule of each kind with its principal axes.
+
+```{iframe} https://wexlergroup.github.io/chem-4020-5020/computational-studios/molecular-tops.html
+:label: fig:tops
+:width: 100%
+:title: Rotatable models of methane, ammonia, and water with their principal axes
+:placeholder: ../_static/molecular-tops/molecular-tops.png
+
+Principal axes $a$, $b$, and $c$ of (a) a spherical top, CH$_4$, (b) a symmetric top, NH$_3$, and (c) an asymmetric top, H$_2$O. The axes pass through the center of mass, and the relation below each molecule compares its principal moments of inertia. In CH$_4$, any three perpendicular axes through the carbon atom are principal axes. In NH$_3$, the $c$ axis is the threefold axis. In H$_2$O, the $b$ axis is the twofold axis and the $c$ axis is perpendicular to the plane of the molecule.
+```
+
 The *rotational partition function* $q_{\mathrm{rot}}$ depends on:
 
 1. The rotational constants (encoded as rotational temperatures $\Theta_{\mathrm{rot},A}$, $\Theta_{\mathrm{rot},B}$, $\Theta_{\mathrm{rot},C}$, etc.).
@@ -133,152 +144,6 @@ Use the high-temperature $q_{\mathrm{rot}}$ of a nonlinear molecule and the deri
   - 40.11, 20.88, 13.36
   - 2
 ```
-
-Below is a visualization comparing *spherical top*, *symmetric top*, and *asymmetric top* molecules. The ellipsoid semi-axes are scaled by the three principal rotational temperatures $\Theta_{\mathrm{rot},i}$, highlighting how anisotropy in the rotational constants maps onto the 3D “rotational profile.”
-
-```{code-cell} ipython3
-:tags: [hide-input]
-
-import numpy as np
-import matplotlib.pyplot as plt
-from mpl_toolkits.mplot3d import Axes3D
-from myst_nb import glue
-
-u = np.linspace(0, 2*np.pi, 100)
-v = np.linspace(0, np.pi, 100)
-u, v = np.meshgrid(u, v)
-
-def surface_points(a, b, c):
-    """Return x, y, z for an ellipsoid with semi-axes a, b, c."""
-    x = a * np.cos(u) * np.sin(v)
-    y = b * np.sin(u) * np.sin(v)
-    z = c * np.cos(v)
-    return x, y, z
-
-# Rotational temperatures in K (see the table above), listed as the
-# semi-axes along x, y, and z
-theta_ch4 = (7.54, 7.54, 7.54)     # Spherical top
-theta_nh3 = (14.31, 14.31, 8.96)   # Symmetric top: the c axis (threefold axis) is z
-theta_h2o = (40.1, 13.4, 20.9)     # Asymmetric top: a is x, c is y (normal to the
-                                   # molecular plane), and b is z (twofold axis)
-
-fig = plt.figure(figsize=(9, 3.4))
-
-# 1) CH4: Spherical top
-ax1 = fig.add_subplot(1, 3, 1, projection='3d')
-x1, y1, z1 = surface_points(*theta_ch4)
-surf1 = ax1.plot_surface(x1, y1, z1, color='skyblue', alpha=0.4, edgecolor='none')
-ax1.set_title("Spherical Top", fontsize=11)
-ax1.set_box_aspect((1,1,1), zoom=0.85)
-ax1.set_xlim(-7.54, 7.54)
-ax1.set_ylim(-7.54, 7.54)
-ax1.set_zlim(-7.54, 7.54)
-ax1.view_init(elev=20, azim=35)
-ax1.set_xlabel('$x$')
-ax1.set_ylabel('$y$')
-ax1.set_zlabel('$z$')
-ax1.set_xticks([])
-ax1.set_yticks([])
-ax1.set_zticks([])
-
-# Add a CH4 molecule to the plot (schematic coordinates)
-positions = np.array([
-    [ 0.0000,  0.0000,  0.0000],
-    [ 0.6276,  0.6276,  0.6276],
-    [ 0.6276, -0.6276, -0.6276],
-    [-0.6276,  0.6276, -0.6276],
-    [-0.6276, -0.6276,  0.6276]
-]) * 7.54/2
-
-for i, pos in enumerate(positions):
-    if i == 0:
-        ax1.plot(*pos, 'o', markersize=6, markeredgecolor='black', markerfacecolor='black')
-    else:
-        ax1.plot(*pos, 'o', markersize=3.5, markeredgecolor='black', markerfacecolor='white')
-    if i > 0:
-        ax1.plot([positions[0][0], pos[0]],
-                 [positions[0][1], pos[1]],
-                 [positions[0][2], pos[2]], color='black', linewidth=1)
-
-ax1.text(7.54/4, -7.54/4, 7.54/16, 'CH$_4$', color='black', fontsize=10)
-
-# 2) NH3: Symmetric top
-ax2 = fig.add_subplot(1, 3, 2, projection='3d')
-x2, y2, z2 = surface_points(*theta_nh3)
-surf2 = ax2.plot_surface(x2, y2, z2, color='salmon', alpha=0.4, edgecolor='none')
-ax2.set_title("Symmetric Top", fontsize=11)
-ax2.set_box_aspect((1,1,1), zoom=0.85)
-ax2.set_xlim(-14.31, 14.31)
-ax2.set_ylim(-14.31, 14.31)
-ax2.set_zlim(-14.31, 14.31)
-ax2.view_init(elev=20, azim=35)
-ax2.set_xlabel('$x$')
-ax2.set_ylabel('$y$')
-ax2.set_zlabel('$z$')
-ax2.set_xticks([])
-ax2.set_yticks([])
-ax2.set_zticks([])
-
-positions = np.array([
-    [ 0.0000,  0.0000,  0.0000],
-    [ 0.0000, -0.9377, -0.3816],
-    [ 0.8121,  0.4689, -0.3816],
-    [-0.8121,  0.4689, -0.3816]
-]) * 14.31/2
-
-for i, pos in enumerate(positions):
-    if i == 0:
-        ax2.plot(*pos, 'o', markersize=6, markeredgecolor='black', markerfacecolor='skyblue')
-    else:
-        ax2.plot(*pos, 'o', markersize=3.5, markeredgecolor='black', markerfacecolor='white')
-    if i > 0:
-        ax2.plot([positions[0][0], pos[0]],
-                 [positions[0][1], pos[1]],
-                 [positions[0][2], pos[2]], color='black', linewidth=1)
-
-ax2.text(14.31/4, -14.31/4, 14.31/16, 'NH$_3$', color='black', fontsize=10)
-
-# 3) H2O: Asymmetric top
-ax3 = fig.add_subplot(1, 3, 3, projection='3d')
-x3, y3, z3 = surface_points(*theta_h2o)
-surf3 = ax3.plot_surface(x3, y3, z3, color='plum', alpha=0.4, edgecolor='none')
-ax3.set_title("Asymmetric Top", fontsize=11)
-ax3.set_box_aspect((1,1,1), zoom=0.85)
-ax3.set_xlim(-40.1, 40.1)
-ax3.set_ylim(-40.1, 40.1)
-ax3.set_zlim(-40.1, 40.1)
-ax3.view_init(elev=20, azim=35)
-ax3.set_xlabel('$x$')
-ax3.set_ylabel('$y$')
-ax3.set_zlabel('$z$')
-ax3.set_xticks([])
-ax3.set_yticks([])
-ax3.set_zticks([])
-
-positions = np.array([
-    [ 0.0000,  0.0000,  0.1173],
-    [ 0.7572,  0.0000, -0.4692],
-    [-0.7572,  0.0000, -0.4692]
-]) * 40.1/2
-
-for i, pos in enumerate(positions):
-    if i == 0:
-        ax3.plot(*pos, 'o', markersize=6, markeredgecolor='black', markerfacecolor='red')
-    else:
-        ax3.plot(*pos, 'o', markersize=3.5, markeredgecolor='black', markerfacecolor='white')
-    if i > 0:
-        ax3.plot([positions[0][0], pos[0]],
-                 [positions[0][1], pos[1]],
-                 [positions[0][2], pos[2]], color='black', linewidth=1)
-
-ax3.text(40.1/4, -40.1/4, 40.1/16, 'H$_2$O', color='black', fontsize=10)
-
-fig.subplots_adjust(left=0.0, right=0.97, bottom=0.0, top=0.95, wspace=0.0)
-plt.show()
-plt.close(fig)
-```
-
-Approximate visualization of rotational shapes: (left) a spherical top (CH₄), (middle) a symmetric top (NH₃), and (right) an asymmetric top (H₂O). The semi-axes of each ellipsoid are proportional to the rotational temperatures in {numref}`rotational-temperatures-nonlinear` and lie along the corresponding principal axes. Each panel has its own scale.
 
 ### Vibrations of Polyatomic Molecules
 
