@@ -198,10 +198,62 @@ dG \le 0.
 ```
 ````
 
+The figure below collects the Summary Table and the four extremum principles.
+
+```{code-cell} ipython3
+:tags: [hide-input]
+
+import sys
+sys.path.append("..")                              # the book folder, which holds figstyle
+import matplotlib.pyplot as plt
+from matplotlib.patches import FancyBboxPatch
+import figstyle as fs
+
+# position, symbol with natural variables, name, variables held fixed at the minimum
+boxes = {
+    "U": ((0.0, 1.0), r"$U(S,V)$", "internal energy", r"minimum at fixed $S$, $V$"),
+    "H": ((1.0, 1.0), r"$H(S,P)$", "enthalpy", r"minimum at fixed $S$, $P$"),
+    "A": ((0.0, 0.0), r"$A(T,V)$", "Helmholtz free energy", r"minimum at fixed $T$, $V$"),
+    "G": ((1.0, 0.0), r"$G(T,P)$", "Gibbs free energy", r"minimum at fixed $T$, $P$"),
+}
+w, h = 0.58, 0.44
+
+def draw(c):
+    fig, ax = plt.subplots(figsize=(6.4, 3.9), constrained_layout=True)
+    for (x, y), symbol, name, fixed in boxes.values():
+        ax.add_patch(FancyBboxPatch((x - w / 2, y - h / 2), w, h, boxstyle="round,pad=0.02,rounding_size=0.035",
+                                    fc=c.fill, ec="none"))
+        ax.text(x, y + 0.10, symbol, ha="center", va="center", fontsize=fs.BASE + 5)
+        ax.text(x, y - 0.045, name, ha="center", va="center")
+        ax.text(x, y - 0.145, fixed, ha="center", va="center", fontsize=fs.BASE - 0.5, color=c.muted)
+
+    # Horizontal transforms replace V by P; vertical transforms replace S by T
+    for y in (1.0, 0.0):
+        fs.arrow(ax, (w / 2 + 0.05, y), (1 - w / 2 - 0.05, y), c.blue, lw=2, scale=16)
+        ax.text(0.5, y + 0.05, r"$+PV$", ha="center", va="bottom", fontsize=fs.BASE + 2, color=c.blue)
+        ax.text(0.5, y - 0.06, r"$V \rightarrow P$", ha="center", va="top", fontsize=fs.BASE - 0.5, color=c.blue)
+    for x in (0.0, 1.0):
+        fs.arrow(ax, (x, 1 - h / 2 - 0.05), (x, h / 2 + 0.05), c.vermilion, lw=2, scale=16)
+        ax.text(x + 0.03, 0.5, r"$-TS$", ha="left", va="center", fontsize=fs.BASE + 2, color=c.vermilion)
+        ax.text(x - 0.03, 0.5, r"$S \rightarrow T$", ha="right", va="center", fontsize=fs.BASE - 0.5, color=c.vermilion)
+    ax.set_xlim(-0.36, 1.36)
+    ax.set_ylim(-0.3, 1.3)
+    ax.axis("off")
+    return fig
+
+fs.show(draw, alt="Diagram of the four thermodynamic potentials U(S,V), H(S,P), A(T,V) and G(T,P) at the corners "
+                  "of a square. Horizontal arrows labeled +PV lead from U to H and from A to G. Vertical arrows "
+                  "labeled -TS lead from U to A and from H to G.")
+```
+
+The four thermodynamic potentials and the Legendre transforms that connect them. Each horizontal arrow adds $PV$ and replaces the natural variable $V$ by $P$; each vertical arrow subtracts $TS$ and replaces $S$ by $T$. Below each potential are the variables that are held fixed when it is minimized at equilibrium.
+
 These extremum principles are immensely practical. Most chemistry and biology occurs at constant temperature (thermostatted lab or regulated body temperature) and either constant volume (rigid container, computational simulation) or constant pressure (open to the atmosphere). Under these conditions:
 
 - **Constant $T, V$:** the Helmholtz free energy $A$ is minimized at equilibrium.
 - **Constant $T, P$:** the Gibbs free energy $G$ is minimized at equilibrium.
+
+The first of these two statements is illustrated below with [two gases separated by a piston](#section:piston), a system in which the minimum of $A$ can be located.
 
 ---
 
@@ -320,6 +372,93 @@ S = Nk_{\mathrm B}\!\left[\ln\!\left(\frac{V}{N\Lambda^3}\right) + \frac{5}{2}\r
 
 This is the **Sackur–Tetrode equation** for the entropy of an ideal monatomic gas — a result that connects statistical mechanics (through $\Lambda$ and $Q$) to a measurable thermodynamic quantity.
 
+(section:piston)=
+#### Minimum of $A$: Two Gases Separated by a Piston
+
+Equation {eq}`eq:ideal-gas-A` also provides an example of the extremum principle at constant $T$ and $V$. A rigid box of volume $V$ is in contact with a heat bath at temperature $T$. A movable piston divides the box into two compartments, which hold $N_1$ and $N_2$ atoms of ideal gas in the volumes $V_1$ and $V - V_1$ (panel (a) of the figure below). The temperature, the total volume, and the numbers of atoms are fixed, but $V_1$ is not, so the system is in general not in equilibrium internally. Its Helmholtz free energy is the sum of the free energies of the two gases, and by Eq. {eq}`eq:ideal-gas-A` it depends on $V_1$ as
+
+```{math}
+A(V_1) = -N_1k_{\mathrm B}T\ln V_1 - N_2k_{\mathrm B}T\ln(V - V_1) + \text{terms independent of } V_1.
+```
+
+Panel (b) shows this function for $1\ \mathrm{mol}$ of gas 1 and $2\ \mathrm{mol}$ of gas 2 at $298.15\ \mathrm{K}$. It has a single minimum. By Eq. {eq}`eq:P-from-A`, applied to each gas,
+
+```{math}
+\left(\frac{\partial A}{\partial V_1}\right)_T = -P_1 + P_2,
+```
+
+so the minimum lies where the two pressures are equal, which for these amounts is $V_1 = V/3$. From any other position, the piston moves toward the side with the lower pressure, and $A$ decreases until the minimum is reached.
+
+```{code-cell} ipython3
+:tags: [hide-input]
+
+import sys
+sys.path.append("..")                              # the book folder, which holds figstyle
+import numpy as np
+import matplotlib.pyplot as plt
+from matplotlib.patches import Rectangle
+from scipy.constants import R
+import figstyle as fs
+
+# Two ideal gases in a rigid box at fixed T, separated by a movable piston
+T = 298.15                 # K
+n1, n2 = 1.0, 2.0          # mol
+x_eq = n1 / (n1 + n2)      # V_1/V at which the two pressures are equal
+x_p = 0.60                 # V_1/V of the piston position that is drawn
+
+def dA(x):
+    """A(x) - A(x_eq) in kJ, from the V dependence of A for each ideal gas."""
+    return -R * T * (n1 * np.log(x / x_eq) + n2 * np.log((1 - x) / (1 - x_eq))) / 1000
+
+def draw(c):
+    fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(fs.WIDTH, 3.2), constrained_layout=True,
+                                   gridspec_kw={"width_ratios": [1, 1.15]})
+
+    # (a) The system, drawn with the piston away from its equilibrium position
+    rng = np.random.default_rng(5020)
+    ax1.add_patch(Rectangle((-0.06, -0.08), 1.12, 0.76, fc=c.fill, ec="none"))                 # heat bath
+    ax1.add_patch(Rectangle((0, 0), 1, 0.6, fc=c.ground, ec=c.ink, lw=1.5))                     # rigid box
+    ax1.add_patch(Rectangle((x_p - 0.012, 0), 0.024, 0.6, fc=c.muted, ec=c.ink, lw=0.8))        # piston
+    ax1.scatter(rng.uniform(0.03, x_p - 0.04, 9), rng.uniform(0.04, 0.56, 9), s=30, color=c.blue, lw=0)
+    ax1.scatter(rng.uniform(x_p + 0.04, 0.97, 18), rng.uniform(0.04, 0.56, 18), s=30, color=c.vermilion, lw=0)
+    fs.arrow(ax1, (x_p - 0.03, 0.30), (x_p - 0.20, 0.30), c.ink, lw=1.6, scale=14)
+    ax1.text(x_p / 2, 0.71, r"gas 1: $N_1$, $V_1$", ha="center", va="bottom", color=c.blue)
+    ax1.text((1 + x_p) / 2, 0.71, r"gas 2: $N_2$, $V - V_1$", ha="center", va="bottom", color=c.vermilion)
+    ax1.text(x_p, -0.03, "piston", ha="center", va="top", fontsize=fs.BASE - 1)
+    ax1.text(0.5, -0.17, r"heat bath at temperature $T$", ha="center", va="top", fontsize=fs.BASE - 1, color=c.muted)
+    ax1.set_xlim(-0.1, 1.1)
+    ax1.set_ylim(-0.3, 0.87)
+    ax1.set_aspect("equal")
+    ax1.axis("off")
+    fs.panel(ax1, "a", "Fixed $T$ and $V$")
+
+    # (b) Helmholtz free energy as a function of the piston position
+    x = np.linspace(0.04, 0.9, 400)
+    ax2.plot(x, dA(x), "-", color=c.ink)
+    ax2.plot(x_eq, 0, "o", color=c.ink, ms=6.5, zorder=3)
+    ax2.plot(x_p, dA(x_p), "o", mfc=c.ground, mec=c.ink, ms=6.5, zorder=3)
+    ax2.annotate(r"$P_1 = P_2$", (x_eq, 0), xytext=(0, 12), textcoords="offset points", ha="center")
+    for xa, xb in ((x_p - 0.02, x_p - 0.14), (0.10, 0.20)):
+        ax2.annotate("", xy=(xb, dA(xb) + 0.25), xytext=(xa, dA(xa) + 0.25),
+                     arrowprops=dict(arrowstyle="-|>", color=c.muted, lw=1.3))
+    ax2.text(x_eq, 1.55, "spontaneous\n" + r"$dA < 0$", ha="center", color=c.muted)
+    ax2.text(0.14, -0.42, r"$P_1 > P_2$", ha="center", fontsize=fs.BASE - 1, color=c.muted)
+    ax2.text(0.72, -0.42, r"$P_1 < P_2$", ha="center", fontsize=fs.BASE - 1, color=c.muted)
+    ax2.set_xlabel(r"Volume fraction of gas 1, $V_1/V$")
+    ax2.set_ylabel(r"$A - A_{\mathrm{min}}$ (kJ)")
+    ax2.set_xlim(0, 1)
+    ax2.set_ylim(-0.6, 3.2)
+    fs.panel(ax2, "b", "Helmholtz free energy")
+    return fig
+
+fs.show(draw, alt="Two panels. Panel a: a rigid box in a heat bath, divided by a piston into gas 1 on the left and "
+                  "gas 2 on the right, with an arrow that shows the piston moving left. Panel b: the Helmholtz free "
+                  "energy relative to its minimum against the volume fraction of gas 1, a curve with a single "
+                  "minimum at one third, where the two pressures are equal.")
+```
+
+Two ideal gases in a rigid box at fixed temperature, separated by a movable piston. (a) The system, drawn with the piston at $V_1 = 0.6\,V$, where $P_2 > P_1$. (b) The Helmholtz free energy relative to its minimum as a function of $V_1/V$, for $1\ \mathrm{mol}$ of gas 1 and $2\ \mathrm{mol}$ of gas 2 at $298.15\ \mathrm{K}$. The open circle marks the position drawn in (a) and the filled circle marks equilibrium, where $P_1 = P_2$.
+
 ---
 
 ### Gibbs Free Energy and Non-$PV$ Work
@@ -375,6 +514,52 @@ The standard-state water-splitting reaction at room temperature is
 ```
 
 Because $\Delta G^\circ > 0$, the reaction is non-spontaneous under standard conditions. It must be driven by supplying non-$PV$ work — in this case, electrical work in an electrolyzer. In the reversible limit, the minimum electrical work required per mole equals $\Delta G^\circ$.
+
+The enthalpy change of the reaction, $\Delta H^\circ = +285.8\ \mathrm{kJ\,mol^{-1}}$, is larger than $\Delta G^\circ$. At constant $T$ and $P$, $\Delta H = q + w_{\text{non-}PV}$, and in the reversible limit $q = T\,\Delta S^\circ = +48.7\ \mathrm{kJ\,mol^{-1}}$. The electrolyzer therefore supplies $237.1\ \mathrm{kJ\,mol^{-1}}$ as electrical work, and the remaining $48.7\ \mathrm{kJ\,mol^{-1}}$ is absorbed as heat from the surroundings (figure below).
+
+```{code-cell} ipython3
+:tags: [hide-input]
+
+import sys
+sys.path.append("..")                              # the book folder, which holds figstyle
+import matplotlib.pyplot as plt
+import figstyle as fs
+
+# H2O(l) -> H2(g) + 1/2 O2(g) at 298.15 K and 1 bar (NIST-JANAF values)
+T = 298.15                                   # K
+dH = 285.83                                  # kJ/mol, -Delta_f H(H2O, l)
+dS = 130.680 + 0.5 * 205.147 - 69.95         # J/(mol K)
+TdS = T * dS / 1000                          # kJ/mol
+dG = dH - TdS                                # kJ/mol
+
+def draw(c):
+    total = c.tint(c.gray, 0.55)
+    fig, ax = plt.subplots(figsize=(fs.WIDTH, 2.5), constrained_layout=True)
+    edge = dict(height=0.55, ec=c.ground, lw=1.2)
+    ax.barh(1, dH, color=total, **edge)
+    ax.barh(0, dG, color=c.blue, **edge)
+    ax.barh(0, TdS, left=dG, color=c.vermilion, **edge)
+    ax.text(dH / 2, 1, rf"$\Delta H°$ = {dH:.1f}", ha="center", va="center", color=fs.on(total))
+    ax.text(dG / 2, 0, rf"$\Delta G°$ = {dG:.1f}" + "\nminimum electrical work", ha="center", va="center",
+            color=fs.on(c.blue))
+    ax.text(dG + TdS / 2, 0, r"$T\Delta S°$" + f"\n{TdS:.1f}", ha="center", va="center", color=fs.on(c.vermilion))
+    ax.annotate("heat from the\nsurroundings", (dG + TdS / 2, -0.28), xytext=(dG + TdS / 2, -0.95),
+                ha="center", va="top", fontsize=fs.BASE - 1, arrowprops=dict(arrowstyle="-", color=c.muted, lw=0.8))
+    ax.set_yticks([1, 0], ["required", "supplied as"])
+    ax.set_xlabel(r"Energy per mole of $\mathrm{H_2O}$ (kJ mol$^{-1}$)")
+    ax.set_xlim(0, 300)
+    ax.set_ylim(-1.5, 1.5)
+    ax.spines["left"].set_visible(False)
+    ax.tick_params(axis="y", length=0)
+    return fig
+
+fs.show(draw, alt=f"Two horizontal bars. The top bar is the enthalpy change, {dH:.1f} kJ per mole. The bottom bar "
+                  f"has the same length and is split into the Gibbs energy change, {dG:.1f} kJ per mole, supplied "
+                  f"as electrical work, and T times the entropy change, {TdS:.1f} kJ per mole, supplied as heat "
+                  "from the surroundings.")
+```
+
+Energy required to split one mole of liquid water at $298.15\ \mathrm{K}$ and $1\ \mathrm{bar}$ in the reversible limit. The enthalpy change (top) is supplied as electrical work equal to $\Delta G^\circ$ and as heat equal to $T\,\Delta S^\circ$ (bottom). Data from the [NIST-JANAF Thermochemical Tables](https://janaf.nist.gov/).
 
 ---
 
