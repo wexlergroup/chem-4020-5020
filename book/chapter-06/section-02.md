@@ -519,9 +519,18 @@ If your numbers differ noticeably, check that you used (1) **kelvin**, (2) **nat
 
 ## Computational Studio: Clausius–Clapeyron
 
-Interact with real vapor-pressure data for ethanol. The studio transforms the dataset to visualize the Clausius–Clapeyron linearization ($\ln P$ versus $1/T$), lets you dynamically adjust the regression bounds to explore linearity limits, and reports the corresponding $\Delta\bar h_{\mathrm{vap}}$ extracted from the slope.
+In [](#fig:cc-studio), you can repeat Parts A to C of the mini-lab for water, ethanol, and benzene. Choose the range of temperatures of the fit, and compare the enthalpy of vaporization from the slope with the reference value.
 
-You can open the studio in a new tab: [Clausius–Clapeyron Studio](https://wexlergroup.github.io/chem-4020-5020/computational-studios/clausius-clapeyron-studio.html).
+```{iframe} https://wexlergroup.github.io/chem-4020-5020/computational-studios/clausius-clapeyron-studio.html
+:label: fig:cc-studio
+:width: 100%
+:title: Clausius–Clapeyron
+:placeholder: ../_static/clausius-clapeyron-studio/clausius-clapeyron-studio.png
+
+Clausius–Clapeyron fits for three liquids. (a) The vapor pressure against temperature. (b) The Clausius–Clapeyron plot, $\ln(P_{\mathrm{sat}}/1\ \mathrm{bar})$ against $1/T$, with a straight line fitted to the filled points, as in [](#fig:cc-fit). (c) The residuals of the fit, as in [](#fig:cc-residuals). (d) The slope of the line, $R^2$, the enthalpy of vaporization from the slope, Eq. [](#eq:CC-integrated), and the reference value at the temperature at which $1/T$ is the mean of $1/T$ over the points in the fit. The data come from the reference equation of state of each liquid, evaluated with [CoolProp](https://coolprop.org); for water they are the values of the table of the mini-lab.
+```
+
+You can also open the studio in a new tab: [Clausius–Clapeyron Studio](https://wexlergroup.github.io/chem-4020-5020/computational-studios/clausius-clapeyron-studio.html).
 
 ## Concept Checks
 
