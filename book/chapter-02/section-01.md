@@ -187,43 +187,65 @@ Grand canonical ensemble
 : Microstates are sampled at fixed $\left(\mu, V, T\right)$.
 ```
 
-### Probability of a Microstate in the Microcanonical Ensemble
-
-For an **isolated system**—one that exchanges neither energy nor matter with its surroundings—the appropriate statistical description is the **microcanonical ensemble**.
+[](#fig:ensembles) shows the system and its surroundings in each of the three ensembles.
 
 ```{code-cell} ipython3
 :tags: [hide-input]
+:label: fig:ensembles
+:caption: The three ensembles. (a) Microcanonical ensemble: an isolated system, with $N$, $V$, and $E$ fixed. (b) Canonical ensemble: a closed system that exchanges energy with a heat bath at temperature $T$, with $N$, $V$, and $T$ fixed. (c) Grand canonical ensemble: an open system that exchanges energy and matter with a reservoir at temperature $T$ and chemical potential $\mu$, with $\mu$, $V$, and $T$ fixed.
+
+import sys
 
 import matplotlib.pyplot as plt
-import matplotlib.patches as mpatches
-from myst_nb import glue
+from matplotlib.patches import FancyBboxPatch
 
-# Helper function to plot a system
-def plot_system(ax, title, annotations, boundary_color='b'):
-    box = mpatches.FancyBboxPatch((0, 0), 1, 1, boxstyle='roundtooth', ec=boundary_color, fc='w')
-    ax.add_patch(box)
-    ax.set_title(title, fontsize=14)
-    ax.text(0.5, 0.5, 'System', ha='center', va='center', fontsize=12)
-    ax.text(0.5, -0.65, 'Surroundings', ha='center', va='center', fontsize=12)
-    ax.text(0.5, 1.3, 'Boundary', ha='center', va='bottom', fontsize=12, color=boundary_color)
-    for annotation in annotations:
-        if "arrowprops" in annotation:  # Arrow annotations
-            ax.annotate('', **annotation)
-        else:  # Text annotations
-            ax.text(**annotation)
-    ax.set_xlim(-1, 2)
-    ax.set_ylim(-1, 2)
-    ax.set_aspect('equal')
-    ax.axis('off')
+sys.path.append("..")            # the book folder, which holds figstyle
+import figstyle as fs
 
-fig, ax = plt.subplots(1, 1, figsize=(4, 4))
-plot_system(ax, "", [])
 
-plt.show()
-plt.close(fig)
+def draw_ensemble(ax, c, fixed, bath=None, energy=False, matter=False):
+    """Sketch of a system in its surroundings for one ensemble, with the exchanges that its boundary allows."""
+    if bath:
+        ax.add_patch(FancyBboxPatch((0.05, 0.17), 0.90, 0.72, boxstyle="round,pad=0.03,rounding_size=0.06",
+                                    fc=c.fill, ec="none"))
+    ax.text(0.5, 0.83, bath or "Surroundings", ha="center", va="center", color=c.muted)
+    ax.add_patch(FancyBboxPatch((0.36, 0.34), 0.28, 0.32, boxstyle="round,pad=0.03,rounding_size=0.06",
+                                fc=c.ground, ec=c.ink, lw=1.6))
+    ax.text(0.5, 0.59, "System", ha="center", va="center")
+    if energy:
+        ax.annotate("", xy=(0.09, 0.42), xytext=(0.45, 0.42),
+                    arrowprops=dict(arrowstyle="<|-|>", color=c.vermilion, lw=1.6, mutation_scale=12))
+        ax.text(0.20, 0.46, "Energy", ha="center", va="bottom", color=c.vermilion)
+    if matter:
+        ax.annotate("", xy=(0.55, 0.42), xytext=(0.91, 0.42),
+                    arrowprops=dict(arrowstyle="<|-|>", color=c.blue, lw=1.6, mutation_scale=12))
+        ax.text(0.80, 0.46, "Matter", ha="center", va="bottom", color=c.blue)
+    ax.text(0.5, 0.05, fixed, ha="center", va="center")
+    ax.set(xlim=(0, 1), ylim=(0, 0.95), aspect="equal")
+    ax.axis("off")
+
+
+def draw(c):
+    fig, axes = plt.subplots(1, 3, figsize=(fs.WIDTH, 2.55), constrained_layout=True)
+    draw_ensemble(axes[0], c, "$N$, $V$, $E$ fixed")
+    draw_ensemble(axes[1], c, "$N$, $V$, $T$ fixed", bath="Heat bath at $T$", energy=True)
+    draw_ensemble(axes[2], c, r"$\mu$, $V$, $T$ fixed", bath=r"Reservoir at $T$ and $\mu$", energy=True, matter=True)
+    for ax, letter, title in zip(axes, "abc", ["Microcanonical", "Canonical", "Grand canonical"]):
+        fs.panel(ax, letter, title)
+    return fig
+
+
+fs.show(draw, alt="Three sketches of a system, drawn as a box. In panel a, the microcanonical ensemble, nothing crosses "
+                  "the boundary, and N, V, and E are fixed. In panel b, the canonical ensemble, the system sits in a "
+                  "heat bath at temperature T, a two-headed arrow labeled energy crosses the boundary, and N, V, and T "
+                  "are fixed. In panel c, the grand canonical ensemble, the system sits in a reservoir at temperature "
+                  "T and chemical potential mu, two-headed arrows labeled energy and matter cross the boundary, "
+                  "and mu, V, and T are fixed.")
 ```
 
-An isolated system exchanges neither energy nor matter with its surroundings.
+### Probability of a Microstate in the Microcanonical Ensemble
+
+For an **isolated system**—one that exchanges neither energy nor matter with its surroundings—the appropriate statistical description is the **microcanonical ensemble** (panel (a) of [](#fig:ensembles)).
 
 #### Fundamental Postulate of Statistical Mechanics
 
