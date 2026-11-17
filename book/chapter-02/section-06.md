@@ -34,127 +34,60 @@ Learning objectives:
 
 ### Review of the One-Dimensional Harmonic Oscillator
 
+[](#fig:oscillator-levels) shows the potential energy, the first four energy levels, and the corresponding wavefunctions of the one-dimensional harmonic oscillator that is reviewed in this subsection.
+
 ```{code-cell} ipython3
+:label: fig:oscillator-levels
+:caption: Potential energy $V(x)$ (thin curve), energy levels $E_n$ (gray lines), and wavefunctions $\psi_n$ (blue curves) of a one-dimensional harmonic oscillator. Each wavefunction is drawn on its energy level, and the levels are equally spaced by $\hbar\omega$.
 :tags: [hide-input]
 
-import numpy as np
+import sys
+from math import factorial, pi
+
 import matplotlib.pyplot as plt
-from mpl_toolkits.mplot3d.art3d import Poly3DCollection
-from scipy.constants import k, eV
-from scipy.special import hermite, factorial
-from labellines import labelLines
-from myst_nb import glue
-from numpy.linalg import eigh
+import numpy as np
+from scipy.special import eval_hermite
 
-fig, axs = plt.subplot_mosaic([[0]], figsize=(4, 4))
+sys.path.append("..")            # the book folder, which holds figstyle
+import figstyle as fs
 
-def harmonic_potential(x, m, omega):
-    """
-    Calculates the potential matrix for a particle in a one-dimensional harmonic potential
-    
-    Parameters
-    ----------
-    x : array-like
-        The positions of the particles.
-    m : float
-        The mass of the particle.
-    omega : float
-        The frequency of the harmonic potential
-    
-    Returns
-    -------
-    array
-        The potential matrix.
-    """
-    V = 0.5 * m * omega**2 * x**2
-    V_matrix = np.diag(V)
-    return V_matrix
 
-def off_diagonal_identity_matrix(n_points):
-    matrix = np.zeros((n_points, n_points))
-    for i in range(n_points):
-        if i == 0:
-            matrix[i + 1, i] = 1
-        elif i == n_points - 1:
-            matrix[i - 1, i] = 1
-        else:
-            matrix[i - 1, i] = 1
-            matrix[i + 1, i] = 1
-    return matrix
+def oscillator_wavefunction(n, x):
+    """Wavefunction of level n, with x in units of (hbar / (m omega))^(1/2)."""
+    return eval_hermite(n, x) * np.exp(-x**2 / 2) / np.sqrt(2**n * factorial(n) * np.sqrt(pi))
 
-def laplacian_matrix(x):
-    """
-    Calculates the Laplacian matrix for a particle in a one-dimensional potential.
-    
-    Parameters
-    ----------
-    x : array-like
-        The positions of the particles.
-    
-    Returns
-    -------
-    array
-        The Laplacian matrix.
-    """
-    Delta_x = x[1] - x[0]
-    n_points = len(x)
-    off_diag = off_diagonal_identity_matrix(n_points)
-    Laplacian = (1 / (Delta_x**2)) * (-2 * np.eye(n_points) + off_diag)
-    return Laplacian
 
-# Define constants in atomic units
-hbar = 1
-m = 1
+def draw(c):
+    fig, ax = plt.subplots(figsize=(4.8, 3.7), constrained_layout=True)
+    x = np.linspace(-5, 5, 600)              # displacement in units of (hbar / (m omega))^(1/2)
+    levels = range(4)
 
-# Harmonic potential
-omega = 1
+    # Potential energy in units of hbar omega
+    ax.plot(x, x**2 / 2, color=c.ink, lw=1.4)
 
-# Discretize the system
-n_points = 2000
-L = 40
-x = np.linspace(-L/2, L/2, n_points)
+    # Energy levels, drawn between the classical turning points, with each wavefunction drawn on its level
+    for n in levels:
+        energy = n + 0.5
+        turning_point = np.sqrt(2 * energy)
+        ax.plot([-turning_point, turning_point], [energy, energy], color=c.gray, lw=1.2)
+        ax.plot(x, energy + 0.57 * oscillator_wavefunction(n, x), color=c.blue)
+        ax.text(5.15, energy, rf"$\psi_{n}$", color=c.blue, va="center", clip_on=False)
+    ax.text(-3.02, 4.05, "$V(x)$", ha="right", va="center")
 
-# Construct the Hamiltonian matrix
-H_harm = -hbar**2 / (2 * m) * laplacian_matrix(x) + harmonic_potential(x, m=1, omega=1)
+    ax.set(xlabel="Displacement $x$", ylabel="Energy", xlim=(-5, 5), ylim=(0, 4.3), xticks=[0],
+           yticks=[n + 0.5 for n in levels])
+    ax.set_yticklabels([r"$E_0 = \frac{1}{2}\hbar\omega$", r"$E_1 = \frac{3}{2}\hbar\omega$",
+                        r"$E_2 = \frac{5}{2}\hbar\omega$", r"$E_3 = \frac{7}{2}\hbar\omega$"])
+    ax.tick_params(axis="y", length=0, pad=6)
+    ax.spines["left"].set_visible(False)
+    return fig
 
-# Solve for eigenvalues and eigenfunctions
-E_harm, psi_harm = np.linalg.eigh(H_harm)
 
-# Plot a one-dimensional quadratic potential
-axs[0].plot(x, np.diag(harmonic_potential(x, m, omega)), "k-", zorder=2.5, lw=4)
-
-# Plot the energy levels (blue lines)
-for n in range(4):
-    energy = axs[0].plot(x, np.ones_like(x) * E_harm[n], color='blue', label=r'$E_{%d}$' % n)
-    labelLines(energy, xvals=[-L/24], zorder=2.5)
-
-# Plot the wavefunctions (red curves)
-for n in range(4):
-    wavefunction = axs[0].plot(x, psi_harm[:, n] * 4 + E_harm[n], color='red', label=r'$\psi_{%d}$' % n)
-    labelLines(wavefunction, xvals=[L/24], zorder=2.5)
-
-# Format plot
-axs[0].set_xlim(-L/8, L/8)
-ymin = np.min(np.diag(harmonic_potential(x, m, omega)))
-ymax = np.max(psi_harm[:, -1]) + E_harm[3]
-yrange = ymax - ymin
-ybuffer = 0.05 * yrange
-axs[0].set_ylim(ymin - ybuffer, ymax + ybuffer * 2)
-axs[0].set_xlabel("Position")
-axs[0].set_ylabel("Energy")
-axs[0].set_xticks([])
-axs[0].set_yticks([])
-axs[0].spines['top'].set_visible(False)
-axs[0].spines['right'].set_visible(False)
-axs[0].spines['left'].set_visible(False)
-axs[0].spines['bottom'].set_visible(False)
-
-plt.tight_layout()
-plt.show()
-plt.close(fig)
+fs.show(draw, alt="Parabolic potential energy against displacement, with four equally spaced horizontal energy "
+                  "levels at one half, three halves, five halves, and seven halves of h-bar omega. On each level, "
+                  "the wavefunction is drawn. The lowest wavefunction is a single peak at zero displacement, and "
+                  "each higher wavefunction has one more node and extends farther from the center.")
 ```
-
-Energy levels and wavefunctions for a one-dimensional harmonic oscillator. The energy levels $E_n$ are shown as blue lines, while the wavefunctions $\psi_n$ are shown as red curves.
 
 A one-dimensional harmonic oscillator is a particle of mass $m$ that moves in the potential
 
@@ -270,46 +203,47 @@ U = \frac{\hbar \omega}{2} + \frac{\hbar \omega}{e^{\Theta_{\mathrm{vib}} / T} -
 ```
 
 ```{code-cell} ipython3
+:label: fig:oscillator-energy
+:caption: Harmonic oscillator as a function of the reduced temperature $T/\Theta_{\mathrm{vib}}$. (a) Internal energy in units of $\hbar\omega$. The dashed lines are the zero-point energy, which $U$ approaches at low temperature, and $k_{\mathrm B}T$, which it approaches at high temperature. (b) Heat capacity at constant volume in units of $k_{\mathrm B}$, which is derived below. The dashed line is its high-temperature limit.
 :tags: [hide-input]
 
-import numpy as np
-import matplotlib.pyplot as plt
-from mpl_toolkits.mplot3d.art3d import Poly3DCollection
-from scipy.constants import k, eV
-from labellines import labelLines
-from myst_nb import glue
+Theta_vib = 805                              # K, for a Cl2 molecule
+T = np.linspace(10, 1000, 400)               # K
+Tr = T / Theta_vib                           # reduced temperature
 
-kB = k / eV  # Boltzmann constant in eV/K
+U = 0.5 + 1 / (np.exp(1 / Tr) - 1)           # internal energy in units of hbar omega
+C_V = Tr**-2 * np.exp(1 / Tr) / (np.exp(1 / Tr) - 1)**2    # heat capacity in units of k_B
 
-fig, axs = plt.subplot_mosaic([[0]], figsize=(4, 4))
 
-Theta_vib = 805  # K, for a Cl2 molecule
-hbar_omega = kB * Theta_vib
-T = np.linspace(10, 1000, 100)
-Tr = T / Theta_vib
+def draw(c):
+    fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(fs.WIDTH, 3.0), constrained_layout=True)
+    dashed = dict(color=c.muted, lw=1.2, ls=(0, (4, 3)))
 
-U = hbar_omega / 2 + hbar_omega / (np.exp(Theta_vib / T) - 1)
+    ax1.axhline(0.5, **dashed)
+    ax1.plot([0, 1.25], [0, 1.25], **dashed)
+    ax1.plot(Tr, U, color=c.ink)
+    ax1.text(1.25, 0.44, r"zero-point energy, $\hbar\omega/2$", color=c.muted, ha="right", va="top")
+    ax1.text(1.02, 0.9, r"$k_{\mathrm{B}}T$", color=c.muted, ha="left", va="top")
+    ax1.set(xlabel=r"$T/\Theta_{\mathrm{vib}}$", ylabel=r"$U/\hbar\omega$", xlim=(0, 1.25), ylim=(0, 1.4))
+    fs.panel(ax1, "a", "Internal energy")
 
-axs[0].plot(Tr, U / hbar_omega, "k-")
+    ax2.axhline(1, **dashed)
+    ax2.plot(Tr, C_V, color=c.ink)
+    ax2.text(1.25, 1.03, "high-temperature limit", color=c.muted, ha="right", va="bottom")
+    ax2.set(xlabel=r"$T/\Theta_{\mathrm{vib}}$", ylabel=r"$C_V/k_{\mathrm{B}}$", xlim=(0, 1.25), ylim=(0, 1.2))
+    fs.panel(ax2, "b", "Heat capacity")
+    return fig
 
-axs[0].set_xlabel(r"$T / \Theta_{\text{vib}}$")
-axs[0].set_ylabel(r"$U / \left( \hbar \omega \right)$")
 
-zero_point_energy = axs[0].plot([np.min(Tr), np.max(Tr)], [0.5, 0.5], "b--", label="Zero-point energy")
-labelLines(zero_point_energy, zorder=2.5)
-
-x = Tr[Tr >= 0.5]
-kT = axs[0].plot(x, x, "r--", label=r"$U \rightarrow k_{\text{B}} T$")
-labelLines(kT, xvals=[Tr[-1] * 3 / 4], zorder=2.5)
-
-plt.tight_layout()
-plt.show()
-plt.close(fig)
+fs.show(draw, alt="Two panels against the reduced temperature from 0 to 1.25 for a harmonic oscillator. Panel a: "
+                  "the internal energy in units of h-bar omega starts at the zero-point energy of 0.5, stays there up "
+                  "to a reduced temperature of about 0.2, and then rises toward the line U equal to k_B T, reaching "
+                  "about 1.3 at 1.25. Panel b: the heat capacity in units of k_B is zero up to a reduced "
+                  "temperature of about 0.1, rises steeply, and levels off toward a dashed line at 1, reaching about "
+                  "0.95 at 1.25.")
 ```
 
-Internal energy of a harmonic oscillator as a function of temperature. The zero-point energy is shown as a blue dashed line, while the high-temperature limit is shown as a red dashed line.
-
-The dashed lines in the figure are the low- and high-temperature limits of $U$. For $T \ll \Theta_{\mathrm{vib}}$, the exponential $e^{\Theta_{\mathrm{vib}}/T}$ is very large, so the second term in the brackets vanishes and
+The dashed lines in panel (a) of [](#fig:oscillator-energy) are the low- and high-temperature limits of $U$. For $T \ll \Theta_{\mathrm{vib}}$, the exponential $e^{\Theta_{\mathrm{vib}}/T}$ is very large, so the second term in the brackets vanishes and
 
 ```{math}
 U \to \frac{1}{2} k_{\mathrm B}\Theta_{\mathrm{vib}} = \frac{\hbar \omega}{2},
@@ -399,38 +333,11 @@ C_V
 Dividing by $k_{\mathrm B} T^2$ and using $\beta = 1/(k_{\mathrm B} T)$ gives the expression for $C_V$ above.
 ````
 
-```{code-cell} ipython3
-:tags: [hide-input]
-
-fig, axs = plt.subplot_mosaic([[0]], figsize=(4, 4))
-
-Cv = kB * (Theta_vib / T)**2 * np.exp(Theta_vib / T) / (np.exp(Theta_vib / T) - 1)**2
-
-axs[0].plot(Tr, Cv / kB, "k-")
-
-axs[0].annotate(
-    '$C_V \\rightarrow 0$', xy=(0.15, 0), xytext=(Tr[-1] / 3, 0.1),
-    arrowprops=dict(arrowstyle='->', color='b'),
-    bbox=dict(boxstyle='round,pad=0.3', fc='w', ec='b'),
-    ha='center', va='center', color='b'
-)
-
-high_T = axs[0].plot([0, Tr[-1]], [1, 1], "r--", label="$C_V \\rightarrow k_{\\text{B}}$")
-labelLines(high_T, zorder=2.5)
-
-axs[0].set_xlabel(r"$T / \Theta_{\text{vib}}$")
-axs[0].set_ylabel(r"$C_V / k_{\text{B}}$")
-
-plt.tight_layout()
-plt.show()
-plt.close(fig)
-```
-
-Heat capacity at constant volume of a harmonic oscillator as a function of temperature. The low-temperature limit is indicated by the blue arrow, while the high-temperature limit is shown as a red dashed line.
+Panel (b) of [](#fig:oscillator-energy) shows $C_V$ as a function of the reduced temperature.
 
 ```{admonition} Limits of the heat capacity
 :class: important
-Take the limits $T \ll \Theta_{\mathrm{vib}}$ and $T \gg \Theta_{\mathrm{vib}}$ of the expression for $C_V$, following the steps used for $U$ above, and compare the results with the figure.
+Take the limits $T \ll \Theta_{\mathrm{vib}}$ and $T \gg \Theta_{\mathrm{vib}}$ of the expression for $C_V$, following the steps used for $U$ above, and compare the results with panel (b) of [](#fig:oscillator-energy).
 ```
 
 ### Computational Studio: Harmonic Oscillator
@@ -461,9 +368,11 @@ C_V = 3 N k_{\mathrm B} \left( \frac{\hbar \omega}{k_{\mathrm B} T} \right)^2 \f
 
 #### Dulong–Petit Law
 
-The **Dulong–Petit law** is the empirical observation that the molar heat capacity of many elemental solids at room temperature is close to $3R = 24.9\ \mathrm{J\,mol^{-1}\,K^{-1}}$, where $R$ is the gas constant. The figure below compares the law with molar heat capacities measured at 25 °C. Elements whose heat capacity differs from $3R$ by more than $R$ are labeled.
+The **Dulong–Petit law** is the empirical observation that the molar heat capacity of many elemental solids at room temperature is close to $3R = 24.9\ \mathrm{J\,mol^{-1}\,K^{-1}}$, where $R$ is the gas constant. [](#fig:dulong-petit) compares the law with molar heat capacities measured at 25 °C. Elements whose heat capacity differs from $3R$ by more than $R$ are labeled.
 
 ```{code-cell} ipython3
+:label: fig:dulong-petit
+:caption: Molar heat capacity at 25 °C of elemental solids (and liquid mercury) as a function of atomic number, in units of the gas constant $R$. The dashed line is the Dulong–Petit law.
 :tags: [hide-input]
 
 # https://en.wikipedia.org/wiki/Heat_capacities_of_the_elements_(data_page)
@@ -481,37 +390,39 @@ df["Absolute Deviation"] = np.abs(df["Molar (R)"] - 3)
 elemental_gases = ["H", "He", "N", "O", "F", "Ne", "Cl", "Ar", "Kr", "Xe", "Rn"]
 df = df[~df.Symbol.isin(elemental_gases)]
 
-fig, axs = plt.subplot_mosaic([[0]], figsize=(4, 4))
 
-axs[0].scatter(df["Atomic Number"], df["Molar (R)"], color="black")
-axs[0].set_xlabel("Atomic Number")
-axs[0].set_ylabel(r"Molar heat capacity ($C/R$)")
+def draw(c):
+    fig, ax = plt.subplots(figsize=(6.2, 3.6), constrained_layout=True)
 
-# Annotate outliers (the two entries for carbon are graphite and diamond)
-outliers = df[df["Absolute Deviation"] > 1]
-for _, row in outliers.iterrows():
-    label, offset, ha = row["Symbol"], (5, 2), "left"
-    if row["Symbol"] == "C":
-        allotrope = "graphite" if "graphite" in str(row["Notes"]) else "diamond"
-        label = f"C ({allotrope})"
-        offset = (5, -2) if allotrope == "graphite" else (5, -6)
-    elif row["Symbol"] == "B":
-        offset = (5, 4)
-    elif row["Atomic Number"] > 90:
-        offset, ha = (-6, -3), "right"
-    axs[0].annotate(label, (row["Atomic Number"], row["Molar (R)"]),
-                    xytext=offset, textcoords="offset points", ha=ha)
+    # Dulong-Petit law
+    ax.axhline(3, color=c.muted, lw=1.2, ls=(0, (4, 3)))
+    ax.text(101.5, 3, "Dulong–Petit\nlaw, $3R$", color=c.muted, va="center", clip_on=False)
 
-# Plot Dulong-Petit law
-dulong_petit = axs[0].plot([0, 100], [3, 3], "r--", label="Dulong–Petit law")
-labelLines(dulong_petit, zorder=2.5)
+    ax.scatter(df["Atomic Number"], df["Molar (R)"], s=20, color=c.blue, edgecolor=c.ground, linewidth=0.5,
+               zorder=3)
 
-plt.tight_layout()
-plt.show()
-plt.close(fig)
+    # Label the outliers (the two entries for carbon are graphite and diamond)
+    outliers = df[df["Absolute Deviation"] > 1]
+    for _, row in outliers.iterrows():
+        label, offset, ha, va = row["Symbol"], (6, 0), "left", "center"
+        if row["Symbol"] == "C":
+            allotrope = "graphite" if "graphite" in str(row["Notes"]) else "diamond"
+            label = f"C ({allotrope})"
+            offset = (6, 3) if allotrope == "graphite" else (6, -4)
+        elif row["Symbol"] == "B" or row["Atomic Number"] > 90:
+            offset, ha = (-6, 0), "right"
+        ax.annotate(label, (row["Atomic Number"], row["Molar (R)"]), xytext=offset, textcoords="offset points",
+                    ha=ha, va=va)
+
+    ax.set(xlabel="Atomic number", ylabel="Molar heat capacity, $C/R$", xlim=(0, 100), ylim=(0, 8))
+    return fig
+
+
+fs.show(draw, alt="Molar heat capacity divided by the gas constant against atomic number for 82 elements. Most "
+                  "points lie close to the dashed line at 3, which is the Dulong–Petit law. Beryllium, boron, "
+                  "graphite, and diamond lie well below the line, between 0.7 and 2. Gadolinium and plutonium lie "
+                  "above it, near 4.4, and americium lies near 7.5.")
 ```
-
-Molar heat capacity at 25 °C of elemental solids (and liquid mercury) as a function of atomic number. The Dulong–Petit law is shown as a red dashed line.
 
 ```{admonition} Comparing the data with the Einstein model
 :class: important
