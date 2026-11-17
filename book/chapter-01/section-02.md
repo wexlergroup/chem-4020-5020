@@ -10,6 +10,8 @@ kernelspec:
   display_name: Python 3
   language: python
   name: python3
+numbering:
+  enumerator: 1.2.%s
 ---
 
 # 1.2. Kinetic Theory
@@ -61,61 +63,50 @@ Assumptions 2 and 4 are approximations, because real molecules have a finite siz
 ### Deriving Pressure from Particle-Wall Collisions
 
 ```{code-cell} ipython3
+:label: fig:particle-in-container
+:caption: Two-dimensional schematic of a single gas particle of mass $m$ in a cuboid container. The particle moves toward the right wall with velocity component $v_x$, crosses the container with $-v_x$ after the collision, and moves to the right again after the collision with the left wall. The length $L_y$ is perpendicular to the plane of the drawing.
 :tags: [hide-input]
 
+import sys
+
 import matplotlib.pyplot as plt
-from myst_nb import glue
+from matplotlib.patches import Circle, Rectangle
 
-def plot_container_2d(offset=0.2):
-    """Plot a 2D schematic of a gas particle in a container."""
-    fig, ax = plt.subplots(figsize=(12, 4))
+sys.path.append("..")            # the book folder, which holds figstyle
+import figstyle as fs
 
-    # Dimensions
-    Lx, Lz = 10, 2
 
-    # Draw container
-    ax.plot([0, Lx, Lx, 0, 0], [0, 0, Lz, Lz, 0], color='black')
-    ax.fill_between([0, Lx], 0, Lz, color='lightgray')
+def draw(c):
+    fig, ax = plt.subplots(figsize=(6.4, 2.1), constrained_layout=True)
+    Lx, Lz = 10.0, 2.4
+    ax.add_patch(Rectangle((0, 0), Lx, Lz, fc=c.fill, ec=c.ink, lw=1.6))
 
-    # Gas particle
-    ax.plot(0.5 * Lx, 0.75 * Lz, 'o', color='blue', markersize=20, zorder=10)
-    ax.text(0.5 * Lx, 0.75 * Lz, "$m$", color='white',
-            ha='center', va='center', zorder=20, fontsize=12)
+    # The particle and its three legs: toward the right wall, back across the box, and forward again.
+    y_out, y_back, y_again = 0.78 * Lz, 0.50 * Lz, 0.22 * Lz
+    ax.add_patch(Circle((0.5 * Lx, y_out), 0.24, fc=c.blue, ec="none", zorder=5))
+    ax.text(0.5 * Lx, y_out, "$m$", color=fs.on(c.blue), ha="center", va="center", zorder=6)
+    fs.arrow(ax, (0.5 * Lx + 0.35, y_out), (Lx - 0.08, y_out), c.vermilion)
+    fs.arrow(ax, (Lx - 0.08, y_back), (0.08, y_back), c.vermilion)
+    fs.arrow(ax, (0.08, y_again), (0.5 * Lx, y_again), c.vermilion)
+    for x, y, label in [(0.76 * Lx, y_out, "$v_x$"), (0.76 * Lx, y_back, "$-v_x$"), (0.24 * Lx, y_again, "$v_x$")]:
+        ax.text(x, y + 0.12, label, color=c.vermilion, ha="center", va="bottom")
 
-    # Velocity arrows
-    ax.annotate("", xy=(0.5 * Lx, 0.75 * Lz), xytext=(Lx, 0.75 * Lz),
-                arrowprops=dict(arrowstyle="<-", color='red'))
-    ax.text(Lx * 2 / 3, 0.75 * Lz + offset, "$v_x$", color='red', fontsize=12, ha='center', va='center')
+    # Dimensions of the container
+    kw = dict(arrowstyle="<->", color=c.muted, lw=1.0, shrinkA=0, shrinkB=0)
+    ax.annotate("", xy=(0, -0.35), xytext=(Lx, -0.35), arrowprops=kw)
+    ax.text(Lx / 2, -0.55, "$L_x$", ha="center", va="top", color=c.muted)
+    ax.annotate("", xy=(-0.3, 0), xytext=(-0.3, Lz), arrowprops=kw)
+    ax.text(-0.5, Lz / 2, "$L_z$", ha="right", va="center", color=c.muted)
 
-    ax.annotate("", xy=(Lx, 0.5 * Lz), xytext=(0, 0.5 * Lz),
-                arrowprops=dict(arrowstyle="<-", color='red'))
-    ax.text(Lx * 5 / 6, 0.5 * Lz + offset, "$-v_x$", color='red', fontsize=12, ha='center', va='center')
-
-    ax.annotate("", xy=(0, 0.25 * Lz), xytext=(0.5 * Lx, 0.25 * Lz),
-                arrowprops=dict(arrowstyle="<-", color='red'))
-    ax.text(0.25 * Lx, 0.25 * Lz + offset, "$v_x$", color='red', fontsize=12, ha='center', va='center')
-
-    # Length indicators
-    ax.annotate("", xy=(0, -offset), xytext=(Lx, -offset),
-                arrowprops=dict(arrowstyle="<->", color='black'))
-    ax.text(Lx / 2, -2 * offset, "$L_x$", color='black', fontsize=12, ha='center', va='center')
-
-    ax.annotate("", xy=(-offset, 0), xytext=(-offset, Lz),
-                arrowprops=dict(arrowstyle="<->", color='black'))
-    ax.text(-2 * offset, Lz / 2, "$L_z$", color='black', fontsize=12, ha='center', va='center')
-
-    ax.set_xlim(-1, Lx+1)
-    ax.set_ylim(-1, Lz+1)
-    ax.axis('off')
-
+    ax.set(xlim=(-1.2, Lx + 0.3), ylim=(-1.1, Lz + 0.2), aspect="equal")
+    ax.axis("off")
     return fig
 
-fig = plot_container_2d()
-plt.show()
-plt.close(fig)
-```
 
-Two-dimensional schematic of a single gas particle in a cuboid container (gray). Velocity components are shown in red. The length $L_y$ is not depicted, as it extends perpendicular to the plane of view.
+fs.show(draw, alt="A rectangular container of length L x and height L z that holds one particle of mass m. Arrows show "
+                  "the particle moving to the right wall with velocity v x, crossing the whole box to the left wall "
+                  "with velocity minus v x, and moving to the right again with velocity v x.")
+```
 
 #### Microscopic Picture of Pressure
 
@@ -351,66 +342,40 @@ The Maxwell–Boltzmann curves below illustrate two trends:
 - **Higher temperatures** shift the distribution to higher speeds and make it broader.
 
 ```{code-cell} ipython3
+:label: fig:maxwell-boltzmann
+:caption: Maxwell–Boltzmann speed distributions of three gases at 300 K (solid) and of N$_2$ at 600 K (dashed).
 :tags: [hide-input]
 
 import numpy as np
-import matplotlib.pyplot as plt
 from scipy.constants import k as k_B, N_A
 
 
-def f_MB(v, M_kg_per_mol, T):
-    """Maxwell–Boltzmann speed distribution f(v) for an ideal gas.
-
-    Parameters
-    ----------
-    v : array
-        Speeds (m/s).
-    M_kg_per_mol : float
-        Molar mass (kg/mol).
-    T : float
-        Temperature (K).
-
-    Returns
-    -------
-    f : array
-        Probability density (s/m).
-    """
-    m = M_kg_per_mol / N_A  # mass per molecule (kg)
-    prefactor = 4 * np.pi * (m / (2 * np.pi * k_B * T)) ** 1.5
-    return prefactor * v**2 * np.exp(-m * v**2 / (2 * k_B * T))
+def f_MB(v, M, T):
+    """Maxwell–Boltzmann distribution of speeds (s/m) for molar mass M (kg/mol) at temperature T (K)."""
+    m = M / N_A
+    return 4 * np.pi * (m / (2 * np.pi * k_B * T)) ** 1.5 * v**2 * np.exp(-m * v**2 / (2 * k_B * T))
 
 
-# Molar masses (kg/mol)
-M_He = 4.002602e-3
-M_N2 = 28.0134e-3
-M_CO2 = 44.0095e-3
+def draw(c):
+    # Color names the gas. The dashed curve is the same gas at the higher temperature.
+    cases = [(44.0095e-3, 300, c.vermilion, "-", r"CO$_2$, 300 K", (520, 2.25)),
+             (28.0134e-3, 300, c.blue, "-", r"N$_2$, 300 K", (640, 1.82)),
+             (28.0134e-3, 600, c.blue, "--", r"N$_2$, 600 K", (930, 1.20)),
+             (4.002602e-3, 300, c.green, "-", "He, 300 K", (1680, 0.60))]
+    v = np.linspace(0, 3000, 2000)
+    fig, ax = plt.subplots(figsize=(6, 3.8), constrained_layout=True)
+    for M, T, color, style, label, (x, y) in cases:
+        ax.plot(v, 1e3 * f_MB(v, M, T), color=color, ls=style)
+        ax.text(x, y, label, color=color, ha="left", va="bottom")
+    ax.set(xlabel="Speed $v$ (m/s)", ylabel=r"Probability density $f(v)$ ($10^{-3}$ s/m)", xlim=(0, 3000), ylim=(0, 2.5))
+    return fig
 
-cases = [
-    (M_CO2, 300, r"CO$_2$ (300 K)"),
-    (M_N2, 300, r"N$_2$ (300 K)"),
-    (M_N2, 600, r"N$_2$ (600 K)"),
-    (M_He, 300, r"He (300 K)"),
-]
 
-v = np.linspace(0, 4000, 4000)
-
-fig, ax = plt.subplots(figsize=(6, 4))
-
-for M, T, label in cases:
-    ax.plot(v, f_MB(v, M, T), label=label)
-
-ax.set_xlabel("Speed $v$ (m/s)")
-ax.set_ylabel(r"Probability density $f(v)$")
-ax.set_xlim(0, 4000)
-ax.grid(True)
-ax.legend(frameon=False)
-
-plt.tight_layout()
-plt.show()
-plt.close(fig)
+fs.show(draw, alt="Maxwell–Boltzmann distributions of molecular speeds from 0 to 3000 meters per second. Carbon dioxide "
+                  "at 300 K has the narrowest curve, with its peak near 340 meters per second. Nitrogen at 300 K "
+                  "peaks near 420, nitrogen at 600 K near 600, and helium at 300 K has the broadest curve, with its "
+                  "peak near 1100 meters per second.")
 ```
-
-Maxwell–Boltzmann speed distributions for different gases and temperatures.
 
 ## Worked Example
 
