@@ -103,9 +103,11 @@ Per mole, using $R = N_Ak_{\mathrm B}$:
 S_{\mathrm{res,m}} = R\ln 2 \approx 5.76\ \mathrm{J\,mol^{-1}\,K^{-1}}.
 ```
 
-The figure below contrasts the ordered crystal with the disordered one for a small part of a lattice.
+[](#fig:residual-entropy-CO) contrasts the ordered crystal with the disordered one for a small part of a lattice.
 
 ```{code-cell} ipython3
+:label: fig:residual-entropy-CO
+:caption: Schematic of solid CO, drawn in two dimensions. (a) Every molecule has the orientation that the ordered structure assigns to its site, which is a single arrangement. (b) Each molecule is frozen at random in one of its two head-to-tail orientations. The positions of the molecules are the same as in (a), and $N$ molecules have $2^N$ arrangements of this kind.
 :tags: [hide-input]
 
 import sys
@@ -143,8 +145,6 @@ fs.show(draw, alt="Two square lattices of 36 carbon monoxide molecules, each dra
                   "larger oxygen atom. In panel a, every molecule points the way its site prescribes. In panel b, "
                   "about half of the molecules are flipped end for end at random.")
 ```
-
-Schematic of solid CO, drawn in two dimensions. (a) Every molecule has the orientation that the ordered structure assigns to its site, which is a single arrangement. (b) Each molecule is frozen at random in one of its two head-to-tail orientations. The positions of the molecules are the same as in (a), and $N$ molecules have $2^N$ arrangements of this kind.
 
 ```{admonition} Comparison with Experiment
 :class: dropdown
@@ -198,9 +198,11 @@ A closely related statement — sometimes called the **Nernst form** of the thir
 
 The intuitive argument is as follows. Cooling to very low temperature typically alternates two steps, as in adiabatic demagnetization: an isothermal step that removes entropy from the system, and an adiabatic step that lowers the temperature at constant entropy. As $T \to 0$, the entropy of the system approaches the same limiting value whatever the magnetic field (or other control variable), so each successive pair of steps removes less entropy and lowers the temperature by less. The sequence converges but never quite reaches zero. In practice, temperatures below $1\ \mathrm{nK}$ have been achieved in laboratory settings, but $T = 0$ remains a limit, not an endpoint.
 
-The figure below shows the construction for a model paramagnet of $N$ independent magnetic moments. Each moment is a two-state system ([Section 2.3](../chapter-02/section-03.md)) whose energy gap is $\varepsilon_0$ when the field is off, because of the interactions between the moments, and $2\varepsilon_0$ when the field is on. The entropy of a two-state system depends on the gap $\varepsilon$ and on the temperature only through the ratio $\varepsilon/(k_{\mathrm B}T)$. An adiabatic step that returns the gap from $2\varepsilon_0$ to $\varepsilon_0$ therefore halves the temperature, and after $n$ cycles that start at $T_0$ the temperature is $T_0/2^n$, which is greater than zero for every finite $n$.
+[](#fig:adiabatic-demagnetization) shows the construction for a model paramagnet of $N$ independent magnetic moments. Each moment is a two-state system ([Section 2.3](../chapter-02/section-03.md)) whose energy gap is $\varepsilon_0$ when the field is off, because of the interactions between the moments, and $2\varepsilon_0$ when the field is on. The entropy of a two-state system depends on the gap $\varepsilon$ and on the temperature only through the ratio $\varepsilon/(k_{\mathrm B}T)$. An adiabatic step that returns the gap from $2\varepsilon_0$ to $\varepsilon_0$ therefore halves the temperature, and after $n$ cycles that start at $T_0$ the temperature is $T_0/2^n$, which is greater than zero for every finite $n$.
 
 ```{code-cell} ipython3
+:label: fig:adiabatic-demagnetization
+:caption: Entropy of a model paramagnet with the magnetic field off (blue) and on (orange), and successive cooling cycles between the two curves. Each vertical arrow is an isothermal magnetization, in which entropy leaves the system as heat. Each horizontal arrow is an adiabatic demagnetization at constant entropy. Both curves approach the same entropy as $T \to 0$, so each cycle removes less entropy and lowers the temperature by less than the one before.
 :tags: [hide-input]
 
 import sys
@@ -247,8 +249,6 @@ fs.show(draw, alt="Entropy per magnetic moment against temperature for a model p
                   "halves the temperature at each step.")
 ```
 
-Entropy of a model paramagnet with the magnetic field off (blue) and on (orange), and successive cooling cycles between the two curves. Each vertical arrow is an isothermal magnetization, in which entropy leaves the system as heat. Each horizontal arrow is an adiabatic demagnetization at constant entropy. Both curves approach the same entropy as $T \to 0$, so each cycle removes less entropy and lowers the temperature by less than the one before.
-
 ---
 
 ### Absolute Entropies
@@ -262,9 +262,11 @@ S^\circ(T) = \int_0^T \frac{C_P(T')}{T'}\,dT' + \sum_{\text{transitions}} \frac{
 
 where the sum runs over any phase transitions (melting, boiling, etc.) between $0$ and $T$, each contributing $\Delta H_{\mathrm{trs}}/T_{\mathrm{trs}}$ to the entropy.
 
-The figure below applies Eq. {eq}`eq:absolute-entropy` to nitrogen at $1\ \mathrm{atm}$, with the calorimetric measurements of Giauque and Clayton ([*J. Am. Chem. Soc.* **1933**, *55*, 4875](https://doi.org/10.1021/ja01339a024)). Nitrogen has two solid phases, $\alpha$ below $35.61\ \mathrm{K}$ and $\beta$ from there to the melting point at $63.14\ \mathrm{K}$, and it boils at $77.32\ \mathrm{K}$. The measurements begin near $15\ \mathrm{K}$ and end at the boiling point. Below $10\ \mathrm{K}$, the authors extrapolated the heat capacity with the Debye model of a crystal, which reduces to the $T^3$ law of Example 1 below at the lowest temperatures. Above the boiling point, the curve is that of the ideal gas with $C_P = \tfrac{7}{2}R$ ([Section 5.3](section-03.md)). The three transitions contribute $6.4$, $11.4$, and $72.1\ \mathrm{J\,mol^{-1}\,K^{-1}}$, the last of which is more than a third of the total. The result at $298.15\ \mathrm{K}$ is $192.3\ \mathrm{J\,mol^{-1}\,K^{-1}}$, which is $0.4\%$ above the value in the [NIST-JANAF Thermochemical Tables](https://janaf.nist.gov/), $191.61\ \mathrm{J\,mol^{-1}\,K^{-1}}$.
+[](#fig:nitrogen-entropy) applies Eq. {eq}`eq:absolute-entropy` to nitrogen at $1\ \mathrm{atm}$, with the calorimetric measurements of Giauque and Clayton ([*J. Am. Chem. Soc.* **1933**, *55*, 4875](https://doi.org/10.1021/ja01339a024)). Nitrogen has two solid phases, $\alpha$ below $35.61\ \mathrm{K}$ and $\beta$ from there to the melting point at $63.14\ \mathrm{K}$, and it boils at $77.32\ \mathrm{K}$. The measurements begin near $15\ \mathrm{K}$ and end at the boiling point. Below $10\ \mathrm{K}$, the authors extrapolated the heat capacity with the Debye model of a crystal, which reduces to the $T^3$ law of Example 1 below at the lowest temperatures. Above the boiling point, the curve is that of the ideal gas with $C_P = \tfrac{7}{2}R$ ([Section 5.3](section-03.md)). The three transitions contribute $6.4$, $11.4$, and $72.1\ \mathrm{J\,mol^{-1}\,K^{-1}}$, the last of which is more than a third of the total. The result at $298.15\ \mathrm{K}$ is $192.3\ \mathrm{J\,mol^{-1}\,K^{-1}}$, which is $0.4\%$ above the value in the [NIST-JANAF Thermochemical Tables](https://janaf.nist.gov/), $191.61\ \mathrm{J\,mol^{-1}\,K^{-1}}$.
 
 ```{code-cell} ipython3
+:label: fig:nitrogen-entropy
+:caption: Absolute entropy of nitrogen at $1\ \mathrm{atm}$ from the heat capacities and transition enthalpies measured by Giauque and Clayton (1933). (a) The integrand $C_P/T$ of Eq. [](#eq:absolute-entropy). Symbols are the measurements, and the shaded area under each branch is the entropy gained within that phase. Dashed lines are calculated: the Debye model below $10\ \mathrm{K}$ and the ideal gas above the boiling point. (b) The entropy, which rises continuously within each phase and increases by $\Delta H_{\mathrm{trs}}/T_{\mathrm{trs}}$ (labels, in $\mathrm{J\,mol^{-1}\,K^{-1}}$) at the solid–solid transition, at melting, and at boiling. The step at the boiling point includes the correction of $0.9\ \mathrm{J\,mol^{-1}\,K^{-1}}$ that the authors applied to convert the vapor to an ideal gas.
 :tags: [hide-input]
 
 import sys
@@ -359,8 +361,6 @@ fs.show(draw, alt="Two panels for nitrogen at 1 atm. Panel a: the heat capacity 
                   f"rises within each phase, steps up at the three transitions, and reaches {S0:.1f} joules per mole "
                   "per kelvin.")
 ```
-
-Absolute entropy of nitrogen at $1\ \mathrm{atm}$ from the heat capacities and transition enthalpies measured by Giauque and Clayton (1933). (a) The integrand $C_P/T$ of Eq. {eq}`eq:absolute-entropy`. Symbols are the measurements, and the shaded area under each branch is the entropy gained within that phase. Dashed lines are calculated: the Debye model below $10\ \mathrm{K}$ and the ideal gas above the boiling point. (b) The entropy, which rises continuously within each phase and increases by $\Delta H_{\mathrm{trs}}/T_{\mathrm{trs}}$ (labels, in $\mathrm{J\,mol^{-1}\,K^{-1}}$) at the solid–solid transition, at melting, and at boiling. The step at the boiling point includes the correction of $0.9\ \mathrm{J\,mol^{-1}\,K^{-1}}$ that the authors applied to convert the vapor to an ideal gas.
 
 These absolute entropies are tabulated in standard references (NIST WebBook, JANAF tables) as $S^\circ(298.15\ \mathrm{K})$. Combined with standard enthalpies of formation, they provide the reaction entropies and Gibbs energies that we will use in [Section 5.3](section-03.md) to analyze the Haber–Bosch process.
 
