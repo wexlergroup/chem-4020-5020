@@ -302,9 +302,18 @@ In a more rigorous quantum treatment (and at lower temperatures), the partition 
 
 ### Computational Studio: Linear Rigid Rotor
 
-Explore how molecular geometry and symmetry impact rotational thermodynamics. Use this studio to visualize the rotor, analyze the population distribution across quantum states, and compare the partition function and entropy of heteronuclear vs. homonuclear diatomic molecules.
+In [](#fig:rigid-rotor-studio), you can choose the masses, the bond length, and the temperature of a diatomic molecule, or one of the molecules of {numref}`rotational-temperatures`, and follow $\Theta_{\mathrm{rot}}$, $q_{\mathrm{rot}}$, and the probabilities of the rotational levels.
 
-You can open the studio in a new tab: [Rigid Rotor Computational Studio](https://wexlergroup.github.io/chem-4020-5020/computational-studios/rigid-rotor-studio.html).
+```{iframe} https://wexlergroup.github.io/chem-4020-5020/computational-studios/rigid-rotor-studio.html
+:label: fig:rigid-rotor-studio
+:width: 100%
+:title: Linear rigid rotor
+:placeholder: ../_static/rigid-rotor-studio/rigid-rotor-studio.png
+
+A diatomic molecule as a linear rigid rotor. Panel (a) shows the molecule to scale, turning about its center of mass (the cross). Panel (b) lists the reduced mass, the moment of inertia, the rotational constant, the rotational temperature, the partition function from the sum over $J$ and from the high-temperature approximation, and the molar entropy of rotation, which [Section 4.3](../chapter-04/section-03.md) obtains from the partition function. Panel (c) shows the probabilities $p_J$ of the levels, and panel (d) shows their energies beside the temperature (dashed line). For two identical atoms, panel (c) does not include the effect of the nuclear spins on the levels with even and odd $J$.
+```
+
+You can also open the studio in a new tab: [Linear Rigid Rotor Studio](https://wexlergroup.github.io/chem-4020-5020/computational-studios/rigid-rotor-studio.html).
 
 ## Worked Example
 
