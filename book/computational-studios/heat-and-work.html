@@ -1,0 +1,352 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Heat and work on the energy levels · Physical Chemistry II</title>
+<!--
+  Heat and work on the energy levels: an interactive companion to Section 3.2 (microscopic interpretation of the
+  First Law). This file is written by hand (it is not built from development/).
+
+  One particle in a one-dimensional box of length L at temperature T. The levels are E_i = i^2 h^2 / (8 m L^2), and
+  the probabilities p_i are Boltzmann probabilities. The reader chooses one of two reversible processes:
+
+      heat at fixed length      T changes, L is fixed: the levels stay, the probabilities change, dU = sum E_i dp_i = q
+      compress without heat     L changes, T L^2 is constant: the probabilities stay, the levels move, dU = sum p_i dE_i = w
+
+  The page adds up q and w along the route that the reader takes from the starting state.
+
+      heat-and-work.html               the interactive page
+      heat-and-work.html?static=1      one still picture, for the PDF of the notes
+      ...&theme=light or dark          fixes the colors (otherwise the page follows the book or the system)
+
+  Inside the notes, the page follows the light or dark mode of the book and sets the height of its own frame.
+
+  Units inside the program: energies and k_B T in units of epsilon = h^2 / (8 m L_0^2), lengths in units of L_0.
+-->
+<style>
+  :root {
+    --ground: #ffffff; --text: #1c1917; --muted: #6b645e; --border: #dedad5; --fill: #f1f0ee;
+    --blue: #0072b2; --on-blue: #ffffff; --verm: #d55e00; --bar: #a8a29e; --axis: #78716c;
+  }
+  :root[data-theme="dark"] {
+    --ground: #1c1917; --text: #f5f5f4; --muted: #a8a29e; --border: #3a3531; --fill: #2a2623;
+    --blue: #56b4e9; --on-blue: #111111; --verm: #f4915a; --bar: #78716c; --axis: #a8a29e;
+  }
+  * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body { margin: 0; background: var(--ground); color: var(--text);
+         font: 15px/1.45 Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+  main { max-width: 760px; margin: 0 auto; padding: 24px 16px 40px; }
+  .embedded main { max-width: none; padding: 0 0 12px; }
+  h1 { font-size: 1.5rem; line-height: 1.2; margin: 0 0 6px; }
+  .embedded h1, .embedded .lede, .embedded .alone { display: none; }      /* in the notes, the caption gives the units */
+  .lede { color: var(--muted); margin: 0 0 18px; max-width: 64ch; }
+  i.v { font-style: italic; font-family: inherit; }
+  .plots { display: grid; grid-template-columns: minmax(0, 3fr) minmax(0, 2fr); gap: 18px; }
+  .plot h2 { font-size: 0.98rem; font-weight: 400; line-height: 1.3; margin: 0 0 4px; }
+  .plot h2 b { font-weight: 700; margin-right: 0.5em; }
+  canvas { display: block; width: 100%; height: 330px; }
+  @media (max-width: 600px) { .plots { grid-template-columns: minmax(0, 1fr); } #levels { height: 300px; } #account { height: 230px; } }
+  .state { display: none; flex-wrap: wrap; gap: 4px 22px; justify-content: center; margin: 10px 0 0; font-size: 0.92rem; }
+  .static .state { display: flex; }                 /* the still picture has no sliders, so it states T, L, and U */
+  .readout, .state { font-variant-numeric: tabular-nums; }
+  .controls { margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--border); display: grid;
+              grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 10px 22px; align-items: end; }
+  .controls .wide { grid-column: 1 / -1; display: flex; flex-wrap: wrap; gap: 6px 10px; align-items: center; font-size: 0.9rem; }
+  @media (max-width: 600px) { .controls { grid-template-columns: minmax(0, 1fr); } }
+  .seg { display: inline-flex; flex-wrap: wrap; gap: 4px; }
+  button { font: inherit; font-size: 0.88rem; color: var(--text); background: var(--fill); border: 1px solid var(--border);
+           border-radius: 999px; padding: 4px 12px; cursor: pointer; }
+  button:hover { border-color: var(--muted); }
+  button[aria-pressed="true"] { background: var(--blue); border-color: var(--blue); color: var(--on-blue); font-weight: 600; }
+  label { display: block; font-size: 0.9rem; }
+  label output { float: right; font-variant-numeric: tabular-nums; color: var(--muted); }
+  label.held { color: var(--muted); }
+  input[type="range"] { width: 100%; margin: 4px 0 0; accent-color: var(--blue); }
+  button:focus-visible, input:focus-visible { outline: 2px solid var(--blue); outline-offset: 2px; }
+  .spacer { flex: 1 1 auto; }
+  .hint { font-size: 0.84rem; color: var(--muted); margin: 12px 0 0; }
+  .static .controls, .static .hint, .static h1, .static .lede { display: none; }
+  .static main { padding: 0; }
+</style>
+</head>
+<body>
+<main>
+  <h1>Heat and work on the energy levels</h1>
+  <p class="lede">A particle in a box can take up energy in two ways. Heat changes the probabilities of its energy levels, and work moves the levels themselves. Choose a process, and follow where the energy goes.</p>
+
+  <div class="plots">
+    <section class="plot">
+      <h2><b>a</b>Energy levels and probabilities</h2>
+      <canvas id="levels" role="img" aria-label="Energy levels of a particle in a box, each with a bar for its probability"></canvas>
+    </section>
+    <section class="plot">
+      <h2><b>b</b>Heat, work, and the change in <i class="v">U</i></h2>
+      <canvas id="account" role="img" aria-label="Bars for the heat, the work, and the change in internal energy since the starting state"></canvas>
+    </section>
+  </div>
+  <p class="state">
+    <span><i class="v">k</i><sub>B</sub><i class="v">T</i> = <span id="r-T"></span> <i class="v">ε</i></span>
+    <span><i class="v">L</i> = <span id="r-L"></span> <i class="v">L</i><sub>0</sub></span>
+    <span><i class="v">U</i> = <span id="r-U2"></span> <i class="v">ε</i></span>
+  </p>
+
+  <div class="controls">
+    <div class="wide"><span>Process</span>
+      <span class="seg" id="process" role="group" aria-label="Process">
+        <button type="button" data-process="heat" aria-pressed="true">Heat at fixed length</button>
+        <button type="button" data-process="work" aria-pressed="false">Compress or expand without heat</button>
+      </span>
+    </div>
+    <label id="l-T">Temperature <i class="v">k</i><sub>B</sub><i class="v">T</i> <output id="o-T"></output><input id="s-T" type="range" min="0.6" max="16" step="0.05"></label>
+    <label id="l-L">Length of the box <i class="v">L</i> <output id="o-L"></output><input id="s-L" type="range" min="0.8" max="1.25" step="0.005"></label>
+    <div class="wide end">
+      <span class="readout"><i class="v">U</i> = <span id="r-U"></span> <i class="v">ε</i></span>
+      <span class="spacer"></span>
+      <button type="button" id="restart">Start again from this state</button>
+      <button type="button" id="reset">Reset</button>
+    </div>
+  </div>
+  <p class="hint"><span class="alone">Energies are in units of <i class="v">ε</i> = <i class="v">h</i><sup>2</sup>/(8<i class="v">mL</i><sub>0</sub><sup>2</sup>), the energy of the lowest level at the starting length <i class="v">L</i><sub>0</sub>. </span>Gray shows what is as it was in the starting state, orange shows what has changed, and the dashed marks show the starting state. The triangle marks the internal energy <i class="v">U</i> = Σ <i class="v">p<sub>i</sub>E<sub>i</sub></i>.</p>
+</main>
+
+<script>
+"use strict";
+const params = new URLSearchParams(location.search);
+const fixed = params.has("static");
+document.body.classList.toggle("static", fixed);
+const $ = id => document.getElementById(id);
+
+/* ---- colors of the book, and the height of the frame ---- */
+let host = null;
+try { if (window.parent !== window) host = window.parent.document.documentElement; } catch (e) { host = null; }
+try { if (window.frameElement) document.body.classList.add("embedded"); } catch (e) {}
+let color = {};
+function theme() {
+  let dark = false;
+  if (params.get("theme")) dark = params.get("theme") === "dark";
+  else if (host) dark = host.classList.contains("dark");
+  else { try { dark = window.matchMedia("(prefers-color-scheme: dark)").matches; } catch (e) {} }
+  document.documentElement.dataset.theme = dark ? "dark" : "light";
+  const css = getComputedStyle(document.documentElement);
+  for (const name of ["ground", "text", "muted", "border", "blue", "verm", "bar", "axis"]) color[name] = css.getPropertyValue("--" + name).trim();
+  if (typeof drawAll === "function") drawAll();
+}
+
+function fit() {                                    // inside the notes, make the frame as tall as the content
+  try {
+    const frame = window.frameElement;
+    if (!frame) return;
+    const height = Math.ceil(document.documentElement.getBoundingClientRect().height) + "px";
+    frame.style.height = height;
+    const box = frame.parentElement;                // the book theme wraps a frame in a box with a fixed 5:3 shape
+    if (box && box.style.paddingBottom) { box.style.paddingBottom = "0"; box.style.display = "block"; }
+    if (box && box.style.paddingBottom === "0px") box.style.height = height;
+  } catch (e) {}
+}
+
+/* ---- the particle in a box ---- */
+const LEVELS = 80;                                  // levels in the sums
+const T_MIN = 0.6, T_MAX = 16, L_MIN = 0.8, L_MAX = 1.25;
+const START = { T: 4, L: 1 };
+const energy = (i, L) => i * i / (L * L);           // E_i in units of epsilon, for i = 1, 2, 3, ...
+function probabilities(T, L) {                      // Boltzmann probabilities p_1, p_2, ...
+  const weights = [];
+  let sum = 0;
+  for (let i = 1; i <= LEVELS; i++) { const weight = Math.exp(-(energy(i, L) - energy(1, L)) / T); weights.push(weight); sum += weight; }
+  return weights.map(weight => weight / sum);
+}
+function internalEnergy(T, L) { return probabilities(T, L).reduce((sum, p, k) => sum + p * energy(k + 1, L), 0); }
+
+let state = { ...START }, start = { ...START }, q = 0, w = 0, process = "heat";
+
+// Heat at fixed length: the levels stay, so dU = sum E_i dp_i, and the whole change of U is heat.
+function heatTo(T) {
+  T = Math.min(T_MAX, Math.max(T_MIN, T));
+  q += internalEnergy(T, state.L) - internalEnergy(state.T, state.L);
+  state.T = T;
+}
+// Reversible change of length without heat: every E_i changes by the same factor as k_B T, so the probabilities stay,
+// dU = sum p_i dE_i, and the whole change of U is work. T L^2 is constant.
+function compressTo(L) {
+  const constant = state.T * state.L * state.L;
+  L = Math.min(L_MAX, Math.max(L_MIN, L));
+  L = Math.min(Math.sqrt(constant / T_MIN), Math.max(Math.sqrt(constant / T_MAX), L));     // keep T on its slider
+  const T = constant / (L * L);
+  w += internalEnergy(T, L) - internalEnergy(state.T, state.L);
+  state.L = L; state.T = T;
+}
+
+/* ---- drawing ---- */
+const FONT = "Inter, ui-sans-serif, system-ui, sans-serif";
+const number = (value, digits = 2) => value.toFixed(digits).replace("-", "−");
+const signed = value => (value > 0.004 ? "+" : "") + number(Math.abs(value) < 0.005 ? 0 : value);
+function prepare(canvas) {
+  const ratio = window.devicePixelRatio || 1, w = canvas.clientWidth, h = canvas.clientHeight;
+  if (canvas.width !== Math.round(w * ratio) || canvas.height !== Math.round(h * ratio)) { canvas.width = Math.round(w * ratio); canvas.height = Math.round(h * ratio); }
+  const g = canvas.getContext("2d");
+  g.setTransform(ratio, 0, 0, ratio, 0, 0); g.clearRect(0, 0, w, h);
+  return [g, w, h];
+}
+function subscript(g, x, y, base, index, align) {  // an italic symbol with an index, such as E with the index 3
+  g.font = "italic 12.5px " + FONT; const wide = g.measureText(base).width;
+  const small = (/^[a-z]$/.test(index) ? "italic " : "") + "10px " + FONT;      // a letter index is italic, a number is upright
+  g.font = small; const narrow = g.measureText(index).width;
+  let left = align === "right" ? x - wide - narrow : align === "center" ? x - (wide + narrow) / 2 : x;
+  g.textAlign = "left"; g.textBaseline = "middle";
+  g.font = "italic 12.5px " + FONT; g.fillText(base, left, y);
+  g.font = small; g.fillText(index, left + wide + 0.5, y + 4);
+}
+
+const E_TOP = 40;                                   // top of the energy axis, in units of epsilon
+function drawLevels() {
+  const [g, W, H] = prepare($("levels"));
+  if (!W) return;
+  const left = 46, right = 34, top = 10, bottom = 38, BAR = 9;
+  const x = p => left + p * (W - left - right), y = E => H - bottom - E / E_TOP * (H - top - bottom);
+  const p = probabilities(state.T, state.L), p0 = probabilities(start.T, start.L);
+  const levelsMoved = Math.abs(state.L - start.L) > 1e-9;
+  const weightsMoved = p.some((value, k) => Math.abs(value - p0[k]) > 5e-4);
+
+  // Axes: probability along the bottom, energy on the left without numbers
+  g.strokeStyle = color.axis; g.lineWidth = 1; g.beginPath(); g.moveTo(left, top); g.lineTo(left, H - bottom); g.lineTo(W - right, H - bottom); g.stroke();
+  g.fillStyle = color.text; g.font = "11.5px " + FONT; g.textAlign = "center"; g.textBaseline = "top";
+  for (const tick of [0, 0.25, 0.5, 0.75, 1]) {
+    g.beginPath(); g.moveTo(x(tick), H - bottom); g.lineTo(x(tick), H - bottom + 4); g.stroke();
+    g.fillText(String(tick), x(tick), H - bottom + 6);
+  }
+  g.font = "12.5px " + FONT; g.textBaseline = "bottom";
+  const label = "Probability ", shift = g.measureText(label).width / 2;
+  g.fillText(label, (left + W - right) / 2 - 6, H - 2);
+  subscript(g, (left + W - right) / 2 - 6 + shift, H - 9, "p", "i", "left");
+  g.save(); g.translate(11, (top + H - bottom) / 2); g.rotate(-Math.PI / 2); g.font = "12.5px " + FONT; g.textAlign = "center"; g.textBaseline = "middle";
+  g.fillStyle = color.text; g.fillText("Energy", 0, 0); g.restore();
+
+  // Starting levels, dashed, when the levels have moved
+  if (levelsMoved) {
+    g.strokeStyle = color.axis; g.lineWidth = 1; g.setLineDash([4, 3]);
+    for (let i = 1; energy(i, start.L) <= E_TOP; i++) { const yy = y(energy(i, start.L)); g.beginPath(); g.moveTo(left + 1, yy); g.lineTo(W - right, yy); g.stroke(); }
+    g.setLineDash([]);
+  }
+
+  // Value beside each bar; its halo is painted first, so that it covers only the dashed starting levels behind it
+  const valueAt = i => Math.max(x(p[i - 1]), weightsMoved ? x(p0[i - 1]) : 0) + 5;
+  g.font = "11.5px " + FONT; g.textAlign = "left"; g.textBaseline = "middle"; g.strokeStyle = color.ground; g.lineWidth = 4; g.lineJoin = "round";
+  for (let i = 1; energy(i, state.L) <= E_TOP; i++) if (p[i - 1] >= 0.005) g.strokeText(number(p[i - 1]), valueAt(i), y(energy(i, state.L)) - BAR / 2 - 2);
+
+  // Levels with their bars
+  let lastLabel = Infinity;
+  for (let i = 1; energy(i, state.L) <= E_TOP; i++) {
+    const yy = y(energy(i, state.L)), value = p[i - 1];
+    g.strokeStyle = levelsMoved ? color.verm : color.axis; g.lineWidth = 1.6;
+    g.beginPath(); g.moveTo(left + 1, yy); g.lineTo(W - right, yy); g.stroke();
+    g.fillStyle = weightsMoved ? color.verm : color.bar;
+    g.fillRect(x(0) + 1, yy - BAR - 1, Math.max(0, x(value) - x(0) - 1), BAR);
+    if (weightsMoved) {                              // starting probability as a dashed outline
+      g.strokeStyle = color.text; g.lineWidth = 1; g.setLineDash([3, 2]);
+      g.strokeRect(x(0) + 1.5, yy - BAR - 0.5, Math.max(0, x(p0[i - 1]) - x(0) - 1.5), BAR - 1); g.setLineDash([]);
+    }
+    if (value >= 0.005) {
+      g.fillStyle = weightsMoved ? color.verm : color.text; g.font = "11.5px " + FONT; g.textAlign = "left"; g.textBaseline = "middle";
+      g.fillText(number(value), valueAt(i), yy - BAR / 2 - 2);
+    }
+    if (lastLabel - yy >= 13) { g.fillStyle = color.text; subscript(g, left - 7, yy - 1, "E", String(i), "right"); lastLabel = yy; }
+  }
+
+  // The internal energy, as a triangle at the right (hollow for the starting state)
+  const marker = (U, filled) => {
+    if (U > E_TOP) return;
+    const yy = y(U), xx = W - right + 3;
+    g.beginPath(); g.moveTo(xx, yy); g.lineTo(xx + 9, yy - 5.5); g.lineTo(xx + 9, yy + 5.5); g.closePath();
+    if (filled) { g.fillStyle = color.blue; g.fill(); } else { g.strokeStyle = color.axis; g.lineWidth = 1.2; g.stroke(); }
+  };
+  const U = internalEnergy(state.T, state.L), U0 = internalEnergy(start.T, start.L);
+  if (Math.abs(U - U0) > 0.02) marker(U0, false);
+  marker(U, true);
+  if (U <= E_TOP) { g.fillStyle = color.blue; g.font = "italic 12.5px " + FONT; g.textAlign = "left"; g.textBaseline = "middle"; g.fillText("U", W - right + 15, y(U)); }
+}
+
+function drawAccount() {
+  const [g, W, H] = prepare($("account"));
+  if (!W) return;
+  const left = 44, right = 8, top = 22, bottom = 52;
+  const U = internalEnergy(state.T, state.L), U0 = internalEnergy(start.T, start.L), change = U - U0;
+  const largest = Math.max(Math.abs(q), Math.abs(w), Math.abs(change));
+  const limit = [4, 8, 16, 32, 64].find(value => value >= largest * 1.25) || 64;
+  const y = value => top + (limit - value) / (2 * limit) * (H - top - bottom);
+
+  g.strokeStyle = color.axis; g.lineWidth = 1; g.beginPath(); g.moveTo(left, top); g.lineTo(left, H - bottom); g.stroke();
+  g.fillStyle = color.text; g.font = "11.5px " + FONT; g.textAlign = "right"; g.textBaseline = "middle";
+  for (const tick of [-limit, -limit / 2, 0, limit / 2, limit]) {
+    g.beginPath(); g.moveTo(left - 4, y(tick)); g.lineTo(left, y(tick)); g.stroke();
+    g.fillText(number(tick, 0), left - 7, y(tick));
+  }
+  g.save(); g.translate(10, (top + H - bottom) / 2); g.rotate(-Math.PI / 2); g.font = "12.5px " + FONT; g.textAlign = "center"; g.textBaseline = "middle";
+  g.fillText("Energy (units of ", -8, 0); const wide = g.measureText("Energy (units of ").width;
+  g.font = "italic 12.5px " + FONT; g.textAlign = "left"; g.fillText("ε", -8 + wide / 2, 0); const symbol = g.measureText("ε").width;
+  g.font = "12.5px " + FONT; g.fillText(")", -8 + wide / 2 + symbol, 0); g.restore();
+  g.strokeStyle = color.axis; g.beginPath(); g.moveTo(left, y(0)); g.lineTo(W - right, y(0)); g.stroke();
+
+  const bars = [["q", "Σ", "E", "dp", q], ["w", "Σ", "p", "dE", w], ["ΔU", "", "", "", change]];
+  const span = (W - left - right) / 3, width = Math.min(46, span * 0.5);
+  bars.forEach(([name, sum, first, second, value], k) => {
+    const center = left + span * (k + 0.5), y0 = y(0), y1 = y(value);
+    g.fillStyle = k === 2 ? color.text : color.blue;
+    g.fillRect(center - width / 2, Math.min(y0, y1), width, Math.abs(y1 - y0));
+    g.fillStyle = color.text; g.font = "11.5px " + FONT; g.textAlign = "center";
+    g.textBaseline = value >= 0 ? "bottom" : "top";
+    g.fillText(signed(value), center, value >= 0 ? y1 - 4 : y1 + 4);
+    // Name of the bar and its microscopic expression below the plot
+    g.textBaseline = "middle";
+    if (k === 2) { g.font = "12.5px " + FONT; const d = g.measureText("Δ").width; g.font = "italic 12.5px " + FONT; const u = g.measureText("U").width;
+      g.textAlign = "left"; g.font = "12.5px " + FONT; g.fillText("Δ", center - (d + u) / 2, H - bottom + 16); g.font = "italic 12.5px " + FONT; g.fillText("U", center - (d + u) / 2 + d, H - bottom + 16);
+      g.fillStyle = color.muted; g.font = "11.5px " + FONT; const e = g.measureText("= ").width, plus = g.measureText(" + ").width;
+      g.font = "italic 11.5px " + FONT; const qq = g.measureText("q").width, ww = g.measureText("w").width;
+      let xx = center - (e + qq + plus + ww) / 2;
+      g.font = "11.5px " + FONT; g.fillText("= ", xx, H - bottom + 36); xx += e;
+      g.font = "italic 11.5px " + FONT; g.fillText("q", xx, H - bottom + 36); xx += qq;
+      g.font = "11.5px " + FONT; g.fillText(" + ", xx, H - bottom + 36); xx += plus;
+      g.font = "italic 11.5px " + FONT; g.fillText("w", xx, H - bottom + 36);
+    } else {
+      g.font = "italic 12.5px " + FONT; g.fillText(name, center, H - bottom + 16);
+      g.fillStyle = color.muted; g.font = "11.5px " + FONT; const a = g.measureText("= Σ ").width;
+      g.font = "italic 11.5px " + FONT; const b = g.measureText(first).width, c = g.measureText(second).width;
+      g.font = "9px " + FONT; const i = g.measureText("i").width;
+      let xx = center - (a + b + c + 2 * i + 2) / 2; g.textAlign = "left";
+      g.font = "11.5px " + FONT; g.fillText("= Σ ", xx, H - bottom + 36); xx += a;
+      g.font = "italic 11.5px " + FONT; g.fillText(first, xx, H - bottom + 36); xx += b;
+      g.font = "italic 9px " + FONT; g.fillText("i", xx, H - bottom + 40); xx += i + 2;
+      g.font = "italic 11.5px " + FONT; g.fillText(second, xx, H - bottom + 36); xx += c;
+      g.font = "italic 9px " + FONT; g.fillText("i", xx, H - bottom + 40);
+    }
+  });
+}
+
+function drawAll() {
+  drawLevels(); drawAccount();
+  $("r-T").textContent = number(state.T); $("r-L").textContent = number(state.L, 3); $("r-U").textContent = $("r-U2").textContent = number(internalEnergy(state.T, state.L));
+  $("o-T").innerHTML = number(state.T) + ' <i class="v">ε</i>'; $("o-L").innerHTML = number(state.L, 3) + ' <i class="v">L</i><sub>0</sub>';
+  $("s-T").value = state.T; $("s-L").value = state.L;
+  $("s-T").disabled = process !== "heat"; $("s-L").disabled = process !== "work";
+  $("l-T").classList.toggle("held", process !== "heat"); $("l-L").classList.toggle("held", process !== "work");
+  for (const button of $("process").querySelectorAll("button")) button.setAttribute("aria-pressed", String(button.dataset.process === process));
+}
+
+/* ---- controls ---- */
+$("s-T").addEventListener("input", e => { if (process === "heat") heatTo(+e.target.value); drawAll(); });
+$("s-L").addEventListener("input", e => { if (process === "work") compressTo(+e.target.value); drawAll(); });
+for (const button of $("process").querySelectorAll("button")) button.addEventListener("click", () => { process = button.dataset.process; drawAll(); });
+$("restart").addEventListener("click", () => { start = { ...state }; q = 0; w = 0; drawAll(); });
+$("reset").addEventListener("click", () => { state = { ...START }; start = { ...START }; q = 0; w = 0; process = "heat"; drawAll(); });
+
+/* ---- run ---- */
+if (fixed) { heatTo(7); compressTo(0.85); }         // the still picture shows one heating and one compression
+theme(); drawAll();
+if (host) new MutationObserver(theme).observe(host, { attributes: true, attributeFilter: ["class"] });
+else { try { window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", theme); } catch (e) {} }
+try { new ResizeObserver(() => { fit(); drawAll(); }).observe(document.body); } catch (e) {}
+window.addEventListener("load", () => { fit(); drawAll(); });
+</script>
+</body>
+</html>
