@@ -181,13 +181,20 @@ On a $\bar g$-vs-$T$ plot at fixed $P$:
 - All phases have *negative* slope (entropy is positive).
 - The phase with the *larger* molar entropy has the *more negative* (steeper) slope.
 
-Because typically $\bar s_{\mathrm{g}} > \bar s_{\mathrm{l}} > \bar s_{\mathrm{s}}$, the gas line is steepest, then liquid, then solid. Starting at low $T$ the solid curve is the lowest (most stable); as $T$ increases, the liquid curve eventually crosses the solid curve, and then the gas curve crosses the liquid. Each crossing marks a first-order phase transition at which the lowest-$\bar g$ phase — the stable one — changes. The figure below shows the three curves for water at 1 bar.
+Because typically $\bar s_{\mathrm{g}} > \bar s_{\mathrm{l}} > \bar s_{\mathrm{s}}$, the gas line is steepest, then liquid, then solid. Starting at low $T$ the solid curve is the lowest (most stable); as $T$ increases, the liquid curve eventually crosses the solid curve, and then the gas curve crosses the liquid. Each crossing marks a first-order phase transition at which the lowest-$\bar g$ phase — the stable one — changes. [](#fig:gibbs-phases) shows the three curves for water at 1 bar.
 
 ```{code-cell} ipython3
+:label: fig:gibbs-phases
+:caption: Molar Gibbs free energy of ice, liquid water, and steam at 1 bar. Each curve is solid where its phase is the stable one and dashed where it is not. The curves cross at the melting point ($273.15\ \mathrm{K}$) and at the boiling point ($372.76\ \mathrm{K}$ at 1 bar). The curves were computed with a constant heat capacity for each phase ($37.8$, $75.3$, and $36\ \mathrm{J\,mol^{-1}\,K^{-1}}$), the standard entropy of the liquid at $298.15\ \mathrm{K}$ ($69.95\ \mathrm{J\,mol^{-1}\,K^{-1}}$), and the enthalpies of fusion ($6.01\ \mathrm{kJ\,mol^{-1}}$) and vaporization ($40.67\ \mathrm{kJ\,mol^{-1}}$). The zero of enthalpy is that of the liquid at $273.15\ \mathrm{K}$.
 :tags: [hide-input]
+
+import sys
 
 import numpy as np
 import matplotlib.pyplot as plt
+
+sys.path.append("..")            # the book folder, which holds figstyle
+import figstyle as fs
 
 # Water at 1 bar, with a constant heat capacity for each phase
 T_fus, T_vap = 273.15, 372.76             # K
@@ -207,39 +214,40 @@ def g_phase(T, T_ref, h_ref, s_ref, c):
     return (h - T * s) / 1000
 
 phases = {
-    "ice": (T_fus, -dh_fus, s_l_fus - dh_fus / T_fus, c_s, "#0072B2"),
-    "liquid": (T_fus, 0.0, s_l_fus, c_l, "#009E73"),
-    "steam": (T_vap, h_l_vap + dh_vap, s_l_vap + dh_vap / T_vap, c_g, "#D55E00"),
+    "ice": (T_fus, -dh_fus, s_l_fus - dh_fus / T_fus, c_s),
+    "liquid": (T_fus, 0.0, s_l_fus, c_l),
+    "steam": (T_vap, h_l_vap + dh_vap, s_l_vap + dh_vap / T_vap, c_g),
 }
 stable = {"ice": (230, T_fus), "liquid": (T_fus, T_vap), "steam": (T_vap, 420)}
 drawn = {"ice": (230, 330), "liquid": (230, 420), "steam": (318, 420)}
 
-fig, ax = plt.subplots(figsize=(6, 4), constrained_layout=True)
-for name, (T_ref, h_ref, s_ref, c, color) in phases.items():
-    T = np.linspace(*drawn[name], 200)
-    ax.plot(T, g_phase(T, T_ref, h_ref, s_ref, c), "--", color=color, lw=1.2)
-    T = np.linspace(*stable[name], 200)
-    ax.plot(T, g_phase(T, T_ref, h_ref, s_ref, c), "-", color=color, lw=2.5)
 
-for T_x, label in ((T_fus, "273.15 K"), (T_vap, "372.76 K")):
-    g_x = g_phase(T_x, T_fus, 0.0, s_l_fus, c_l)
-    ax.plot(T_x, g_x, "o", color="0.2", ms=5, zorder=3)
-    ax.annotate(label, (T_x, g_x), xytext=(-8, -14), textcoords="offset points",
-                ha="right", fontsize=9)
+def draw_gibbs(c):
+    fig, ax = plt.subplots(figsize=(6.0, 4.0), constrained_layout=True)
+    colors = {"ice": c.solid, "liquid": c.liquid, "steam": c.gas}
+    for name, (T_ref, h_ref, s_ref, heat_capacity) in phases.items():
+        T = np.linspace(*drawn[name], 200)                   # dashed where the phase is not the stable one
+        ax.plot(T, g_phase(T, T_ref, h_ref, s_ref, heat_capacity), color=colors[name], lw=1.3, ls=(0, (4, 3)))
+        T = np.linspace(*stable[name], 200)
+        ax.plot(T, g_phase(T, T_ref, h_ref, s_ref, heat_capacity), color=colors[name], lw=fs.LINE)
 
-ax.text(240, -17.4, "ice", color="#0072B2", fontsize=10)
-ax.text(318, -22.2, "liquid", color="#009E73", fontsize=10)
-ax.text(402, -30.2, "steam", color="#D55E00", fontsize=10)
-ax.set_xlabel("Temperature (K)")
-ax.set_ylabel(r"$\bar g$ (kJ mol$^{-1}$)")
-ax.set_xlim(230, 420)
-ax.set_ylim(-35, -13)
+    for T_x, label in ((T_fus, "273.15 K"), (T_vap, "372.76 K")):
+        g_x = g_phase(T_x, T_fus, 0.0, s_l_fus, c_l)
+        ax.plot(T_x, g_x, "o", color=c.ink, ms=5.5, zorder=3)
+        ax.annotate(label, (T_x, g_x), xytext=(-8, -15), textcoords="offset points", ha="right")
 
-plt.show()
-plt.close(fig)
+    ax.text(240, -17.4, "ice", color=colors["ice"])
+    ax.text(318, -22.2, "liquid", color=colors["liquid"])
+    ax.text(402, -30.2, "steam", color=colors["steam"])
+    ax.set(xlim=(230, 420), ylim=(-35, -13), xlabel="Temperature (K)", ylabel="$\\bar g$ (kJ mol$^{-1}$)")
+    return fig
+
+
+fs.show(draw_gibbs, alt="Molar Gibbs energy against temperature for ice, liquid water, and steam at 1 bar. All three "
+                        "curves fall with temperature, and the steam curve falls most steeply. The ice curve is "
+                        "lowest below 273.15 K, the liquid curve between 273.15 K and 372.76 K, and the steam curve "
+                        "above 372.76 K. Each curve is solid where it is lowest and dashed elsewhere.")
 ```
-
-Molar Gibbs free energy of ice, liquid water, and steam at 1 bar. Each curve is solid where its phase is the stable one and dashed where it is not. The curves cross at the melting point ($273.15\ \mathrm{K}$) and at the boiling point ($372.76\ \mathrm{K}$ at 1 bar). The curves were computed with a constant heat capacity for each phase ($37.8$, $75.3$, and $36\ \mathrm{J\,mol^{-1}\,K^{-1}}$), the standard entropy of the liquid at $298.15\ \mathrm{K}$ ($69.95\ \mathrm{J\,mol^{-1}\,K^{-1}}$), and the enthalpies of fusion ($6.01\ \mathrm{kJ\,mol^{-1}}$) and vaporization ($40.67\ \mathrm{kJ\,mol^{-1}}$). The zero of enthalpy is that of the liquid at $273.15\ \mathrm{K}$.
 
 #### (B) $\bar g$ versus $P$ at Fixed Temperature
 
@@ -424,12 +432,19 @@ for name, dH, dS in rows:
 
 The enthalpy of vaporization found here, $40.89\ \mathrm{kJ\,mol^{-1}}$, is that of the tables, in which the gas is in its ideal-gas standard state at 1 bar. For real steam the measured value at 1 bar is $40.67\ \mathrm{kJ\,mol^{-1}}$, which gives $\Delta \bar s_{\mathrm{vap}} = 109.1\ \mathrm{J\,mol^{-1}\,K^{-1}}$.
 
-**What to notice.** The total entropy change along this path is dominated by the phase transition: $\Delta \bar s_{\mathrm{vap}} \approx 1.1\times 10^2\ \mathrm{J\,mol^{-1}\,K^{-1}}$, which alone is about 2.5 times the combined contribution of heating the liquid by about 75 K and the vapor by about 430 K.
+**What to notice.** The total entropy change along this path is dominated by the phase transition: $\Delta \bar s_{\mathrm{vap}} \approx 1.1\times 10^2\ \mathrm{J\,mol^{-1}\,K^{-1}}$, which alone is about 2.5 times the combined contribution of heating the liquid by about 75 K and the vapor by about 430 K. [](#fig:water-entropy-path) shows the entropy along the whole path.
 
 ```{code-cell} ipython3
+:label: fig:water-entropy-path
+:caption: Entropy of one mole of water at 1 bar, relative to the liquid at $298.15\ \mathrm{K}$, along the heating path of this example. The vertical segment at $T_{\mathrm{trs}} = 372.78\ \mathrm{K}$ is the entropy of vaporization.
 :tags: [hide-input]
 
+import sys
+
 import matplotlib.pyplot as plt
+
+sys.path.append("..")            # the book folder, which holds figstyle
+import figstyle as fs
 
 # Cumulative entropy relative to 298.15 K along the path (trapezoid rule)
 def cumulative(T, Cp):
@@ -439,25 +454,27 @@ def cumulative(T, Cp):
 S_liq_cum = cumulative(T_liq, Cp_liq)
 S_gas_cum = S_liq_cum[-1] + dS_vap + cumulative(T_gas, Cp_gas)
 
-fig, ax = plt.subplots(figsize=(6, 4), constrained_layout=True)
-ax.plot(T_liq, S_liq_cum, "-", color="#009E73", lw=2.5)
-ax.plot(T_gas, S_gas_cum, "-", color="#D55E00", lw=2.5)
-ax.plot([T_tr, T_tr], [S_liq_cum[-1], S_gas_cum[0]], "-", color="0.3", lw=2.5)
 
-ax.text(325, 17, "liquid", color="#009E73", fontsize=10)
-ax.text(560, 131, "steam", color="#D55E00", fontsize=10)
-ax.text(T_tr + 10, 70, "vaporization\nat 372.78 K", color="0.3", fontsize=10,
-        va="center")
-ax.set_xlabel("Temperature (K)")
-ax.set_ylabel(r"$\Delta \bar s$ from 298.15 K (J mol$^{-1}$ K$^{-1}$)")
-ax.set_xlim(280, 820)
-ax.set_ylim(-5, 165)
 
-plt.show()
-plt.close(fig)
+def draw_entropy(c):
+    fig, ax = plt.subplots(figsize=(6.0, 4.0), constrained_layout=True)
+    ax.plot(T_liq, S_liq_cum, color=c.liquid, lw=fs.LINE)
+    ax.plot(T_gas, S_gas_cum, color=c.gas, lw=fs.LINE)
+    ax.plot([T_tr, T_tr], [S_liq_cum[-1], S_gas_cum[0]], color=c.ink, lw=fs.LINE)
+
+    ax.text(325, 17, "liquid", color=c.liquid)
+    ax.text(560, 131, "steam", color=c.gas)
+    ax.text(T_tr + 10, 70, f"vaporization\nat {T_tr:.2f} K", va="center")
+    ax.set(xlim=(280, 820), ylim=(-5, 165), xlabel="Temperature (K)",
+           ylabel="$\\Delta \\bar s$ from 298.15 K (J mol$^{-1}$ K$^{-1}$)")
+    return fig
+
+
+fs.show(draw_entropy, alt="Entropy of one mole of water relative to the liquid at 298.15 K against temperature. The "
+                          "curve rises slowly to about 17 joules per mole per kelvin in the liquid, jumps by about "
+                          "110 at 372.78 K, where the water vaporizes, and then rises slowly again in the steam to "
+                          "about 153 at 800 K.")
 ```
-
-Entropy of one mole of water at 1 bar, relative to the liquid at $298.15\ \mathrm{K}$, along the heating path of this example. The vertical segment at $T_{\mathrm{trs}} = 372.78\ \mathrm{K}$ is the entropy of vaporization.
 
 The sharp vertical step at $T_{\mathrm{trs}}$ is the graphical signature of a first-order transition: a finite entropy jump at a single temperature, sitting atop a smooth continuous rise from heat-capacity integration through each single-phase region.
 
