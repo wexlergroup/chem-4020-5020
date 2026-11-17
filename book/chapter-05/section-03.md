@@ -298,14 +298,23 @@ Because $\Delta\nu < 0$, increasing pressure favors the side with fewer gas mole
 
 ### Summary: The Engineering Knobs
 
-The figure below collects the two results of this section: the standard reaction Gibbs energy at 1 bar as a function of temperature, and the pressure at which the reaction Gibbs energy vanishes.
+[](#fig:ammonia-synthesis) collects the two results of this section: the standard reaction Gibbs energy at 1 bar as a function of temperature, and the pressure at which the reaction Gibbs energy vanishes.
 
 ```{code-cell} ipython3
+:label: fig:ammonia-synthesis
+:caption: Ammonia synthesis as a function of temperature. (a) $\Delta_r G^\circ$ at 1 bar from the constant-$C_P$ model of this section (solid line) and from the Shomate heat-capacity equations of the NIST Chemistry WebBook (dashed line). Both change sign at 456 K (183 °C). (b) The pressure at which $\Delta_r G = 0$ when each species is at the pressure $P$, from Eq. [](#eq:P-crossover); the points mark the estimates of this section at 400 °C and 500 °C. The shaded areas mark the operating range of the Haber–Bosch process.
 :tags: [hide-input]
+
+import sys
 
 import numpy as np
 import matplotlib.pyplot as plt
+from matplotlib.patches import Rectangle
 from scipy.constants import R
+from scipy.optimize import brentq
+
+sys.path.append("..")            # the book folder, which holds figstyle
+import figstyle as fs
 
 # Constant-C_P model of this section (rigid molecules, no vibration)
 T_i = 298.15                      # K
@@ -346,50 +355,53 @@ T = np.linspace(298.15, 873.15, 231)
 theta = T - 273.15                               # temperature in degrees Celsius
 g_model = dG_model(T) / 1000                     # kJ/mol
 g_nist = np.array([dG_nist(Tk) for Tk in T]) / 1000
-T_cross = T[np.argmin(np.abs(g_model))]
+T_cross = brentq(dG_model, 400, 500)          # K, where the model gives zero
 
-fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(8, 3.6), constrained_layout=True)
-color = "tab:blue"
 
-# (a) Standard reaction Gibbs energy at 1 bar
-ax1.axvspan(400, 500, color="0.88", lw=0)
-ax1.axhline(0, color="0.5", lw=0.8)
-ax1.plot(theta, g_model, "-", color=color, lw=2, label=r"constant-$C_P$ model")
-ax1.plot(theta, g_nist, "--", color="0.25", lw=1.5, label="NIST heat capacities")
-ax1.plot(T_cross - 273.15, 0, "o", color=color, ms=6)
-ax1.annotate(f"{T_cross:.0f} K", (T_cross - 273.15, 0), xytext=(8, -14), textcoords="offset points", fontsize=9)
-ax1.text(450, -27, "operating\nrange", ha="center", va="center", fontsize=9)
-ax1.set_xlabel("Temperature (°C)")
-ax1.set_ylabel(r"$\Delta_r G^\circ$ (kJ mol$^{-1}$)")
-ax1.set_xlim(25, 600)
-ax1.set_title("(a) At 1 bar", loc="left", fontsize=10)
-ax1.legend(frameon=False, fontsize=9, loc="upper left")
+def draw_ammonia(c):
+    fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(fs.WIDTH, 3.4), constrained_layout=True)
+    shade = c.tint(c.gray, 0.72)
 
-# (b) Pressure at which the reaction Gibbs energy vanishes
-mask = T > T_cross + 1
-P_model = np.exp(g_model[mask] * 1000 / (2 * R * T[mask]))
-P_nist = np.exp(g_nist[mask] * 1000 / (2 * R * T[mask]))
-ax2.fill_between([400, 500], 150, 350, color="0.88", lw=0)
-ax2.plot(theta[mask], P_model, "-", color=color, lw=2)
-ax2.plot(theta[mask], P_nist, "--", color="0.25", lw=1.5)
-for th in (400, 500):
-    P_th = np.exp(dG_model(th + 273.15) / (2 * R * (th + 273.15)))
-    ax2.plot(th, P_th, "o", color=color, ms=6, zorder=3)
-ax2.text(450, 420, "operating\nwindow", ha="center", va="bottom", fontsize=9)
-ax2.text(215, 200, r"$\Delta_r G < 0$", fontsize=10)
-ax2.text(480, 4, r"$\Delta_r G > 0$", fontsize=10)
-ax2.set_yscale("log")
-ax2.set_xlabel("Temperature (°C)")
-ax2.set_ylabel(r"Pressure for $\Delta_r G = 0$ (bar)")
-ax2.set_xlim(180, 600)
-ax2.set_ylim(1, 2000)
-ax2.set_title("(b) Pressure needed", loc="left", fontsize=10)
+    # (a) Standard reaction Gibbs energy at 1 bar
+    ax1.axvspan(400, 500, color=shade, lw=0)
+    ax1.axhline(0, color=c.gray, lw=0.9)
+    ax1.plot(theta, g_nist, color=c.gray, lw=1.6, ls=(0, (4, 3)), label="NIST heat capacities")
+    ax1.plot(theta, g_model, color=c.blue, lw=fs.LINE, label="constant-$C_P$ model")
+    ax1.plot(T_cross - 273.15, 0, "o", color=c.blue, ms=6)
+    ax1.annotate(f"{T_cross:.0f} K", (T_cross - 273.15, 0), xytext=(8, -15), textcoords="offset points")
+    ax1.text(450, -27, "operating\nrange", ha="center", va="center")
+    ax1.set(xlim=(25, 600), xlabel="Temperature (°C)", ylabel="$\\Delta_r G°$ (kJ mol$^{-1}$)")
+    handles, labels = ax1.get_legend_handles_labels()
+    ax1.legend(handles[::-1], labels[::-1], frameon=False, loc="upper left", handlelength=1.8)
+    fs.panel(ax1, "a", "At 1 bar")
 
-plt.show()
-plt.close(fig)
+    # (b) Pressure at which the reaction Gibbs energy vanishes
+    mask = T > T_cross + 1
+    P_model = np.exp(g_model[mask] * 1000 / (2 * R * T[mask]))
+    P_nist = np.exp(g_nist[mask] * 1000 / (2 * R * T[mask]))
+    ax2.add_patch(Rectangle((400, 150), 100, 200, fc=shade, ec="none"))
+    ax2.plot(theta[mask], P_nist, color=c.gray, lw=1.6, ls=(0, (4, 3)))
+    ax2.plot(theta[mask], P_model, color=c.blue, lw=fs.LINE)
+    for th in (400, 500):
+        P_th = np.exp(dG_model(th + 273.15) / (2 * R * (th + 273.15)))
+        ax2.plot(th, P_th, "o", color=c.blue, ms=6, zorder=3)
+    ax2.text(450, 420, "operating\nwindow", ha="center", va="bottom")
+    ax2.text(215, 200, "$\\Delta_r G < 0$")
+    ax2.text(480, 4, "$\\Delta_r G > 0$")
+    ax2.set_yscale("log")
+    ax2.set(xlim=(180, 600), ylim=(1, 2000), xlabel="Temperature (°C)", ylabel="Pressure for $\\Delta_r G = 0$ (bar)")
+    fs.panel(ax2, "b", "Pressure needed")
+    return fig
+
+
+fs.show(draw_ammonia, alt="Two panels for ammonia synthesis. Panel a plots the standard reaction Gibbs energy at 1 bar "
+                          "against temperature from 25 to 600 degrees Celsius. It rises from about minus 33 to about "
+                          "plus 99 kilojoules per mole and crosses zero at 183 degrees Celsius; the curve from NIST "
+                          "heat capacities lies slightly lower at high temperature. Panel b plots, on a logarithmic "
+                          "axis, the pressure at which the reaction Gibbs energy is zero. It rises from 1 bar near 183 "
+                          "degrees Celsius to several hundred bar at 600 degrees Celsius and passes through the "
+                          "shaded operating window of 150 to 350 bar between 400 and 500 degrees Celsius.")
 ```
-
-Ammonia synthesis as a function of temperature. (a) $\Delta_r G^\circ$ at 1 bar from the constant-$C_P$ model of this section (solid line) and from the Shomate heat-capacity equations of the NIST Chemistry WebBook (dashed line). Both change sign at 456 K (183 °C). (b) The pressure at which $\Delta_r G = 0$ when each species is at the pressure $P$, from Eq. {eq}`eq:P-crossover`; the points mark the estimates of this section at 400 °C and 500 °C. The shaded areas mark the operating range of the Haber–Bosch process.
 
 The Haber–Bosch process operates at $400\text{–}500\,\text{°C}$ and $150\text{–}350\ \mathrm{bar}$ over an iron-based catalyst. Each operating parameter addresses a different aspect of the thermodynamics/kinetics tradeoff:
 
