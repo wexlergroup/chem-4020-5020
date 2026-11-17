@@ -1,0 +1,351 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Spherical, symmetric, and asymmetric tops · Physical Chemistry II</title>
+<!--
+  Molecular tops: an interactive companion to Section 2.8 (molecular partition functions). This file is written
+  by hand (it is not built from development/).
+
+  Three molecules, each with its principal axes a, b, and c through the center of mass: methane (spherical top),
+  ammonia (symmetric top), and water (asymmetric top). The reader turns each model by dragging it and can let it
+  spin about one of its principal axes.
+
+      molecular-tops.html               the interactive page
+      molecular-tops.html?static=1      one still picture, for the PDF of the notes
+      ...&theme=light or dark           fixes the colors (otherwise the page follows the book or the system)
+
+  Inside the notes, the page follows the light or dark mode of the book and sets the height of its own frame.
+
+  Units inside the program: lengths in angstrom, masses in g/mol, angles in radians.
+-->
+<style>
+  :root {
+    --ground: #ffffff; --text: #1c1917; --muted: #6b645e; --border: #dedad5; --fill: #f1f0ee;
+    --blue: #0072b2; --on-blue: #ffffff; --verm: #d55e00; --carbon: #57534e; --hydrogen: #ffffff; --axis: #78716c;
+  }
+  :root[data-theme="dark"] {
+    --ground: #1c1917; --text: #f5f5f4; --muted: #a8a29e; --border: #3a3531; --fill: #2a2623;
+    --blue: #56b4e9; --on-blue: #111111; --verm: #f4915a; --carbon: #8f8983; --hydrogen: #ecebe9; --axis: #a8a29e;
+  }
+  * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body { margin: 0; background: var(--ground); color: var(--text);
+         font: 15px/1.45 Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+  main { max-width: 760px; margin: 0 auto; padding: 24px 16px 40px; }
+  .embedded main { max-width: none; padding: 0 0 12px; }
+  h1 { font-size: 1.5rem; line-height: 1.2; margin: 0 0 6px; }
+  .embedded h1, .embedded .lede { display: none; }
+  .lede { color: var(--muted); margin: 0 0 18px; max-width: 64ch; }
+  i.v { font-style: italic; font-family: inherit; }
+  .tops { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }
+  @media (max-width: 600px) { .tops { grid-template-columns: minmax(0, 1fr); gap: 22px; } .top { max-width: 264px; width: 100%; margin: 0 auto; } }
+  .top h2 { font-size: 0.98rem; font-weight: 400; line-height: 1.3; margin: 0 0 4px; }
+  .top h2 b { font-weight: 700; margin-right: 0.5em; }
+  canvas { display: block; width: 100%; aspect-ratio: 1 / 1; touch-action: none; cursor: grab; border-radius: 8px; }
+  canvas:active { cursor: grabbing; }
+  .static canvas { cursor: default; }
+  .relation { text-align: center; margin: 2px 0 8px; }
+  .row { display: flex; gap: 6px 8px; flex-wrap: wrap; align-items: center; justify-content: center; font-size: 0.9rem; }
+  .seg { display: inline-flex; gap: 4px; }
+  button { font: inherit; font-size: 0.88rem; color: var(--text); background: var(--fill); border: 1px solid var(--border);
+           border-radius: 999px; padding: 4px 12px; cursor: pointer; }
+  .seg button { min-width: 2.4em; font-style: italic; }
+  button:hover { border-color: var(--muted); }
+  button[aria-pressed="true"] { background: var(--blue); border-color: var(--blue); color: var(--on-blue); font-weight: 600; }
+  button:focus-visible, canvas:focus-visible { outline: 2px solid var(--blue); outline-offset: 2px; }
+  .controls { display: flex; justify-content: center; margin-top: 14px; padding-top: 12px; border-top: 1px solid var(--border); }
+  .hint { font-size: 0.84rem; color: var(--muted); margin: 12px 0 0; }
+  .static .row, .static .controls, .static .hint, .static h1, .static .lede { display: none; }
+  .static main { padding: 0; }
+  .static .relation { margin-bottom: 0; }
+</style>
+</head>
+<body>
+<main>
+  <h1>Spherical, symmetric, and asymmetric tops</h1>
+  <p class="lede">A nonlinear molecule is classified by its three principal moments of inertia. Turn each molecule, and let it spin about one of its principal axes.</p>
+
+  <div class="tops">
+    <section class="top" data-molecule="methane">
+      <h2><b>a</b>Spherical top, CH<sub>4</sub></h2>
+      <canvas tabindex="0" role="img" aria-label="Model of methane with its principal axes a, b, and c. Drag it, or use the arrow keys, to turn it."></canvas>
+      <p class="relation"><i class="v">I<sub>A</sub></i> = <i class="v">I<sub>B</sub></i> = <i class="v">I<sub>C</sub></i></p>
+      <div class="row"><span>Spin about</span><span class="seg" role="group" aria-label="Axis about which methane spins">
+        <button type="button" data-axis="0" aria-pressed="false" aria-label="Spin about the a axis">a</button><button type="button" data-axis="1" aria-pressed="false" aria-label="Spin about the b axis">b</button><button type="button" data-axis="2" aria-pressed="false" aria-label="Spin about the c axis">c</button></span></div>
+    </section>
+    <section class="top" data-molecule="ammonia">
+      <h2><b>b</b>Symmetric top, NH<sub>3</sub></h2>
+      <canvas tabindex="0" role="img" aria-label="Model of ammonia with its principal axes a, b, and c. Drag it, or use the arrow keys, to turn it."></canvas>
+      <p class="relation"><i class="v">I<sub>A</sub></i> = <i class="v">I<sub>B</sub></i> &lt; <i class="v">I<sub>C</sub></i></p>
+      <div class="row"><span>Spin about</span><span class="seg" role="group" aria-label="Axis about which ammonia spins">
+        <button type="button" data-axis="0" aria-pressed="false" aria-label="Spin about the a axis">a</button><button type="button" data-axis="1" aria-pressed="false" aria-label="Spin about the b axis">b</button><button type="button" data-axis="2" aria-pressed="false" aria-label="Spin about the c axis">c</button></span></div>
+    </section>
+    <section class="top" data-molecule="water">
+      <h2><b>c</b>Asymmetric top, H<sub>2</sub>O</h2>
+      <canvas tabindex="0" role="img" aria-label="Model of water with its principal axes a, b, and c. Drag it, or use the arrow keys, to turn it."></canvas>
+      <p class="relation"><i class="v">I<sub>A</sub></i> &lt; <i class="v">I<sub>B</sub></i> &lt; <i class="v">I<sub>C</sub></i></p>
+      <div class="row"><span>Spin about</span><span class="seg" role="group" aria-label="Axis about which water spins">
+        <button type="button" data-axis="0" aria-pressed="false" aria-label="Spin about the a axis">a</button><button type="button" data-axis="1" aria-pressed="false" aria-label="Spin about the b axis">b</button><button type="button" data-axis="2" aria-pressed="false" aria-label="Spin about the c axis">c</button></span></div>
+    </section>
+  </div>
+
+  <div class="controls"><button type="button" id="reset">Reset the views</button></div>
+  <p class="hint">Drag a molecule, or select it and use the arrow keys, to turn it. The moment of inertia about an axis is larger when the atoms lie farther from that axis.</p>
+</main>
+
+<script>
+"use strict";
+const params = new URLSearchParams(location.search);
+const fixed = params.has("static");
+document.body.classList.toggle("static", fixed);
+
+/* ---- colors of the book, and the height of the frame ---- */
+let host = null;
+try { if (window.parent !== window) host = window.parent.document.documentElement; } catch (e) { host = null; }
+try { if (window.frameElement) document.body.classList.add("embedded"); } catch (e) {}
+let color = {};
+function theme() {
+  let dark = false;
+  if (params.get("theme")) dark = params.get("theme") === "dark";
+  else if (host) dark = host.classList.contains("dark");
+  else { try { dark = window.matchMedia("(prefers-color-scheme: dark)").matches; } catch (e) {} }
+  document.documentElement.dataset.theme = dark ? "dark" : "light";
+  const css = getComputedStyle(document.documentElement);
+  for (const name of ["ground", "text", "muted", "blue", "verm", "carbon", "hydrogen", "axis"]) color[name] = css.getPropertyValue("--" + name).trim();
+  if (typeof drawAll === "function") drawAll();
+}
+
+function fit() {                                    // inside the notes, make the frame as tall as the content
+  try {
+    const frame = window.frameElement;
+    if (!frame) return;
+    const height = Math.ceil(document.documentElement.getBoundingClientRect().height) + "px";
+    frame.style.height = height;
+    const box = frame.parentElement;                // the book theme wraps a frame in a box with a fixed 5:3 shape
+    if (box && box.style.paddingBottom) { box.style.paddingBottom = "0"; box.style.display = "block"; }
+    if (box && box.style.paddingBottom === "0px") box.style.height = height;
+  } catch (e) {}
+}
+
+/* ---- vectors and rotations ---- */
+const add = (u, v) => [u[0] + v[0], u[1] + v[1], u[2] + v[2]];
+const sub = (u, v) => [u[0] - v[0], u[1] - v[1], u[2] - v[2]];
+const times = (s, v) => [s * v[0], s * v[1], s * v[2]];
+const dot = (u, v) => u[0] * v[0] + u[1] * v[1] + u[2] * v[2];
+const norm = v => Math.sqrt(dot(v, v));
+const apply = (m, v) => [dot(m[0], v), dot(m[1], v), dot(m[2], v)];
+const product = (m, n) => m.map(row => [0, 1, 2].map(j => row[0] * n[0][j] + row[1] * n[1][j] + row[2] * n[2][j]));
+const radians = degrees => degrees * Math.PI / 180;
+
+// Rotation by an angle about a unit vector (Rodrigues' formula)
+function rotation(axis, angle) {
+  const [x, y, z] = axis, c = Math.cos(angle), s = Math.sin(angle), t = 1 - c;
+  return [[t * x * x + c, t * x * y - s * z, t * x * z + s * y],
+          [t * x * y + s * z, t * y * y + c, t * y * z - s * x],
+          [t * x * z - s * y, t * y * z + s * x, t * z * z + c]];
+}
+
+// Orientation whose rows are the directions "right", "up", and "toward the viewer" for a viewing direction
+function view(azimuth, elevation) {
+  const a = radians(azimuth), e = radians(elevation);
+  return [[-Math.sin(a), Math.cos(a), 0],
+          [-Math.sin(e) * Math.cos(a), -Math.sin(e) * Math.sin(a), Math.cos(e)],
+          [Math.cos(e) * Math.cos(a), Math.cos(e) * Math.sin(a), Math.sin(e)]];
+}
+
+/* ---- the three molecules ---- */
+const MASS = { H: 1.008, C: 12.011, N: 14.007, O: 15.999 };          // g/mol
+const RADIUS = { H: 0.27, C: 0.38, N: 0.37, O: 0.36 };               // drawn radius of each atom
+const BOND = 0.062, AXIS = 1.5;                                      // half-width of a bond; half-length of an axis
+const horizontal = degrees => [Math.cos(radians(degrees)), Math.sin(radians(degrees)), 0];
+const Z = [0, 0, 1];
+
+function pyramid(r, angle) {                        // three H atoms around the z axis, for an H-X-H angle in degrees
+  const rho = 2 * r * Math.sin(radians(angle) / 2) / Math.sqrt(3), z = -Math.sqrt(r * r - rho * rho);
+  return [90, 210, 330].map(t => [rho * Math.cos(radians(t)), rho * Math.sin(radians(t)), z]);
+}
+const half = radians(104.52) / 2;
+const MOLECULES = {
+  // methane: C-H 1.087; one C-H bond along -z, so that z is a threefold axis. Any three perpendicular axes are principal.
+  methane: { elements: ["C", "H", "H", "H", "H"],
+             positions: [[0, 0, 0], ...pyramid(1.087, 109.4712).map(p => [p[0], p[1], -p[2]]), [0, 0, -1.087]],
+             axes: [horizontal(60), horizontal(150), Z], start: view(12, 32) },
+  // ammonia: N-H 1.012, H-N-H 106.7 degrees. The threefold axis is c.
+  ammonia: { elements: ["N", "H", "H", "H"], positions: [[0, 0, 0], ...pyramid(1.012, 106.7)],
+             axes: [horizontal(225), horizontal(315), Z], start: view(90, 28) },
+  // water: O-H 0.9572, H-O-H 104.52 degrees, in the xz plane. The twofold axis is b, and c is normal to the plane.
+  water: { elements: ["O", "H", "H"],
+           positions: [[0, 0, 0], [0.9572 * Math.sin(half), 0, -0.9572 * Math.cos(half)], [-0.9572 * Math.sin(half), 0, -0.9572 * Math.cos(half)]],
+           axes: [[-1, 0, 0], Z, [0, 1, 0]], start: view(-46, 8) },
+};
+
+// Positions relative to the center of mass, and the moment of inertia about each of the three axes
+for (const molecule of Object.values(MOLECULES)) {
+  const m = molecule.elements.map(element => MASS[element]), total = m.reduce((s, x) => s + x, 0);
+  const center = molecule.positions.reduce((s, p, i) => add(s, times(m[i] / total, p)), [0, 0, 0]);
+  molecule.positions = molecule.positions.map(p => sub(p, center));
+  molecule.moments = molecule.axes.map(axis => molecule.positions.reduce((s, p, i) => s + m[i] * (dot(p, p) - dot(p, axis) ** 2), 0));
+}
+
+/* ---- drawing ---- */
+const CAMERA = 14;                                  // distance of the viewer, which sets the perspective
+function shade(hex, t) {                            // mix a color with white (t > 0) or with black (t < 0)
+  const n = parseInt(hex.slice(1), 16), target = t > 0 ? 255 : 0, f = Math.abs(t);
+  return "rgb(" + [n >> 16, (n >> 8) & 255, n & 255].map(v => Math.round(v + (target - v) * f)).join(",") + ")";
+}
+function luminance(hex) {
+  const n = parseInt(hex.slice(1), 16);
+  return (0.2126 * (n >> 16) + 0.7152 * ((n >> 8) & 255) + 0.0722 * (n & 255)) / 255;
+}
+
+function draw(top) {
+  const canvas = top.canvas, molecule = top.molecule, ratio = window.devicePixelRatio || 1;
+  const w = canvas.clientWidth, h = canvas.clientHeight;
+  if (!w || !h) return;
+  if (canvas.width !== Math.round(w * ratio) || canvas.height !== Math.round(h * ratio)) { canvas.width = Math.round(w * ratio); canvas.height = Math.round(h * ratio); }
+  const g = canvas.getContext("2d");
+  g.setTransform(ratio, 0, 0, ratio, 0, 0); g.clearRect(0, 0, w, h); g.lineCap = "round"; g.lineJoin = "round";
+  const scale = Math.min(w, h) / 2 / 1.92;          // pixels per angstrom
+  const place = p => {                              // position in the frame of the molecule -> point on the screen, depth, size
+    const q = apply(top.orientation, p), f = CAMERA / (CAMERA - q[2]);
+    return { x: w / 2 + scale * f * q[0], y: h / 2 - scale * f * q[1], z: q[2], f: scale * f };
+  };
+  // A point of an axis is hidden when it lies inside an atom or inside a bond
+  const inside = p => molecule.positions.some((center, i) => {
+    if (norm(sub(p, center)) < RADIUS[molecule.elements[i]] - 0.02) return true;
+    if (i === 0) return false;
+    const bond = sub(center, molecule.positions[0]), length = norm(bond), q = sub(p, molecule.positions[0]), t = dot(q, bond) / length;
+    return t > 0 && t < length && norm(sub(q, times(t / length, bond))) < BOND;
+  });
+  const items = [];
+
+  // Principal axes, in short pieces so that the atoms can hide the parts behind them
+  molecule.axes.forEach((axis, k) => {
+    const spinning = top.spin === k, pieces = 40;
+    for (let i = 0; i < pieces; i++) {
+      const t0 = -AXIS + 2 * AXIS * i / pieces, t1 = -AXIS + 2 * AXIS * (i + 1) / pieces, middle = times((t0 + t1) / 2, axis);
+      if (inside(middle)) continue;
+      const a = place(times(t0, axis)), b = place(times(t1, axis));
+      items.push({ z: (a.z + b.z) / 2, paint() {
+        g.strokeStyle = spinning ? color.blue : color.axis; g.lineWidth = spinning ? 2.4 : 1.4;
+        g.beginPath(); g.moveTo(a.x, a.y); g.lineTo(b.x, b.y); g.stroke();
+      } });
+    }
+    const tip = place(times(AXIS, axis)), back = place(times(AXIS - 0.2, axis));
+    items.push({ z: tip.z, paint() {                 // arrowhead at the positive end
+      const dx = tip.x - back.x, dy = tip.y - back.y, d = Math.hypot(dx, dy);
+      if (d < 0.5) return;
+      const ux = dx / d, uy = dy / d, size = 0.085 * tip.f + 2;
+      g.fillStyle = spinning ? color.blue : color.axis;
+      g.beginPath(); g.moveTo(tip.x + ux * size, tip.y + uy * size);
+      g.lineTo(tip.x - ux * size * 0.6 - uy * size * 0.62, tip.y - uy * size * 0.6 + ux * size * 0.62);
+      g.lineTo(tip.x - ux * size * 0.6 + uy * size * 0.62, tip.y - uy * size * 0.6 - ux * size * 0.62);
+      g.closePath(); g.fill();
+    } });
+  });
+
+  // Bonds from the first atom to each of the others, between the surfaces of the two atoms
+  for (let i = 1; i < molecule.elements.length; i++) {
+    const start = molecule.positions[0], bond = sub(molecule.positions[i], start), length = norm(bond), unit = times(1 / length, bond);
+    const from = RADIUS[molecule.elements[0]] - 0.06, to = length - RADIUS[molecule.elements[i]] + 0.06, pieces = 6;
+    for (let j = 0; j < pieces; j++) {
+      // each piece starts a little early, so that no seam shows between neighbors
+      const a = place(add(start, times(from + (to - from) * Math.max(j - 0.25, 0) / pieces, unit))), b = place(add(start, times(from + (to - from) * (j + 1) / pieces, unit)));
+      items.push({ z: (a.z + b.z) / 2, paint() {
+        g.strokeStyle = color.text; g.lineWidth = 2 * BOND * (a.f + b.f) / 2; g.lineCap = "butt";
+        g.beginPath(); g.moveTo(a.x, a.y); g.lineTo(b.x, b.y); g.stroke(); g.lineCap = "round";
+      } });
+    }
+  }
+
+  // Atoms as shaded spheres with the symbol of the element
+  molecule.positions.forEach((position, i) => {
+    const element = molecule.elements[i], p = place(position), r = RADIUS[element] * p.f;
+    const base = { H: color.hydrogen, C: color.carbon, N: color.blue, O: color.verm }[element];
+    items.push({ z: p.z, paint() {
+      const glow = g.createRadialGradient(p.x - 0.35 * r, p.y - 0.38 * r, 0.08 * r, p.x, p.y, r);
+      glow.addColorStop(0, shade(base, 0.55)); glow.addColorStop(0.55, base); glow.addColorStop(1, shade(base, -0.28));
+      g.fillStyle = glow; g.beginPath(); g.arc(p.x, p.y, r, 0, 2 * Math.PI); g.fill();
+      g.strokeStyle = color.text; g.lineWidth = 1.1; g.stroke();
+      g.fillStyle = luminance(base) > 0.55 ? "#111111" : "#ffffff";
+      g.font = "600 " + Math.max(9, Math.round(0.78 * r)) + "px Inter, ui-sans-serif, system-ui, sans-serif";
+      g.textAlign = "center"; g.textBaseline = "middle"; g.fillText(element, p.x, p.y + 0.5);
+    } });
+  });
+
+  items.sort((a, b) => a.z - b.z);                  // far to near
+  for (const item of items) item.paint();
+
+  // Names of the axes, on top of everything else
+  g.font = "italic 15px Inter, ui-sans-serif, system-ui, sans-serif"; g.textAlign = "center"; g.textBaseline = "middle";
+  molecule.axes.forEach((axis, k) => {
+    const p = place(times(AXIS + 0.26, axis));
+    g.lineWidth = 4; g.strokeStyle = color.ground; g.strokeText("abc"[k], p.x, p.y);
+    g.fillStyle = top.spin === k ? color.blue : color.text; g.fillText("abc"[k], p.x, p.y);
+  });
+}
+
+/* ---- the three models and their controls ---- */
+const tops = [...document.querySelectorAll(".top")].map(section => {
+  const molecule = MOLECULES[section.dataset.molecule];
+  return { section, molecule, canvas: section.querySelector("canvas"), buttons: [...section.querySelectorAll("button")],
+           orientation: molecule.start, spin: null };
+});
+function drawAll() { for (const top of tops) draw(top); }
+
+const SPEED = 1.1;                                  // radians per second
+let last = null, running = false;
+function step(time) {
+  const dt = last === null ? 0 : Math.min((time - last) / 1000, 0.05);
+  last = time;
+  let any = false;
+  for (const top of tops) {
+    if (top.spin === null) continue;
+    // A rotation about an axis that is fixed in the molecule multiplies the orientation from the right
+    top.orientation = product(top.orientation, rotation(top.molecule.axes[top.spin], SPEED * dt));
+    draw(top); any = true;
+  }
+  if (any) requestAnimationFrame(step); else { running = false; last = null; }
+}
+function setSpin(top, axis) {
+  top.spin = axis;
+  top.buttons.forEach(button => button.setAttribute("aria-pressed", String(+button.dataset.axis === axis)));
+  draw(top);
+  if (axis !== null && !running) { running = true; requestAnimationFrame(step); }
+}
+
+for (const top of tops) {
+  const canvas = top.canvas;
+  let grab = null;
+  // Dragging turns the molecule about the horizontal and vertical directions of the screen
+  const turn = (dx, dy) => { top.orientation = product(product(rotation([0, 1, 0], dx), rotation([1, 0, 0], dy)), top.orientation); draw(top); };
+  if (!fixed) {
+    canvas.addEventListener("pointerdown", e => { grab = [e.clientX, e.clientY]; canvas.setPointerCapture(e.pointerId); });
+    canvas.addEventListener("pointermove", e => {
+      if (!grab) return;
+      turn((e.clientX - grab[0]) * 0.012, (e.clientY - grab[1]) * 0.012); grab = [e.clientX, e.clientY];
+    });
+    for (const type of ["pointerup", "pointercancel"]) canvas.addEventListener(type, () => { grab = null; });
+    canvas.addEventListener("keydown", e => {
+      const move = { ArrowLeft: [-0.17, 0], ArrowRight: [0.17, 0], ArrowUp: [0, -0.17], ArrowDown: [0, 0.17] }[e.key];
+      if (!move) return;
+      turn(move[0], move[1]); e.preventDefault();
+    });
+    for (const button of top.buttons) button.addEventListener("click", () => setSpin(top, top.spin === +button.dataset.axis ? null : +button.dataset.axis));
+  }
+}
+document.getElementById("reset").addEventListener("click", () => {
+  for (const top of tops) { top.orientation = top.molecule.start; setSpin(top, null); }
+});
+
+/* ---- run ---- */
+theme(); drawAll();
+if (host) new MutationObserver(theme).observe(host, { attributes: true, attributeFilter: ["class"] });
+else { try { window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", theme); } catch (e) {} }
+try { new ResizeObserver(() => { fit(); drawAll(); }).observe(document.body); } catch (e) {}
+window.addEventListener("load", () => { fit(); drawAll(); });
+</script>
+</body>
+</html>
