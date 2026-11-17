@@ -361,14 +361,21 @@ G(\xi) - G(0)
 + RT\!\left[(2-2\xi)\ln y_{\mathrm{NO_2}}(\xi) + \xi\ln y_{\mathrm{N_2O_4}}(\xi)\right].
 ```
 
-The first term is the "bookkeeping" shift in standard chemical potentials, which is linear in $\xi$. The second is the **ideal-mixing** term, $-T\,\Delta_{\mathrm{mix}}S$, where $\Delta_{\mathrm{mix}}S = -R\sum_i n_i\ln y_i$ is the entropy of mixing of the two ideal gases. The figure shows their sum.
+The first term is the "bookkeeping" shift in standard chemical potentials, which is linear in $\xi$. The second is the **ideal-mixing** term, $-T\,\Delta_{\mathrm{mix}}S$, where $\Delta_{\mathrm{mix}}S = -R\sum_i n_i\ln y_i$ is the entropy of mixing of the two ideal gases. [](#fig:gibbs-extent) shows their sum.
 
 ```{code-cell} ipython3
+:label: fig:gibbs-extent
+:caption: Gibbs free energy of the reacting mixture relative to pure $\mathrm{NO_2}$, from Eq. [](#eq:G-xi-NO2), for $2\,\mathrm{NO_2(g)} \rightleftharpoons \mathrm{N_2O_4(g)}$ at $298.15\ \mathrm{K}$ and $P = P^\circ$, starting from 2 mol of $\mathrm{NO_2}$. The dashed line marks $\xi_{\mathrm{eq}} = 0.81$, the value computed from $K = 6.74$.
 :tags: [hide-input]
+
+import sys
 
 import numpy as np
 import matplotlib.pyplot as plt
 from scipy.optimize import brentq
+
+sys.path.append("..")            # the book folder, which holds figstyle
+import figstyle as fs
 
 R = 8.314462618          # J mol^-1 K^-1
 T = 298.15               # K
@@ -387,20 +394,22 @@ xis = np.linspace(1e-4, 1 - 1e-4, 400)
 xi_eq = brentq(lambda x: x * (2 - x) / (2 - 2 * x)**2 - K_eq, 0.01, 0.99)
 G_eq = G_of_xi(xi_eq) / 1e3   # kJ
 
-fig, ax = plt.subplots(figsize=(6, 4), constrained_layout=True)
-ax.plot(xis, G_of_xi(xis) / 1e3, lw=2.5, color="#0072B2")
-ax.axvline(xi_eq, color="0.5", ls="--", lw=1)
-ax.plot(xi_eq, G_eq, "o", color="0.2", ms=5, zorder=3)
-ax.text(xi_eq - 0.02, -2.5, fr"$\xi_{{\mathrm{{eq}}}} = {xi_eq:.2f}$", ha="right", fontsize=10)
-ax.set_xlabel(r"Extent of reaction $\xi$ (mol)")
-ax.set_ylabel(r"$G(\xi) - G(0)$ (kJ)")
-ax.set_xlim(0, 1)
 
-plt.show()
-plt.close(fig)
+def draw_extent(c):
+    fig, ax = plt.subplots(figsize=(6.0, 4.0), constrained_layout=True)
+    ax.axvline(xi_eq, color=c.gray, lw=1.2, ls=(0, (4, 3)))
+    ax.plot(xis, G_of_xi(xis) / 1e3, color=c.blue, lw=fs.LINE)
+    ax.plot(xi_eq, G_eq, "o", color=c.ink, ms=5.5, zorder=3)
+    ax.text(xi_eq - 0.02, -2.5, f"$\\xi_{{\\mathrm{{eq}}}} = {xi_eq:.2f}$", ha="right")
+    ax.set(xlim=(0, 1), xlabel="Extent of reaction $\\xi$ (mol)", ylabel="$G(\\xi) - G(0)$ (kJ)")
+    return fig
+
+
+fs.show(draw_extent, alt=f"Gibbs energy of the reacting mixture relative to pure nitrogen dioxide against the extent "
+                         f"of reaction from 0 to 1 mole. The curve falls steeply at first, passes through a minimum "
+                         f"of {G_eq:.1f} kilojoules at an extent of {xi_eq:.2f} mole, which is marked by a dashed "
+                         f"line, and rises again toward pure dinitrogen tetroxide.")
 ```
-
-Gibbs free energy of the reacting mixture relative to pure $\mathrm{NO_2}$, from Eq. {eq}`eq:G-xi-NO2`, for $2\,\mathrm{NO_2(g)} \rightleftharpoons \mathrm{N_2O_4(g)}$ at $298.15\ \mathrm{K}$ and $P = P^\circ$, starting from 2 mol of $\mathrm{NO_2}$. The dashed line marks $\xi_{\mathrm{eq}} = 0.81$, the value computed from $K = 6.74$.
 
 The minimum of $G(\xi)$ lies at the $\xi_{\mathrm{eq}}$ computed from $K$, where the slope $(\partial G/\partial\xi)_{T,P} = \Delta_r G$ is zero. The curve is not symmetric, and it is steep at both ends. To see why, evaluate the slope $\Delta_r G = \Delta_r G^\circ + RT\ln Q_p$ in the limits $\xi\to 0$ and $\xi\to 1$, and decide which of the two terms of Eq. {eq}`eq:G-xi-NO2` produces that behavior. Concept Check 4 builds on the result.
 
