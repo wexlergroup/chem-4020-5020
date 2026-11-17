@@ -1,602 +1,312 @@
-import React, { useState, useEffect, useRef, useCallback } from 'react';
-import * as THREE from 'three';
+import React, { useEffect, useRef, useState } from 'react';
+import { useBook, Studio, Panel, Slider, Sci, V, seeded, LINE, DASH, STATIC } from '../../studio-kit/kit.jsx';
+import { TRIPLE, CRITICAL, saturationPressure, sublimationPressure, meltingPressure,
+         saturationTemperature, sublimationTemperature, meltingTemperature, phases } from './water.js';
+import { Sample, THICK, RADIUS } from './layer.js';
 
-// --- CONSTANTS ---
-const MARGIN = { top: 40, right: 40, bottom: 60, left: 80 };
-const MIN_T = 200, MAX_T = 700; // Kelvin
-const MIN_P = 1, MAX_P = 100000000; // Pascals (Log scale)
-const TRIPLE_POINT = { t: 273.16, p: 611.657 };
-const CRITICAL_POINT = { t: 647.096, p: 22064000 };
-const STD_PRESSURE = 101325; // 1 atm
-const ICE_IH_MIN_T = 251.165; // K, lower end of the ice Ih melting curve
+/*
+  Phase diagram of water (Section 6.1). Panel (a) is the P-T diagram with a state that the student moves.
+  Panel (b) shows the molecules of each phase present at that state, in a thin layer and in their real number,
+  and panel (c) lists the density, the molar volume, and the mean distance between molecules (src/water.js).
 
-// --- PHASE BOUNDARIES OF WATER (IAPWS correlations, pressures in Pa) ---
-// The same three functions draw the curves and name the phase under the
-// pointer, so the drawing and the readout cannot disagree.
+  Near a coexistence curve the state moves onto the curve (`on` is 'lg', 'sg', 'sl', 'triple', or 'critical'),
+  and panels (b) and (c) then show the phases that coexist. The motion in panel (b) is schematic (src/layer.js);
+  one second shows 1 ps.
+*/
+const T_MIN = 200, T_MAX = 800;                       // K
+const P_MIN = 1, P_MAX = 1e8;                         // Pa: from 0.00001 bar to 1000 bar
+const START = { T: 600, P: saturationPressure(600), on: 'lg' };
+const EDGE = 5, TALL = 6;                             // nm, width and height of the layer in panel (b)
+const GAP = 0.16;                                     // nm, space between the pictures of two phases
+const PS_PER_SECOND = 1;
+const HEIGHT = 392;                                   // px, height of the diagram
+const PICTURE = 300;                                  // px, largest width of the picture of the layer
+const FONT = 'Inter, ui-sans-serif, system-ui, sans-serif';
 
-// Liquid-vapor: saturation pressure, triple point to critical point.
-const saturationPressure = (t) => {
-  const tau = 1 - t / CRITICAL_POINT.t;
-  const a = [-7.85951783, 1.84408259, -11.7866497, 22.6807411, -15.9618719, 1.80122502];
-  const e = [1, 1.5, 3, 3.5, 4, 7.5];
-  const sum = a.reduce((acc, ai, i) => acc + ai * Math.pow(tau, e[i]), 0);
-  return CRITICAL_POINT.p * Math.exp((CRITICAL_POINT.t / t) * sum);
-};
+// The three coexistence curves as lists of [T, P]
+const T_LOW = sublimationTemperature(P_MIN);
+const SG = Array.from({ length: 81 }, (_, i) => { const T = T_LOW + (TRIPLE.T - T_LOW) * i / 80; return [T, sublimationPressure(T)]; });
+const SL = Array.from({ length: 81 }, (_, i) => { const P = TRIPLE.P * (P_MAX / TRIPLE.P) ** (i / 80); return [meltingTemperature(P), P]; });
+const LG = Array.from({ length: 161 }, (_, i) => { const T = TRIPLE.T + (CRITICAL.T - TRIPLE.T) * i / 160; return [T, saturationPressure(T)]; });
+const T_TOP = SL[80][0];                              // where the solid-liquid curve leaves the diagram
 
-// Solid-vapor: sublimation pressure of ice Ih, below the triple point.
-const sublimationPressure = (t) => {
-  const theta = t / TRIPLE_POINT.t;
-  const a = [-21.2144006, 27.3203819, -6.10598130];
-  const b = [0.00333333333, 1.20666667, 1.70333333];
-  const sum = a.reduce((acc, ai, i) => acc + ai * Math.pow(theta, b[i]), 0);
-  return TRIPLE_POINT.p * Math.exp(sum / theta);
-};
+const NAME = { solid: 'solid', liquid: 'liquid', gas: 'gas', supercritical: 'supercritical fluid', critical: 'fluid at the critical point' };
+const hues = (color) => ({ solid: color.blue, liquid: color.green, gas: color.vermilion, supercritical: color.purple, critical: color.purple });
+const clamp = (x, lo, hi) => Math.min(hi, Math.max(lo, x));
+const SUPER = { '-': '⁻', 0: '⁰', 1: '¹', 2: '²', 3: '³', 4: '⁴', 5: '⁵', 6: '⁶', 7: '⁷', 8: '⁸', 9: '⁹' };
+function plain(value) {                               // a small number as text for the canvas: 0.19, or 5 × 10⁻⁴
+  if (value >= 0.01) return value.toPrecision(2);
+  const power = Math.floor(Math.log10(value)), mantissa = Math.round(value / 10 ** power);
+  return mantissa === 10 ? `10${[...String(power + 1)].map((c) => SUPER[c]).join('')}`
+                         : `${mantissa} × 10${[...String(power)].map((c) => SUPER[c]).join('')}`;
+}
 
-// Solid-liquid: melting pressure of ice Ih. It rises as the temperature
-// falls (negative slope) and leaves the plotted range near 264 K.
-const meltingPressure = (t) => {
-  if (t < ICE_IH_MIN_T) return Infinity;
-  const theta = t / TRIPLE_POINT.t;
-  const a = [1195393.37, 80818.3159, 3338.26860];
-  const b = [3.0, 25.75, 103.75];
-  const sum = a.reduce((acc, ai, i) => acc + ai * (1 - Math.pow(theta, b[i])), 0);
-  return TRIPLE_POINT.p * (1 + sum);
-};
+// A number with `digits` significant figures, as m x 10^n when it is very small or very large
+function Num({ value, digits = 4 }) {
+  if (value >= 10 ** digits || value < 0.01) return <Sci value={value} digits={Math.min(digits, 3)} />;
+  return <>{value.toPrecision(digits)}</>;
+}
 
-// --- HELPER FUNCTIONS ---
-const mapT = (t, width) => {
-  const plotWidth = width - MARGIN.left - MARGIN.right;
-  return MARGIN.left + ((t - MIN_T) / (MAX_T - MIN_T)) * plotWidth;
-};
-
-const mapP = (p, height) => {
-  const plotHeight = height - MARGIN.top - MARGIN.bottom;
-  const logMin = Math.log10(MIN_P);
-  const logMax = Math.log10(MAX_P);
-  const logP = Math.log10(p);
-  return (height - MARGIN.bottom) - ((logP - logMin) / (logMax - logMin) * plotHeight);
-};
-
-const invMapT = (x, width) => {
-  const plotWidth = width - MARGIN.left - MARGIN.right;
-  return ((x - MARGIN.left) / plotWidth) * (MAX_T - MIN_T) + MIN_T;
-};
-
-const invMapP = (y, height) => {
-  const plotHeight = height - MARGIN.top - MARGIN.bottom;
-  const logMin = Math.log10(MIN_P);
-  const logMax = Math.log10(MAX_P);
-  const normY = ((height - MARGIN.bottom) - y) / plotHeight;
-  return Math.pow(10, normY * (logMax - logMin) + logMin);
-};
-
-const getPhase = (t, p) => {
-  if (t >= CRITICAL_POINT.t) {
-    return p >= CRITICAL_POINT.p ? 'supercritical' : 'vapor';
-  }
-  if (t < TRIPLE_POINT.t) {
-    if (p < sublimationPressure(t)) return 'vapor';
-    return p > meltingPressure(t) ? 'liquid' : 'solid';
-  }
-  return p > saturationPressure(t) ? 'liquid' : 'vapor';
-};
-
-// --- COMPONENTS ---
-
-const PhaseDiagram = ({ onPhaseSelect, currentPhase }) => {
-  const canvasRef = useRef(null);
-  const containerRef = useRef(null);
-  const [hoverInfo, setHoverInfo] = useState({ x: 0, y: 0, visible: false, text: '', coords: '--' });
-
-  const draw = useCallback((width, height) => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-    const ctx = canvas.getContext('2d');
-    
-    // Handle high-DPI displays
-    const dpr = window.devicePixelRatio || 1;
-    canvas.width = width * dpr;
-    canvas.height = height * dpr;
-    ctx.scale(dpr, dpr);
-    canvas.style.width = `${width}px`;
-    canvas.style.height = `${height}px`;
-
-    ctx.clearRect(0, 0, width, height);
-
-    // --- GRID ---
-    ctx.strokeStyle = '#334155';
-    ctx.lineWidth = 0.5;
-    ctx.font = '10px sans-serif';
-    ctx.fillStyle = '#94a3b8';
-    ctx.textAlign = 'center';
-
-    const plotBottom = height - MARGIN.bottom;
-    const plotTop = MARGIN.top;
-    const plotLeft = MARGIN.left;
-    const plotRight = width - MARGIN.right;
-
-    // On a narrow plot (a phone), label every other tick and leave out
-    // the small annotations, which would overlap.
-    const narrow = plotRight - plotLeft < 200;
-
-    // X-Axis (Temp)
-    for (let t = 200; t <= 700; t += 50) {
-      let x = mapT(t, width);
-      ctx.beginPath();
-      ctx.moveTo(x, plotTop); ctx.lineTo(x, plotBottom + 5);
-      ctx.stroke();
-      if (!narrow || t % 200 === 0) ctx.fillText(t, x, plotBottom + 18);
-    }
-    ctx.fillText("Temperature (K)", (plotLeft + plotRight) / 2, plotBottom + 35);
-
-    // Y-Axis (Pressure)
-    ctx.textAlign = 'right';
-    ctx.textBaseline = 'middle';
-    for (let e = 0; e <= 8; e++) {
-      let p = Math.pow(10, e);
-      let y = mapP(p, height);
-      ctx.beginPath();
-      ctx.moveTo(plotLeft - 5, y); ctx.lineTo(plotRight, y);
-      ctx.stroke();
-      
-      if (e === 0 || e === 5 || e === 8) {
-        const label = e === 0 ? "1 Pa" : e === 5 ? "1 bar" : "100 MPa";
-        ctx.fillText(label, plotLeft - 10, y);
-      } else {
-        // "10" with a raised exponent
-        ctx.font = '8px sans-serif';
-        const expWidth = ctx.measureText(String(e)).width;
-        ctx.fillText(String(e), plotLeft - 10, y - 4);
-        ctx.font = '10px sans-serif';
-        ctx.fillText("10", plotLeft - 11 - expWidth, y);
-      }
-    }
-
-    ctx.save();
-    ctx.translate(20, (plotTop + plotBottom) / 2);
-    ctx.rotate(-Math.PI / 2);
-    ctx.textAlign = 'center';
-    ctx.fillText("Pressure (Pa, log scale)", 0, 0);
-    ctx.restore();
-
-    // Axes Box
-    ctx.lineWidth = 2;
-    ctx.strokeStyle = '#cbd5e1';
-    ctx.strokeRect(plotLeft, plotTop, plotRight - plotLeft, plotBottom - plotTop);
-
-    // --- CURVES ---
-    ctx.lineWidth = 3;
-    const tpX = mapT(TRIPLE_POINT.t, width);
-    const tpY = mapP(TRIPLE_POINT.p, height);
-    const cpX = mapT(CRITICAL_POINT.t, width);
-    const cpY = mapP(CRITICAL_POINT.p, height);
-
-    // Each boundary is drawn from the function that getPhase uses.
-    const strokeCurve = (color, points) => {
-      ctx.beginPath();
-      ctx.strokeStyle = color;
-      points.forEach(([t, p], i) => {
-        const x = mapT(t, width);
-        const y = mapP(Math.min(Math.max(p, MIN_P), MAX_P), height);
-        if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
-      });
-      ctx.stroke();
-    };
-    const N_SEG = 200;
-
-    // Sublimation: from the bottom of the plot up to the triple point
-    const sublimation = [];
-    for (let i = 0; i <= N_SEG; i++) {
-      const t = MIN_T + (TRIPLE_POINT.t - MIN_T) * (i / N_SEG);
-      const p = sublimationPressure(t);
-      if (p >= MIN_P) sublimation.push([t, p]);
-    }
-    strokeCurve('#94a3b8', sublimation);
-
-    // Melting (negative slope): from the triple point up to the top of the plot
-    const melting = [];
-    for (let i = 0; i <= N_SEG; i++) {
-      const t = TRIPLE_POINT.t - (TRIPLE_POINT.t - ICE_IH_MIN_T) * (i / N_SEG);
-      const p = meltingPressure(t);
-      melting.push([t, p]);
-      if (p >= MAX_P) break;
-    }
-    strokeCurve('#60a5fa', melting);
-
-    // Vaporization: from the triple point to the critical point
-    const vaporization = [];
-    for (let i = 0; i <= N_SEG; i++) {
-      const t = TRIPLE_POINT.t + (CRITICAL_POINT.t - TRIPLE_POINT.t) * (i / N_SEG);
-      vaporization.push([t, saturationPressure(t)]);
-    }
-    strokeCurve('#f87171', vaporization);
-
-    // --- MARKERS ---
-    // 1 atm
-    ctx.setLineDash([4, 4]);
-    ctx.lineWidth = 1;
-    ctx.strokeStyle = 'rgba(255,255,255,0.3)';
-    const y1atm = mapP(STD_PRESSURE, height);
-    ctx.beginPath();
-    ctx.moveTo(plotLeft, y1atm);
-    ctx.lineTo(plotRight, y1atm);
-    ctx.stroke();
-    
-    ctx.fillStyle = '#fbbf24';
-    ctx.textAlign = 'left';
-    if (!narrow) ctx.fillText("1 atm", plotRight - 35, y1atm + 13);
-
-    ctx.setLineDash([]);
-    
-    // Points
-    const drawPoint = (x, y, color, label, align, dx, dy) => {
-      ctx.fillStyle = color;
-      ctx.beginPath();
-      ctx.arc(x, y, 4, 0, Math.PI * 2);
-      ctx.fill();
-      ctx.textAlign = align;
-      if (!narrow) ctx.fillText(label, x + dx, y + dy);
-    };
-
-    // The critical-point label is right-aligned at the edge of the plot and
-    // sits just below the vaporization curve, so that it stays inside the
-    // panel and clear of the curve at any size.
-    const cpLabel = 'Critical Point';
-    const cpLabelLeftT = invMapT(plotRight - 6 - ctx.measureText(cpLabel).width, width);
-    const cpLabelY = Math.max(cpY, mapP(saturationPressure(cpLabelLeftT), height)) + 15;
-    drawPoint(cpX, cpY, '#f87171', cpLabel, 'right', plotRight - 6 - cpX, cpLabelY - cpY);
-    drawPoint(tpX, tpY, '#60a5fa', 'Triple Point', 'left', 8, 15);
-
-    // Annotations. The font follows the width of the plot, and each label
-    // is centered in its own region, clear of the axis labels.
-    const plotWidth = plotRight - plotLeft;
-    const regionFont = Math.max(11, Math.min(16, Math.round(plotWidth / 22)));
-    ctx.font = `bold ${regionFont}px sans-serif`;
-    ctx.fillStyle = 'rgba(255,255,255,0.8)';
-    ctx.textAlign = 'center';
-    ctx.fillText('ICE', mapT(236, width), mapP(100000, height));
-    ctx.fillText('LIQUID', mapT(365, width), mapP(1000000, height));
-    ctx.fillText('VAPOR', mapT(500, width), mapP(1000, height));
-
-    // Slope note, to the right of the melting line
-    ctx.font = 'italic 11px sans-serif';
-    ctx.fillStyle = '#60a5fa';
-    ctx.textAlign = 'left';
-    const noteX = mapT(TRIPLE_POINT.t, width) + 8;
-    const noteY = mapP(40000000, height);
-    if (!narrow) {
-      ctx.fillText("negative slope", noteX, noteY);
-      ctx.fillText("(ice is less dense)", noteX, noteY + 12);
-    }
-
+function Diagram({ state, onMove, color, dark }) {
+  const box = useRef(null), dragging = useRef(false);
+  const [width, setWidth] = useState(430);
+  useEffect(() => {
+    const element = box.current, measure = () => setWidth(element.clientWidth);
+    const sizes = new ResizeObserver(measure);
+    sizes.observe(element); measure();
+    return () => sizes.disconnect();
   }, []);
 
+  const m = { l: 58, r: 12, t: 10, b: 24 };
+  const pw = Math.max(120, width - m.l - m.r), ph = HEIGHT - m.t - m.b;
+  const right = m.l + pw, bottom = m.t + ph;
+  const sx = (T) => m.l + (T - T_MIN) / (T_MAX - T_MIN) * pw;
+  const sy = (P) => m.t + (1 - Math.log10(P / P_MIN) / Math.log10(P_MAX / P_MIN)) * ph;
+  const xy = ([T, P]) => sx(T).toFixed(1) + ' ' + sy(P).toFixed(1);
+  const line = (points) => points.map((p, i) => (i ? 'L' : 'M') + xy(p)).join(' ');
+  const more = (points) => points.map((p) => 'L' + xy(p)).join(' ');
+  const back = (points) => more([...points].reverse());
+  const hue = hues(color), narrow = pw < 330;
+
+  // The regions in which one phase is stable
+  const regions = [
+    [hue.solid, `M${xy([T_MIN, P_MAX])} L${xy([T_TOP, P_MAX])} ${back(SL)} ${back(SG)} L${xy([T_MIN, P_MIN])} Z`],
+    [hue.liquid, `M${xy([T_TOP, P_MAX])} L${xy([CRITICAL.T, P_MAX])} L${xy([CRITICAL.T, CRITICAL.P])} ${back(LG)} ${more(SL)} Z`],
+    [hue.supercritical, `M${xy([CRITICAL.T, P_MAX])} L${xy([T_MAX, P_MAX])} L${xy([T_MAX, CRITICAL.P])} L${xy([CRITICAL.T, CRITICAL.P])} Z`],
+    [hue.gas, `${line(SG)} ${more(LG)} L${xy([T_MAX, CRITICAL.P])} L${xy([T_MAX, P_MIN])} Z`],
+  ];
+
+  const place = (clientX, clientY) => {
+    const frame = box.current.getBoundingClientRect();
+    const x = clamp(clientX - frame.left, m.l, right), y = clamp(clientY - frame.top, m.t, bottom);
+    const T = T_MIN + (x - m.l) / pw * (T_MAX - T_MIN), P = P_MIN * (P_MAX / P_MIN) ** (1 - (y - m.t) / ph);
+    for (const [on, point] of [['triple', TRIPLE], ['critical', CRITICAL]]) {
+      if (Math.hypot(x - sx(point.T), y - sy(point.P)) < 10) return onMove({ T: point.T, P: point.P, on });
+    }
+    let best = null;                                  // the nearest coexistence curve within 8 px
+    for (const [on, points] of [['lg', LG], ['sg', SG], ['sl', SL]]) for (const [Tc, Pc] of points) {
+      const d = Math.hypot(x - sx(Tc), y - sy(Pc));
+      if (d < 8 && (!best || d < best.d)) best = { d, on };
+    }
+    if (!best) return onMove({ T, P, on: null });
+    if (best.on === 'sl') { const p = clamp(P, TRIPLE.P, P_MAX); return onMove({ T: meltingTemperature(p), P: p, on: 'sl' }); }
+    if (best.on === 'lg') { const t = clamp(T, TRIPLE.T, CRITICAL.T); return onMove({ T: t, P: saturationPressure(t), on: 'lg' }); }
+    const t = clamp(T, T_LOW, TRIPLE.T);
+    return onMove({ T: t, P: sublimationPressure(t), on: 'sg' });
+  };
+
+  const small = { fill: color.text, fontSize: 12 }, label = { fontSize: narrow ? 11.5 : 12.5, fontWeight: 600, textAnchor: 'middle' };
+  const cx = sx(state.T), cy = sy(state.P);
+  return (
+    <div ref={box} className="chart">
+      <svg width={width} height={HEIGHT} role="img" style={{ display: 'block', cursor: 'crosshair', userSelect: 'none' }}
+           aria-label={`Phase diagram of water, pressure on a logarithmic scale against temperature. The state is at ${state.T.toFixed(1)} kelvin and ${(state.P / 1e5).toPrecision(3)} bar.`}
+           onPointerDown={(e) => {
+             if (e.pointerType !== 'mouse' && !e.target.dataset.handle) return;        // a finger drags only the point
+             dragging.current = true; e.currentTarget.setPointerCapture(e.pointerId); place(e.clientX, e.clientY);
+           }}
+           onPointerMove={(e) => { if (dragging.current) place(e.clientX, e.clientY); }}
+           onPointerUp={() => { dragging.current = false; }} onPointerCancel={() => { dragging.current = false; }}
+           onClick={(e) => place(e.clientX, e.clientY)}>
+        {regions.map(([fill, d], i) => <path key={i} d={d} fill={fill} fillOpacity={dark ? 0.16 : 0.1} />)}
+
+        {/* 1 bar, and the conventional limits of the supercritical fluid */}
+        <path d={`M${m.l} ${sy(1e5)} H${right}`} stroke={color.gray} strokeWidth={1.2} strokeDasharray={DASH} fill="none" />
+        <text x={right - 4} y={sy(1e5) - 5} textAnchor="end" {...small} fill={color.muted}>1 bar</text>
+        <path d={`M${xy([CRITICAL.T, P_MAX])} L${xy([CRITICAL.T, CRITICAL.P])} L${xy([T_MAX, CRITICAL.P])}`} stroke={color.gray} strokeWidth={1.2} strokeDasharray="1.5 3" fill="none" />
+
+        {[SG, SL, LG].map((points, i) => <path key={i} d={line(points)} stroke={color.text} strokeWidth={LINE} strokeLinecap="round" strokeLinejoin="round" fill="none" />)}
+
+        <text x={sx(236)} y={sy(2e6)} fill={hue.solid} {...label}>solid</text>
+        <text x={sx(400)} y={sy(6e6)} fill={hue.liquid} {...label}>liquid</text>
+        <text x={sx(560)} y={sy(1.5e3)} fill={hue.gas} {...label}>gas</text>
+        <text x={sx(0.5 * (CRITICAL.T + T_MAX))} y={sy(P_MAX) + 12.5} fill={hue.supercritical} {...label} fontSize={11.5}>supercritical</text>
+        <text x={sx(0.5 * (CRITICAL.T + T_MAX))} y={sy(P_MAX) + 25.5} fill={hue.supercritical} {...label} fontSize={11.5}>fluid</text>
+
+        <circle cx={sx(TRIPLE.T)} cy={sy(TRIPLE.P)} r={3.6} fill={color.text} />
+        <text x={sx(TRIPLE.T) + 9} y={sy(TRIPLE.P) + 15} {...small}>triple point</text>
+        <circle cx={sx(CRITICAL.T)} cy={sy(CRITICAL.P)} r={3.6} fill={color.text} />
+        <text x={sx(CRITICAL.T) + 9} y={sy(CRITICAL.P) + 16} {...small}>critical point</text>
+
+        {/* Axes */}
+        <path d={`M${m.l} ${m.t} V${bottom} H${right}`} stroke={color.axis} fill="none" />
+        {[200, 300, 400, 500, 600, 700, 800].filter((T) => !narrow || T % 200 === 0).map((T) => (
+          <g key={T}>
+            <path d={`M${sx(T)} ${bottom} v4`} stroke={color.axis} />
+            <text x={sx(T)} y={bottom + 18} textAnchor="middle" {...small}>{T}</text>
+          </g>
+        ))}
+        {[-5, -4, -3, -2, -1, 0, 1, 2, 3].map((power) => {
+          const y = sy(1e5 * 10 ** power);
+          return (
+            <g key={power}>
+              <path d={`M${m.l} ${y} h-4`} stroke={color.axis} />
+              <text x={m.l - 8} y={y + 4} textAnchor="end" {...small}>
+                {power === 0 ? '1' : power === 1 ? '10' : <>10<tspan dy={-5} fontSize={9}>{String(power).replace('-', '−')}</tspan></>}
+              </text>
+            </g>
+          );
+        })}
+        <text x={13} y={m.t + ph / 2} textAnchor="middle" transform={`rotate(-90 13 ${m.t + ph / 2})`} fill={color.text} fontSize={12.5}>
+          Pressure, <tspan fontStyle="italic">P</tspan> (bar), logarithmic scale
+        </text>
+
+        {/* The state */}
+        <circle cx={cx} cy={cy} r={6.5} fill={color.ground} stroke={color.text} strokeWidth={2.4} />
+        <circle cx={cx} cy={cy} r={2} fill={color.text} />
+        <circle data-handle="1" cx={cx} cy={cy} r={20} fill="transparent" style={{ touchAction: 'none', cursor: 'grab' }} />
+      </svg>
+      <p className="xlabel" style={{ paddingLeft: m.l }}>Temperature, <V>T</V> (K)</p>
+    </div>
+  );
+}
+
+function Layer({ list, T, playing, color }) {
+  const canvas = useRef(null), samples = useRef(null), now = useRef({});
+  if (!samples.current) { const random = seeded(6010); samples.current = [0, 1, 2].map(() => new Sample(random)); }
+  now.current = { list, T, playing, color };
+
   useEffect(() => {
-    const observer = new ResizeObserver((entries) => {
-      window.requestAnimationFrame(() => {
-        if (!entries.length) return;
-        const { width, height } = entries[0].contentRect;
-        draw(width, height);
+    let frame = 0, last = performance.now();
+    const draw = (time) => {
+      const { list, T, playing, color } = now.current;
+      const element = canvas.current;
+      if (!element) return;
+      const width = element.clientWidth, ratio = window.devicePixelRatio || 1;
+      const side = Math.min(width, PICTURE), tall = side * TALL / EDGE, height = tall + 50;
+      if (element.width !== Math.round(width * ratio) || element.height !== Math.round(height * ratio)) {
+        element.width = Math.round(width * ratio); element.height = Math.round(height * ratio); element.style.height = height + 'px';
+      }
+      const seconds = Math.min((time - last) / 1000, 0.05);
+      last = time;
+      const ctx = element.getContext('2d');
+      ctx.setTransform(ratio, 0, 0, ratio, 0, 0);
+      ctx.clearRect(0, 0, width, height);
+      const scale = side / EDGE, left = (width - side) / 2, top = 22, hue = hues(color);
+      const n = list.length, w = (EDGE - GAP * (n - 1)) / n;                     // nm, width of the picture of one phase
+      list.forEach((phase, k) => {
+        const sample = samples.current[k], x0 = left + k * (w + GAP) * scale, wide = w * scale;
+        sample.set(phase.name, phase.number, T, w, TALL);
+        if (playing) sample.step(seconds * PS_PER_SECOND);
+        ctx.fillStyle = color.fill; ctx.fillRect(x0, top, wide, tall);
+        ctx.save();
+        ctx.beginPath(); ctx.rect(x0, top, wide, tall); ctx.clip();
+        ctx.fillStyle = hue[phase.name];
+        sample.each((x, y) => { ctx.beginPath(); ctx.arc(x0 + x * scale, top + y * scale, RADIUS * scale, 0, 2 * Math.PI); ctx.fill(); });
+        ctx.restore();
+        if (sample.mean < 1) {                        // fewer than one molecule on average: say how many
+          ctx.fillStyle = color.muted; ctx.font = `12px ${FONT}`; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+          const mid = x0 + wide / 2, lines = wide > 150 ? [`${plain(sample.mean)} molecules`, 'on average'] : [plain(sample.mean), 'molecules', 'on average'];
+          lines.forEach((text, i) => ctx.fillText(text, mid, top + tall / 2 + (i - (lines.length - 1) / 2) * 16));
+        }
+        ctx.strokeStyle = color.axis; ctx.lineWidth = 1.5; ctx.strokeRect(x0, top, wide, tall);
+        ctx.fillStyle = hue[phase.name]; ctx.font = `600 12.5px ${FONT}`; ctx.textAlign = 'center'; ctx.textBaseline = 'alphabetic';
+        ctx.fillText(NAME[phase.name], x0 + wide / 2, top - 7);
       });
-    });
-    if (containerRef.current) observer.observe(containerRef.current);
-    return () => observer.disconnect();
-  }, [draw]);
+      for (let k = n; k < 3; k++) { samples.current[k].kind = null; samples.current[k].fluid = false; }
+      // Scale bar of 1 nm under the left corner
+      const y = top + tall + 16;
+      ctx.strokeStyle = color.text; ctx.lineWidth = 1.5;
+      ctx.beginPath(); ctx.moveTo(left, y); ctx.lineTo(left + scale, y); ctx.moveTo(left, y - 4); ctx.lineTo(left, y + 4);
+      ctx.moveTo(left + scale, y - 4); ctx.lineTo(left + scale, y + 4); ctx.stroke();
+      ctx.fillStyle = color.text; ctx.font = `12px ${FONT}`; ctx.textAlign = 'left'; ctx.textBaseline = 'middle';
+      ctx.fillText('1 nm', left + scale + 8, y);
+      frame = requestAnimationFrame(draw);
+    };
+    frame = requestAnimationFrame(draw);
+    return () => cancelAnimationFrame(frame);
+  }, []);
 
-  const handleMouseMove = (e) => {
-    const rect = canvasRef.current.getBoundingClientRect();
-    const x = e.clientX - rect.left;
-    const y = e.clientY - rect.top;
-    
-    // Use container dimensions for mapping, not canvas internal resolution
-    const width = rect.width;
-    const height = rect.height;
+  return <canvas ref={canvas} style={{ height: PICTURE * TALL / EDGE + 50 }} role="img"
+                 aria-label={`A thin layer of water as ${list.map((p) => NAME[p.name]).join(', ')}, with the molecules drawn as disks in their real number.`} />;
+}
 
-    const t = invMapT(x, width);
-    const p = invMapP(y, height);
-    
-    const phase = getPhase(t, p);
-    
-    setHoverInfo({
-      x: x, 
-      y: y, 
-      visible: true, 
-      text: phase.toUpperCase(), 
-      coords: `${Math.round(t)} K / ${p.toExponential(1)} Pa`
-    });
+export default function PhaseDiagram() {
+  const { color, dark } = useBook();
+  const [state, setState] = useState(START);
+  const [playing, setPlaying] = useState(() => {
+    if (STATIC) return false;
+    try { return !window.matchMedia('(prefers-reduced-motion: reduce)').matches; } catch (e) { return true; }
+  });
+  const { T, P, on } = state;
+  const list = phases(T, P, on);
+  const hue = hues(color);
+  const width = (EDGE - GAP * (list.length - 1)) / list.length;                // nm, as in panel (b)
+
+  // A slider moves the state along its coexistence curve as far as the curve goes, and off it beyond the end.
+  const setT = (t) => {
+    if (on === 'lg' && t >= TRIPLE.T && t <= CRITICAL.T) return setState({ T: t, P: saturationPressure(t), on });
+    if (on === 'sg' && t >= T_LOW && t <= TRIPLE.T) return setState({ T: t, P: sublimationPressure(t), on });
+    if (on === 'sl' && t >= T_TOP && t <= TRIPLE.T) return setState({ T: t, P: meltingPressure(t), on });
+    return setState({ T: t, P, on: null });
+  };
+  const setP = (p) => {
+    if (on === 'lg' && p >= TRIPLE.P && p <= CRITICAL.P) return setState({ T: saturationTemperature(p), P: p, on });
+    if (on === 'sg' && p >= P_MIN && p <= TRIPLE.P) return setState({ T: sublimationTemperature(p), P: p, on });
+    if (on === 'sl' && p >= TRIPLE.P && p <= P_MAX) return setState({ T: meltingTemperature(p), P: p, on });
+    return setState({ T, P: p, on: null });
   };
 
-  const handleMouseLeave = () => {
-    setHoverInfo(prev => ({ ...prev, visible: false, coords: '--' }));
-  };
-
-  const handleClick = () => {
-    if (hoverInfo.text) {
-      onPhaseSelect(hoverInfo.text.toLowerCase());
-    }
-  };
+  const where = {
+    lg: 'On the liquid–gas curve, liquid and gas coexist.',
+    sg: 'On the solid–gas curve, solid and gas coexist.',
+    sl: 'On the solid–liquid curve, solid and liquid coexist.',
+    triple: 'At the triple point, solid, liquid, and gas coexist.',
+    critical: 'At the critical point, liquid and gas are one phase.',
+  }[on] || `One phase is stable at this state: ${list[0].name === 'solid' ? 'solid (ice Ih)' : NAME[list[0].name]}.`;
+  const vbar = <V bar>v</V>;
+  const rows = [
+    [<>Density, <V>ρ</V> (g cm<sup>−3</sup>)</>, (p) => <Num value={p.rho / 1000} />],
+    [<>Molar volume, {vbar} (cm<sup>3</sup> mol<sup>−1</sup>)</>, (p) => <Num value={p.v * 1e6} />],
+    [<>Mean distance between molecules, ({vbar}/<V sub="A">N</V>)<sup>1/3</sup> (nm)</>, (p) => <Num value={p.spacing} digits={3} />],
+    ['Molecules in the picture in panel (b), on average', (p) => <Num value={p.number * THICK * width * TALL} digits={3} />],
+  ];
 
   return (
-    // UPDATED: Forced w-1/2 instead of responsive stacking, added min-w-0 to prevent flex overflow
-    <div className="w-1/2 h-full border-r border-slate-700 relative bg-slate-900 flex flex-col min-w-0">
-      <div className="p-4 border-b border-slate-700 bg-slate-800">
-        <h1 className="text-xl font-bold text-blue-400">H₂O Phase Diagram</h1>
-        <p className="text-sm text-slate-400 mt-1">Click a region to view molecular structure.</p>
+    <Studio title="Phase diagram of water"
+            lede="Move a state through the phase diagram of water, and look at the molecules of the phases that are stable there.">
+      <div className="panels two left-wide">
+        <Panel letter="a" title="Phase diagram of water">
+          <Diagram state={state} onMove={setState} color={color} dark={dark} />
+        </Panel>
+        <Panel letter="b" title="Molecules in a layer 0.33 nm thick">
+          <Layer list={list} T={T} playing={playing} color={color} />
+        </Panel>
       </div>
-      
-      <div ref={containerRef} className="relative flex-grow cursor-pointer w-full h-full min-h-0">
-        <canvas 
-          ref={canvasRef} 
-          className="w-full h-full block"
-          onMouseMove={handleMouseMove}
-          onMouseLeave={handleMouseLeave}
-          onClick={handleClick}
-        />
-        {hoverInfo.visible && (
-          <div 
-            className="absolute bg-white text-slate-900 text-xs px-2 py-1 rounded shadow pointer-events-none transform -translate-x-1/2 -translate-y-full mt-[-10px]"
-            style={{ left: hoverInfo.x, top: hoverInfo.y }}
-          >
-            {hoverInfo.text}
-          </div>
-        )}
+      <div className="panels" style={{ marginTop: 14 }}>
+        <Panel letter="c" title={where}>
+          <table className="values">
+            <thead>
+              <tr><th></th>{list.map((p) => <th key={p.name} style={{ color: hue[p.name] }}>{p.name === 'critical' ? 'fluid' : NAME[p.name]}</th>)}</tr>
+            </thead>
+            <tbody>
+              {rows.map(([name, value], i) => (
+                <tr key={i}><td>{name}</td>{list.map((p) => <td key={p.name} className="num">{value(p)}</td>)}</tr>
+              ))}
+            </tbody>
+          </table>
+        </Panel>
       </div>
 
-      <div className="p-4 bg-slate-800 text-xs text-slate-400 border-t border-slate-700">
-        <div className="flex justify-between items-center mb-2">
-            <span className="text-slate-500">Current Phase:</span>
-            <span className={`font-bold uppercase text-sm ${
-                currentPhase === 'solid' ? 'text-blue-300' : 
-                currentPhase === 'liquid' ? 'text-blue-500' : 'text-red-400'
-            }`}>
-                {currentPhase}
-            </span>
-        </div>
-        <div className="flex justify-between border-t border-slate-700 pt-2">
-            <span>Temp/Press:</span>
-            <span>{hoverInfo.coords}</span>
+      <div className="controls">
+        <Slider label={<>Temperature, <V>T</V></>} show={<>{T.toFixed(on === 'triple' || on === 'critical' ? 2 : 1)} K</>} value={T} min={T_MIN} max={T_MAX} step={1} onChange={setT} />
+        <Slider label={<>Pressure, <V>P</V></>} show={<><Num value={P / 1e5} /> bar</>} value={Math.log10(P / 1e5)} min={-5} max={3} step={0.01}
+                onChange={(x) => setP(clamp(1e5 * 10 ** x, P_MIN, P_MAX))} />
+        <div className="row">
+          <button type="button" onClick={() => setState({ T: TRIPLE.T, P: TRIPLE.P, on: 'triple' })}>Triple point</button>
+          <button type="button" onClick={() => setState({ T: CRITICAL.T, P: CRITICAL.P, on: 'critical' })}>Critical point</button>
+          <button type="button" onClick={() => setPlaying(!playing)}>{playing ? 'Pause' : 'Play'}</button>
+          <button type="button" onClick={() => setState(START)}>Reset</button>
         </div>
       </div>
-    </div>
+      <p className="hint">
+        Drag the point in panel (a), or use the sliders. Near a coexistence curve the point moves onto the curve, and the sliders then move it
+        along the curve. Panel (b) shows a layer of water 5 nm wide, 6 nm high, and 0.33 nm thick, which is about one molecule. The number of molecules in it
+        is the real one, from the density of the phase. Their motion is schematic, and one second shows 1 ps. In ice Ih each molecule has four
+        neighbors, and the picture shows three of them in a plane. The dotted lines at the critical temperature and the critical pressure are a
+        convention and not coexistence curves. The coexistence curves and the densities follow the equations of the International Association
+        for the Properties of Water and Steam.
+      </p>
+    </Studio>
   );
-};
-
-const MolecularSimulation = ({ phase, isPaused, togglePause }) => {
-  const mountRef = useRef(null);
-  const sceneRef = useRef(null);
-  const moleculesRef = useRef([]);
-  
-  // These refs allow the animation loop to access the latest React state
-  // without needing to be recreated on every render
-  const phaseRef = useRef(phase);
-  const isPausedRef = useRef(isPaused);
-
-  useEffect(() => { phaseRef.current = phase; }, [phase]);
-  useEffect(() => { isPausedRef.current = isPaused; }, [isPaused]);
-
-  useEffect(() => {
-    // --- THREE.JS SETUP ---
-    const scene = new THREE.Scene();
-    scene.background = new THREE.Color(0x000000);
-    scene.fog = new THREE.FogExp2(0x000000, 0.02);
-    
-    // Initialize with a default aspect, will be corrected by handleResize immediately after
-    const camera = new THREE.PerspectiveCamera(50, 1, 0.1, 100);
-    camera.position.z = 20;
-
-    const renderer = new THREE.WebGLRenderer({ antialias: true });
-    // Don't set fixed size yet, wait for mount
-    mountRef.current.appendChild(renderer.domElement);
-
-    const ambientLight = new THREE.AmbientLight(0x404040, 2);
-    scene.add(ambientLight);
-    const pointLight = new THREE.PointLight(0xffffff, 1, 100);
-    pointLight.position.set(10, 10, 10);
-    scene.add(pointLight);
-    const pointLight2 = new THREE.PointLight(0x5555ff, 0.5, 100);
-    pointLight2.position.set(-10, -10, 5);
-    scene.add(pointLight2);
-
-    sceneRef.current = { scene, camera, renderer };
-
-    // Resize Handler
-    const handleResize = () => {
-      if (!mountRef.current) return;
-      const width = mountRef.current.clientWidth;
-      const height = mountRef.current.clientHeight;
-      
-      camera.aspect = width / height;
-      camera.updateProjectionMatrix();
-      renderer.setSize(width, height);
-    };
-    
-    // Initial resize
-    handleResize();
-    
-    // Use ResizeObserver for more robust sizing in flex containers
-    const observer = new ResizeObserver(() => {
-        handleResize();
-    });
-    observer.observe(mountRef.current);
-
-    // Animation Loop
-    let animationId;
-    const animate = () => {
-      animationId = requestAnimationFrame(animate);
-      
-      const time = Date.now() * 0.001;
-      const currentSimType = phaseRef.current;
-      const paused = isPausedRef.current;
-
-      if (!paused) {
-        if (currentSimType === 'solid') {
-          moleculesRef.current.forEach(m => {
-            m.mesh.position.x = m.basePos.x + Math.sin(time * 10 + m.phaseOffset) * 0.05;
-            m.mesh.position.y = m.basePos.y + Math.cos(time * 12 + m.phaseOffset) * 0.05;
-            m.mesh.position.z = m.basePos.z + Math.sin(time * 8 + m.phaseOffset) * 0.05;
-          });
-          scene.rotation.y = time * 0.1;
-        } else if (currentSimType === 'liquid') {
-          moleculesRef.current.forEach(m => {
-            m.mesh.position.add(m.velocity);
-            m.mesh.rotation.x += m.rotVel.x;
-            m.mesh.rotation.y += m.rotVel.y;
-            const dist = m.mesh.position.length();
-            if (dist > 8) m.velocity.add(m.mesh.position.clone().multiplyScalar(-0.002));
-            if (Math.random() > 0.95) {
-              m.velocity.add(new THREE.Vector3((Math.random()-0.5)*0.02, (Math.random()-0.5)*0.02, (Math.random()-0.5)*0.02));
-            }
-          });
-          scene.rotation.y = time * 0.05;
-        } else if (currentSimType === 'vapor' || currentSimType === 'supercritical') {
-          const bounds = 12;
-          moleculesRef.current.forEach(m => {
-            m.mesh.position.add(m.velocity);
-            m.mesh.rotation.x += m.rotVel.x;
-            m.mesh.rotation.y += m.rotVel.y;
-            if (m.mesh.position.x > bounds || m.mesh.position.x < -bounds) m.velocity.x *= -1;
-            if (m.mesh.position.y > bounds || m.mesh.position.y < -bounds) m.velocity.y *= -1;
-            if (m.mesh.position.z > bounds || m.mesh.position.z < -bounds) m.velocity.z *= -1;
-          });
-          scene.rotation.y += 0.001;
-        }
-      }
-      
-      renderer.render(scene, camera);
-    };
-    animate();
-
-    return () => {
-      observer.disconnect();
-      cancelAnimationFrame(animationId);
-      if (mountRef.current && renderer.domElement) {
-        mountRef.current.removeChild(renderer.domElement);
-      }
-      renderer.dispose();
-    };
-  }, []); // Run once on mount
-
-  // Re-build molecules when phase changes
-  useEffect(() => {
-    if (!sceneRef.current) return;
-    const { scene, camera } = sceneRef.current;
-
-    // Cleanup old molecules
-    moleculesRef.current.forEach(m => scene.remove(m.mesh));
-    moleculesRef.current = [];
-
-    const createMolecule = () => {
-      const group = new THREE.Group();
-      const oxy = new THREE.Mesh(
-        new THREE.SphereGeometry(0.4, 16, 16),
-        new THREE.MeshPhongMaterial({ color: 0xff0000, shininess: 100 })
-      );
-      group.add(oxy);
-      const hydMat = new THREE.MeshPhongMaterial({ color: 0xffffff, shininess: 100 });
-      const hydGeo = new THREE.SphereGeometry(0.25, 16, 16);
-      const h1 = new THREE.Mesh(hydGeo, hydMat); h1.position.set(0.45, 0.3, 0); group.add(h1);
-      const h2 = new THREE.Mesh(hydGeo, hydMat); h2.position.set(-0.45, 0.3, 0); group.add(h2);
-      return group;
-    };
-
-    if (phase === 'solid') {
-      camera.position.z = 12;
-      const spacingX = 1.8, spacingY = 2.0, spacingZ = 1.8;
-      for(let x = -2; x <= 2; x++) {
-        for(let y = -2; y <= 2; y++) {
-          for(let z = -1; z <= 1; z++) {
-            const mol = createMolecule();
-            const offsetX = (y % 2) * 0.5 * spacingX;
-            const offsetZ = (y % 2) * 0.5 * spacingZ;
-            mol.position.set(x * spacingX + offsetX, y * spacingY, z * spacingZ + offsetZ);
-            mol.rotation.x = Math.random() * 0.5;
-            mol.rotation.y = Math.random() * Math.PI * 2;
-            scene.add(mol);
-            moleculesRef.current.push({ mesh: mol, basePos: mol.position.clone(), phaseOffset: Math.random() * 100 });
-          }
-        }
-      }
-    } else if (phase === 'liquid') {
-      camera.position.z = 15;
-      for(let i=0; i<80; i++) {
-        const mol = createMolecule();
-        const r = 6 * Math.cbrt(Math.random());
-        const theta = Math.random() * Math.PI * 2;
-        const phi = Math.acos(2 * Math.random() - 1);
-        mol.position.set(r * Math.sin(phi) * Math.cos(theta), r * Math.sin(phi) * Math.sin(theta), r * Math.cos(phi));
-        mol.rotation.set(Math.random()*Math.PI, Math.random()*Math.PI, 0);
-        scene.add(mol);
-        moleculesRef.current.push({
-          mesh: mol,
-          velocity: new THREE.Vector3((Math.random()-0.5)*0.05, (Math.random()-0.5)*0.05, (Math.random()-0.5)*0.05),
-          rotVel: new THREE.Vector3((Math.random()-0.5)*0.1, (Math.random()-0.5)*0.1, 0)
-        });
-      }
-    } else { // Vapor or Supercritical
-      camera.position.z = 20;
-      const count = phase === 'supercritical' ? 100 : 30;
-      const speedMult = phase === 'supercritical' ? 0.8 : 0.5;
-      const boxSize = phase === 'supercritical' ? 18 : 20;
-      
-      for(let i=0; i<count; i++) {
-        const mol = createMolecule();
-        mol.position.set((Math.random()-0.5)*boxSize, (Math.random()-0.5)*boxSize, (Math.random()-0.5)*boxSize);
-        scene.add(mol);
-        moleculesRef.current.push({
-          mesh: mol,
-          velocity: new THREE.Vector3((Math.random()-0.5)*speedMult, (Math.random()-0.5)*speedMult, (Math.random()-0.5)*speedMult),
-          rotVel: new THREE.Vector3((Math.random()-0.5)*0.2, (Math.random()-0.5)*0.2, (Math.random()-0.5)*0.2)
-        });
-      }
-    }
-
-  }, [phase]);
-
-  const getSimInfo = () => {
-    switch(phase) {
-      case 'solid': return { title: "Solid Phase (Ice Ih)", desc: "Molecules locked in a lattice. Vibrating but not translating." };
-      case 'liquid': return { title: "Liquid Phase", desc: "Molecules close together, high density, flowing freely." };
-      case 'vapor': return { title: "Vapor Phase", desc: "Molecules far apart, high speeds, negligible forces." };
-      case 'supercritical': return { title: "Supercritical Fluid", desc: "Hybrid state: Gas-like kinetic energy, Liquid-like density." };
-      default: return { title: "Waiting...", desc: "Select a phase." };
-    }
-  };
-
-  const info = getSimInfo();
-
-  return (
-    // UPDATED: Forced w-1/2 instead of responsive stacking, added min-w-0 to prevent flex overflow
-    <div className="w-1/2 h-full relative bg-black min-w-0">
-      <div ref={mountRef} className="w-full h-full" />
-      <div id="overlay" className="absolute top-5 left-5 pointer-events-none z-10">
-        <div className="bg-slate-900/80 p-4 rounded-lg border border-slate-700 max-w-xs">
-          <h2 className="text-lg font-bold text-blue-300 mb-1">{info.title}</h2>
-          <p className="text-sm text-gray-300 mb-3">{info.desc}</p>
-          <button 
-            onClick={togglePause}
-            className={`pointer-events-auto px-3 py-1 rounded text-sm font-bold transition-colors ${
-              isPaused ? "bg-blue-600 hover:bg-blue-500 text-white" : "bg-slate-600 hover:bg-slate-500 text-white"
-            }`}
-          >
-            {isPaused ? "▶ Play Simulation" : "⏸ Pause Simulation"}
-          </button>
-        </div>
-      </div>
-    </div>
-  );
-};
-
-const App = () => {
-  const [phase, setPhase] = useState('liquid');
-  const [isPaused, setIsPaused] = useState(true);
-
-  return (
-    // UPDATED: Forced flex-row (no breakpoints), h-screen to fill iframe, overflow-hidden to contain children
-    <div className="flex flex-row h-screen w-full font-sans bg-slate-900 text-white overflow-hidden">
-      <PhaseDiagram onPhaseSelect={setPhase} currentPhase={phase} />
-      <MolecularSimulation phase={phase} isPaused={isPaused} togglePause={() => setIsPaused(!isPaused)} />
-    </div>
-  );
-};
-
-export default App;
+}
