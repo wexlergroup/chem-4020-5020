@@ -43,40 +43,46 @@ The second law for an **isolated system** ([Section 4.2](section-02.md)) require
 dS \ge 0,
 ```
 
-with equality only at equilibrium. The qualitative picture is:
+with equality only at equilibrium. The qualitative picture, which [](#fig:entropy-equilibrium) sketches, is:
 
 - **Out of equilibrium:** entropy increases spontaneously ($dS > 0$).
 - **At equilibrium:** entropy reaches its maximum value subject to the constraints and stops changing ($dS = 0$).
 
 ```{code-cell} ipython3
+:label: fig:entropy-equilibrium
+:caption: Entropy of an isolated system during a spontaneous process (schematic). The entropy rises from $S_i$ to its maximum value $S_f$ and then stays constant at equilibrium.
 :tags: [hide-input]
 
-import numpy as np
+import sys
+
 import matplotlib.pyplot as plt
+import numpy as np
 
-# Schematic "approach to equilibrium" curve
-t = np.linspace(0, 10, 400)
-S_i = 1.0
-S_f = 2.0
+sys.path.append("..")            # the book folder, which holds figstyle
+import figstyle as fs
 
-# Smooth approach to plateau + slight wiggle to mimic "spontaneous process" steps
-S = S_f - (S_f - S_i) * np.exp(-t/2.0) + 0.03*np.sin(5*t)*np.exp(-t/2.0)
+S_i, S_f = 1.0, 2.0              # schematic values
 
-fig, ax = plt.subplots(figsize=(4.5, 3))
-ax.plot(t, S)
-ax.axhline(S_f, linestyle="--")
-ax.set_xlabel("time (schematic)")
-ax.set_ylabel("entropy (schematic)")
-ax.set_title("Entropy increases until equilibrium (isolated system)", fontsize=10, pad=10)
-ax.text(0.4, S_i+0.05, r"$S_i$")
-ax.text(7.5, S_f+0.03, r"$S_f$")
-ax.set_ylim(S_i-0.1, S_f+0.2)
-ax.grid(True, alpha=0.3)
-plt.show()
-plt.close(fig)
+
+def draw_approach(c):
+    fig, ax = plt.subplots(figsize=(5.2, 3.1), constrained_layout=True)
+    t = np.linspace(0, 10, 400)
+    S = S_f - (S_f - S_i) * np.exp(-t / 1.6)               # a smooth approach to the maximum
+    ax.axhline(S_f, color=c.gray, lw=1.2, ls=(0, (4, 3)))
+    ax.plot(t, S, color=c.blue, lw=fs.LINE, solid_capstyle="round")
+    ax.text(2.0, 1.52, "spontaneous change\n$dS > 0$", ha="left", va="center")
+    ax.text(8.0, 1.9, "equilibrium\n$dS = 0$", ha="center", va="top")
+    ax.set(xlim=(0, 10.3), ylim=(0.9, 2.12), xlabel="Time", ylabel="Entropy $S$")
+    ax.set_xticks([])
+    ax.set_yticks([S_i, S_f], ["$S_i$", "$S_f$"])
+    return fig
+
+
+fs.show(draw_approach, alt="Schematic plot of entropy against time for an isolated system. The entropy starts at its "
+                           "initial value, rises quickly at first and then more slowly, and levels off at its final, "
+                           "maximum value, which is marked by a dashed line. The rising part is labeled spontaneous "
+                           "change, dS greater than zero, and the flat part is labeled equilibrium, dS equal to zero.")
 ```
-
-Entropy rises from $S_i$ to $S_f$ during a spontaneous process and then becomes constant at equilibrium.
 
 A concrete example from [Section 4.2](section-02.md) illustrates this. Two subsystems at different temperatures ($T_A > T_B$) in an insulated box exchange heat, and we showed that
 
