@@ -1,0 +1,322 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Solid carbon monoxide · Physical Chemistry II</title>
+<!--
+  Solid carbon monoxide: an interactive companion to Section 5.2 (the Third Law and residual entropy). This file is
+  written by hand (it is not built from development/).
+
+  One unit cell of the low-temperature (alpha) phase of solid CO, which the reader turns by dragging. A switch
+  changes between the ordered structure and a crystal in which each molecule is frozen at random in one of its two
+  head-to-tail orientations.
+
+      solid-carbon-monoxide.html               the interactive page
+      solid-carbon-monoxide.html?static=1      one still picture with both crystals, for the PDF of the notes
+      ...&theme=light or dark                  fixes the colors (otherwise the page follows the book or the system)
+
+  Inside the notes, the page follows the light or dark mode of the book and sets the height of its own frame.
+
+  Structure: space group P2_1 3, a = 5.63 angstrom, C and O on 4a sites (x, x, x) with x_C = -0.042 and
+  x_O = 0.067. L. Vegard, Z. Physik 61, 185-190 (1930), as listed in the AFLOW Library of Crystallographic
+  Prototypes (M. J. Mehl et al., Comput. Mater. Sci. 136, S1-S828 (2017), prototype AB_cP8_198_a_a).
+
+  Units inside the program: lengths in angstrom, angles in radians.
+-->
+<style>
+  :root {
+    --ground: #ffffff; --text: #1c1917; --muted: #6b645e; --border: #dedad5; --fill: #f1f0ee;
+    --blue: #0072b2; --on-blue: #ffffff; --verm: #d55e00; --carbon: #57534e; --cell: #a8a29e;
+  }
+  :root[data-theme="dark"] {
+    --ground: #1c1917; --text: #f5f5f4; --muted: #a8a29e; --border: #3a3531; --fill: #2a2623;
+    --blue: #56b4e9; --on-blue: #111111; --verm: #f4915a; --carbon: #a8a29e; --cell: #78716c;
+  }
+  * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body { margin: 0; background: var(--ground); color: var(--text);
+         font: 15px/1.45 Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+  main { max-width: 760px; margin: 0 auto; padding: 24px 16px 40px; }
+  .embedded main { max-width: none; padding: 0 0 12px; }
+  h1 { font-size: 1.5rem; line-height: 1.2; margin: 0 0 6px; }
+  .lede { color: var(--muted); margin: 0 0 18px; max-width: 64ch; }
+  .embedded h1, .embedded .lede, .embedded .hint { display: none; }       /* in the notes, the caption says this */
+  i.v { font-style: italic; font-family: inherit; }
+  .views { display: grid; grid-template-columns: minmax(0, 1fr); gap: 14px; max-width: 460px; margin: 0 auto; }
+  .static .views { grid-template-columns: repeat(2, minmax(0, 1fr)); max-width: none; }
+  .view h2 { font-size: 0.98rem; font-weight: 400; line-height: 1.3; margin: 0 0 4px; text-align: center; }
+  .static .view h2 { text-align: left; }
+  .view h2 b { font-weight: 700; margin-right: 0.5em; }
+  canvas { display: block; width: 100%; aspect-ratio: 1 / 1; touch-action: none; cursor: grab; border-radius: 8px; }
+  canvas:active { cursor: grabbing; }
+  .static canvas { cursor: default; }
+  .key { display: flex; gap: 6px 18px; flex-wrap: wrap; justify-content: center; font-size: 0.9rem; margin: 6px 0 0; }
+  .key span { display: inline-flex; align-items: center; gap: 6px; white-space: nowrap; }
+  .dot { width: 12px; height: 12px; border-radius: 50%; border: 1px solid var(--text); }
+  .dot.c { background: var(--carbon); } .dot.o { background: var(--verm); }
+  .bar { width: 20px; height: 4px; border-radius: 2px; background: var(--blue); }
+  .count { text-align: center; margin: 10px auto 0; max-width: 56ch; min-height: 2.9em; }
+  .controls { display: flex; gap: 8px 10px; flex-wrap: wrap; align-items: center; justify-content: center;
+              margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--border); }
+  .seg { display: inline-flex; gap: 4px; }
+  button { font: inherit; font-size: 0.88rem; color: var(--text); background: var(--fill); border: 1px solid var(--border);
+           border-radius: 999px; padding: 4px 12px; cursor: pointer; }
+  button:hover { border-color: var(--muted); }
+  button:disabled { opacity: 0.45; cursor: default; }
+  button:disabled:hover { border-color: var(--border); }
+  button[aria-pressed="true"] { background: var(--blue); border-color: var(--blue); color: var(--on-blue); font-weight: 600; }
+  button:focus-visible, canvas:focus-visible { outline: 2px solid var(--blue); outline-offset: 2px; }
+  .hint { font-size: 0.84rem; color: var(--muted); margin: 12px 0 0; }
+  .static .controls, .static .hint, .static h1, .static .lede, .static .count { display: none; }
+  .static main { padding: 0; }
+</style>
+</head>
+<body>
+<main>
+  <h1>Solid carbon monoxide</h1>
+  <p class="lede">One unit cell of solid CO at low temperature. Turn the crystal, and compare the ordered structure with a crystal in which each molecule is frozen at random in one of its two orientations.</p>
+
+  <div class="views">
+    <section class="view" id="view-main">
+      <h2 id="title-main"><b>a</b>Ordered</h2>
+      <canvas tabindex="0" role="img" aria-label="Model of one unit cell of solid carbon monoxide. Drag it, or use the arrow keys, to turn it."></canvas>
+    </section>
+    <section class="view" id="view-second" hidden>
+      <h2><b>b</b>Frozen at random</h2>
+      <canvas role="img" aria-label="Model of the same unit cell with some of the molecules flipped end for end."></canvas>
+    </section>
+  </div>
+  <p class="key"><span><i class="dot c"></i>C</span><span><i class="dot o"></i>O</span><span><i class="bar"></i>molecule flipped end for end</span></p>
+  <p class="count" id="count" aria-live="polite"></p>
+
+  <div class="controls">
+    <span class="seg" role="group" aria-label="Arrangement of the molecules">
+      <button type="button" id="b-ordered" aria-pressed="true">Ordered</button><button type="button" id="b-random" aria-pressed="false">Frozen at random</button></span>
+    <button type="button" id="again" disabled>Another random arrangement</button>
+    <button type="button" id="reset">Reset the view</button>
+  </div>
+  <p class="hint">The cube is one unit cell, with an edge of 5.63&nbsp;Å. It contains four molecules. The 14 molecules shown are those at its corners and on its faces, which it shares with the neighboring cells. Each molecule lies along one of the four body diagonals of the cube. A flip exchanges the carbon atom and the oxygen atom of one molecule. The atom positions are those of the X-ray structure of L. Vegard, <i>Z. Physik</i> <b>61</b>, 185 (1930).</p>
+</main>
+
+<script>
+"use strict";
+const params = new URLSearchParams(location.search);
+const fixed = params.has("static");
+document.body.classList.toggle("static", fixed);
+
+/* ---- colors of the book, and the height of the frame ---- */
+let host = null;
+try { if (window.parent !== window) host = window.parent.document.documentElement; } catch (e) { host = null; }
+try { if (window.frameElement) document.body.classList.add("embedded"); } catch (e) {}
+let color = {};
+function theme() {
+  let dark = false;
+  if (params.get("theme")) dark = params.get("theme") === "dark";
+  else if (host) dark = host.classList.contains("dark");
+  else { try { dark = window.matchMedia("(prefers-color-scheme: dark)").matches; } catch (e) {} }
+  document.documentElement.dataset.theme = dark ? "dark" : "light";
+  const css = getComputedStyle(document.documentElement);
+  for (const name of ["ground", "text", "muted", "blue", "verm", "carbon", "cell"]) color[name] = css.getPropertyValue("--" + name).trim();
+  if (typeof drawAll === "function") drawAll();
+}
+
+function fit() {                                    // inside the notes, make the frame as tall as the content
+  try {
+    const frame = window.frameElement;
+    if (!frame) return;
+    const height = Math.ceil(document.documentElement.getBoundingClientRect().height) + "px";
+    frame.style.height = height;
+    const box = frame.parentElement;                // the book theme wraps a frame in a box with a fixed 5:3 shape
+    if (box && box.style.paddingBottom) { box.style.paddingBottom = "0"; box.style.display = "block"; }
+    if (box && box.style.paddingBottom === "0px") box.style.height = height;
+  } catch (e) {}
+}
+
+/* ---- vectors and rotations ---- */
+const add = (u, v) => [u[0] + v[0], u[1] + v[1], u[2] + v[2]];
+const times = (s, v) => [s * v[0], s * v[1], s * v[2]];
+const dot = (u, v) => u[0] * v[0] + u[1] * v[1] + u[2] * v[2];
+const apply = (m, v) => [dot(m[0], v), dot(m[1], v), dot(m[2], v)];
+const product = (m, n) => m.map(row => [0, 1, 2].map(j => row[0] * n[0][j] + row[1] * n[1][j] + row[2] * n[2][j]));
+const radians = degrees => degrees * Math.PI / 180;
+
+// Rotation by an angle about a unit vector (Rodrigues' formula)
+function rotation(axis, angle) {
+  const [x, y, z] = axis, c = Math.cos(angle), s = Math.sin(angle), t = 1 - c;
+  return [[t * x * x + c, t * x * y - s * z, t * x * z + s * y],
+          [t * x * y + s * z, t * y * y + c, t * y * z - s * x],
+          [t * x * z - s * y, t * y * z + s * x, t * z * z + c]];
+}
+
+// Orientation whose rows are the directions "right", "up", and "toward the viewer" for a viewing direction
+function view(azimuth, elevation) {
+  const a = radians(azimuth), e = radians(elevation);
+  return [[-Math.sin(a), Math.cos(a), 0],
+          [-Math.sin(e) * Math.cos(a), -Math.sin(e) * Math.sin(a), Math.cos(e)],
+          [Math.cos(e) * Math.cos(a), Math.cos(e) * Math.sin(a), Math.sin(e)]];
+}
+
+/* ---- the crystal ---- */
+const A = 5.63;                                     // edge of the cubic cell
+const X_C = -0.042, X_O = 0.067;                    // carbon and oxygen at (x, x, x), in fractions of the edge
+// The four molecules of the cell: the lattice site that each one lies near, and the body diagonal along which it lies.
+// These are the four equivalent positions of the site 4a of the space group P2_1 3.
+const BASIS = [{ site: [0, 0, 0], axis: [1, 1, 1] },
+               { site: [0.5, 0, 0.5], axis: [-1, -1, 1] },
+               { site: [0, 0.5, 0.5], axis: [-1, 1, -1] },
+               { site: [0.5, 0.5, 0], axis: [1, -1, -1] }];
+
+// Every molecule whose site lies in or on the cube: 8 at the corners and 6 on the faces. The origin is the center.
+const MOLECULES = [];
+for (const { site, axis } of BASIS)
+  for (let i = 0; i <= 1; i++) for (let j = 0; j <= 1; j++) for (let k = 0; k <= 1; k++) {
+    const s = add(site, [i, j, k]);
+    if (s.some(v => v > 1)) continue;
+    const place = x => times(A, add(add(s, times(x, axis)), [-0.5, -0.5, -0.5]));
+    MOLECULES.push({ ends: [place(X_C), place(X_O)] });               // the ordered structure: carbon first
+  }
+const COUNT = MOLECULES.length;
+
+// Random numbers that repeat from one visit to the next (mulberry32)
+let seed = 4020;
+function random() {
+  seed = (seed + 0x6d2b79f5) | 0;
+  let t = Math.imul(seed ^ (seed >>> 15), 1 | seed);
+  t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+  return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+}
+const NONE = MOLECULES.map(() => false);
+let flips = NONE.slice();
+function shuffle() {                                // each molecule is flipped with probability 1/2
+  do { flips = MOLECULES.map(() => random() < 0.5); } while (!flips.some(f => f));
+}
+shuffle();
+
+/* ---- drawing ---- */
+const RADIUS = { C: 0.36, O: 0.40 };                // drawn radius of each atom
+const BOND = 0.085;                                 // half-width of a bond
+const CAMERA = 34;                                  // distance of the viewer, which sets the perspective
+const EXTENT = 5.7;                                 // half-width of the picture
+const START = view(-17, 10);                       // a view in which no molecule hides another
+let orientation = START, state = "ordered";
+
+function shade(hex, t) {                            // mix a color with white (t > 0) or with black (t < 0)
+  const n = parseInt(hex.slice(1), 16), target = t > 0 ? 255 : 0, f = Math.abs(t);
+  return "rgb(" + [n >> 16, (n >> 8) & 255, n & 255].map(v => Math.round(v + (target - v) * f)).join(",") + ")";
+}
+function luminance(hex) {
+  const n = parseInt(hex.slice(1), 16);
+  return (0.2126 * (n >> 16) + 0.7152 * ((n >> 8) & 255) + 0.0722 * (n & 255)) / 255;
+}
+
+function draw(canvas, flipped) {
+  const ratio = window.devicePixelRatio || 1, w = canvas.clientWidth, h = canvas.clientHeight;
+  if (!w || !h) return;
+  if (canvas.width !== Math.round(w * ratio) || canvas.height !== Math.round(h * ratio)) { canvas.width = Math.round(w * ratio); canvas.height = Math.round(h * ratio); }
+  const g = canvas.getContext("2d");
+  g.setTransform(ratio, 0, 0, ratio, 0, 0); g.clearRect(0, 0, w, h); g.lineCap = "round"; g.lineJoin = "round";
+  const scale = Math.min(w, h) / 2 / EXTENT;        // pixels per angstrom
+  const place = p => {                              // position in the crystal -> point on the screen, depth, size
+    const q = apply(orientation, p), f = CAMERA / (CAMERA - q[2]);
+    return { x: w / 2 + scale * f * q[0], y: h / 2 - scale * f * q[1], z: q[2], f: scale * f };
+  };
+  const items = [];
+
+  // Edges of the cell, in short pieces so that nearer atoms cover the parts behind them
+  const half = A / 2, pieces = 12;
+  for (let d = 0; d < 3; d++) for (const u of [-half, half]) for (const v of [-half, half]) {
+    const point = t => { const p = [0, 0, 0]; p[d] = t; p[(d + 1) % 3] = u; p[(d + 2) % 3] = v; return p; };
+    for (let i = 0; i < pieces; i++) {
+      const a = place(point(-half + A * i / pieces)), b = place(point(-half + A * (i + 1) / pieces));
+      items.push({ z: (a.z + b.z) / 2 - 0.3, paint() {
+        g.strokeStyle = color.cell; g.lineWidth = 1.2;
+        g.beginPath(); g.moveTo(a.x, a.y); g.lineTo(b.x, b.y); g.stroke();
+      } });
+    }
+  }
+
+  MOLECULES.forEach((molecule, m) => {
+    const flip = flipped[m];
+    const atoms = flip ? ["O", "C"] : ["C", "O"];   // a flip exchanges the two atoms
+    // Bond between the surfaces of the two atoms
+    const [p0, p1] = molecule.ends, bond = add(p1, times(-1, p0)), length = Math.sqrt(dot(bond, bond)), unit = times(1 / length, bond);
+    const a = place(add(p0, times(RADIUS[atoms[0]] - 0.08, unit))), b = place(add(p0, times(length - RADIUS[atoms[1]] + 0.08, unit)));
+    items.push({ z: (a.z + b.z) / 2, paint() {
+      g.strokeStyle = flip ? color.blue : color.text; g.lineWidth = 2 * BOND * (a.f + b.f) / 2 * (flip ? 1.5 : 1); g.lineCap = "butt";
+      g.beginPath(); g.moveTo(a.x, a.y); g.lineTo(b.x, b.y); g.stroke(); g.lineCap = "round";
+    } });
+    // Atoms as shaded spheres with the symbol of the element
+    molecule.ends.forEach((position, i) => {
+      const element = atoms[i], p = place(position), r = RADIUS[element] * p.f;
+      const base = element === "C" ? color.carbon : color.verm;
+      items.push({ z: p.z, paint() {
+        const glow = g.createRadialGradient(p.x - 0.35 * r, p.y - 0.38 * r, 0.08 * r, p.x, p.y, r);
+        glow.addColorStop(0, shade(base, 0.55)); glow.addColorStop(0.55, base); glow.addColorStop(1, shade(base, -0.28));
+        g.fillStyle = glow; g.beginPath(); g.arc(p.x, p.y, r, 0, 2 * Math.PI); g.fill();
+        g.strokeStyle = flip ? color.blue : color.text; g.lineWidth = flip ? 2 : 1; g.stroke();
+        if (r < 10.5) return;                       // the symbol is left out when the atom is too small to hold it
+        g.fillStyle = luminance(base) > 0.55 ? "#111111" : "#ffffff";
+        g.font = "600 " + Math.round(0.95 * r) + "px Inter, ui-sans-serif, system-ui, sans-serif";
+        g.textAlign = "center"; g.textBaseline = "middle"; g.fillText(element, p.x, p.y + 0.5);
+      } });
+    });
+  });
+
+  items.sort((a, b) => a.z - b.z);                  // far to near
+  for (const item of items) item.paint();
+}
+
+/* ---- the views and their controls ---- */
+const mainCanvas = document.querySelector("#view-main canvas"), secondCanvas = document.querySelector("#view-second canvas");
+const title = document.getElementById("title-main"), count = document.getElementById("count");
+const ordered = document.getElementById("b-ordered"), randomButton = document.getElementById("b-random"), again = document.getElementById("again");
+if (fixed) document.getElementById("view-second").hidden = false;
+else title.querySelector("b").remove();             // a single view needs no panel letter
+
+function drawAll() {
+  draw(mainCanvas, state === "random" ? flips : NONE);
+  if (fixed) draw(secondCanvas, flips);
+}
+function show() {
+  const isRandom = state === "random";
+  if (!fixed) title.textContent = isRandom ? "Frozen at random" : "Ordered";
+  ordered.setAttribute("aria-pressed", String(!isRandom)); randomButton.setAttribute("aria-pressed", String(isRandom));
+  again.disabled = !isRandom;
+  const ways = (2 ** COUNT).toLocaleString("en-US");
+  count.innerHTML = isRandom
+    ? flips.filter(f => f).length + " of the " + COUNT + " molecules shown are flipped. This is one of 2<sup>" + COUNT + "</sup> = " + ways + " arrangements of these " + COUNT + " molecules."
+    : "Every molecule has the orientation that the structure assigns to its site. This is one arrangement.";
+  drawAll(); fit();
+}
+
+let grab = null;
+// Dragging turns the crystal about the horizontal and vertical directions of the screen
+const turn = (dx, dy) => { orientation = product(product(rotation([0, 1, 0], dx), rotation([1, 0, 0], dy)), orientation); drawAll(); };
+if (!fixed) {
+  mainCanvas.addEventListener("pointerdown", e => { grab = [e.clientX, e.clientY]; mainCanvas.setPointerCapture(e.pointerId); });
+  mainCanvas.addEventListener("pointermove", e => {
+    if (!grab) return;
+    turn((e.clientX - grab[0]) * 0.012, (e.clientY - grab[1]) * 0.012); grab = [e.clientX, e.clientY];
+  });
+  for (const type of ["pointerup", "pointercancel"]) mainCanvas.addEventListener(type, () => { grab = null; });
+  mainCanvas.addEventListener("keydown", e => {
+    const move = { ArrowLeft: [-0.17, 0], ArrowRight: [0.17, 0], ArrowUp: [0, -0.17], ArrowDown: [0, 0.17] }[e.key];
+    if (!move) return;
+    turn(move[0], move[1]); e.preventDefault();
+  });
+  ordered.addEventListener("click", () => { state = "ordered"; show(); });
+  randomButton.addEventListener("click", () => { state = "random"; show(); });
+  again.addEventListener("click", () => { shuffle(); show(); });
+  document.getElementById("reset").addEventListener("click", () => { orientation = START; drawAll(); });
+}
+
+/* ---- run ---- */
+theme(); show();
+if (host) new MutationObserver(theme).observe(host, { attributes: true, attributeFilter: ["class"] });
+else { try { window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", theme); } catch (e) {} }
+try { new ResizeObserver(() => { fit(); drawAll(); }).observe(document.body); } catch (e) {}
+window.addEventListener("load", () => { fit(); drawAll(); });
+</script>
+</body>
+</html>
