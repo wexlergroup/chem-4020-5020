@@ -149,6 +149,64 @@ Applying a constraint eliminates one or more terms from your Step 2 expression, 
 Different process constraints (isobaric, isochoric, isothermal, adiabatic) dictate how heat, work, and changes in state variables interrelate. Mastering these constraints reveals how energy flows and how measurable quantities (e.g., temperature, volume, pressure) change under specific conditions.
 ```
 
+[](#fig:process-paths) shows the four constraints as paths of an ideal gas on a $P$–$V$ diagram. All four paths start from the same state.
+
+```{code-cell} ipython3
+:label: fig:process-paths
+:caption: Four reversible paths of one mole of a monatomic ideal gas from the same initial state, $(V_1, T_1) = (5\,\mathrm{L}, 300\,\mathrm{K})$: isochoric heating, and isobaric, isothermal, and adiabatic expansion to $V_2 = 20\,\mathrm{L}$. The area between a path and the volume axis is $|w|$ for that path. The areas overlap: the area under the isobaric path includes the blue and orange areas, and the area under the isothermal path includes the orange area. The isochoric path has no area under it, so $w = 0$.
+:tags: [hide-input]
+
+import sys
+
+import matplotlib.pyplot as plt
+import numpy as np
+
+sys.path.append("..")            # the book folder, which holds figstyle
+import figstyle as fs
+
+R_GAS = 0.083145                 # L bar K^-1 mol^-1
+GAMMA = 5 / 3                    # monatomic ideal gas
+V_1, V_2, T_1 = 5.0, 20.0, 300.0             # L, L, K (one mole)
+P_1 = R_GAS * T_1 / V_1                      # bar
+P_HEATED = 1.3 * P_1                         # bar, the end of the isochoric heating (390 K)
+
+
+def draw_paths(c):
+    fig, ax = plt.subplots(figsize=(6.4, 4.0), constrained_layout=True)
+    V = np.linspace(V_1, V_2, 400)
+    P_isobaric, P_isothermal, P_adiabatic = np.full_like(V, P_1), P_1 * V_1 / V, P_1 * (V_1 / V) ** GAMMA
+
+    # The area under a path is |w|. Each band has the color of the path that bounds it from above.
+    ax.fill_between(V, P_isothermal, P_isobaric, color=c.tint(c.green, 0.8), lw=0)
+    ax.fill_between(V, P_adiabatic, P_isothermal, color=c.tint(c.blue, 0.75), lw=0)
+    ax.fill_between(V, 0, P_adiabatic, color=c.tint(c.vermilion, 0.75), lw=0)
+
+    # Paths, each named at its final state with the condition that defines it
+    for P, color, name in [(P_isobaric, c.green, "isobaric\n$dP = 0$"), (P_isothermal, c.blue, "isothermal\n$dT = 0$"),
+                           (P_adiabatic, c.vermilion, "adiabatic\n$\\delta q = 0$")]:
+        ax.plot(V, P, color=color)
+        ax.plot(V[-1], P[-1], "o", color=color, ms=6.5, zorder=5, clip_on=False)
+        ax.text(V[-1] + 0.5, P[-1], name, color=color, va="center", clip_on=False)
+    ax.plot([V_1, V_1], [P_1, P_HEATED], color=c.purple)
+    ax.plot(V_1, P_HEATED, "o", color=c.purple, ms=6.5, zorder=5)
+    ax.text(V_1 + 0.45, P_HEATED, "isochoric, $dV = 0$", color=c.purple, va="center")
+
+    # Initial state
+    ax.plot(V_1, P_1, "o", color=c.ink, ms=6.5, zorder=6)
+    ax.text(V_1 - 0.35, P_1, "initial\nstate", ha="right", va="center")
+
+    ax.set(xlabel="Volume $V$ (L)", ylabel="Pressure $P$ (bar)", xlim=(2.6, 20), ylim=(0, 7.0))
+    ax.set_xticks([5, 10, 15, 20])
+    return fig
+
+
+fs.show(draw_paths, alt="Pressure against volume with four paths that start from one state at 5 L and about 5 bar. The "
+                        "isochoric path rises vertically at 5 L to about 6.5 bar. The isobaric path runs horizontally to "
+                        "20 L. The isothermal path falls to about 1.2 bar at 20 L. The adiabatic path falls more steeply "
+                        "to about 0.5 bar at 20 L. The areas under the isobaric, isothermal, and adiabatic paths are "
+                        "shaded, and the isobaric path has the largest area.")
+```
+
 ---
 
 ### Applying the Workflow: $V$ and $T$ as Independent Variables
@@ -541,6 +599,22 @@ fs.show(draw_levels,
             "0.13, and 0.09, so the higher levels are more populated. Panel c, after compression: every level has "
             "moved up to twice its energy, and the probabilities are the same as in the initial state.")
 ```
+
+In [](#fig:heat-and-work-interactive), a particle in a one-dimensional box ([Section 2.5](../chapter-02/section-05.md)) takes the place of the schematic levels. Choose a process, move its slider, and follow the heat, the work, and the change in internal energy.
+
+```{iframe} https://wexlergroup.github.io/chem-4020-5020/computational-studios/heat-and-work.html
+:label: fig:heat-and-work-interactive
+:width: 100%
+:title: Heat and work on the energy levels of a particle in a box
+:placeholder: ../_static/heat-and-work/heat-and-work.png
+
+Heat and work for a particle in a one-dimensional box. Panel (a) shows the energy levels $E_i$ with a bar for each probability $p_i$, and panel (b) shows the heat $q$, the work $w$, and the change in internal energy $\Delta U$ since the starting state. Energies are in units of $\varepsilon = h^2/(8mL_0^2)$, the energy of the lowest level at the starting length $L_0$.
+```
+
+Two things to try:
+
+1. Heat the particle at fixed length, and then compress the box without heat. For each step, say which of $q$ and $w$ changes and why.
+2. Go from the starting state to $L = 0.8\,L_0$ and $k_{\mathrm{B}}T = 10\,\varepsilon$ along two routes. On the first route, heat to $6.4\,\varepsilon$ and then compress. On the second route, compress and then heat. Compare $q$, $w$, and $\Delta U$ for the two routes.
 
 ````{admonition} **Think–pair–share**
 :class: important
