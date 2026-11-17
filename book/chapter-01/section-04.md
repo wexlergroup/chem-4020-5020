@@ -540,9 +540,18 @@ Calculate the compressibility factor of a van der Waals fluid at the critical po
 
 ### Computational Studio: Real Gas
 
-Explore deviations from ideal behavior by dynamically comparing the ideal-gas, van der Waals (vdW), and Peng–Robinson (PR) equations of state. Adjust temperature and pressure to visualize how intermolecular forces impact the compressibility factor ($Z$) and $P$–$V_\text{m}$ isotherms, particularly near the critical point.
+In [](#fig:real-gas-studio), you can choose a gas and a temperature and compare the ideal-gas law with the van der Waals EOS and with the Peng–Robinson EOS, a later equation of the same kind.
 
-You can open the studio in a new tab: [Real Gas Computational Studio](https://wexlergroup.github.io/chem-4020-5020/computational-studios/real-gas-studio.html).
+```{iframe} https://wexlergroup.github.io/chem-4020-5020/computational-studios/real-gas-studio.html
+:label: fig:real-gas-studio
+:width: 100%
+:title: Real gas
+:placeholder: ../_static/real-gas-studio/real-gas-studio.png
+
+Compressibility factor and isotherm of a gas according to the ideal-gas law, the van der Waals EOS (Eq. [](#van-der-waals-eos)), and the Peng–Robinson EOS. Panel (a) shows $Z$ against the pressure, and panel (b) shows the pressure against the molar volume on a logarithmic scale. The constants of both EOS follow from the critical temperature $T_c$ and the critical pressure $P_c$ of the gas. Below $T_c$, the thick lines follow the Maxwell construction of [](#fig:maxwell-construction), and the thin lines in panel (b) are the loops that it replaces.
+```
+
+You can also open the studio in a new tab: [Real Gas Studio](https://wexlergroup.github.io/chem-4020-5020/computational-studios/real-gas-studio.html).
 
 ## Worked Example
 
