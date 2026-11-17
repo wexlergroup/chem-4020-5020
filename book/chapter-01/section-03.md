@@ -10,6 +10,8 @@ kernelspec:
   display_name: Python 3
   language: python
   name: python3
+numbering:
+  enumerator: 1.3.%s
 ---
 
 # 1.3. Ideal Gases
@@ -35,68 +37,55 @@ Learning objectives:
 ### Gas Laws
 
 ```{code-cell} ipython3
+:label: fig:gas-laws
+:caption: The four classical gas laws in chronological order: (a) Boyle's law ([Boyle's original data](https://web.lemoyne.edu/~giunta/classicalcs/boyleform.html)), (b) Charles's law, (c) Gay–Lussac's law, and (d) Avogadro's law. Each curve is calculated for an ideal gas with the two named variables held constant.
 :tags: [hide-input]
+
+import sys
 
 import matplotlib.pyplot as plt
 import numpy as np
-from scipy.constants import k, N_A
-from labellines import labelLines
-from myst_nb import glue
+from scipy.constants import R
 
-# Constants
-T = 290  # Temperature in Kelvin (Boyle's Law)
-P = 1.0  # Fixed pressure in bar (Charles' Law)
-V = 24.53  # Fixed volume in liters (Gay-Lussac's Law)
-N = N_A   # Number of particles for Avogadro's Law
+sys.path.append("..")            # the book folder, which holds figstyle
+import figstyle as fs
 
-temperatures = np.linspace(273.15, 373.15, 101)   # Temperatures in Kelvin
-volumes = np.linspace(1, 40, 400)  # Volumes in liters
-number_of_particles = np.linspace(0.1, 10, 100) * N_A
+R_L_bar = R / 100                      # gas constant in L bar/(mol K)
+T0, P0, V0 = 290.0, 1.0, 24.53         # the temperature (K), pressure (bar), and volume (L) that are held constant
 
-# Calculate pressures, volumes, etc., according to each law
-pressures_boyle = N * k * T / volumes * 0.01
-volumes_charles = (N * k / P * 0.01) * temperatures
-pressures_gay_lussac = (N * k / V) * temperatures * 0.01
-volumes_avogadro = (k * T / P * 0.01) * number_of_particles
 
-def plot_law(ax, x, y, label, title, xlabel, ylabel):
-    line = ax.plot(x, y, "b-", label=label)
-    ax.set_title(title, fontsize=14)
-    ax.set_xlabel(xlabel, fontsize=12)
-    ax.set_ylabel(ylabel, fontsize=12)
-    ax.grid(True, linestyle="--", linewidth=0.5)
-    labelLines(line, zorder=2.5)
+def draw(c):
+    T = np.linspace(273.15, 373.15, 101)
+    V = np.linspace(1, 40, 400)
+    n = np.linspace(0, 10, 101)        # amount in moles, which is the number of particles in units of N_A
+    panels = [
+        ("a", "Boyle (1662)", V, R_L_bar * T0 / V, "Volume $V$ (L)", "Pressure $P$ (bar)",
+         r"$P = c_{\mathrm{B}}/V$", "constant $T$ and $N$", (0.30, 0.52)),
+        ("b", "Charles (1787)", T, R_L_bar * T / P0, "Temperature $T$ (K)", "Volume $V$ (L)",
+         r"$V = c_{\mathrm{C}}\,T$", "constant $P$ and $N$", (0.08, 0.80)),
+        ("c", "Gay-Lussac (1802)", T, R_L_bar * T / V0, "Temperature $T$ (K)", "Pressure $P$ (bar)",
+         r"$P = c_{\mathrm{GL}}\,T$", "constant $V$ and $N$", (0.08, 0.80)),
+        ("d", "Avogadro (1811)", n, R_L_bar * T0 / P0 * n, r"Number of particles $N$ ($N_{\mathrm{A}}$)", "Volume $V$ (L)",
+         r"$V = c_{\mathrm{A}}\,N$", "constant $P$ and $T$", (0.08, 0.80)),
+    ]
+    fig, axs = plt.subplots(2, 2, figsize=(fs.WIDTH, 5.4), constrained_layout=True)
+    for ax, (letter, title, x, y, xlabel, ylabel, law, held, (tx, ty)) in zip(axs.flat, panels):
+        ax.plot(x, y, color=c.blue)
+        ax.set(xlabel=xlabel, ylabel=ylabel)
+        ax.text(tx, ty, law, transform=ax.transAxes, color=c.blue, fontsize=fs.BASE + 1.5, va="bottom")
+        ax.text(tx, ty - 0.03, held, transform=ax.transAxes, color=c.muted, va="top")
+        fs.panel(ax, letter, title)
+    axs[0, 0].set(xlim=(0, 40), ylim=(0, 25))
+    axs[1, 1].set(xlim=(0, 10), ylim=(0, 250))
+    return fig
 
-fig, axs = plt.subplots(1, 4, figsize=(12, 3))
 
-# Boyle's Law
-plot_law(axs[0], volumes, pressures_boyle, "$P = c_\\text{B} / V$", "Boyle (1662)",
-         "Volume (L)", "Pressure (bar)")
-axs[0].text(0.1, 0.9, 'Constant $T$ & $N$', transform=axs[0].transAxes)
-
-# Charles's Law
-plot_law(axs[1], temperatures, volumes_charles, "$V = c_\\text{C} T$", "Charles (1787)",
-         "Temperature (K)", "Volume (L)")
-axs[1].text(0.1, 0.9, 'Constant $P$ & $N$', transform=axs[1].transAxes)
-
-# Gay-Lussac's Law
-plot_law(axs[2], temperatures, pressures_gay_lussac, "$P = c_\\text{GL} T$", "Gay-Lussac (1802)",
-         "Temperature (K)", "Pressure (bar)")
-axs[2].text(0.1, 0.9, 'Constant $V$ & $N$', transform=axs[2].transAxes)
-
-# Avogadro's Law
-plot_law(axs[3], number_of_particles / N_A, volumes_avogadro, "$V = c_\\text{A} N$", "Avogadro (1811)",
-         "Number of Particles ($N_{\\mathrm{A}}$)", "Volume (L)")
-axs[3].text(0.1, 0.9, 'Constant $P$ & $T$', transform=axs[3].transAxes)
-
-plt.tight_layout()
-plt.show()
-plt.close(fig)
+fs.show(draw, alt="Four panels, one for each gas law. Panel a, Boyle: pressure falls as one over the volume at constant "
+                  "temperature and number of particles. Panel b, Charles: volume rises in a straight line with "
+                  "temperature at constant pressure and number of particles. Panel c, Gay-Lussac: pressure rises in "
+                  "a straight line with temperature at constant volume and number of particles. Panel d, Avogadro: "
+                  "volume rises in a straight line with the number of particles at constant pressure and temperature.")
 ```
-
-Four classical gas laws (blue), shown in chronological order: Boyle's law[^1], Charles's law, Gay–Lussac's law, and Avogadro's law.
-
-[^1]: [Boyle's original data](https://web.lemoyne.edu/~giunta/classicalcs/boyleform.html)
 
 Written as equations, the four laws are:
 
@@ -244,48 +233,98 @@ Rearranging Eq. {eq}`ideal-gas-equation-of-state`, a simple estimate for a typic
 
 This expression shows that increasing temperature or reducing pressure *increases* the typical separation between gas particles.
 
+[](#fig:gas-to-scale) shows this spacing to scale for nitrogen at $300\ \mathrm{K}$ and $1\ \mathrm{bar}$, where Eq. {eq}`average-distance-between-particles` gives $\langle d \rangle = 3.46\ \mathrm{nm}$ (see the worked example below). The molecules are about ten molecular diameters apart, which is why their own volume and their interactions can be neglected. In the liquid, the same molecules touch.
+
+```{code-cell} ipython3
+:label: fig:gas-to-scale
+:caption: Nitrogen molecules drawn to scale as discs with a diameter of 0.36 nm, in slices 10 nm wide. (a) The gas at 300 K and 1 bar, in a slice that is one mean spacing thick. The bar shows the mean spacing $\langle d \rangle$. (b) The liquid at its boiling point, in a slice that is one molecule thick.
+:tags: [hide-input]
+
+from matplotlib.patches import Circle, Rectangle
+from scipy.constants import N_A, k as k_B
+
+window = 10.0                                              # width of each slice (nm)
+diameter = 0.364                                           # kinetic diameter of N2 (nm)
+d_gas = (k_B * 300 / 1e5) ** (1 / 3) * 1e9                 # mean spacing at 300 K and 1 bar (nm), from the equation above
+d_liquid = (28.0134e-3 / (806.2 * N_A)) ** (1 / 3) * 1e9   # liquid N2 at its boiling point, 806.2 kg/m^3 (nm)
+
+rng = np.random.default_rng(4020)
+
+# Gas: a slice one mean spacing thick holds (window / d_gas)^2 molecules. They are placed at random.
+gas = []
+while len(gas) < round((window / d_gas) ** 2):
+    point = rng.uniform(0.4, window - 0.4, 2)
+    if all(np.hypot(*(point - other)) > 1.5 for other in gas):
+        gas.append(point)
+
+# Liquid: one layer of molecules in contact, as a hexagonal arrangement with small random displacements.
+spacing = 2 ** (1 / 6) * d_liquid
+liquid = [(x + (row % 2) * spacing / 2, row * spacing * np.sqrt(3) / 2)
+          for row in range(int(window / (spacing * np.sqrt(3) / 2)) + 1)
+          for x in np.arange(0, window, spacing)]
+liquid = np.array(liquid) + rng.normal(0, 0.025, (len(liquid), 2))
+
+
+def draw_to_scale(c):
+    fig, axs = plt.subplots(1, 2, figsize=(fs.WIDTH, 3.75), constrained_layout=True)
+    for ax, letter, title, points in zip(axs, "ab", ["Gas at 300 K and 1 bar", "Liquid"], [gas, liquid]):
+        ax.add_patch(Rectangle((0, 0), window, window, fc="none", ec=c.muted, lw=0.9, zorder=3))
+        for x, y in points:
+            ax.add_patch(Circle((x, y), diameter / 2, fc=c.blue, ec="none", clip_path=None))
+        for patch in ax.patches[1:]:
+            patch.set_clip_path(ax.patches[0])
+        ax.set(xlim=(-0.1, window + 0.1), ylim=(-1.6, window + 0.1), aspect="equal")
+        ax.axis("off")
+        fs.panel(ax, letter, title)
+    for ax, length, label in [(axs[0], d_gas, rf"$\langle d \rangle$ = {d_gas:.2f} nm"),
+                              (axs[1], 1.0, "1 nm")]:
+        ax.annotate("", xy=(0, -0.7), xytext=(length, -0.7),
+                    arrowprops=dict(arrowstyle="|-|", color=c.ink, lw=1.1, mutation_scale=3, shrinkA=0, shrinkB=0))
+        ax.text(length + 0.3, -0.7, label, va="center", ha="left")
+    return fig
+
+
+fs.show(draw_to_scale,
+        alt="Two square slices, each 10 nanometers wide, with nitrogen molecules drawn to scale as small discs. In "
+            f"the gas at 300 K and 1 bar, the slice holds {len(gas)} widely separated molecules, and a bar marks the "
+            f"mean spacing of {d_gas:.2f} nanometers. In the liquid, the slice is filled with molecules in contact.")
+```
+
 ### Absolute Temperature Scale
 
 ```{code-cell} ipython3
+:label: fig:absolute-zero
+:caption: Molar volume of O$_2$ at 1 Pa against the Celsius temperature (points, from the [NIST Chemistry WebBook](https://webbook.nist.gov/cgi/inchi/InChI%3D1S/O2/c1-2)). The line is an ordinary least-squares fit to the measurements. Extended to zero volume (dashed), it reaches the temperature axis at $-273.15\,{}^{\circ}\mathrm{C}$, which is absolute zero (0 K).
 :tags: [hide-input]
 
-import matplotlib.pyplot as plt
-import numpy as np
 import pandas as pd
-from scipy.constants import N_A
-import statsmodels.api as sm
-from myst_nb import glue
 
-# Experimental data for O2 at 1 Pa:
-df = pd.read_table("../_static/section-03/isobaric-properties-for-oxygen.tsv", sep="\t").iloc[:, [0, 1, 3]]
-df.columns = ["T_C", "P", "V"]
-df["v"] = df["V"] * 1e27 / N_A  # Convert volume to nm³/molecule
+# Measured molar volume of O2 at a pressure of 1 Pa between 0 and 100 °C (NIST Chemistry WebBook)
+data = pd.read_table("../_static/section-03/isobaric-properties-for-oxygen.tsv", sep="\t")
+T_C, V_m = data["Temperature (C)"].to_numpy(), data["Volume (m3/mol)"].to_numpy()
 
-X = sm.add_constant(df["v"])  # For intercept in linear regression
-y = df["T_C"]
-model = sm.OLS(y, X).fit()
+# Straight line through the measurements: the temperature at which the line reaches zero volume is the intercept
+slope, intercept = np.polyfit(V_m, T_C, 1)
 
-df["T_C_pred"] = model.predict(X)
 
-fig, ax = plt.subplots(figsize=(4, 4))
-ax.plot(df["v"], df["T_C"], "b.")
-intercept, slope = model.params
-line = ax.plot(df["v"], df["T_C_pred"], "r-", label=f"Slope: {slope:.2e}; Intercept: {intercept:.2f} °C")
-labelLines(line, zorder=2.5)
+def draw(c):
+    fig, ax = plt.subplots(figsize=(6, 3.8), constrained_layout=True)
+    ax.plot([intercept, T_C[0]], [0, V_m[0]], color=c.vermilion, ls="--", lw=1.6)
+    ax.plot(T_C, V_m, color=c.vermilion, lw=1.6)
+    ax.plot(T_C[::5], V_m[::5], "o", color=c.blue, ms=4.5)
+    ax.plot(intercept, 0, "o", mfc=c.ground, mec=c.vermilion, mew=1.6, ms=7, clip_on=False, zorder=5)
+    label = f"{intercept:.2f} °C".replace("-", "−")
+    ax.text(intercept + 24, 40, label, color=c.vermilion, ha="left", va="bottom")
+    ax.text(50, 2150, "measured", color=c.blue, ha="center", va="top")
+    ax.text(-150, 1250, "straight line,\nextended", color=c.vermilion, ha="right", va="bottom")
+    ax.set(xlabel="Temperature (°C)", ylabel=r"Molar volume (m$^3$/mol)", xlim=(-300, 110), ylim=(0, 3300))
+    return fig
 
-ax.set_xlabel("Volume (nm³/molecule)")
-ax.set_ylabel("Temperature (°C)")
-ax.grid(True, linestyle="--", linewidth=0.5)
 
-plt.tight_layout()
-plt.show()
-plt.close(fig)
+fs.show(draw, alt="Molar volume of oxygen at 1 pascal against temperature in degrees Celsius. Measured points between "
+                  "0 and 100 degrees fall on a straight line. The line, extended to lower temperatures, reaches "
+                  f"zero volume at {intercept:.2f} degrees Celsius.".replace("-", "minus "))
 ```
-
-Linear relationship between the per-molecule volume $v$ and Celsius temperature for O₂ at 1 Pa.[^2]  
-The red line is an ordinary least-squares fit; its intercept at $-273.15\,{}^{\circ}\mathrm{C}$ corresponds to the extrapolated *zero-volume* limit and therefore to absolute zero (0 K).
-
-[^2]: [NIST WebBook: O₂ Data](https://webbook.nist.gov/cgi/inchi/InChI%3D1S/O2/c1-2)
 
 Charles's law states that, at constant (sufficiently low) pressure, the volume per particle is directly proportional to the gas temperature. If temperature is reported on the Celsius scale ($0\,{}^{\circ}\mathrm{C}$ at the freezing point of water and $100\,{}^{\circ}\mathrm{C}$ at the boiling point), plotting $T(\,{}^{\circ}\mathrm{C})$ versus $v$ gives an approximately linear relationship. Extrapolating this line to the (unphysical) point where the volume would vanish identifies a theoretical lower bound at $-273.15\,{}^{\circ}\mathrm{C}$. Shifting the Celsius scale by $273.15$ degrees places this bound at zero:
 
