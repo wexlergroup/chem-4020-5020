@@ -141,73 +141,60 @@ U_{\text{two-state}}
 ```
 ````
 
+[](#fig:two-state-energy) shows $U_{\text{two-state}}$, measured from $E_1$, as a function of temperature for an energy gap of $0.01\ \mathrm{eV}$, together with the heat capacity at constant volume, which the next subsection defines.
+
 ```{code-cell} ipython3
+:label: fig:two-state-energy
+:caption: Two-state system with an energy gap $E_2 - E_1 = 0.01\ \mathrm{eV}$ ($10\ \mathrm{meV}$) as a function of temperature. (a) Internal energy measured from $E_1$. The dashed line is its high-temperature limit, $(E_2 - E_1)/2$. (b) Heat capacity at constant volume in units of $k_{\mathrm{B}}$.
 :tags: [hide-input]
 
-import numpy as np
+import sys
+
 import matplotlib.pyplot as plt
-from scipy.constants import k, eV
-from labellines import labelLines
+import numpy as np
+from scipy.constants import eV, k
 
-kB = k / eV  # Boltzmann constant in eV/K
+sys.path.append("..")            # the book folder, which holds figstyle
+import figstyle as fs
 
-# Define the partition function for a two-state system
-def partition_function_two_state(E1, E2, T):
-    beta = 1 / (kB * T)
-    return np.exp(-beta * E1) + np.exp(-beta * E2)
+k_B = k / eV                     # Boltzmann constant in eV/K
+E1, E2 = 0.0, 0.01               # energies of the two states in eV
 
-# Calculate the partition function for a two-state system
-E1 = 0
-E2 = 0.01  # Energy of state 2 in eV (equal to the energy gap, since E1 = 0)
-T_values = np.linspace(1, 1000, 1000)
-Q_values = [partition_function_two_state(E1, E2, T) for T in T_values]
+T = np.linspace(1, 1000, 1000)   # K
+beta = 1 / (k_B * T)             # 1/eV
 
-# Calculate the internal energy for a two-state system
-beta_values = 1 / (kB * T_values)
-ln_Q_values = np.log(Q_values)
-U_values = -np.gradient(ln_Q_values, beta_values)
+# Internal energy U = -d(ln Q)/d(beta), which is the average of the two energies weighted by their probabilities
+Q = np.exp(-beta * E1) + np.exp(-beta * E2)
+U = (E1 * np.exp(-beta * E1) + E2 * np.exp(-beta * E2)) / Q
 
-# Calculate the heat capacity in units of kB from the two-state result
-# C_V / kB = x^2 e^(-x) / (1 + e^(-x))^2, with x = (E2 - E1) / (kB T)
-x_values = (E2 - E1) * beta_values
-C_V_values = x_values**2 * np.exp(-x_values) / (1 + np.exp(-x_values))**2
+# Heat capacity in units of k_B: C_V / k_B = x^2 e^(-x) / (1 + e^(-x))^2, with x = (E2 - E1) / (k_B T)
+x = (E2 - E1) * beta
+C_V = x**2 * np.exp(-x) / (1 + np.exp(-x))**2
 
-fig, axs = plt.subplots(1, 2, figsize=(8, 4))
 
-# Plot the internal energy, relative to E1, as a function of temperature
-ax = axs[0]
-ax.plot(T_values, U_values - E1, 'k-')
-ax.set_xlabel('Temperature (K)')
-ax.set_ylabel('$U_{\\text{two-state}} - E_1$ (eV)')
-ax.grid(True)
-ax.annotate(
-    '$U_{\\text{two-state}} - E_1 \\rightarrow 0$', xy=(40, U_values[0] - E1 + 0.0001), xytext=(300, 0.001),
-    arrowprops=dict(arrowstyle='->', color='b'),
-    bbox=dict(boxstyle='round,pad=0.3', fc='w', ec='b'),
-    ha='center', va='center', color='b'
-)
-x_values_high_T = np.linspace(0, 1000, 1001)
-y_values_high_T = ((E2 - E1) / 2) * np.ones_like(x_values_high_T)
-line = ax.plot(x_values_high_T, y_values_high_T, 'm--', label='$U_{\\text{two-state}} - E_1 \\rightarrow (E_2 - E_1) / 2$')
-labelLines(line, zorder=2.5)
-ax.set_xlim(0, 1000)
-ax.set_ylim(0, 0.006)
+def draw(c):
+    fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(fs.WIDTH, 3.0), constrained_layout=True)
 
-# Plot the heat capacity at constant volume as a function of temperature
-ax = axs[1]
-ax.plot(T_values, C_V_values, 'k-')
-ax.set_xlabel('Temperature (K)')
-ax.set_ylabel('$C_V / k_{\\mathrm{B}}$')
-ax.grid(True)
-ax.set_xlim(0, 1000)
-ax.set_ylim(0, 0.5)
+    half_gap = 1e3 * (E2 - E1) / 2           # meV
+    ax1.axhline(half_gap, color=c.muted, lw=1.2, ls=(0, (4, 3)))
+    ax1.text(1000, half_gap + 0.15, "$(E_2 - E_1)/2$", color=c.muted, ha="right", va="bottom")
+    ax1.plot(T, 1e3 * (U - E1), color=c.ink)
+    ax1.set(xlabel="Temperature $T$ (K)", ylabel=r"$U_{\mathrm{two\text{-}state}} - E_1$ (meV)", xlim=(0, 1000),
+            ylim=(0, 6))
+    fs.panel(ax1, "a", "Internal energy")
 
-plt.tight_layout()
-plt.show()
-plt.close(fig)
+    ax2.plot(T, C_V, color=c.ink)
+    ax2.set(xlabel="Temperature $T$ (K)", ylabel=r"$C_V / k_{\mathrm{B}}$", xlim=(0, 1000), ylim=(0, 0.5))
+    fs.panel(ax2, "b", "Heat capacity")
+    return fig
+
+
+fs.show(draw, alt="Two panels against temperature from 0 to 1000 K for a two-state system with an energy gap of 0.01 "
+                  "eV. Panel a: the internal energy measured from the lower energy starts at 0, rises steeply up to "
+                  "about 200 K, and then approaches a dashed line at half the gap, 5 meV, reaching about 4.7 meV at "
+                  "1000 K. Panel b: the heat capacity divided by the Boltzmann constant starts at 0, rises to a "
+                  "maximum of about 0.44 near 50 K, and then decreases toward 0 at high temperature.")
 ```
-
-Internal energy (left) and heat capacity at constant volume (right; defined in the next subsection) of a two-state system as functions of temperature, for an energy gap of $0.01\ \mathrm{eV}$.
 
 ### Heat Capacity at Constant Volume
 
@@ -218,7 +205,7 @@ C_V
 \;=\; \left(\frac{\partial U}{\partial T}\right)_{N,V}.
 ```
 
-The right panel of the figure above shows $C_V$ for the two-state system.
+Panel (b) of [](#fig:two-state-energy) shows $C_V$ for the two-state system.
 
 #### Heat Capacity and Energy Fluctuations
 
