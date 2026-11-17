@@ -214,9 +214,11 @@ dG \le 0.
 ```
 ````
 
-The figure below collects the Summary Table and the four extremum principles.
+[](#fig:potentials) collects the Summary Table and the four extremum principles.
 
 ```{code-cell} ipython3
+:label: fig:potentials
+:caption: The four thermodynamic potentials and the Legendre transforms that connect them. Each horizontal arrow adds $PV$ and replaces the natural variable $V$ by $P$; each vertical arrow subtracts $TS$ and replaces $S$ by $T$. Below each potential are the variables that are held fixed when it is minimized at equilibrium.
 :tags: [hide-input]
 
 import sys
@@ -261,8 +263,6 @@ fs.show(draw, alt="Diagram of the four thermodynamic potentials U(S,V), H(S,P), 
                   "of a square. Horizontal arrows labeled +PV lead from U to H and from A to G. Vertical arrows "
                   "labeled -TS lead from U to A and from H to G.")
 ```
-
-The four thermodynamic potentials and the Legendre transforms that connect them. Each horizontal arrow adds $PV$ and replaces the natural variable $V$ by $P$; each vertical arrow subtracts $TS$ and replaces $S$ by $T$. Below each potential are the variables that are held fixed when it is minimized at equilibrium.
 
 These extremum principles are immensely practical. Most chemistry and biology occurs at constant temperature (thermostatted lab or regulated body temperature) and either constant volume (rigid container, computational simulation) or constant pressure (open to the atmosphere). Under these conditions:
 
@@ -391,13 +391,13 @@ This is the **Sackur–Tetrode equation** for the entropy of an ideal monatomic 
 (section:piston)=
 #### Minimum of $A$: Two Gases Separated by a Piston
 
-Equation {eq}`eq:ideal-gas-A` also provides an example of the extremum principle at constant $T$ and $V$. A rigid box of volume $V$ is in contact with a heat bath at temperature $T$. A movable piston divides the box into two compartments, which hold $N_1$ and $N_2$ atoms of ideal gas in the volumes $V_1$ and $V - V_1$ (panel (a) of the figure below). The temperature, the total volume, and the numbers of atoms are fixed, but $V_1$ is not, so the system is in general not in equilibrium internally. Its Helmholtz free energy is the sum of the free energies of the two gases, and by Eq. {eq}`eq:ideal-gas-A` it depends on $V_1$ as
+Equation {eq}`eq:ideal-gas-A` also provides an example of the extremum principle at constant $T$ and $V$. A rigid box of volume $V$ is in contact with a heat bath at temperature $T$. A movable piston divides the box into two compartments, which hold $N_1$ and $N_2$ atoms of ideal gas in the volumes $V_1$ and $V - V_1$ (panel (a) of [](#fig:helmholtz-piston)). The temperature, the total volume, and the numbers of atoms are fixed, but $V_1$ is not, so the system is in general not in equilibrium internally. Its Helmholtz free energy is the sum of the free energies of the two gases, and by Eq. {eq}`eq:ideal-gas-A` it depends on $V_1$ as
 
 ```{math}
 A(V_1) = -N_1k_{\mathrm B}T\ln V_1 - N_2k_{\mathrm B}T\ln(V - V_1) + \text{terms independent of } V_1.
 ```
 
-Panel (b) shows this function for $1\ \mathrm{mol}$ of gas 1 and $2\ \mathrm{mol}$ of gas 2 at $298.15\ \mathrm{K}$. It has a single minimum. By Eq. {eq}`eq:P-from-A`, applied to each gas,
+Panel (b) of [](#fig:helmholtz-piston) shows this function for $1\ \mathrm{mol}$ of gas 1 and $2\ \mathrm{mol}$ of gas 2 at $298.15\ \mathrm{K}$. It has a single minimum. By Eq. {eq}`eq:P-from-A`, applied to each gas,
 
 ```{math}
 \left(\frac{\partial A}{\partial V_1}\right)_T = -P_1 + P_2,
@@ -406,6 +406,8 @@ Panel (b) shows this function for $1\ \mathrm{mol}$ of gas 1 and $2\ \mathrm{mol
 so the minimum lies where the two pressures are equal, which for these amounts is $V_1 = V/3$. From any other position, the piston moves toward the side with the lower pressure, and $A$ decreases until the minimum is reached.
 
 ```{code-cell} ipython3
+:label: fig:helmholtz-piston
+:caption: Two ideal gases in a rigid box at fixed temperature, separated by a movable piston. (a) The system, drawn with the piston at $V_1 = 0.6\,V$, where $P_2 > P_1$. (b) The Helmholtz free energy relative to its minimum as a function of $V_1/V$, for $1\ \mathrm{mol}$ of gas 1 and $2\ \mathrm{mol}$ of gas 2 at $298.15\ \mathrm{K}$. The open circle marks the position drawn in (a) and the filled circle marks equilibrium, where $P_1 = P_2$.
 :tags: [hide-input]
 
 import sys
@@ -473,8 +475,6 @@ fs.show(draw, alt="Two panels. Panel a: a rigid box in a heat bath, divided by a
                   "minimum at one third, where the two pressures are equal.")
 ```
 
-Two ideal gases in a rigid box at fixed temperature, separated by a movable piston. (a) The system, drawn with the piston at $V_1 = 0.6\,V$, where $P_2 > P_1$. (b) The Helmholtz free energy relative to its minimum as a function of $V_1/V$, for $1\ \mathrm{mol}$ of gas 1 and $2\ \mathrm{mol}$ of gas 2 at $298.15\ \mathrm{K}$. The open circle marks the position drawn in (a) and the filled circle marks equilibrium, where $P_1 = P_2$.
-
 ---
 
 ### Gibbs Free Energy and Non-$PV$ Work
@@ -531,9 +531,11 @@ The standard-state water-splitting reaction at room temperature is
 
 Because $\Delta G^\circ > 0$, the reaction is non-spontaneous under standard conditions. It must be driven by supplying non-$PV$ work — in this case, electrical work in an electrolyzer. In the reversible limit, the minimum electrical work required per mole equals $\Delta G^\circ$.
 
-The enthalpy change of the reaction, $\Delta H^\circ = +285.8\ \mathrm{kJ\,mol^{-1}}$, is larger than $\Delta G^\circ$. At constant $T$ and $P$, $\Delta H = q + w_{\text{non-}PV}$, and in the reversible limit $q = T\,\Delta S^\circ = +48.7\ \mathrm{kJ\,mol^{-1}}$. The electrolyzer therefore supplies $237.1\ \mathrm{kJ\,mol^{-1}}$ as electrical work, and the remaining $48.7\ \mathrm{kJ\,mol^{-1}}$ is absorbed as heat from the surroundings (figure below).
+The enthalpy change of the reaction, $\Delta H^\circ = +285.8\ \mathrm{kJ\,mol^{-1}}$, is larger than $\Delta G^\circ$. At constant $T$ and $P$, $\Delta H = q + w_{\text{non-}PV}$, and in the reversible limit $q = T\,\Delta S^\circ = +48.7\ \mathrm{kJ\,mol^{-1}}$. The electrolyzer therefore supplies $237.1\ \mathrm{kJ\,mol^{-1}}$ as electrical work, and the remaining $48.7\ \mathrm{kJ\,mol^{-1}}$ is absorbed as heat from the surroundings ([](#fig:electrolysis-energy)).
 
 ```{code-cell} ipython3
+:label: fig:electrolysis-energy
+:caption: Energy required to split one mole of liquid water at $298.15\ \mathrm{K}$ and $1\ \mathrm{bar}$ in the reversible limit. The enthalpy change (top) is supplied as electrical work equal to $\Delta G^\circ$ and as heat equal to $T\,\Delta S^\circ$ (bottom). Data from the [NIST-JANAF Thermochemical Tables](https://janaf.nist.gov/).
 :tags: [hide-input]
 
 import sys
@@ -574,8 +576,6 @@ fs.show(draw, alt=f"Two horizontal bars. The top bar is the enthalpy change, {dH
                   f"as electrical work, and T times the entropy change, {TdS:.1f} kJ per mole, supplied as heat "
                   "from the surroundings.")
 ```
-
-Energy required to split one mole of liquid water at $298.15\ \mathrm{K}$ and $1\ \mathrm{bar}$ in the reversible limit. The enthalpy change (top) is supplied as electrical work equal to $\Delta G^\circ$ and as heat equal to $T\,\Delta S^\circ$ (bottom). Data from the [NIST-JANAF Thermochemical Tables](https://janaf.nist.gov/).
 
 ---
 
