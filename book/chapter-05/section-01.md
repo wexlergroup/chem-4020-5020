@@ -17,6 +17,20 @@ kernelspec:
 
 See also: [Course-wide Conventions & Notation](../notation.md)
 
+The course map shows where this module sits in the course and which relations connect the microscopic and macroscopic descriptions. Select a module to unfold its sections.
+
+<iframe
+  src="https://wexlergroup.github.io/chem-4020-5020/computational-studios/course-map.html?module=5&amp;here=5.1"
+  title="Course map, opened at Module 5"
+  style="width: 100%; height: 830px; border: 0;"
+  loading="lazy"
+></iframe>
+
+```{image} ../_static/course-map/module-5.png
+:class: hidden
+:alt: Course map with Module 5 unfolded. Statistical mechanics (Module 2) forms the microscopic strand, and Modules 1 and 3 to 7 form the macroscopic strand. A relation joins the two strands at each module except Module 6, and for Module 5 it is the Helmholtz free energy in terms of the canonical partition function. Below the map, one card for each of Sections 5.1 to 5.3 lists the microscopic content, the connecting relations, and the macroscopic content of the section.
+```
+
 ## Overview and Learning Objectives
 
 In [Section 4.3](../chapter-04/section-03.md) we derived the canonical entropy $S = U/T + k_{\mathrm B}\ln Q$ and showed that rearranging it gives the Helmholtz free energy $A = U - TS = -k_{\mathrm B}T\ln Q$. We noted that this makes $A$ a "master potential" — if you can compute $Q$, you can derive all other thermodynamic quantities by taking appropriate derivatives. This section develops that machinery.
