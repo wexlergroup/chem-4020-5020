@@ -1,433 +1,172 @@
-import React, { useState, useEffect, useRef, useMemo } from 'react';
-import { FlaskConical } from 'lucide-react';
+import React, { useMemo, useState } from 'react';
+import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
+import { useBook, Studio, Panel, Slider, Select, Checks, V, axis, niceTicks, logTicks, LINE, DASH } from '../../studio-kit/kit.jsx';
+import { R, GASES, vanDerWaals, pengRobinson, coexistence, stableZ } from './eos.js';
 
-// --- Constants & Data ---
-const R = 8.314; // J/(mol·K)
+/*
+  Real gas (Section 1.4). One mole of a gas at a fixed temperature, described by the ideal-gas law, the
+  van der Waals equation, and the Peng-Robinson equation (src/eos.js). Panel (a) shows the compressibility
+  factor Z = P V_m / (R T) against the pressure, and panel (b) shows the isotherm, P against V_m.
 
-const GAS_PRESETS = [
-    { name: "Ideal Gas (Reference)", Tc: 0, Pc: 1, omega: 0, type: "ideal" },
-    { name: "Carbon Dioxide (CO2)", Tc: 304.13, Pc: 73.77e5, omega: 0.224, type: "real" },
-    { name: "Nitrogen (N2)", Tc: 126.2, Pc: 33.9e5, omega: 0.037, type: "real" },
-    { name: "Water Vapor (H2O)", Tc: 647.1, Pc: 220.6e5, omega: 0.344, type: "real" },
-    { name: "Methane (CH4)", Tc: 190.56, Pc: 45.99e5, omega: 0.011, type: "real" },
-    { name: "Helium (He)", Tc: 5.19, Pc: 2.27e5, omega: -0.385, type: "real" },
-];
+  The temperature and the largest pressure are kept as ratios to the critical values of the gas, so that a
+  change of the gas keeps the reduced conditions.
+*/
+const START = { gas: 'co2', tr: 1.1, pr: 8, shown: { ideal: true, vdw: true, pr: true } };
+const NAMES = { ideal: 'ideal gas', vdw: 'van der Waals', pr: 'Peng–Robinson' };
+const POINTS = 320;
 
-// --- Math Engine ---
+const digits3 = (x) => Number(x.toPrecision(3)).toString();              // three significant figures
+const kelvin = (T) => (T < 100 ? T.toFixed(1) : T.toFixed(0));
+const digits4 = (x) => Number(x.toPrecision(4)).toString();              // critical constants, as tabulated
+const bar = (P) => (P < 100 ? digits3(P) : P.toFixed(0));
+const Vm = <V sub="m">V</V>;
+const Tc = <V sub="c">T</V>;
+const Pc = <V sub="c">P</V>;
 
-// Cubic Solver Helper: z^3 + a2*z^2 + a1*z + a0 = 0
-// Returns the largest real root (Gas phase Z)
-function solveCubic(a2, a1, a0) {
-    const Q = (3 * a1 - a2 * a2) / 9;
-    const R_val = (9 * a2 * a1 - 27 * a0 - 2 * a2 * a2 * a2) / 54;
-    const D = Q * Q * Q + R_val * R_val; // Discriminant
-
-    if (D > 0) { // One real root
-        const S = Math.cbrt(R_val + Math.sqrt(D));
-        const T = Math.cbrt(R_val - Math.sqrt(D));
-        return S + T - a2 / 3;
-    } else { // Three real roots (take the largest for Vapor phase Z)
-        const theta = Math.acos(R_val / Math.sqrt(-Q * Q * Q));
-        const z1 = 2 * Math.sqrt(-Q) * Math.cos(theta / 3) - a2 / 3;
-        const z2 = 2 * Math.sqrt(-Q) * Math.cos((theta + 2 * Math.PI) / 3) - a2 / 3;
-        const z3 = 2 * Math.sqrt(-Q) * Math.cos((theta + 4 * Math.PI) / 3) - a2 / 3;
-        return Math.max(z1, z2, z3);
-    }
+function Tip({ active, payload, label, head, unit, value, after, shown }) {
+  if (!active || !payload || !payload.length) return null;
+  const point = payload[0].payload;
+  return (
+    <div className="tip">
+      <div>{head} = {digits3(Number(label))} {unit}</div>
+      {['ideal', 'vdw', 'pr'].filter((key) => shown[key] && point[key] != null).map((key) => (
+        <div key={key}>{NAMES[key]}: {value} = {digits3(point[key])}{after}</div>
+      ))}
+    </div>
+  );
 }
 
-// --- EOS Implementations ---
+export default function RealGas() {
+  const { color } = useBook();
+  const [gasKey, setGasKey] = useState(START.gas);
+  const [tr, setTr] = useState(START.tr);               // T / T_c
+  const [pr, setPr] = useState(START.pr);               // largest pressure shown / P_c
+  const [shown, setShown] = useState(START.shown);
 
-const Models = {
-    ideal: {
-        getZ: () => 1.0,
-        color: '#94a3b8', // Slate 400
-        label: 'Ideal Gas'
-    },
-    vdw: {
-        // Van der Waals
-        // P = RT/(V-b) - a/V^2
-        getZ: (P, T, gas) => {
-            const a = (27 * (R ** 2) * (gas.Tc ** 2)) / (64 * gas.Pc);
-            const b = (R * gas.Tc) / (8 * gas.Pc);
-            
-            const A = (a * P) / ((R * T) ** 2);
-            const B = (b * P) / (R * T);
-            
-            const a2 = -(1 + B);
-            const a1 = A;
-            const a0 = -A * B;
-            
-            return solveCubic(a2, a1, a0);
-        },
-        getParams: (gas) => {
-            const a = (27 * (R ** 2) * (gas.Tc ** 2)) / (64 * gas.Pc);
-            const b = (R * gas.Tc) / (8 * gas.Pc);
-            return { a, b };
-        },
-        color: '#3b82f6', // Blue 500
-        label: 'Van der Waals'
-    },
-    pr: {
-        // Peng-Robinson
-        getZ: (P, T, gas) => {
-            const Tr = T / gas.Tc;
-            const kappa = 0.37464 + 1.54226 * gas.omega - 0.26992 * (gas.omega ** 2);
-            const alpha = (1 + kappa * (1 - Math.sqrt(Tr))) ** 2;
+  const gas = GASES.find((g) => g.key === gasKey);
+  const T = tr * gas.Tc, top = pr * gas.Pc;
+  const unit = R * gas.Tc / gas.Pc;                     // L/mol; the volume axis runs from 0.1 to 10 times this volume
+  const volumes = [0.1 * unit, 10 * unit];
 
-            const a = (0.45724 * (R ** 2) * (gas.Tc ** 2)) / gas.Pc;
-            const b = (0.07780 * R * gas.Tc) / gas.Pc;
-            const a_alpha = a * alpha;
+  const { rows, isotherm, sat, constants } = useMemo(() => {
+    const models = { vdw: vanDerWaals(gas, T), pr: pengRobinson(gas, T) };
+    const sat = { vdw: coexistence(models.vdw), pr: coexistence(models.pr) };
 
-            const A = (a_alpha * P) / ((R * T) ** 2);
-            const B = (b * P) / (R * T);
+    // (a) Z against P. The pressures of coexistence are added to the grid, so that the jumps of Z are vertical.
+    const pressures = [];
+    for (let i = 1; i <= POINTS; i++) pressures.push(top * i / POINTS);
+    for (const key of ['vdw', 'pr']) if (sat[key] && sat[key].P < top) pressures.push(sat[key].P * (1 - 1e-7), sat[key].P * (1 + 1e-7));
+    pressures.sort((x, y) => x - y);
+    const rows = pressures.map((P) => ({ P, ideal: 1, vdw: stableZ(models.vdw, P, sat.vdw), pr: stableZ(models.pr, P, sat.pr) }));
 
-            const a2 = -(1 - B);
-            const a1 = A - 3 * (B ** 2) - 2 * B;
-            const a0 = -(A * B - (B ** 2) - (B ** 3));
-
-            return solveCubic(a2, a1, a0);
-        },
-        getParams: (gas, T) => {
-            const Tr = T / gas.Tc;
-            const kappa = 0.37464 + 1.54226 * gas.omega - 0.26992 * (gas.omega ** 2);
-            const alpha = (1 + kappa * (1 - Math.sqrt(Tr))) ** 2;
-            const a = (0.45724 * (R ** 2) * (gas.Tc ** 2)) / gas.Pc;
-            const b = (0.07780 * R * gas.Tc) / gas.Pc;
-            return { a: a * alpha, b };
-        },
-        color: '#10b981', // Emerald 500
-        label: 'Peng-Robinson'
-    }
-};
-
-// --- Custom Hooks ---
-
-// Hook to load scripts dynamically (for Plotly CDN in this standalone component)
-const useExternalScript = (url) => {
-    const [loaded, setLoaded] = useState(false);
-
-    useEffect(() => {
-        if (window.Plotly) {
-            setLoaded(true);
-            return;
-        }
-        const script = document.createElement('script');
-        script.src = url;
-        script.async = true;
-        script.onload = () => setLoaded(true);
-        document.body.appendChild(script);
-
-        return () => {
-            // Optional cleanup
-        };
-    }, [url]);
-
-    return loaded;
-};
-
-// --- Components ---
-
-const ControlPanel = ({ gas, setGas, temp, setTemp, pMax, setPMax, models, toggleModel }) => {
-    const currentParamsVDW = gas.type === 'real' ? Models.vdw.getParams(gas) : {a:0, b:0};
-    const currentParamsPR = gas.type === 'real' ? Models.pr.getParams(gas, temp) : {a:0, b:0};
-
-    return (
-        <div className="bg-slate-900 border-r border-slate-800 w-full md:w-80 p-6 flex flex-col gap-8 overflow-y-auto h-full flex-shrink-0">
-            <div>
-                <h1 className="text-xl font-bold text-blue-400 mb-2 flex items-center gap-2">
-                    <FlaskConical className="w-6 h-6" /> Real Gas Studio
-                </h1>
-                <p className="text-xs text-slate-400">Computational EOS Comparison</p>
-            </div>
-
-            {/* Gas Selection */}
-            <div className="space-y-3">
-                <label className="text-sm font-semibold text-slate-300 uppercase tracking-wider">Substance</label>
-                <select 
-                    value={GAS_PRESETS.indexOf(gas)}
-                    onChange={(e) => setGas(GAS_PRESETS[e.target.value])}
-                    className="w-full bg-slate-950 border border-slate-700 rounded p-2 text-sm focus:border-blue-500 outline-none transition-colors text-slate-200"
-                >
-                    {GAS_PRESETS.map((g, idx) => (
-                        <option key={g.name} value={idx}>{g.name}</option>
-                    ))}
-                </select>
-                {gas.type === 'real' && (
-                    <div className="text-xs text-slate-500 grid grid-cols-2 gap-2 mt-2 bg-slate-950 p-2 rounded">
-                        <div>Tc: {gas.Tc} K</div>
-                        <div>Pc: {(gas.Pc/1e5).toFixed(1)} bar</div>
-                        <div>ω: {gas.omega}</div>
-                    </div>
-                )}
-            </div>
-
-            {/* Conditions */}
-            <div className="space-y-4">
-                <label className="text-sm font-semibold text-slate-300 uppercase tracking-wider">Conditions</label>
-                
-                <div>
-                    <div className="flex justify-between text-xs text-slate-400 mb-1">
-                        <span>Temperature (T)</span>
-                        <span className="text-blue-400 font-mono">{temp} K</span>
-                    </div>
-                    <input 
-                        type="range" min="100" max="1000" step="5" 
-                        value={temp} onChange={(e) => setTemp(Number(e.target.value))}
-                        className="w-full h-1 bg-slate-700 rounded-lg appearance-none cursor-pointer slider-thumb"
-                    />
-                </div>
-
-                <div>
-                    <div className="flex justify-between text-xs text-slate-400 mb-1">
-                        <span>Max Pressure (P)</span>
-                        <span className="text-blue-400 font-mono">{pMax} bar</span>
-                    </div>
-                    <input 
-                        type="range" min="50" max="500" step="10" 
-                        value={pMax} onChange={(e) => setPMax(Number(e.target.value))}
-                        className="w-full h-1 bg-slate-700 rounded-lg appearance-none cursor-pointer slider-thumb"
-                    />
-                </div>
-            </div>
-
-            {/* Model Toggles */}
-            <div className="space-y-3">
-                <label className="text-sm font-semibold text-slate-300 uppercase tracking-wider">Models</label>
-                <div className="flex flex-col gap-2">
-                    {Object.keys(Models).map(key => (
-                        <label key={key} className="flex items-center justify-between p-2 rounded hover:bg-slate-800 cursor-pointer transition-colors group">
-                            <div className="flex items-center gap-2">
-                                <div className={`w-3 h-3 rounded-full`} style={{background: Models[key].color}}></div>
-                                <span className="text-sm text-slate-300 group-hover:text-white">{Models[key].label}</span>
-                            </div>
-                            <input 
-                                type="checkbox" 
-                                checked={models[key]} 
-                                onChange={() => toggleModel(key)}
-                                className="accent-blue-500"
-                            />
-                        </label>
-                    ))}
-                </div>
-            </div>
-
-            {/* Calculated Parameters Display */}
-            {gas.type === 'real' && (
-                <div className="mt-auto pt-6 border-t border-slate-800">
-                     <label className="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2 block">Computed Parameters</label>
-                     <div className="space-y-2 text-xs font-mono">
-                        <div className="bg-slate-950 p-2 rounded border-l-2 border-blue-500">
-                            <div className="text-slate-400 font-bold mb-1">Van der Waals</div>
-                            <div className="flex justify-between"><span>a:</span> <span>{currentParamsVDW.a.toFixed(3)}</span></div>
-                            <div className="flex justify-between"><span>b:</span> <span>{(currentParamsVDW.b * 1e5).toFixed(2)} e-5</span></div>
-                        </div>
-                        <div className="bg-slate-950 p-2 rounded border-l-2 border-emerald-500">
-                            <div className="text-slate-400 font-bold mb-1">Peng-Robinson</div>
-                            <div className="flex justify-between"><span>a(T):</span> <span>{currentParamsPR.a.toFixed(3)}</span></div>
-                            <div className="flex justify-between"><span>b:</span> <span>{(currentParamsPR.b * 1e5).toFixed(2)} e-5</span></div>
-                        </div>
-                     </div>
-                </div>
-            )}
-        </div>
-    );
-};
-
-const Charts = ({ gas, temp, pMax, models }) => {
-    const zPlotRef = useRef(null);
-    const pvPlotRef = useRef(null);
-    const plotlyLoaded = useExternalScript("https://cdn.plot.ly/plotly-2.24.1.min.js");
-
-    // Generate Data
-    const data = useMemo(() => {
-        const steps = 100;
-        const pStep = (pMax * 1e5) / steps; 
-        
-        // Initialize arrays
-        const datasets = {
-            ideal: { xP: [], yZ: [], xV: [], yP: [] },
-            vdw: { xP: [], yZ: [], xV: [], yP: [] },
-            pr: { xP: [], yZ: [], xV: [], yP: [] }
-        };
-
-        // Avoid P=0 singularity
-        for(let i = 1; i <= steps; i++) {
-            const P = i * pStep;
-            const P_bar = P / 1e5;
-
-            // Ideal
-            if(models.ideal) {
-                datasets.ideal.xP.push(P_bar);
-                datasets.ideal.yZ.push(1);
-                datasets.ideal.yP.push(P_bar);
-                datasets.ideal.xV.push((R * temp) / P * 1000); // L/mol
-            }
-
-            // VdW
-            if(models.vdw) {
-                if(gas.type === 'ideal') {
-                     datasets.vdw.xP.push(P_bar); datasets.vdw.yZ.push(1);
-                } else {
-                    const z = Models.vdw.getZ(P, temp, gas);
-                    const v = (z * R * temp) / P;
-                    datasets.vdw.xP.push(P_bar);
-                    datasets.vdw.yZ.push(z);
-                    datasets.vdw.yP.push(P_bar);
-                    datasets.vdw.xV.push(v * 1000); // L/mol
-                }
-            }
-
-            // PR
-            if(models.pr) {
-                 if(gas.type === 'ideal') {
-                     datasets.pr.xP.push(P_bar); datasets.pr.yZ.push(1);
-                } else {
-                    const z = Models.pr.getZ(P, temp, gas);
-                    const v = (z * R * temp) / P;
-                    datasets.pr.xP.push(P_bar);
-                    datasets.pr.yZ.push(z);
-                    datasets.pr.yP.push(P_bar);
-                    datasets.pr.xV.push(v * 1000); // L/mol
-                }
-            }
-        }
-        return datasets;
-    }, [gas, temp, pMax, models]);
-
-    // Render Plots
-    useEffect(() => {
-        if (!plotlyLoaded || !window.Plotly) return;
-
-        const commonLayout = {
-            paper_bgcolor: 'rgba(0,0,0,0)',
-            plot_bgcolor: 'rgba(0,0,0,0)',
-            font: { color: '#94a3b8' },
-            margin: { t: 40, r: 20, l: 60, b: 50 },
-            xaxis: { gridcolor: '#334155', zerolinecolor: '#475569' },
-            yaxis: { gridcolor: '#334155', zerolinecolor: '#475569' },
-            showlegend: true,
-            legend: { x: 1, xanchor: 'right', y: 1 }
-        };
-
-        const tracesZ = [];
-        const tracesPV = [];
-
-        Object.keys(models).forEach(key => {
-            if(!models[key]) return;
-            
-            tracesZ.push({
-                x: data[key].xP,
-                y: data[key].yZ,
-                type: 'scatter',
-                mode: 'lines',
-                name: Models[key].label,
-                line: { color: Models[key].color, width: 2 }
-            });
-
-            tracesPV.push({
-                x: data[key].xV,
-                y: data[key].yP,
-                type: 'scatter',
-                mode: 'lines',
-                name: Models[key].label,
-                line: { color: Models[key].color, width: 2 }
-            });
-        });
-
-        const layoutZ = {
-            ...commonLayout,
-            title: 'Compressibility Factor (Z)',
-            xaxis: { ...commonLayout.xaxis, title: 'Pressure (bar)' },
-            yaxis: { ...commonLayout.yaxis, title: 'Z = PV / RT' }
-        };
-
-        const layoutPV = {
-            ...commonLayout,
-            title: 'P-V Isotherm',
-            xaxis: { ...commonLayout.xaxis, title: 'Molar Volume (L/mol)', type: 'log' }, 
-            yaxis: { ...commonLayout.yaxis, title: 'Pressure (bar)' }
-        };
-
-        window.Plotly.newPlot(zPlotRef.current, tracesZ, layoutZ, {responsive: true, displayModeBar: false});
-        window.Plotly.newPlot(pvPlotRef.current, tracesPV, layoutPV, {responsive: true, displayModeBar: false});
-
-    }, [data, models, plotlyLoaded]);
-
-    return (
-        <div className="flex-1 p-4 md:p-8 overflow-y-auto grid grid-cols-1 lg:grid-cols-2 gap-6">
-            <div className="bg-slate-800/50 rounded-xl border border-slate-700 p-2 shadow-xl backdrop-blur-sm min-h-[400px] flex flex-col">
-                <div ref={zPlotRef} className="flex-1 w-full h-full">
-                    {!plotlyLoaded && <div className="flex items-center justify-center h-full text-slate-500">Loading Plotly...</div>}
-                </div>
-                <div className="px-4 pb-2 text-xs text-slate-500 text-center">
-                    Shows deviation from Ideal Gas Law (Z=1). Z &lt; 1 implies attractive forces dominate; Z &gt; 1 implies repulsive forces dominate.
-                </div>
-            </div>
-            <div className="bg-slate-800/50 rounded-xl border border-slate-700 p-2 shadow-xl backdrop-blur-sm min-h-[400px] flex flex-col">
-                <div ref={pvPlotRef} className="flex-1 w-full h-full">
-                    {!plotlyLoaded && <div className="flex items-center justify-center h-full text-slate-500">Loading Plotly...</div>}
-                </div>
-                <div className="px-4 pb-2 text-xs text-slate-500 text-center">
-                    Pressure vs Volume Isotherm (Log scale on V). Visualize the compression path.
-                </div>
-            </div>
-
-            <div className="lg:col-span-2 bg-slate-900 rounded-lg p-6 border border-slate-800 mb-8">
-                <h3 className="text-lg font-semibold text-slate-200 mb-2">Analysis: {gas.name}</h3>
-                <p className="text-slate-400 text-sm leading-relaxed">
-                    At <strong>{temp} K</strong> and high pressures, real gas behavior deviates significantly from the Ideal Gas Law.
-                    { models.vdw && <span> <strong>Van der Waals</strong> accounts for molecular volume (b) and intermolecular forces (a), predicting a Z-factor dip due to attraction. </span> }
-                    { models.pr && <span> <strong>Peng-Robinson</strong> improves accuracy near the critical point and for non-spherical molecules (using ω), often showing a sharper deviation in the liquid/dense-gas region. </span> }
-                </p>
-            </div>
-        </div>
-    );
-};
-
-// --- Main App Component ---
-
-export default function App() {
-    const [gas, setGas] = useState(GAS_PRESETS[1]); // Default CO2
-    const [temp, setTemp] = useState(310);
-    const [pMax, setPMax] = useState(200);
-    
-    const [models, setModels] = useState({
-        ideal: true,
-        vdw: true,
-        pr: true
+    // (b) P against V_m. Between the volumes of the liquid and the vapor, the stable isotherm is the tie line.
+    const grid = [];
+    for (let i = 0; i <= POINTS; i++) grid.push(volumes[0] * 100 ** (i / POINTS));
+    for (const key of ['vdw', 'pr']) if (sat[key]) grid.push(sat[key].Vl, sat[key].Vg);
+    grid.sort((x, y) => x - y);
+    const isotherm = grid.map((volume) => {
+      const row = { V: volume, ideal: R * T / volume };
+      for (const key of ['vdw', 'pr']) {
+        const model = models[key], s = sat[key];
+        if (volume <= model.b * 1.001) { row[key] = null; row[key + 'Loop'] = null; continue; }
+        const inside = s && volume >= s.Vl && volume <= s.Vg;
+        row[key] = inside ? s.P : model.pressure(volume);
+        row[key + 'Loop'] = inside ? model.pressure(volume) : null;
+      }
+      return row;
     });
+    return { rows, isotherm, sat, constants: { a: models.vdw.a, b: models.vdw.b } };
+  }, [gasKey, tr, pr]);
 
-    const toggleModel = (key) => {
-        setModels(prev => ({...prev, [key]: !prev[key]}));
-    };
+  // Top of the Z axis: above the largest value of the lines shown, and at least 1.2
+  const largest = Math.max(1.2, ...rows.map((row) => Math.max(shown.vdw ? row.vdw : 0, shown.pr ? row.pr : 0)));
+  const zTicks = niceTicks(largest * 1.0001, 5);
+  const zStep = zTicks[1] - zTicks[0], zTop = Math.ceil(largest / zStep - 1e-9) * zStep;
+  const zAll = niceTicks(zTop, Math.round(zTop / zStep));
+  const pTicks = niceTicks(top, 5);
 
-    return (
-        <div className="flex flex-col md:flex-row h-screen w-full bg-slate-950 text-slate-200 font-sans overflow-hidden">
-             {/* Slider CSS Injection for Vite compatibility */}
-             <style>{`
-                .slider-thumb::-webkit-slider-thumb {
-                    -webkit-appearance: none; appearance: none;
-                    width: 16px; height: 16px;
-                    background: #3b82f6; cursor: pointer; border-radius: 50%;
-                }
-                .slider-thumb::-moz-range-thumb {
-                    width: 16px; height: 16px;
-                    background: #3b82f6; cursor: pointer; border-radius: 50%;
-                }
-            `}</style>
-            
-            <ControlPanel 
-                gas={gas} setGas={setGas}
-                temp={temp} setTemp={setTemp}
-                pMax={pMax} setPMax={setPMax}
-                models={models} toggleModel={toggleModel}
-            />
-            <Charts 
-                gas={gas}
-                temp={temp}
-                pMax={pMax}
-                models={models}
-            />
+  const margin = { top: 14, right: 14, bottom: -6, left: 0 };
+  const lines = (suffix) => [
+    shown.ideal && !suffix ? <Line key="ideal" dataKey="ideal" stroke={color.gray} strokeWidth={1.6} strokeDasharray={DASH} dot={false} isAnimationActive={false} /> : null,
+    shown.vdw ? <Line key={'vdw' + suffix} dataKey={'vdw' + suffix} stroke={color.blue} strokeWidth={suffix ? 1.1 : LINE} dot={false} activeDot={!suffix} isAnimationActive={false} /> : null,
+    shown.pr ? <Line key={'pr' + suffix} dataKey={'pr' + suffix} stroke={color.vermilion} strokeWidth={suffix ? 1.1 : LINE} dot={false} activeDot={!suffix} isAnimationActive={false} /> : null,
+  ];
+  const below = sat.vdw || sat.pr;
+  const coexist = ['vdw', 'pr'].filter((key) => shown[key] && sat[key]);
+
+  return (
+    <Studio title="Real gas"
+            lede="Choose a gas and a temperature, and compare the ideal-gas law with two equations of state for real gases, the van der Waals equation and the Peng–Robinson equation.">
+      <p className="key">
+        {shown.ideal ? <span style={{ color: color.gray }}><i className="dash" /><span>ideal gas</span></span> : null}
+        {shown.vdw ? <span style={{ color: color.blue }}><i className="line" /><span>van der Waals</span></span> : null}
+        {shown.pr ? <span style={{ color: color.vermilion }}><i className="line" /><span>Peng–Robinson</span></span> : null}
+      </p>
+      <div className="panels two" style={{ marginTop: 8 }}>
+        <Panel letter="a" title={<>Compressibility factor, <V>Z</V></>}>
+          <div className="chart" style={{ height: 250 }}>
+            <ResponsiveContainer width="100%" height="100%">
+              <LineChart data={rows} margin={margin}>
+                <XAxis dataKey="P" type="number" domain={[0, top]} ticks={pTicks} {...axis(color)} />
+                <YAxis domain={[0, zTop]} ticks={zAll} width={44} allowDataOverflow {...axis(color)} />
+                <Tooltip content={<Tip head={<V>P</V>} unit="bar" value={<V>Z</V>} shown={shown} />} isAnimationActive={false} />
+                {lines('')}
+              </LineChart>
+            </ResponsiveContainer>
+          </div>
+          <p className="xlabel">Pressure, <V>P</V> (bar)</p>
+        </Panel>
+        <Panel letter="b" title={<>Isotherm: pressure, <V>P</V> (bar)</>}>
+          <div className="chart" style={{ height: 250 }}>
+            <ResponsiveContainer width="100%" height="100%">
+              <LineChart data={isotherm} margin={margin}>
+                <XAxis dataKey="V" type="number" scale="log" domain={volumes} ticks={logTicks(volumes[0], volumes[1])}
+                       allowDataOverflow {...axis(color)} />
+                <YAxis domain={[0, top]} ticks={pTicks} width={44} allowDataOverflow {...axis(color)} />
+                <Tooltip content={<Tip head={Vm} unit="L/mol" value={<V>P</V>} after=" bar" shown={shown} />} isAnimationActive={false} />
+                {lines('Loop')}
+                {lines('')}
+              </LineChart>
+            </ResponsiveContainer>
+          </div>
+          <p className="xlabel">Molar volume, {Vm} (L/mol), logarithmic scale</p>
+        </Panel>
+      </div>
+      <p className="note">
+        <span>{gas.name}: {Tc} = {digits4(gas.Tc)} K, {Pc} = {digits4(gas.Pc)} bar</span>
+        <span>van der Waals constants: <V sub="m">a</V> = {digits3(constants.a)} L<sup>2</sup> bar mol<sup>−2</sup>, <V sub="m">b</V> = {digits3(constants.b)} L mol<sup>−1</sup></span>
+      </p>
+      <p className="note lines3 live">
+        {below ? (
+          <span>
+            Below {Tc}, liquid and vapor coexist at one pressure
+            {coexist.length ? <>: {coexist.map((key) => `${bar(sat[key].P)} bar (${NAMES[key]})`).join(' and ')}</> : null}.
+            There <V>Z</V> jumps in (a) and the isotherm is horizontal in (b). The thin lines in (b) are the loops of the two equations.
+          </span>
+        ) : (
+          <span>At this temperature, each equation gives one molar volume at every pressure. Below {Tc}, liquid and vapor coexist at one pressure.</span>
+        )}
+      </p>
+
+      <div className="controls">
+        <Select label="Gas" value={gasKey} options={GASES.map((g) => [g.key, g.name])} onChange={setGasKey} />
+        <Checks label="Equations shown" onChange={(key, on) => setShown({ ...shown, [key]: on })}
+                items={[['ideal', 'ideal gas', shown.ideal], ['vdw', 'van der Waals', shown.vdw], ['pr', 'Peng–Robinson', shown.pr]]} />
+        <Slider label={<>Temperature, <V>T</V></>} show={<>{kelvin(T)} K = {tr.toFixed(2)} {Tc}</>}
+                value={tr} min={0.7} max={4} step={0.01} onChange={setTr} />
+        <Slider label={<>Largest pressure shown</>} show={<>{bar(top)} bar = {pr.toFixed(1)} {Pc}</>}
+                value={pr} min={1} max={12} step={0.5} onChange={setPr} />
+        <div className="row">
+          <button type="button" onClick={() => { setGasKey(START.gas); setTr(START.tr); setPr(START.pr); setShown(START.shown); }}>Reset</button>
         </div>
-    );
+      </div>
+      <p className="hint">
+        The compressibility factor is <V>Z</V> = <V>P</V>{Vm}/<V>R</V><V>T</V>, which is 1 for an ideal gas. The van der Waals
+        equation is (<V>P</V> + <V sub="m">a</V>/{Vm}<sup>2</sup>)({Vm} − <V sub="m">b</V>) = <V>R</V><V>T</V>, with <V sub="m">a</V> = 27<V>R</V><sup>2</sup>{Tc}<sup>2</sup>/64{Pc} and <V sub="m">b</V> = <V>R</V>{Tc}/8{Pc}.
+        The Peng–Robinson equation, <V>P</V> = <V>R</V><V>T</V>/({Vm} − <V>b</V>) − <V>a</V>(<V>T</V>)/({Vm}<sup>2</sup> + 2<V>b</V>{Vm} − <V>b</V><sup>2</sup>), is
+        a later equation of the same kind. Its constants also follow from {Tc} and {Pc}, and <V>a</V>(<V>T</V>) also depends on the acentric factor of the gas.
+        The temperature and the largest pressure are set as multiples of {Tc} and {Pc}, and they keep these multiples when you change the gas.
+      </p>
+    </Studio>
+  );
 }
