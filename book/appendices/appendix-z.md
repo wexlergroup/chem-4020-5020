@@ -10,6 +10,8 @@ kernelspec:
   display_name: Python 3
   language: python
   name: python3
+numbering:
+  enumerator: Z.%s
 ---
 
 # Appendix Z. Orders of Magnitude
