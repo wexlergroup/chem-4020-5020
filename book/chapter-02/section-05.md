@@ -36,49 +36,51 @@ Learning objectives:
 
 #### Particle in a One-Dimensional Box
 
+[](#fig:particle-in-a-box) shows the first four energy levels and wavefunctions of a particle in a one-dimensional box.
+
 ```{code-cell} ipython3
+:label: fig:particle-in-a-box
+:caption: Energy levels $E_n$ (gray lines) and wavefunctions $\psi_n$ (blue curves) of a particle in a one-dimensional box with walls at $x=\pm L/2$. Each wavefunction is drawn on its energy level, and the energy increases as $n^2$.
 :tags: [hide-input]
 
-import numpy as np
+import sys
+
 import matplotlib.pyplot as plt
-from mpl_toolkits.mplot3d.art3d import Poly3DCollection
-from scipy.constants import k, eV
-from labellines import labelLines
-from myst_nb import glue
+import numpy as np
 
-fig, axs = plt.subplot_mosaic([[0]], figsize=(4, 4))
+sys.path.append("..")            # the book folder, which holds figstyle
+import figstyle as fs
 
-# Plot a one-dimensional box
-axs[0].plot([-0.5, -0.5], [18, 0], color='black', zorder=2.5, lw=4)
-axs[0].plot([-0.5, 0.5], [0, 0], color='black', zorder=2.5, lw=4)
-axs[0].plot([0.5, 0.5], [0, 18], color='black', zorder=2.5, lw=4)
 
-# Plot the energy levels (blue lines)
-for n in range(1, 5):
-    energy = axs[0].plot([-0.5, 0.5], [n**2, n**2], color='blue', label=r'$E_{%d}$' % n)
-    labelLines(energy, xvals=[-1/6], zorder=2.5)
+def draw(c):
+    fig, ax = plt.subplots(figsize=(4.8, 3.7), constrained_layout=True)
+    x = np.linspace(-0.5, 0.5, 200)          # position in units of L
+    levels = range(1, 5)
 
-# Plot the wavefunctions (red curves)
-x = np.linspace(-0.5, 0.5, 100)
-for n in range(1, 5):
-    wavefunction = axs[0].plot(x, np.sin(n * np.pi * (x + 0.5)) + n**2, color='red', label=r'$\psi_{%d}$' % n)
-    labelLines(wavefunction, xvals=[1/6], zorder=2.5)
+    # Energy levels in units of E_1 = h^2 / (8 m L^2), with each wavefunction drawn on its level
+    for n in levels:
+        ax.plot([-0.5, 0.5], [n**2, n**2], color=c.gray, lw=1.2)
+        ax.plot(x, n**2 + np.sin(n * np.pi * (x + 0.5)), color=c.blue)
+        ax.text(0.53, n**2, rf"$\psi_{n}$", color=c.blue, va="center", clip_on=False)
 
-axs[0].set_xlabel('Position')
-axs[0].set_ylabel('Energy')
-axs[0].set_xticks([-0.5, 0, 0.5])
-axs[0].set_xticklabels([r'$-L/2$', r'$0$', r'$L/2$'])
-axs[0].set_yticks([])
-axs[0].spines['top'].set_visible(False)
-axs[0].spines['right'].set_visible(False)
-axs[0].spines['left'].set_visible(False)
+    # Walls and floor of the box
+    ax.plot([-0.5, -0.5, 0.5, 0.5], [18, 0, 0, 18], color=c.ink, lw=1.6, solid_capstyle="butt", zorder=3)
 
-plt.tight_layout()
-plt.show()
-plt.close(fig)
+    ax.set(xlabel="Position $x$", ylabel="Energy", xlim=(-0.5, 0.5), ylim=(0, 18),
+           xticks=[-0.5, 0, 0.5], yticks=[n**2 for n in levels])
+    ax.set_xticklabels(["$-L/2$", "0", "$L/2$"])
+    ax.set_yticklabels(["$E_1$", "$E_2 = 4E_1$", "$E_3 = 9E_1$", "$E_4 = 16E_1$"])
+    ax.tick_params(axis="y", length=0, pad=6)
+    for side in ("left", "bottom"):
+        ax.spines[side].set_visible(False)
+    return fig
+
+
+fs.show(draw, alt="Box with walls at x equal to minus L over 2 and L over 2. Four horizontal energy levels lie at 1, "
+                  "4, 9, and 16 times the lowest energy. On each level, the wavefunction is drawn as a sine curve "
+                  "that is zero at both walls, with one half-wave for the first level, two for the second, three for "
+                  "the third, and four for the fourth.")
 ```
-
-Energy levels $E_n$ (blue) and wavefunctions $\psi_n$ (red) for a particle in a one-dimensional box with boundaries at $x=\pm L/2$.
 
 For a particle in a one-dimensional box of length $L$, the quantized energy levels are
 
