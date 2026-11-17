@@ -142,6 +142,110 @@ S = k_{\mathrm{B}} \ln \Omega.
 
 Here $\Omega$ is the number of microstates compatible with the macroscopic constraints (fixed $U$, $V$, $N$). You can think of $\Omega$ as the degeneracy of the macrostate: fix the total energy and other extensive quantities, then count how many distinct microscopic configurations share those values.
 
+As an example, place $N$ distinguishable particles in a box and record only which half of the box each particle is in. A microstate is one assignment of the particles to the two halves, and there are $2^N$ of them. The macrostate with $n_L$ particles in the left half contains
+
+```{math}
+\Omega(n_L) = \frac{N!}{n_L!\,(N - n_L)!}
+```
+
+microstates. [](#fig:two-halves) shows all microstates for $N = 4$ and the shape of $\Omega(n_L)$ for larger $N$.
+
+```{code-cell} ipython3
+:label: fig:two-halves
+:caption: Microstates of $N$ distinguishable particles in the two halves of a box. (a) The $2^4 = 16$ microstates for $N = 4$, sorted by the number $n_L$ of particles in the left half. Each color marks one particle. (b) The number of microstates $\Omega(n_L)$, divided by its largest value $\Omega_{\max}$, against the fraction of the particles in the left half for three values of $N$. As $N$ grows, almost all microstates lie close to the even split.
+:tags: [hide-input]
+
+import sys
+from itertools import product
+from math import comb, lgamma
+
+import numpy as np
+import matplotlib.pyplot as plt
+from matplotlib.patches import Circle, Rectangle
+
+sys.path.append("..")            # the book folder, which holds figstyle
+import figstyle as fs
+
+N_SMALL = 4                                              # number of particles in panel (a)
+SLOT = [(0.14, 0.34), (0.36, 0.34), (0.14, 0.12), (0.36, 0.12)]   # place of each particle inside a half
+BOX_W, BOX_H, STEP_X, STEP_Y = 1.0, 0.46, 1.16, 0.58    # size of one small box and spacing of the boxes
+N_LARGE = [10, 100, 1000]                                # numbers of particles in panel (b)
+
+
+def draw_microstate(ax, c, x, y, sides):
+    """One microstate: a box with two halves; ``sides[k]`` is 0 if particle k is in the left half, 1 if in the right."""
+    colors = [c.blue, c.vermilion, c.green, c.purple]
+    ax.add_patch(Rectangle((x, y), BOX_W, BOX_H, fc=c.fill, ec=c.ink, lw=0.9))
+    ax.plot([x + BOX_W / 2] * 2, [y, y + BOX_H], color=c.gray, lw=0.9, ls=(0, (2, 2)))
+    for k, side in enumerate(sides):
+        ax.add_patch(Circle((x + side * BOX_W / 2 + SLOT[k][0], y + SLOT[k][1]), 0.075, fc=colors[k], ec="none"))
+
+
+def relative_count(n_total):
+    """Fraction in the left half and Omega / Omega_max for every n_L from 0 to n_total."""
+    n_left = np.arange(n_total + 1)
+    log_omega = np.array([lgamma(n_total + 1) - lgamma(n + 1) - lgamma(n_total - n + 1) for n in n_left])
+    return n_left / n_total, np.exp(log_omega - log_omega.max())
+
+
+def draw_two_halves(c):
+    fig, (ax_a, ax_b) = plt.subplots(1, 2, figsize=(fs.WIDTH, 3.5), constrained_layout=True,
+                                     gridspec_kw={"width_ratios": [1.45, 1]})
+
+    # (a) All microstates for four particles, one column for each value of n_L
+    states = list(product([0, 1], repeat=N_SMALL))
+    for n_left in range(N_SMALL + 1):
+        column = [sides for sides in states if sides.count(0) == n_left]
+        x = (N_SMALL - n_left) * STEP_X                  # the column with all particles on the left stands first
+        for row, sides in enumerate(column):
+            draw_microstate(ax_a, c, x, row * STEP_Y, sides)
+        ax_a.text(x + BOX_W / 2, -0.16, f"$n_L = {n_left}$", ha="center", va="top")
+        ax_a.text(x + BOX_W / 2, -0.52, f"$\\Omega = {comb(N_SMALL, n_left)}$", ha="center", va="top")
+    ax_a.set(xlim=(-0.08, 4 * STEP_X + BOX_W + 0.08), ylim=(-0.95, 6 * STEP_Y))
+    ax_a.set_aspect("equal")
+    ax_a.axis("off")
+    fs.panel(ax_a, "a", "Four particles")
+
+    # (b) The count of microstates narrows around the even split as N grows
+    for n_total, shade in zip(N_LARGE, [0.55, 0.25, 0.0]):
+        fraction, omega = relative_count(n_total)
+        ax_b.plot(fraction, omega, color=c.tint(c.blue, shade), lw=fs.LINE, marker="o" if n_total == 10 else None,
+                  ms=4.5, label=f"$N = {n_total}$")
+    ax_b.legend(loc="upper right", frameon=False, handlelength=1.3, borderaxespad=0.2)
+    ax_b.set(xlim=(0, 1), ylim=(0, 1.08), xlabel="Fraction in the left half, $n_L/N$",
+             ylabel="$\\Omega(n_L)\\,/\\,\\Omega_{\\max}$")
+    ax_b.set_xticks([0, 0.5, 1], ["0", "0.5", "1"])
+    ax_b.set_yticks([0, 0.5, 1], ["0", "0.5", "1"])
+    fs.panel(ax_b, "b", "More particles")
+    return fig
+
+
+fs.show(draw_two_halves, alt="Panel a shows sixteen small boxes, each with two halves and four colored particles, in five "
+                             "columns. The columns hold one box with four particles on the left, four boxes with three, "
+                             "six boxes with two, four boxes with one, and one box with none. Panel b plots the number "
+                             "of microstates relative to its maximum against the fraction of particles in the left "
+                             "half for 10, 100, and 1000 particles. Each curve peaks at one half, and the peak becomes "
+                             "much narrower as the number of particles grows.")
+```
+
+In [](#fig:free-expansion-interactive), the particles of an ideal gas start in the left half of the box, as in the free expansion of Example 2 in [Section 4.1](section-01.md). Open the partition, and follow $n_L$ and $S = k_{\mathrm{B}}\ln\Omega(n_L)$ as the gas spreads.
+
+```{iframe} https://wexlergroup.github.io/chem-4020-5020/computational-studios/free-expansion.html
+:label: fig:free-expansion-interactive
+:width: 100%
+:title: Expansion of an ideal gas into a vacuum
+:placeholder: ../_static/free-expansion/free-expansion.png
+
+Expansion of $N$ particles into a vacuum. Panel (a) shows the particles, which do not interact. Panel (b) shows the fraction of the particles in the left half and the entropy $S = k_{\mathrm{B}}\ln\Omega(n_L)$ against time. The dashed lines mark the even split and the largest possible value of $\ln\Omega$.
+```
+
+Two things to try:
+
+1. Run the expansion with $N = 10$ and then with $N = 200$. After the gas has spread, compare how far $n_L/N$ and $\ln\Omega$ move away from the dashed lines.
+2. For $N = 200$, compare the largest value of $\ln\Omega$ with $N\ln 2$. Example 2 of [Section 4.1](section-01.md) gives $\Delta S = nR\ln 2$ for a gas that doubles its volume, and $nR = Nk_{\mathrm{B}}$.
+
+For a few particles, $\ln\Omega$ falls below its largest value from time to time. For the $10^{23}$ particles of a macroscopic gas, such fluctuations are far too small to observe, which is why the Second Law can be stated as $dS \ge 0$.
+
 ```{admonition} Scope of Boltzmann's formula
 :class: note
 Boltzmann's $S = k_{\mathrm{B}}\ln\Omega$ applies to isolated systems where all accessible microstates are equally probable (the microcanonical ensemble). For systems in thermal contact with a reservoir — where microstates are *not* equally probable — we need the more general Gibbs formula introduced below.
@@ -183,6 +287,58 @@ S = -k_{\mathrm{B}} \sum_{i=1}^{M} p_i\,\ln p_i.
 ```
 
 A microstate with $p_i = 0$ contributes nothing to the sum, because $p\ln p \to 0$ as $p \to 0$. For two independent subsystems $A$ and $B$, the probability that $A$ is in microstate $i$ while $B$ is in microstate $j$ is the product $p_i^{(A)}\,p_j^{(B)}$.
+
+[](#fig:gibbs-entropy) compares three distributions over the same six microstates.
+
+```{code-cell} ipython3
+:label: fig:gibbs-entropy
+:caption: Three probability distributions over the same $M = 6$ microstates, with the Gibbs entropy of each. The entropy is smallest for the distribution in (a), which is concentrated on few microstates, and largest for the uniform distribution in (c), for which $S = k_{\mathrm{B}}\ln 6$.
+:tags: [hide-input]
+
+import sys
+
+import numpy as np
+import matplotlib.pyplot as plt
+
+sys.path.append("..")            # the book folder, which holds figstyle
+import figstyle as fs
+
+M_STATES = 6
+RATIOS = [0.25, 0.65, 1.0]       # each distribution is p_i proportional to ratio**(i - 1)
+TITLES = ["Concentrated", "Spread out", "Uniform"]
+
+
+def distribution(ratio):
+    weights = ratio ** np.arange(M_STATES)
+    return weights / weights.sum()
+
+
+def gibbs_entropy(p):
+    """Gibbs entropy in units of k_B."""
+    return -np.sum(p * np.log(p))
+
+
+def draw_distributions(c):
+    fig, axes = plt.subplots(1, 3, figsize=(fs.WIDTH, 2.7), constrained_layout=True, sharey=True)
+    states = np.arange(1, M_STATES + 1)
+    for ax, letter, title, ratio in zip(axes, "abc", TITLES, RATIOS):
+        p = distribution(ratio)
+        ax.bar(states, p, width=0.7, color=c.blue)
+        ax.text(M_STATES + 0.45, 0.76, f"$S = {gibbs_entropy(p):.2f}\\,k_{{\\mathrm{{B}}}}$", ha="right", va="top")
+        ax.set(xlim=(0.35, M_STATES + 0.65), ylim=(0, 0.8), xlabel="Microstate $i$")
+        ax.set_xticks(states)
+        ax.set_yticks([0, 0.2, 0.4, 0.6, 0.8])
+        fs.panel(ax, letter, title)
+    axes[0].set_ylabel("Probability $p_i$")
+    return fig
+
+
+fs.show(draw_distributions, alt="Three bar charts of probability against microstate for six microstates. In panel a, the "
+                                "first microstate has a probability of 0.75 and the others fall off quickly, and the "
+                                "entropy is 0.75 k B. In panel b, the probabilities fall off slowly from 0.38, and the "
+                                "entropy is 1.56 k B. In panel c, all six probabilities are equal, and the entropy is "
+                                "1.79 k B.")
+```
 
 This formula has two important features:
 
