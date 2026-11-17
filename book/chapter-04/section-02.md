@@ -71,19 +71,26 @@ Learning objectives:
 
 ### The Cycle
 
-The figure below plots the Carnot cycle on a **pressure–volume ($P$–$V$) diagram** for one mole of a monatomic ideal gas between reservoirs at $500\ \mathrm{K}$ and $300\ \mathrm{K}$, the temperatures of the Worked Example below.
+[](#fig:carnot-cycle) plots the Carnot cycle on a **pressure–volume ($P$–$V$) diagram** for one mole of a monatomic ideal gas between reservoirs at $500\ \mathrm{K}$ and $300\ \mathrm{K}$, the temperatures of the Worked Example below.
 The key geometric features are:
 
-- The **isotherms** (red at $T_{\mathrm{hot}}$, blue at $T_{\mathrm{cold}}$) follow the ideal-gas relation $P = nRT/V$ at fixed temperature. The thin lines continue them beyond the cycle.
-- The **adiabats** (dotted and dashed) are *steeper* than the isotherms and follow $PV^\gamma = \text{constant}$
+- The **isotherms** (orange at $T_{\mathrm{hot}}$, blue at $T_{\mathrm{cold}}$) follow the ideal-gas relation $P = nRT/V$ at fixed temperature. The thin lines continue them beyond the cycle.
+- The **adiabats** (black) are *steeper* than the isotherms and follow $PV^\gamma = \text{constant}$
   for a reversible adiabatic process of an ideal gas ([Section 3.2](../chapter-03/section-02.md)).
 
 ```{code-cell} ipython3
+:label: fig:carnot-cycle
+:caption: The Carnot cycle for one mole of a monatomic ideal gas between $T_{\mathrm{hot}} = 500\ \mathrm{K}$ and $T_{\mathrm{cold}} = 300\ \mathrm{K}$. The arrows on the curves give the direction of each step. Heat enters the system on the hot isotherm and leaves it on the cold isotherm. The adiabats, which are steeper than the isotherms, exchange no heat. The thin lines continue the two isotherms beyond the cycle.
 :tags: [hide-input]
 
-import numpy as np
+import sys
+
 import matplotlib.pyplot as plt
+import numpy as np
 from scipy.constants import R as R_J
+
+sys.path.append("..")            # the book folder, which holds figstyle
+import figstyle as fs
 
 # One mole of a monatomic ideal gas between the reservoirs of the Worked Example
 R = R_J / 100        # L bar K^-1 mol^-1
@@ -96,73 +103,63 @@ V_A, V_B = 1.0, 2.6            # L
 ratio = (T_hot / T_cold) ** (1 / (gamma - 1))
 V_C, V_D = V_B * ratio, V_A * ratio
 
+
 def P_isotherm(V, T):
     return n * R * T / V
+
 
 def P_adiabat(V, V0, T0):
     return P_isotherm(V0, T0) * (V0 / V) ** gamma
 
-steps = [
-    ("A", "B", V_A, V_B, lambda V: P_isotherm(V, T_hot), "r-",
-     r"A$\rightarrow$B isothermal expansion ($T_{\mathrm{hot}}$)"),
-    ("B", "C", V_B, V_C, lambda V: P_adiabat(V, V_B, T_hot), "k:",
-     r"B$\rightarrow$C adiabatic expansion"),
-    ("C", "D", V_C, V_D, lambda V: P_isotherm(V, T_cold), "b-",
-     r"C$\rightarrow$D isothermal compression ($T_{\mathrm{cold}}$)"),
-    ("D", "A", V_D, V_A, lambda V: P_adiabat(V, V_A, T_hot), "k--",
-     r"D$\rightarrow$A adiabatic compression"),
-]
 
-fig, ax = plt.subplots(figsize=(6, 4.2))
+def draw_cycle(c):
+    fig, ax = plt.subplots(figsize=(6.4, 4.1), constrained_layout=True)
+    steps = [(V_A, V_B, lambda V: P_isotherm(V, T_hot), c.vermilion),
+             (V_B, V_C, lambda V: P_adiabat(V, V_B, T_hot), c.ink),
+             (V_C, V_D, lambda V: P_isotherm(V, T_cold), c.blue),
+             (V_D, V_A, lambda V: P_adiabat(V, V_A, T_hot), c.ink)]
 
-# Faint isotherms for reference
-V_all = np.linspace(0.8, 6.2, 400)
-ax.plot(V_all, P_isotherm(V_all, T_hot), "r-", lw=0.6, alpha=0.35)
-ax.plot(V_all, P_isotherm(V_all, T_cold), "b-", lw=0.6, alpha=0.35)
+    # The two isotherms continue beyond the cycle as thin lines
+    V_all = np.linspace(0.84, 6.2, 400)
+    ax.plot(V_all, P_isotherm(V_all, T_hot), color=c.tint(c.vermilion, 0.55), lw=0.9)
+    ax.plot(V_all, P_isotherm(V_all, T_cold), color=c.tint(c.blue, 0.55), lw=0.9)
 
-# The four steps, each with an arrow that shows its direction
-for start, end, V1, V2, P_of_V, style, label in steps:
-    V = np.linspace(V1, V2, 200)
-    ax.plot(V, P_of_V(V), style, lw=2.2, label=label)
-    Vm = np.sqrt(V1 * V2)
-    dV = 0.02 * (V2 - V1)
-    ax.annotate("", xy=(Vm + dV, P_of_V(Vm + dV)), xytext=(Vm - dV, P_of_V(Vm - dV)),
-                arrowprops=dict(arrowstyle="-|>", color=style[0], lw=0, mutation_scale=16))
+    # The four steps, each with an arrow that shows its direction
+    for V1, V2, P_of_V, color in steps:
+        V = np.linspace(V1, V2, 200)
+        ax.plot(V, P_of_V(V), color=color, lw=fs.LINE)
+        Vm, dV = np.sqrt(V1 * V2), 0.02 * (V2 - V1)
+        ax.annotate("", xy=(Vm + dV, P_of_V(Vm + dV)), xytext=(Vm - dV, P_of_V(Vm - dV)),
+                    arrowprops=dict(arrowstyle="-|>", color=color, lw=0, mutation_scale=17))
 
-# Corner points
-corners = {"A": (V_A, P_isotherm(V_A, T_hot)), "B": (V_B, P_isotherm(V_B, T_hot)),
-           "C": (V_C, P_isotherm(V_C, T_cold)), "D": (V_D, P_isotherm(V_D, T_cold))}
-offsets = {"A": (9, 6), "B": (8, 8), "C": (8, 8), "D": (-8, -9)}
-for name, (Vc, Pc) in corners.items():
-    ax.plot(Vc, Pc, "ks", markerfacecolor="w", zorder=5)
-    ax.annotate(name, (Vc, Pc), textcoords="offset points", xytext=offsets[name], ha="center", va="center")
+    # The four states
+    corners = {"A": (V_A, P_isotherm(V_A, T_hot)), "B": (V_B, P_isotherm(V_B, T_hot)),
+               "C": (V_C, P_isotherm(V_C, T_cold)), "D": (V_D, P_isotherm(V_D, T_cold))}
+    offsets = {"A": (10, 2), "B": (6, 9), "C": (2, 11), "D": (-8, -9)}
+    for name, (Vc, Pc) in corners.items():
+        ax.plot(Vc, Pc, "o", ms=6.5, mfc=c.ground, mec=c.ink, mew=1.4, zorder=5)
+        ax.annotate(name, (Vc, Pc), textcoords="offset points", xytext=offsets[name], ha="center", va="center",
+                    fontweight="bold")
 
-# Heat enters on the hot isotherm and leaves on the cold isotherm
-V_in = 1.7
-ax.annotate("", xy=(V_in, P_isotherm(V_in, T_hot) + 0.6), xytext=(V_in + 0.7, P_isotherm(V_in, T_hot) + 9),
-            arrowprops=dict(arrowstyle="-|>", color="r", lw=1.5, mutation_scale=14))
-ax.text(V_in + 0.75, P_isotherm(V_in, T_hot) + 9.3, "heat in\n" + r"($q_{AB} > 0$)", color="r", ha="center", va="bottom")
-V_out = 3.8
-ax.annotate("", xy=(V_out - 0.6, 1.8), xytext=(V_out, P_isotherm(V_out, T_cold) - 0.5),
-            arrowprops=dict(arrowstyle="-|>", color="b", lw=1.5, mutation_scale=14))
-ax.text(V_out - 0.7, 1.4, "heat out " + r"($q_{CD} < 0$)", color="b", ha="right", va="center")
+    # Each step is named beside its curve
+    ax.text(1.72, 29.5, "isothermal expansion at $T_{\\mathrm{hot}}$\nheat in, $q_{AB} > 0$", color=c.vermilion,
+            ha="left", va="center")
+    ax.text(3.35, 15.6, "adiabatic expansion, $q_{BC} = 0$", ha="left", va="center")
+    ax.text(3.6, 2.4, "isothermal compression at $T_{\\mathrm{cold}}$\nheat out, $q_{CD} < 0$", color=c.blue,
+            ha="center", va="center")
+    ax.text(1.46, 11.8, "adiabatic\ncompression\n$q_{DA} = 0$", ha="right", va="center")
 
-ax.set_xlim(0.6, 6.1)
-ax.set_ylim(0, 46)
-ax.set_xticks([corners[c][0] for c in "ADBC"])
-ax.set_xticklabels([r"$V_A$", r"$V_D$", r"$V_B$", r"$V_C$"])
-ax.set_yticks([corners[c][1] for c in "ABDC"])
-ax.set_yticklabels([r"$P_A$", r"$P_B$", r"$P_D$", r"$P_C$"])
-ax.set_xlabel(r"Volume $V$")
-ax.set_ylabel(r"Pressure $P$")
-ax.grid(alpha=0.4)
-ax.legend(loc="upper right", title="Steps", fontsize=8.5)
+    ax.set(xlim=(0.6, 6.1), ylim=(0, 46), xlabel="Volume $V$", ylabel="Pressure $P$")
+    ax.set_xticks([corners[k][0] for k in "ADBC"], ["$V_A$", "$V_D$", "$V_B$", "$V_C$"])
+    ax.set_yticks([corners[k][1] for k in "ABDC"], ["$P_A$", "$P_B$", "$P_D$", "$P_C$"])
+    return fig
 
-plt.show()
-plt.close(fig)
+
+fs.show(draw_cycle, alt="Pressure against volume for a Carnot cycle with the states A, B, C, and D. From A to B the gas "
+                        "expands along the hot isotherm and takes in heat. From B to C it expands along a steeper "
+                        "adiabat to the largest volume. From C to D it is compressed along the cold isotherm and gives "
+                        "off heat. From D to A it is compressed along a second adiabat back to the highest pressure.")
 ```
-
-The Carnot cycle for one mole of a monatomic ideal gas between $T_{\mathrm{hot}} = 500\ \mathrm{K}$ and $T_{\mathrm{cold}} = 300\ \mathrm{K}$. The arrows on the curves give the direction of each step. Heat enters the system on the hot isotherm and leaves it on the cold isotherm. The adiabats, which are steeper than the isotherms, exchange no heat.
 
 #### Step-by-Step Thermodynamic Description
 
@@ -213,64 +210,84 @@ The Carnot cycle can be realized conceptually with a gas-filled cylinder, a pist
    the work done on the gas increases its internal energy and raises the temperature back to $T_{\mathrm{hot}}$,
    returning to state $A$.
 
-The schematic below illustrates each step, showing the thermal contact, piston position, and energy flows at the end of each process.
+[](#fig:carnot-engine) illustrates each step, showing the thermal contact, the position of the piston, and the flows of energy.
 
 ```{code-cell} ipython3
+:label: fig:carnot-engine
+:caption: Schematic of the four steps of the Carnot cycle (not to scale). Each panel shows the thermal contact during the step and the piston at the end of the step. The dashed line is the position of the piston at the start of the step. The number of weights on the piston stands for the pressure of the gas. Heat is exchanged only in the isothermal steps, (a) and (c), and the adiabatic steps, (b) and (d), are insulated. Work is exchanged in all four steps.
 :tags: [hide-input]
 
+import sys
+
 import matplotlib.pyplot as plt
+from matplotlib.patches import Rectangle
 
-fig, axs = plt.subplots(1, 4, figsize=(8, 4), constrained_layout=True, sharex=True, sharey=True)
+sys.path.append("..")            # the book folder, which holds figstyle
+import figstyle as fs
 
-# Each panel shows the END state of the corresponding step.
-titles = [r"Step 1: A$\to$B", r"Step 2: B$\to$C", r"Step 3: C$\to$D", r"Step 4: D$\to$A"]
-end_state = ["B", "C", "D", "A"]
-piston_height = [3.5, 4.5, 2.5, 1.5]   # schematic, not to scale
-contact = ["hot reservoir\n" + r"$T_{\mathrm{hot}}$", "insulation",
-           "cold reservoir\n" + r"$T_{\mathrm{cold}}$", "insulation"]
-contact_color = ["mistyrose", "0.88", "lightcyan", "0.88"]
+HEIGHT = {"A": 1.3, "D": 2.5, "B": 3.4, "C": 4.7}          # schematic height of the piston in each state
+WEIGHTS = {"A": 4, "B": 3, "D": 2, "C": 1}                 # more weights on the piston at a higher pressure
 
-for i, ax in enumerate(axs):
-    h = piston_height[i]
-    ax.set_title(titles[i], fontsize=10)
 
-    # Cylinder walls and base
-    ax.plot([0, 0, 3, 3], [5.6, 0, 0, 5.6], "k-", lw=1.5)
+def draw_step(ax, c, start, end, contact, heat):
+    """One step of the cycle: the cylinder with its piston at the end of the step, on a reservoir or on insulation."""
+    h0, h1 = HEIGHT[start], HEIGHT[end]
+    expansion = h1 > h0
 
-    # Piston and rod
-    ax.plot([0, 3], [h, h], "k-", lw=3)
-    ax.plot([1.5, 1.5], [h, 6.2], "k-", lw=2)
-    ax.text(0.7, h + 0.3, "piston", fontsize=9, ha="center", va="bottom")
+    # Thermal contact below the cylinder
+    face = {"hot": c.tint(c.vermilion, 0.78), "cold": c.tint(c.blue, 0.78), "insulation": c.fill}[contact]
+    ax.add_patch(Rectangle((0, -2.2), 3, 1.8, fc=face, ec=c.muted if contact == "insulation" else "none",
+                           lw=1.0, ls=(0, (4, 3))))
+    label = {"hot": "hot reservoir\n$T_{\\mathrm{hot}}$", "cold": "cold reservoir\n$T_{\\mathrm{cold}}$",
+             "insulation": "insulation"}[contact]
+    ax.text(1.5, -1.3, label, ha="center", va="center")
+
+    # Cylinder, piston at the start (dashed) and at the end of the step, and the weights on the piston
+    ax.plot([0, 0, 3, 3], [5.9, 0, 0, 5.9], color=c.ink, lw=1.4, solid_joinstyle="round")
+    ax.plot([0.08, 2.92], [h0, h0], color=c.gray, lw=1.2, ls=(0, (4, 3)))
+    ax.plot([0.05, 2.95], [h1, h1], color=c.ink, lw=3.2, solid_capstyle="butt")
+    for k in range(WEIGHTS[end]):
+        ax.add_patch(Rectangle((0.2 + 0.34 * k, h1 + 0.09), 0.26, 0.3, fc=c.gray, ec="none"))
+
+    # Work: the piston moves from the dashed line to the solid line
+    gap = 0.14 if expansion else -0.14
+    fs.arrow(ax, (2.45, h0 + gap), (2.45, h1 - 1.6 * gap), c.ink, lw=1.6)
+    ax.text(2.2, max(h0, h1) + 0.25, "work done\nby the gas" if expansion else "work done\non the gas",
+            ha="center", va="bottom")
+
+    # Heat crosses the base of the cylinder in the isothermal steps
+    if heat == "in":
+        fs.arrow(ax, (0.4, -0.3), (0.4, 0.8), c.vermilion, lw=1.6)
+    if heat == "out":
+        fs.arrow(ax, (0.4, 0.8), (0.4, -0.3), c.vermilion, lw=1.6)
+    if heat:
+        ax.text(0.58, 0.45, "heat " + heat, ha="left", va="center", color=c.vermilion)
 
     # State of the gas at the end of the step
-    ax.text(2.0, 0.6, rf"$V_{end_state[i]},\ P_{end_state[i]}$", fontsize=10, ha="center", va="center")
+    ax.text(2.3, 0.45, f"$V_{end}$, $P_{end}$", ha="center", va="center")
 
-    # Thermal contact during the step
-    ax.add_patch(plt.Rectangle((0, -2.4), 3, 2.0, facecolor=contact_color[i], edgecolor="k",
-                               linestyle="-" if i % 2 == 0 else ":"))
-    ax.text(1.5, -1.4, contact[i], fontsize=9, ha="center", va="center")
-
-    arrow = dict(arrowstyle="-|>", lw=1.8, mutation_scale=14)
-    if i == 0:   # heat enters the gas; the gas does work
-        ax.annotate("", xy=(0.6, 1.0), xytext=(0.6, -0.6), arrowprops=dict(color="r", **arrow))
-        ax.text(0.6, 1.1, "heat in", fontsize=9, color="r", ha="center", va="bottom")
-        ax.annotate("", xy=(2.3, h + 1.5), xytext=(2.3, h + 0.2), arrowprops=dict(color="b", **arrow))
-        ax.text(2.3, h + 1.6, "work done\nby gas", fontsize=9, color="b", ha="center", va="bottom")
-    if i == 2:   # heat leaves the gas; work is done on the gas
-        ax.annotate("", xy=(0.6, -0.6), xytext=(0.6, 1.0), arrowprops=dict(color="r", **arrow))
-        ax.text(0.6, 1.1, "heat out", fontsize=9, color="r", ha="center", va="bottom")
-        ax.annotate("", xy=(2.3, h + 0.2), xytext=(2.3, h + 1.5), arrowprops=dict(color="b", **arrow))
-        ax.text(2.3, h + 1.6, "work done\non gas", fontsize=9, color="b", ha="center", va="bottom")
-
-    ax.set_xlim(-0.3, 3.3)
-    ax.set_ylim(-2.6, 6.3)
+    ax.set(xlim=(-0.25, 3.25), ylim=(-2.3, 6.3))
     ax.axis("off")
 
-plt.show()
-plt.close(fig)
-```
 
-Schematic of the four Carnot-cycle steps. Each panel shows the thermal contact during that step and the piston position at its endpoint (not to scale). Heat exchange occurs only during the isothermal steps (Steps 1 and 3); the adiabatic steps (Steps 2 and 4) are insulated. Work is exchanged in all four steps, and the arrows show it for Steps 1 and 3.
+def draw_engine(c):
+    fig, axes = plt.subplots(1, 4, figsize=(fs.WIDTH, 3.3), constrained_layout=True)
+    draw_step(axes[0], c, "A", "B", "hot", "in")
+    draw_step(axes[1], c, "B", "C", "insulation", None)
+    draw_step(axes[2], c, "C", "D", "cold", "out")
+    draw_step(axes[3], c, "D", "A", "insulation", None)
+    for ax, letter, title in zip(axes, "abcd", ["A → B", "B → C", "C → D", "D → A"]):
+        fs.panel(ax, letter, title)
+    return fig
+
+
+fs.show(draw_engine, alt="Four sketches of a gas in a cylinder under a piston that carries weights. In panel a, from A to B, the cylinder "
+                         "stands on the hot reservoir, heat enters the gas, and the piston rises as the gas does work. "
+                         "In panel b, from B to C, the cylinder stands on insulation, and the piston rises further. In "
+                         "panel c, from C to D, the cylinder stands on the cold reservoir, heat leaves the gas, and "
+                         "the piston is pushed down as work is done on the gas. In panel d, from D to A, the cylinder "
+                         "stands on insulation, and the piston is pushed down to its lowest position.")
+```
 
 ---
 
