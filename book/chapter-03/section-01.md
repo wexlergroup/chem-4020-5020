@@ -17,6 +17,20 @@ kernelspec:
 
 See also: [Course-wide Conventions & Notation](../notation.md)
 
+The course map shows where this module sits in the course and which relations connect the microscopic and macroscopic descriptions. Select a module to unfold its sections.
+
+<iframe
+  src="https://wexlergroup.github.io/chem-4020-5020/computational-studios/course-map.html?module=3&amp;here=3.1"
+  title="Course map, opened at Module 3"
+  style="width: 100%; height: 830px; border: 0;"
+  loading="lazy"
+></iframe>
+
+```{image} ../_static/course-map/module-3.png
+:class: hidden
+:alt: Course map with Module 3 unfolded. Statistical mechanics (Module 2) forms the microscopic strand, and Modules 1 and 3 to 7 form the macroscopic strand. A relation joins the two strands at each module except Module 6, and for Module 3 it is the internal energy as the ensemble average of the energy. Below the map, one card for each of Sections 3.1 to 3.3 lists the microscopic content, the connecting relations, and the macroscopic content of the section.
+```
+
 ## Overview and Learning Objectives
 
 Every chemical reaction either absorbs or releases energy—but where does that energy go, and how do we keep track of it? The First Law of Thermodynamics provides the bookkeeping framework. Its origins lie in 19th-century efforts to understand the relationship between mechanical work and heat, and its consequences reach into every area of chemistry: reaction energetics, calorimetry, materials processing, and beyond.
