@@ -181,71 +181,61 @@ When the process is a change of temperature from $T_i$ to $T_f$ with no reaction
 
 #### Calorimetry
 
-A typical way to measure $\Delta H$ experimentally is via **calorimetry**—measuring the temperature change of a known mass of material (often water) that exchanges heat with the process of interest.
+A typical way to measure $\Delta H$ experimentally is via **calorimetry**—measuring the temperature change of a known mass of material (often water) that exchanges heat with the process of interest. [](#fig:calorimeter) shows the parts of a constant-pressure calorimeter.
 
 ```{code-cell} ipython3
+:label: fig:calorimeter
+:caption: Schematic of a constant-pressure calorimeter. The reaction occurs in the sample container; the released or absorbed heat ($q_P$) flows into the surrounding water, producing a measurable temperature change. Insulating walls minimize heat loss to the room. Since the process occurs at atmospheric pressure, $q_P = \Delta H$.
 :tags: [hide-input]
 
-import numpy as np
+import sys
+
 import matplotlib.pyplot as plt
+import numpy as np
 from matplotlib.patches import Rectangle
 
-fig, ax = plt.subplots(figsize=(5.5, 5))
+sys.path.append("..")            # the book folder, which holds figstyle
+import figstyle as fs
 
-# --- Outer container (insulating walls) ---
-outer = Rectangle((0.3, 0.2), 3.4, 3.2, linewidth=2.5, edgecolor='0.4',
-                   facecolor='0.92', linestyle='--', label='Insulating walls')
-ax.add_patch(outer)
 
-# --- Inner container ---
-inner = Rectangle((0.6, 0.4), 2.8, 2.6, linewidth=2, edgecolor='k', facecolor='white')
-ax.add_patch(inner)
+def draw_calorimeter(c):
+    fig, ax = plt.subplots(figsize=(5.3, 3.7), constrained_layout=True)
 
-# --- Water ---
-water = Rectangle((0.6, 0.4), 2.8, 2.1, linewidth=0, facecolor='#a8d8ea', alpha=0.6)
-ax.add_patch(water)
-ax.text(1.1, 1.2, 'Water\n(known mass,\nknown $C_P$)', fontsize=10, ha='center',
-        va='center', color='#1a5276', style='italic')
+    # Insulating walls, inner container, and water
+    ax.add_patch(Rectangle((0.3, 0.2), 3.4, 3.2, fc=c.fill, ec=c.muted, lw=1.6, ls=(0, (4, 3))))
+    ax.add_patch(Rectangle((0.6, 0.4), 2.8, 2.6, fc=c.ground, ec="none"))
+    ax.add_patch(Rectangle((0.6, 0.4), 2.8, 2.1, fc=c.tint(c.blue, 0.75), ec="none"))
+    ax.add_patch(Rectangle((0.6, 0.4), 2.8, 2.6, fc="none", ec=c.ink, lw=1.6))
+    ax.text(1.35, 0.98, "water\n(known mass,\nknown $C_P$)", ha="center", va="center")
 
-# --- Sample container ---
-sample = Rectangle((2.2, 0.5), 0.9, 0.7, linewidth=1.8, edgecolor='C1', facecolor='#fdebd0')
-ax.add_patch(sample)
-ax.text(2.65, 0.85, 'Sample', fontsize=9, ha='center', va='center',
-        fontweight='bold', color='C1')
+    # Sample container and the heat that flows from it into the water
+    ax.add_patch(Rectangle((2.2, 0.5), 0.95, 0.7, fc=c.tint(c.vermilion, 0.75), ec=c.vermilion, lw=1.6))
+    ax.text(2.675, 0.85, "sample", ha="center", va="center")
+    fs.arrow(ax, (2.675, 1.28), (2.675, 2.05), c.vermilion, lw=1.8)
+    ax.text(2.82, 1.66, "$q_P$", color=c.vermilion, va="center")
 
-# --- Thermometer ---
-ax.plot([0.85, 0.85], [2.1, 3.3], color='red', lw=3, solid_capstyle='round')
-ax.plot([0.85], [2.1], 'ro', ms=8, zorder=5)
-ax.text(0.85, 3.45, 'Thermometer', fontsize=9, ha='center', va='bottom', color='red')
+    # Thermometer and stirrer, which pass through the top wall
+    ax.plot([0.95, 0.95], [1.9, 3.65], color=c.ink, lw=2.6, solid_capstyle="round")
+    ax.plot([0.95], [1.9], "o", color=c.ink, ms=8)
+    ax.text(0.95, 3.75, "thermometer", ha="center", va="bottom")
+    ax.plot([1.9, 1.9], [1.65, 3.65], color=c.ink, lw=1.6)
+    ax.plot([1.68, 1.9, 2.12], [1.8, 1.65, 1.8], color=c.ink, lw=1.6)
+    ax.text(1.9, 3.75, "stirrer", ha="center", va="bottom")
 
-# --- Stirrer ---
-ax.plot([1.6, 1.6], [1.6, 3.3], 'k-', lw=2)
-ax.plot([1.4, 1.6, 1.8], [1.55, 1.4, 1.55], 'k-', lw=2)
-ax.text(1.6, 3.45, 'Stirrer', fontsize=9, ha='center', va='bottom', color='0.3')
+    # Label of the walls
+    ax.plot([3.55, 3.95], [2.75, 2.75], color=c.muted, lw=1.0)
+    ax.text(4.03, 2.75, "insulating walls", color=c.muted, va="center")
 
-# --- Heat flow arrow ---
-ax.annotate('', xy=(2.15, 1.5), xytext=(2.65, 1.25),
-            arrowprops=dict(arrowstyle='->', color='C3', lw=2.5,
-                           connectionstyle='arc3,rad=-0.2'))
-ax.text(2.75, 1.55, '$q_P$', fontsize=13, color='C3', fontweight='bold')
+    ax.set(xlim=(0.2, 5.3), ylim=(0.1, 4.0), aspect="equal")
+    ax.axis("off")
+    return fig
 
-# --- Labels ---
-ax.text(2.0, -0.05, 'Constant-pressure calorimeter (schematic)', fontsize=11,
-        ha='center', va='top', fontweight='bold')
-ax.text(3.85, 1.8, 'insulating\nwalls', fontsize=8, ha='center', va='center',
-        color='0.4', style='italic', rotation=90)
 
-ax.set_xlim(-0.1, 4.3)
-ax.set_ylim(-0.2, 3.7)
-ax.set_aspect('equal')
-ax.axis('off')
-
-plt.tight_layout()
-plt.show()
-plt.close(fig)
+fs.show(draw_calorimeter, alt="Schematic of a constant-pressure calorimeter. A container of water with a known mass "
+                              "and heat capacity stands inside insulating walls. A sample container sits in the "
+                              "water, and an arrow labeled q P points from the sample into the water. A thermometer "
+                              "and a stirrer reach into the water from above.")
 ```
-
-Schematic of a constant-pressure calorimeter. The reaction occurs in the sample container; the released or absorbed heat ($q_P$) flows into the surrounding water, producing a measurable temperature change. Insulating walls minimize heat loss to the room. Since the process occurs at atmospheric pressure, $q_P = \Delta H$.
 
 ````{admonition} **In-class activity**
 :class: important
@@ -422,13 +412,12 @@ Summing gives the net reaction, and the enthalpy changes add:
 Either approach gives the same result, thanks to Hess's Law.
 `````
 
-The enthalpy-level diagram below visualizes the path independence that underlies Hess's Law. The direct route (green arrow) and the stepwise route through the elements (orange and purple arrows) connect the same initial and final states, so they produce the same $\Delta_r H^\circ$.
+[](#fig:enthalpy-levels) visualizes the path independence that underlies Hess's Law. The direct route (green arrow) and the stepwise route through the elements (two purple arrows) connect the same initial and final states, so they produce the same $\Delta_r H^\circ$.
 
 ```{code-cell} ipython3
+:label: fig:enthalpy-levels
+:caption: Enthalpy-level diagram for the steam–methane reforming reaction, drawn to scale in $\mathrm{kJ\,mol^{-1}}$ with the elements in their standard states as the zero. The direct path (green arrow) and the stepwise path through the elements (two purple arrows) both connect reactants to products. Because $H$ is a state function, both paths give the same $\Delta_r H^\circ$. This is Hess's Law.
 :tags: [hide-input]
-
-import numpy as np
-import matplotlib.pyplot as plt
 
 # Standard enthalpies of formation at 298.15 K (kJ/mol)
 dHf = {'CH4': -74.8, 'H2O': -241.8, 'CO': -110.5, 'H2': 0.0}
@@ -438,58 +427,49 @@ H_reactants = dHf['CH4'] + dHf['H2O']
 H_products = dHf['CO'] + 3 * dHf['H2']
 dH_rxn = H_products - H_reactants
 
-fig, ax = plt.subplots(figsize=(7, 4.5))
 
-# Enthalpy levels: (x_left, x_right, H, color, linestyle)
-levels = {
-    'reactants': (0.0, 2.0, H_reactants, 'C0', '-'),
-    'elements': (3.0, 5.0, H_elements, '0.4', '--'),
-    'products': (6.0, 8.0, H_products, 'C3', '-'),
-}
-for x0, x1, H, color, ls in levels.values():
-    ax.plot([x0, x1], [H, H], color=color, ls=ls, lw=2.5, solid_capstyle='butt')
+def signed(value):
+    """Number with its sign and one decimal, with a true minus sign."""
+    return f"{value:+.1f}".replace("-", "−")
 
-ax.text(1.0, H_reactants - 12, 'Reactants\n' + r'$\mathrm{CH_4(g) + H_2O(g)}$',
-        fontsize=10, ha='center', va='top', color='C0')
-ax.text(4.0, H_elements + 12,
-        'Elements in standard states\n' + r'$\mathrm{C(s,\,graphite) + 3\,H_2(g) + \frac{1}{2}\,O_2(g)}$',
-        fontsize=10, ha='center', va='bottom', color='0.3')
-ax.text(7.0, H_products - 12, 'Products\n' + r'$\mathrm{CO(g) + 3\,H_2(g)}$',
-        fontsize=10, ha='center', va='top', color='C3')
 
-# Arrows: each starts and ends on an enthalpy level
-def arrow(start, end, color):
-    ax.annotate('', xy=end, xytext=start,
-                arrowprops=dict(arrowstyle='->', color=color, lw=2,
-                                shrinkA=0, shrinkB=0, mutation_scale=16))
+def draw_enthalpy_levels(c):
+    fig, ax = plt.subplots(figsize=(fs.WIDTH, 4.1), constrained_layout=True)
 
-arrow((2.0, H_reactants), (3.0, H_elements), 'C1')    # reactants -> elements
-arrow((5.0, H_elements), (6.0, H_products), 'C4')     # elements -> products
-arrow((2.0, H_reactants), (6.0, H_products), 'C2')    # direct path
+    # Enthalpy levels
+    ax.plot([0.0, 2.0], [H_reactants, H_reactants], color=c.ink, solid_capstyle="butt")
+    ax.plot([3.0, 5.0], [H_elements, H_elements], color=c.muted, ls=(0, (3, 1.5)), solid_capstyle="butt")
+    ax.plot([6.0, 8.0], [H_products, H_products], color=c.ink, solid_capstyle="butt")
+    ax.text(1.0, H_reactants - 12, "Reactants\n" + r"$\mathrm{CH_4(g) + H_2O(g)}$", ha="center", va="top")
+    ax.text(4.0, H_elements + 12,
+            "Elements in standard states\n" + r"$\mathrm{C(s,\,graphite) + 3\,H_2(g) + \frac{1}{2}\,O_2(g)}$",
+            ha="center", va="bottom", color=c.muted)
+    ax.text(7.0, H_products - 12, "Products\n" + r"$\mathrm{CO(g) + 3\,H_2(g)}$", ha="center", va="top")
 
-ax.text(2.35, H_reactants / 2 + 25,
-        r'$-\sum \nu_r\,\Delta_f H_r^\circ$' + f'\n$= {-H_reactants:+.1f}$',
-        fontsize=10, ha='right', va='center', color='C1')
-ax.text(5.65, H_products / 2 + 5,
-        r'$\sum \nu_p\,\Delta_f H_p^\circ$' + f'\n$= {H_products:+.1f}$',
-        fontsize=10, ha='left', va='center', color='C4')
-ax.text(4.3, (H_reactants + H_products) / 2 - 22,
-        r'$\Delta_r H^\circ$' + f'$ = {dH_rxn:+.1f}$',
-        fontsize=11, ha='left', va='top', color='C2')
+    # Arrows: each starts and ends on an enthalpy level
+    fs.arrow(ax, (2.0, H_reactants), (3.0, H_elements), c.purple, lw=1.8)     # reactants -> elements
+    fs.arrow(ax, (5.0, H_elements), (6.0, H_products), c.purple, lw=1.8)      # elements -> products
+    fs.arrow(ax, (2.0, H_reactants), (6.0, H_products), c.green, lw=1.8)      # direct path
 
-ax.set_ylabel(r'Enthalpy relative to the elements (kJ mol$^{-1}$)', fontsize=10)
-ax.set_xlim(-0.3, 8.3)
-ax.set_ylim(-390, 70)
-ax.set_xticks([])
-for side in ('top', 'right', 'bottom'):
-    ax.spines[side].set_visible(False)
+    ax.text(2.33, H_reactants / 2 + 25, r"$-\sum \nu_r\,\Delta_f H_r^\circ$" + f"\n$= {signed(-H_reactants)}$",
+            ha="right", va="center", color=c.purple)
+    ax.text(5.67, H_products / 2 + 5, r"$\sum \nu_p\,\Delta_f H_p^\circ$" + f"\n$= {signed(H_products)}$",
+            ha="left", va="center", color=c.purple)
+    ax.text(4.3, (H_reactants + H_products) / 2 - 22, r"$\Delta_r H^\circ$" + f"$ = {signed(dH_rxn)}$",
+            ha="left", va="top", color=c.green)
 
-plt.tight_layout()
-plt.show()
-plt.close(fig)
+    ax.set(ylabel=r"Enthalpy relative to the elements (kJ mol$^{-1}$)", xlim=(-0.3, 8.3), ylim=(-390, 70), xticks=[])
+    ax.spines["bottom"].set_visible(False)
+    return fig
+
+
+fs.show(draw_enthalpy_levels,
+        alt="Enthalpy-level diagram with three levels. The reactants, methane and water vapor, lie at minus 316.6 "
+            "kJ per mole. The elements in their standard states lie at zero. The products, carbon monoxide and "
+            "hydrogen, lie at minus 110.5 kJ per mole. One arrow runs from the reactants up to the elements, plus "
+            "316.6, and a second from the elements down to the products, minus 110.5. A third arrow runs directly "
+            "from the reactants up to the products, plus 206.1.")
 ```
-
-Enthalpy-level diagram for the steam–methane reforming reaction, drawn to scale in $\mathrm{kJ\,mol^{-1}}$ with the elements in their standard states as the zero. The direct path (green arrow) and the stepwise path through the elements (orange and purple arrows) both connect reactants to products. Because $H$ is a state function, both paths give the same $\Delta_r H^\circ$. This is Hess's Law.
 
 ---
 
