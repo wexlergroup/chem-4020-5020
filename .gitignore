@@ -12,3 +12,4 @@ book/images/*
 book/collect/*
 book/collect.py
 .venv/
+__pycache__/
