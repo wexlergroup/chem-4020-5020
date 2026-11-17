@@ -307,7 +307,7 @@ The initial and final states have the same $T$ but different $V$ — exactly the
 \Delta S_{\mathrm{free\ expansion}} = \Delta S_{\mathrm{rev.\ isotherm}} = nR\ln\left(\frac{V_2}{V_1}\right) = 5.76\ \mathrm{J\,K^{-1}}.
 ```
 
-**Result.** The entropy change of the gas is the same as for the reversible isothermal expansion, because entropy is a state function.
+**Result.** The entropy change of the gas is the same as for the reversible isothermal expansion, because entropy is a state function. [](#fig:free-expansion-interactive) in [Section 4.3](section-03.md) follows this expansion particle by particle.
 
 ```{admonition} Key lesson
 :class: note
