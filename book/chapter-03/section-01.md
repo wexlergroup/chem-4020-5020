@@ -69,9 +69,14 @@ During the Apollo 15 mission, astronaut David Scott famously dropped a hammer an
 v = \sqrt{2 g h}.
 ```
 
-```{image} ../_static/chapter-03/section-01/apollo-15-flag.jpg
-:width: 50%
-:align: center
+```{figure} ../_static/chapter-03/section-01/apollo-15-flag.jpg
+---
+name: apollo-15
+width: 50%
+align: center
+alt: An astronaut in a white space suit salutes beside the flag of the United States on the gray surface of the Moon. The lunar module stands behind the flag, the lunar roving vehicle is parked on the right, and a mountain rises in the background under a black sky.
+---
+Astronaut James Irwin salutes the flag at the Apollo 15 landing site, beside the lunar module and the lunar roving vehicle. Photograph by David Scott, NASA (AS15-88-11866, public domain).
 ```
 ````
 
@@ -276,54 +281,53 @@ Calculate the work when an ideal gas expands from $20\,\mathrm{L}$ to $85\,\math
    - According to the convention $\Delta U = q + w$, if no heat is exchanged ($q=0$), the gas would lose $16\,\mathrm{kJ}$ in internal energy because it expands.
 ````
 
-The $P$–$V$ diagram below illustrates this process geometrically. The magnitude of the work $|w|$ equals the shaded area under the constant-pressure line.
+[](#fig:work-constant-pressure) shows this process on a $P$–$V$ diagram. The magnitude of the work $|w|$ equals the shaded area under the constant-pressure line.
 
 ```{code-cell} ipython3
+:label: fig:work-constant-pressure
+:caption: Expansion of a gas from $V_i = 20\,\mathrm{L}$ to $V_f = 85\,\mathrm{L}$ against a constant external pressure $P_{\mathrm{ext}} = 2.5\,\mathrm{bar}$ (Example 1). The magnitude of the work, $|w| = P_{\mathrm{ext}}\,\Delta V$, is the shaded area under the line.
 :tags: [hide-input]
 
-import numpy as np
+import sys
+
 import matplotlib.pyplot as plt
+import numpy as np
 
-fig, ax = plt.subplots(figsize=(5, 3.5))
+sys.path.append("..")            # the book folder, which holds figstyle
+import figstyle as fs
 
-V_i = 20  # L
-V_f = 85  # L
-P_ext = 2.5  # bar
+V_i = 20       # L
+V_f = 85       # L
+P_ext = 2.5    # bar
 
-# Shaded region: area = |w|
-ax.fill_between([V_i, V_f], 0, P_ext, color='C0', alpha=0.25, label=r'$|w| = P_{\mathrm{ext}}\,\Delta V$')
 
-# Constant-pressure line
-ax.plot([V_i, V_f], [P_ext, P_ext], 'C0-', lw=2)
+def draw(c):
+    fig, ax = plt.subplots(figsize=(5.4, 3.3), constrained_layout=True)
 
-# Vertical dashed lines at V_i and V_f
-ax.plot([V_i, V_i], [0, P_ext], 'k--', lw=1, alpha=0.5)
-ax.plot([V_f, V_f], [0, P_ext], 'k--', lw=1, alpha=0.5)
+    # Shaded region, whose area is |w|
+    ax.fill_between([V_i, V_f], 0, P_ext, color=c.tint(c.blue, 0.75), lw=0)
+    ax.text((V_i + V_f) / 2, P_ext / 2, r"$|w| = P_{\mathrm{ext}}\,\Delta V$", ha="center", va="center")
 
-# Markers for initial and final states
-ax.plot(V_i, P_ext, 'ko', ms=6, zorder=5)
-ax.plot(V_f, P_ext, 'ko', ms=6, zorder=5)
+    # Initial and final volumes
+    for V, name, ha, dx in [(V_i, "$V_i$", "left", 1.5), (V_f, "$V_f$", "right", -1.5)]:
+        ax.plot([V, V], [0, P_ext], color=c.muted, lw=1.2, ls=(0, (4, 3)))
+        ax.text(V + dx, 0.12, name, ha=ha, va="bottom")
 
-# Arrow showing direction of expansion
-ax.annotate('', xy=(V_f - 2, P_ext + 0.3), xytext=(V_i + 2, P_ext + 0.3),
-            arrowprops=dict(arrowstyle='->', color='C3', lw=1.5))
-ax.text((V_i + V_f) / 2, P_ext + 0.45, 'expansion', ha='center', fontsize=10, color='C3')
+    # Constant-pressure path from the initial state to the final state
+    ax.plot([V_i, V_f], [P_ext, P_ext], color=c.blue)
+    ax.plot([V_i, V_f], [P_ext, P_ext], "o", color=c.blue, ms=6.5, zorder=5)
+    ax.text(V_i - 2.5, P_ext, r"$P_{\mathrm{ext}}$", ha="right", va="center")
+    fs.arrow(ax, (V_i + 14, P_ext + 0.3), (V_f - 14, P_ext + 0.3), c.ink)
+    ax.text((V_i + V_f) / 2, P_ext + 0.42, "expansion", ha="center", va="bottom")
 
-# Labels
-ax.text(V_i, -0.25, r'$V_i$', ha='center', fontsize=11)
-ax.text(V_f, -0.25, r'$V_f$', ha='center', fontsize=11)
-ax.text(2, P_ext, r'$P_{\mathrm{ext}}$', ha='left', va='center', fontsize=11)
+    ax.set(xlabel="Volume $V$ (L)", ylabel="Pressure $P$ (bar)", xlim=(0, 100), ylim=(0, 3.5))
+    return fig
 
-ax.set_xlabel('Volume (L)', fontsize=11)
-ax.set_ylabel('Pressure (bar)', fontsize=11)
-ax.set_xlim(0, 100)
-ax.set_ylim(0, 4)
-ax.legend(loc='upper right', fontsize=10, framealpha=0.9)
-ax.set_title('Constant-Pressure Expansion', fontsize=12)
 
-plt.tight_layout()
-plt.show()
-plt.close(fig)
+fs.show(draw, alt="Pressure against volume. A horizontal line at an external pressure of 2.5 bar runs from the initial "
+                  "volume of 20 L to the final volume of 85 L, with an arrow that marks the direction of the "
+                  "expansion. The rectangle under the line, between the two volumes, is shaded, and its area is the "
+                  "magnitude of the work.")
 ```
 
 {numref}`Figure %s <joule-apparatus>` showed how Joule connected mechanical work to heat. Here, the $P$–$V$ diagram provides the geometric interpretation of work that we will use throughout this chapter: **work equals the area under the pressure curve on a $P$–$V$ diagram**. Different paths between the same initial and final volumes can enclose different areas, which is precisely why work is path-dependent.
@@ -335,103 +339,49 @@ plt.close(fig)
 Calculate the work necessary to expand a soap bubble (two surfaces) from a radius of $1\,\mathrm{cm}$ to $3.25\,\mathrm{cm}$. Treat the film as pure water, with surface tension $\gamma = 0.072\,\mathrm{J/m^2}$ ($= 72\,\mathrm{mN/m}$, the value for a water–air interface at room temperature). Soap lowers the surface tension of water, so the work for a real soap film is smaller.
 
 ```{code-cell} ipython3
+:label: fig:soap-bubble
+:caption: Cross-section of a soap bubble showing the inner and outer surfaces. Because a bubble is a thin film enclosing air, its total surface area is $2 \times 4\pi r^2 = 8\pi r^2$, and the differential area change upon inflation is $dA = 16\pi r\,dr$. The thickness of the film is exaggerated.
 :tags: [hide-input]
 
-import numpy as np
-import matplotlib.pyplot as plt
-from matplotlib.patches import Arc, FancyArrowPatch
+from matplotlib.patches import Circle
 
-fig, ax = plt.subplots(figsize=(5, 4))
 
-# Bubble parameters
-center = (0, 0)
-r_outer = 2.0
-r_inner = 1.8  # thin film
-film_thickness = r_outer - r_inner
+def draw_bubble(c):
+    fig, ax = plt.subplots(figsize=(5.8, 3.3), constrained_layout=True)
+    r_outer, r_inner = 2.0, 1.8              # the film between the two surfaces, not to scale
 
-# Draw the outer surface
-theta = np.linspace(0, 2 * np.pi, 300)
-ax.plot(r_outer * np.cos(theta), r_outer * np.sin(theta), 'C0-', lw=2.5, label='Outer surface')
+    # Soap film between the outer surface and the inner surface
+    ax.add_patch(Circle((0, 0), r_outer, fc=c.fill, ec=c.blue, lw=fs.LINE))
+    ax.add_patch(Circle((0, 0), r_inner, fc=c.ground, ec=c.vermilion, lw=fs.LINE))
 
-# Draw the inner surface
-ax.plot(r_inner * np.cos(theta), r_inner * np.sin(theta), 'C1-', lw=2.5, label='Inner surface')
+    # Radius
+    angle = np.radians(35)
+    fs.arrow(ax, (0, 0), (r_inner * np.cos(angle), r_inner * np.sin(angle)), c.ink)
+    ax.text(0.95 * np.cos(angle) - 0.1, 0.95 * np.sin(angle) + 0.1, "$r$", ha="center", va="bottom")
 
-# Shade the film region
-theta_fill = np.linspace(0, 2 * np.pi, 300)
-ax.fill_between(
-    r_outer * np.cos(theta_fill),
-    r_outer * np.sin(theta_fill),
-    r_inner * np.sin(theta_fill),
-    alpha=0.15, color='C0'
-)
-# Fill the other half of the annulus
-ax.fill(
-    np.concatenate([r_outer * np.cos(theta_fill), r_inner * np.cos(theta_fill[::-1])]),
-    np.concatenate([r_outer * np.sin(theta_fill), r_inner * np.sin(theta_fill[::-1])]),
-    alpha=0.2, color='C4', label='Soap film'
-)
+    ax.text(0, -0.62, "air inside", ha="center", va="center", color=c.muted)
+    ax.text(0, -2.45, "air outside", ha="center", va="center", color=c.muted)
 
-# Radius arrow to outer surface
-angle_deg = 35
-angle_rad = np.radians(angle_deg)
-ax.annotate(
-    '', xy=(r_outer * np.cos(angle_rad), r_outer * np.sin(angle_rad)),
-    xytext=center,
-    arrowprops=dict(arrowstyle='->', color='k', lw=1.5)
-)
-# Label r
-r_mid = (r_outer * 0.55)
-ax.text(r_mid * np.cos(angle_rad) - 0.05, r_mid * np.sin(angle_rad) + 0.12,
-        r'$r$', fontsize=14, ha='center', va='bottom')
+    # Labels of the two surfaces and of the film, with leaders
+    for y, radius, label, color in [(1.15, r_outer, r"outer surface, area $4\pi r^2$", c.blue),
+                                    (0.35, r_inner, r"inner surface, area $4\pi r^2$", c.vermilion)]:
+        x = np.sqrt(radius**2 - y**2)
+        ax.plot([x, 2.55], [y, y], color=color, lw=1.0)
+        ax.text(2.65, y, label, color=color, va="center")
+    ax.plot([(r_outer + r_inner) / 2 * np.cos(np.radians(-14)), 2.55], [-0.46, -0.46], color=c.muted, lw=1.0)
+    ax.text(2.65, -0.46, "soap film", color=c.muted, va="center")
+    ax.text(2.65, -1.3, r"total area $A = 2 \times 4\pi r^2 = 8\pi r^2$", va="center")
 
-# Zoom inset showing film thickness
-# Draw a magnified bracket on the right side
-inset_angle = 0  # radians (right side)
-x_outer = r_outer * np.cos(inset_angle)
-y_outer = r_outer * np.sin(inset_angle)
-x_inner = r_inner * np.cos(inset_angle)
-y_inner = r_inner * np.sin(inset_angle)
+    ax.set(xlim=(-2.2, 6.0), ylim=(-2.7, 2.2), aspect="equal")
+    ax.axis("off")
+    return fig
 
-# Bracket lines for film thickness
-bracket_len = 0.4
-ax.plot([x_outer, x_outer + bracket_len], [y_outer + 0.05, y_outer + 0.05], 'k-', lw=1)
-ax.plot([x_inner, x_inner + bracket_len], [y_inner - 0.05, y_inner - 0.05], 'k-', lw=1)
-ax.annotate(
-    '', xy=(x_outer + bracket_len - 0.05, y_outer + 0.05),
-    xytext=(x_inner + bracket_len - 0.05, y_inner - 0.05),
-    arrowprops=dict(arrowstyle='<->', color='k', lw=1.2)
-)
-ax.text(x_outer + bracket_len + 0.08, (y_outer + y_inner) / 2,
-        'film', fontsize=10, ha='left', va='center', style='italic')
 
-# Label "air inside" and "air outside"
-ax.text(0, 0, 'air\ninside', fontsize=11, ha='center', va='center', color='0.4')
-ax.text(0, -2.55, 'air outside', fontsize=11, ha='center', va='center', color='0.4')
-
-# Surface labels
-ax.text(-r_inner - 0.15, 0.8, 'inner\nsurface', fontsize=9, ha='right', va='center', color='C1')
-ax.text(-r_outer - 0.15, -0.8, 'outer\nsurface', fontsize=9, ha='right', va='center', color='C0')
-
-# Annotations for areas
-ax.text(r_outer + 0.15, 1.4, r'$A_{\mathrm{outer}} = 4\pi r^2$', fontsize=11,
-        ha='left', va='center', color='C0',
-        bbox=dict(boxstyle='round,pad=0.3', fc='white', ec='C0', alpha=0.8))
-ax.text(r_outer + 0.15, -1.4, r'$A_{\mathrm{total}} = 2 \times 4\pi r^2 = 8\pi r^2$', fontsize=11,
-        ha='left', va='center', color='C4',
-        bbox=dict(boxstyle='round,pad=0.3', fc='white', ec='C4', alpha=0.8))
-
-ax.set_xlim(-3.2, 5.2)
-ax.set_ylim(-3.2, 3.2)
-ax.set_aspect('equal')
-ax.axis('off')
-ax.set_title('Cross-section of a soap bubble', fontsize=12)
-
-plt.tight_layout()
-plt.show()
-plt.close(fig)
+fs.show(draw_bubble, alt="Cross-section of a soap bubble, drawn as two concentric circles with the soap film between "
+                         "them and air inside and outside. An arrow from the center marks the radius r. The outer "
+                         "surface and the inner surface each have the area 4 pi r squared, so the total area of the "
+                         "bubble is 8 pi r squared.")
 ```
-
-Cross-section of a soap bubble showing the inner and outer surfaces. Because a bubble is a thin film enclosing air, its total surface area is $2 \times 4\pi r^2 = 8\pi r^2$, and the differential area change upon inflation is $dA = 16\pi r\,dr$.
 
 ````{admonition} Solution
 :class: dropdown
