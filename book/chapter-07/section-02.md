@@ -374,12 +374,19 @@ More importantly, the decomposition makes the physics transparent:
 - The **vibrational factor** ($\approx 0.36$) is also below unity, and it comes almost entirely from I$_2$. The stiff stretches of H$_2$ and HI are still nearly frozen out at 700 K, so their factors $(1-e^{-\Theta_{\mathrm{vib}}/T})$ are $0.9999$ and $0.991$. The low-frequency mode of I$_2$ is partially excited, and its factor, which stands in the numerator, is $0.357$.
 - The **bond-energy factor** ($\approx 4.3$) contains the "chemistry": $2D_0^{\mathrm{HI}} - D_0^{\mathrm{H_2}} - D_0^{\mathrm{I_2}} \approx +8.5\ \mathrm{kJ\,mol^{-1}}$ says the two HI bonds together are slightly stronger than one H–H plus one I–I bond, a modest exothermicity that at 700 K gives just over a factor of 4 in $K$.
 
-The calculation can be repeated at other temperatures. The figure below compares Eq. {eq}`eq:K-HI-full` with the NIST-JANAF tables between 300 and 1500 K and shows how each of the four factors changes with temperature.
+The calculation can be repeated at other temperatures. [](#fig:K-HI) compares Eq. {eq}`eq:K-HI-full` with the NIST-JANAF tables between 300 and 1500 K and shows how each of the four factors changes with temperature.
 
 ```{code-cell} ipython3
+:label: fig:K-HI
+:caption: (a) Equilibrium constant of $\mathrm{H_2 + I_2 \rightleftharpoons 2HI}$ from Eq. [](#eq:K-HI-full) (line) and from the NIST-JANAF tables (points). The formula lies 8 to 13 % above the tabulated values over the whole range. (b) The four factors of Eq. [](#eq:K-HI-full). In this model the mass and rotational factors do not depend on temperature. The bond-energy factor falls from 30 at 300 K to 2.0 at 1500 K, and the vibrational factor from 0.64 to 0.23.
 :tags: [hide-input]
 
+import sys
+
 import matplotlib.pyplot as plt
+
+sys.path.append("..")            # the book folder, which holds figstyle
+import figstyle as fs
 
 def hot(Theta_vib, T):
     return 1 - np.exp(-Theta_vib / T)
@@ -399,36 +406,40 @@ K_ref = np.array([673.9, 245.9, 128.2, 80.57, 56.81, 43.25, 34.74, 29.05, 25.04,
 T_plot = np.linspace(300, 1500, 300)
 f_mass, f_rot, f_vib, f_bond = factors(T_plot)
 
-fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(8, 3.6), constrained_layout=True)
 
-ax1.semilogy(T_plot, f_mass * f_rot * f_vib * f_bond, color="#0072B2", lw=2.5)
-ax1.semilogy(T_ref, K_ref, "o", color="0.35", ms=5)
-ax1.text(520, 230, "molecular formula", color="#0072B2", fontsize=9)
-ax1.text(330, 60, "NIST-JANAF", color="0.35", fontsize=9)
-ax1.set_xlabel("Temperature (K)")
-ax1.set_ylabel(r"$K$")
-ax1.set_yticks([20, 50, 100, 200, 500])
-ax1.set_yticklabels(["20", "50", "100", "200", "500"])
-ax1.minorticks_off()
-ax1.set_title("(a)", loc="left", fontweight="bold", fontsize=10)
 
-for f, label, color, y in ((f_mass, "mass", "#0072B2", 220),
-                           (f_bond, "bond energy", "#CC79A7", 5.2),
-                           (f_vib, "vibrational", "#D55E00", 0.47),
-                           (f_rot, "rotational", "#009E73", 0.135)):
-    ax2.semilogy(T_plot, f, color=color, lw=2.5)
-    ax2.text(900, y, label, color=color, fontsize=9)
-ax2.axhline(1, color="0.7", lw=1)
-ax2.set_ylim(0.1, 400)
-ax2.set_xlabel("Temperature (K)")
-ax2.set_ylabel("Factor")
-ax2.set_title("(b)", loc="left", fontweight="bold", fontsize=10)
+def draw_constant(c):
+    fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(fs.WIDTH, 3.4), constrained_layout=True)
 
-plt.show()
-plt.close(fig)
+    # (a) The molecular formula against the tables
+    ax1.semilogy(T_plot, f_mass * f_rot * f_vib * f_bond, color=c.blue, lw=fs.LINE)
+    ax1.semilogy(T_ref, K_ref, "o", color=c.gray, ms=5.5)
+    ax1.text(520, 230, "molecular formula", color=c.blue)
+    ax1.text(330, 30, "NIST-JANAF", color=c.muted)
+    ax1.set(xlabel="Temperature (K)", ylabel="$K$")
+    ax1.set_yticks([20, 50, 100, 200, 500], ["20", "50", "100", "200", "500"])
+    ax1.minorticks_off()
+    fs.panel(ax1, "a", "Equilibrium constant")
+
+    # (b) The four factors of the formula
+    ax2.axhline(1, color=c.gray, lw=1.2, ls=(0, (4, 3)))
+    for factor, label, color, y in ((f_mass, "mass", c.blue, 220), (f_bond, "bond energy", c.purple, 5.2),
+                                    (f_vib, "vibrational", c.vermilion, 0.47), (f_rot, "rotational", c.green, 0.135)):
+        ax2.semilogy(T_plot, factor, color=color, lw=fs.LINE)
+        ax2.text(900, y, label, color=color)
+    ax2.set(ylim=(0.1, 400), xlabel="Temperature (K)", ylabel="Factor")
+    fs.panel(ax2, "b", "The four factors")
+    return fig
+
+
+fs.show(draw_constant, alt="Two panels for the equilibrium of hydrogen, iodine, and hydrogen iodide between 300 and "
+                           "1500 K. Panel a plots the equilibrium constant on a logarithmic axis. It falls from about "
+                           "700 at 300 K to about 18 at 1500 K, and the curve from the molecular formula lies slightly "
+                           "above the points from the NIST-JANAF tables. Panel b plots the four factors of the "
+                           "formula. The mass factor, near 180, and the rotational factor, near 0.14, do not change "
+                           "with temperature. The bond-energy factor falls from about 30 toward 2, and the "
+                           "vibrational factor falls from near 1 to about 0.3.")
 ```
-
-(a) Equilibrium constant of $\mathrm{H_2 + I_2 \rightleftharpoons 2HI}$ from Eq. {eq}`eq:K-HI-full` (line) and from the NIST-JANAF tables (points). The formula lies 8 to 13 % above the tabulated values over the whole range. (b) The four factors of Eq. {eq}`eq:K-HI-full`. In this model the mass and rotational factors do not depend on temperature. The bond-energy factor falls from 30 at 300 K to 2.0 at 1500 K, and the vibrational factor from 0.64 to 0.23.
 
 The lesson: every digit of $K$ can be traced back to a specific molecular property, and the relative sizes of the four factors tell us which part of molecular structure matters most for this particular equilibrium. A student who computed $\Delta_r G^\circ$ from thermochemical tables ([Computing $K$ from Tabulated Thermochemistry](#section:k-from-tables) in [Section 7.1](section-01.md)) and a student who computed $K$ from spectroscopic constants (this subsection) would arrive at nearly the same number by very different routes — and each route teaches something different about *why* the equilibrium sits where it does.
 
