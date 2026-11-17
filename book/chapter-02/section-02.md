@@ -458,19 +458,18 @@ fs.show(draw, alt="Two panels against temperature from 0 to 1000 K for a two-sta
 
 ## Computational Studio: Two-State System
 
-Explore how the canonical probabilities, partition function, and heat capacity respond to changes in the energy gap and temperature range.
+In [](#fig:two-state-studio), you can change the energy difference between the two states and follow the probabilities, the heat capacity, and the partition function as the temperature rises.
 
-<!-- <div style="width: 100%; border: 1px solid #cbd5e1; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.08);">
-  <iframe
-    src="https://wexlergroup.github.io/chem-4020-5020/computational-studios/two-level-system.html"
-    title="Two-Level System Studio"
-    style="width: 100%; height: 850px; border: 0;"
-    loading="lazy"
-  ></iframe>
-</div> -->
+```{iframe} https://wexlergroup.github.io/chem-4020-5020/computational-studios/two-level-system.html
+:label: fig:two-state-studio
+:width: 100%
+:title: Two-state system
+:placeholder: ../_static/two-level-system/two-level-system.png
 
-<!-- If the embed does not load, -->
-You can open the studio in a new tab: [Two-Level System Studio](https://wexlergroup.github.io/chem-4020-5020/computational-studios/two-level-system.html).
+Two-state system with $E_1 = 0$ and $E_2 = \Delta E$ as a function of temperature. Panel (a) shows the probabilities $p_1$ and $p_2$ of the two states, panel (b) the heat capacity of one particle, $C_V/k_\text{B}$, and panel (c) the partition function $Q$. Energies and $k_\text{B}T$ are in units of an arbitrary energy $\varepsilon$.
+```
+
+You can also open the studio in a new tab: [Two-State System Studio](https://wexlergroup.github.io/chem-4020-5020/computational-studios/two-level-system.html).
 
 ## Worked Example
 
