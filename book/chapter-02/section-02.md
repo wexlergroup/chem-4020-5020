@@ -23,47 +23,7 @@ See also: [Course-wide Conventions & Notation](../notation.md)
 
 The canonical ensemble describes a closed system in thermal contact with a large heat bath at fixed temperature. Its central result is the Boltzmann assignment $p_i \propto e^{-\beta E_i}$, normalized by the partition function. This section derives and interprets that probability distribution and introduces a two-state system as a concrete model.
 
-In a **closed system** (energy exchange allowed, matter exchange forbidden) in thermal contact with a heat bath, the appropriate statistical description is the **canonical ensemble**.
-
-```{code-cell} ipython3
-:tags: [hide-input]
-
-import matplotlib.pyplot as plt
-import matplotlib.patches as mpatches
-from myst_nb import glue
-
-# Helper function to plot a system
-def plot_system(ax, title, annotations, boundary_color='b'):
-    box = mpatches.FancyBboxPatch((0, 0), 1, 1, boxstyle='roundtooth', ec=boundary_color, fc='w')
-    ax.add_patch(box)
-    ax.set_title(title, fontsize=14)
-    ax.text(0.5, 0.5, 'System', ha='center', va='center', fontsize=12)
-    ax.text(0.5, -0.65, 'Surroundings', ha='center', va='center', fontsize=12)
-    ax.text(0.5, 1.3, 'Boundary', ha='center', va='bottom', fontsize=12, color=boundary_color)
-    for annotation in annotations:
-        if "arrowprops" in annotation:  # Arrow annotations
-            ax.annotate('', **annotation)
-        else:  # Text annotations
-            ax.text(**annotation)
-    ax.set_xlim(-1, 2)
-    ax.set_ylim(-1, 2)
-    ax.set_aspect('equal')
-    ax.axis('off')
-
-# Define annotations for each system
-annotations = [
-        dict(xy=(-0.6, 0.15), xytext=(0.15, 0.15), arrowprops=dict(arrowstyle='<->', color='r')),
-        dict(x=-1, y=0.3, s='Energy', ha='left', va='bottom', fontsize=12, color='r'),
-]
-
-fig, ax = plt.subplots(1, 1, figsize=(4, 4))
-plot_system(ax, "", annotations)
-
-plt.show()
-plt.close(fig)
-```
-
-A closed system exchanges energy—but not matter—with its surroundings.
+In a **closed system** (energy exchange allowed, matter exchange forbidden) in thermal contact with a heat bath, the appropriate statistical description is the **canonical ensemble** (panel (b) of [](#fig:ensembles)).
 
 Learning objectives:
 
@@ -442,91 +402,59 @@ p_2 = 1 - p_1.
 
 ### Partition Function as the Effective Number of Thermally Accessible Microstates
 
-When energies are measured from the lowest state ($E_1 = 0$), every Boltzmann factor $e^{-\beta E_m}$ is at most 1, and the factor for the lowest state equals 1. The partition function therefore lies between 1 and the total number of microstates, and it can be read as the effective number of microstates that are thermally accessible at temperature $T$. The figure below shows $Q_\text{two-state}$ and the two probabilities as functions of temperature for $E_1 = 0$ and $\Delta E = 0.01\ \mathrm{eV}$. Its annotations mark the low- and high-temperature limits.
+When energies are measured from the lowest state ($E_1 = 0$), every Boltzmann factor $e^{-\beta E_m}$ is at most 1, and the factor for the lowest state equals 1. The partition function therefore lies between 1 and the total number of microstates, and it can be read as the effective number of microstates that are thermally accessible at temperature $T$. [](#fig:two-state-probabilities) shows $Q_\text{two-state}$ and the two probabilities as functions of temperature for $E_1 = 0$ and $\Delta E = 0.01\ \mathrm{eV}$. The dashed lines in panel (a) mark the low- and high-temperature limits of $Q_\text{two-state}$.
 
 ```{code-cell} ipython3
+:label: fig:two-state-probabilities
+:caption: Two-state system with $E_1 = 0$ and $\Delta E = 0.01\ \mathrm{eV}$ as a function of temperature. (a) The partition function $Q_\text{two-state}$ rises from 1, where only state 1 is thermally accessible, toward 2, where both states are. (b) Probabilities $p_1$ and $p_2$ of finding the system in state 1 and in state 2.
 :tags: [hide-input]
 
-import numpy as np
+import sys
+
 import matplotlib.pyplot as plt
-from scipy.constants import k, eV
-from labellines import labelLines
-from myst_nb import glue
-from matplotlib.patches import Rectangle
+import numpy as np
+from scipy.constants import eV, k
 
-k_B = k / eV  # Boltzmann constant in eV/K
+sys.path.append("..")            # the book folder, which holds figstyle
+import figstyle as fs
 
-# Define the partition function for a two-state system
-def partition_function_two_state(E1, E2, T):
-    beta = 1 / (k_B * T)
-    return np.exp(-beta * E1) + np.exp(-beta * E2)
+k_B = k / eV                     # Boltzmann constant in eV/K
+E1, E2 = 0.0, 0.01               # energies of the two states in eV
 
-# Calculate the partition function for a two-state system
-E1 = 0
-E2 = 0.01  # Energy difference between the two states in eV
-T_values = np.linspace(1, 1000, 1000)
-Q_values = [partition_function_two_state(E1, E2, T) for T in T_values]
+T = np.linspace(1, 1000, 1000)   # K
+beta = 1 / (k_B * T)             # 1/eV
+Q = np.exp(-beta * E1) + np.exp(-beta * E2)
+p1 = np.exp(-beta * E1) / Q
+p2 = np.exp(-beta * E2) / Q
 
-# Calculate the probabilities of finding the system in each state for a two-state system
-p1_values = [np.exp(-1 / (k_B * T) * E1) / Q for T, Q in zip(T_values, Q_values)]
-p2_values = [np.exp(-1 / (k_B * T) * E2) / Q for T, Q in zip(T_values, Q_values)]
 
-# Plot the partition function and the probabilities of finding the system in each state
-fig, axs = plt.subplots(1, 2, figsize=(8, 4))
+def draw(c):
+    fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(fs.WIDTH, 3.0), constrained_layout=True)
 
-# Plot the partition function on axs[0]
-axs[0].plot(T_values, Q_values, 'k-')
-axs[0].set_xlabel('Temperature (K)')
-axs[0].set_ylabel('$Q_{\\text{two-state}}$')
-axs[0].grid(True)
-axs[0].annotate(
-    '$\\rightarrow 1$ accessible\nmicrostate', xy=(40, Q_values[0] + 0.01), xytext=(300, 1.1),
-    arrowprops=dict(arrowstyle='->', color='b'),
-    bbox=dict(boxstyle='round,pad=0.3', fc='w', ec='b'),
-    ha='center', va='center', color='b'
-)
-axs[0].annotate(
-    '$\\rightarrow 2$ accessible\nmicrostates', xy=(T_values[-1], Q_values[-1]), xytext=(750, 1.7),
-    arrowprops=dict(arrowstyle='->', color='m'),
-    bbox=dict(boxstyle='round,pad=0.3', fc='w', ec='m'),
-    ha='center', va='center', color='m'
-)
-axs[0].set_xlim(0, 1000)
-axs[0].set_ylim(1, 2)
+    for limit, label, va, dy in [(1, "one accessible microstate", "top", -0.035),
+                                 (2, "two accessible microstates", "bottom", 0.035)]:
+        ax1.axhline(limit, color=c.muted, lw=1.2, ls=(0, (4, 3)))
+        ax1.text(1000, limit + dy, label, color=c.muted, ha="right", va=va)
+    ax1.plot(T, Q, color=c.ink)
+    ax1.set(xlabel="Temperature $T$ (K)", ylabel=r"$Q_{\mathrm{two\text{-}state}}$", xlim=(0, 1000), ylim=(0.8, 2.2),
+            yticks=[1.0, 1.5, 2.0])
+    fs.panel(ax1, "a", "Partition function")
 
-# Plot the probabilities of finding the system in each state on axs[1]
-p1_line, = axs[1].plot(T_values, p1_values, 'b-', label='State 1')
-p2_line, = axs[1].plot(T_values, p2_values, 'r-', label='State 2')
-labelLines([p1_line, p2_line], zorder=2.5)
-axs[1].set_xlabel('Temperature (K)')
-axs[1].set_ylabel('Probability')
-axs[1].grid(True)
-axs[1].set_ylim(0, 1)  # ensure y-axis spans from 0 to 1
+    ax2.plot(T, p1, color=c.blue)
+    ax2.plot(T, p2, color=c.vermilion)
+    ax2.text(330, 0.69, "state 1, $p_1$", color=c.blue, va="center")
+    ax2.text(330, 0.31, "state 2, $p_2$", color=c.vermilion, va="center")
+    ax2.set(xlabel="Temperature $T$ (K)", ylabel="Probability", xlim=(0, 1000), ylim=(0, 1), yticks=[0, 0.5, 1])
+    fs.panel(ax2, "b", "Probabilities")
+    return fig
 
-# Add tall outlined rectangles around the probabilities at low and high temperatures.
-# For T -> 0: highlight T from 1 to 50 K.
-# For T = 1000: highlight T from 950 to 1000 K.
-rect_low = Rectangle((1, 0), 50 - 1, 1, edgecolor='b', facecolor='b', linestyle='-', alpha=0.2)
-rect_high = Rectangle((950, 0), 1000 - 950, 1, edgecolor='m', facecolor='m', linestyle='-', alpha=0.2)
-axs[1].add_patch(rect_low)
-axs[1].add_patch(rect_high)
-axs[1].annotate(
-    'Only state 1 is accessed', xy=(50, 0.95), xytext=(100, 0.95),
-    arrowprops=dict(arrowstyle='-', color='b'),
-    ha='left', va='center', color='b'
-)
-axs[1].annotate(
-    'Both states are accessed', xy=(950, 0.05), xytext=(900, 0.05),
-    arrowprops=dict(arrowstyle='-', color='m'),
-    ha='right', va='center', color='m'
-)
 
-plt.tight_layout()
-plt.show()
-plt.close(fig)
+fs.show(draw, alt="Two panels against temperature from 0 to 1000 K for a two-state system with an energy gap of 0.01 "
+                  "eV. Panel a: the partition function starts at 1 at low temperature, rises steeply up to about "
+                  "200 K, and then approaches 2 slowly, reaching about 1.9 at 1000 K. Panel b: the probability of "
+                  "state 1 starts at 1 and falls, the probability of state 2 starts at 0 and rises, and the two "
+                  "curves approach each other at high temperature.")
 ```
-
-Partition function and state probabilities for a two-state system as a function of temperature ($\Delta E = 0.01\ \mathrm{eV}$).
 
 ## Computational Studio: Two-State System
 
