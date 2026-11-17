@@ -1,0 +1,34 @@
+/*
+  Small corrections to the book theme. Loaded through `site.options.style` in myst.yml.
+
+  All three rules keep a page from scrolling sideways on a narrow screen. They change nothing that is visible.
+*/
+
+/* 1. Math inside a wide table. KaTeX adds a hidden copy of each formula for screen readers and positions it
+      absolutely. Without a positioned parent, the copy of a formula in the part of a table that is scrolled out
+      of view lies outside the table's own scroll box and widens the page. */
+.katex {
+  position: relative;
+}
+
+/* 2. The "¶" link after a heading. It is invisible until the pointer is over the heading, but it reaches about
+      20 px past the last word and widens the page when that word ends at the edge of the screen. */
+:is(h1, h2, h3, h4, h5, h6) > a[aria-label="Link to this Section"] {
+  overflow-x: clip;
+}
+:is(h1, h2, h3, h4, h5, h6):hover > a[aria-label="Link to this Section"],
+:is(h1, h2, h3, h4, h5, h6) > a[aria-label="Link to this Section"]:focus {
+  overflow-x: visible;
+}
+
+/* 3. The "previous" and "next" cards at the foot of a page. Side by side, they cannot become narrower than their
+      longest word, so on a very narrow screen they are stacked. */
+@media (max-width: 359px) {
+  .myst-footer-links.flex {
+    flex-direction: column;
+  }
+  .myst-footer-links.flex > .myst-footer-link ~ .myst-footer-link {
+    margin-left: 0;
+    margin-top: 1rem;
+  }
+}
