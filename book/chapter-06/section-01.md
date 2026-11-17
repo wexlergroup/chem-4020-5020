@@ -17,6 +17,20 @@ kernelspec:
 
 See also: [Course-wide Conventions & Notation](../notation.md)
 
+The course map shows where this module sits in the course and which relations connect the microscopic and macroscopic descriptions. Select a module to unfold its sections.
+
+<iframe
+  src="https://wexlergroup.github.io/chem-4020-5020/computational-studios/course-map.html?module=6&amp;here=6.1"
+  title="Course map, opened at Module 6"
+  style="width: 100%; height: 830px; border: 0;"
+  loading="lazy"
+></iframe>
+
+```{image} ../_static/course-map/module-6.png
+:class: hidden
+:alt: Course map with Module 6 unfolded. Statistical mechanics (Module 2) forms the microscopic strand, and Modules 1 and 3 to 7 form the macroscopic strand. A relation joins the two strands at each module except Module 6, which has no microscopic step. Below the map, one card for each of Sections 6.1 and 6.2 lists the microscopic content, the connecting relations, and the macroscopic content of the section.
+```
+
 ## Overview and Learning Objectives
 
 In [Section 5.1](../chapter-05/section-01.md) we introduced the Gibbs free energy $G$ and showed that at constant $T$ and $P$, a closed system moves spontaneously in the direction of decreasing $G$ and reaches equilibrium when $G$ is minimized. [Section 5.3](../chapter-05/section-03.md) closed by pointing out that this minimization principle also governs **phase equilibria** — the conditions under which a substance exists as solid, liquid, or gas, and the $(T,P)$ curves along which two phases coexist. That is the application we develop in this module.
