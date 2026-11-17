@@ -479,6 +479,74 @@ The NIST-JANAF tables, which include the temperature dependence of $\Delta_r H^{
 
 Because $\Delta_r H^{\circ}<0$ for dimerization, increasing temperature drives $K$ **down** and shifts equilibrium toward $\mathrm{NO_2}$ (less $\mathrm{N_2O_4}$). This is the quantitative form of Le Châtelier's principle for an exothermic reaction.
 
+The integrated form also says that $\ln K$ plotted against $1/T$ is a straight line with slope $-\Delta_r H^{\circ}/R$, as long as $\Delta_r H^{\circ}$ is constant. [](#fig:vant-hoff) shows such a plot for the exothermic dimerization of $\mathrm{NO_2}$ and for an endothermic reaction, the formation of $\mathrm{NO}$ from $\mathrm{N_2}$ and $\mathrm{O_2}$, for which $\Delta_r H^{\circ} = +180.58\ \mathrm{kJ\,mol^{-1}}$. The line rises toward low temperature for the exothermic reaction and falls for the endothermic one. Each line uses only data at $298.15\ \mathrm{K}$, and it stays within 10 % of the tabulated $K$ over the whole range of its panel, in which $K$ changes by about six orders of magnitude.
+
+```{code-cell} ipython3
+:label: fig:vant-hoff
+:caption: Plots of $\ln K$ against $1/T$ for (a) the exothermic reaction $2\,\mathrm{NO_2(g)} \rightleftharpoons \mathrm{N_2O_4(g)}$ and (b) the endothermic reaction $\mathrm{N_2(g)} + \mathrm{O_2(g)} \rightleftharpoons 2\,\mathrm{NO(g)}$. The points are from the NIST-JANAF tables. Each line is the integrated van't Hoff equation with the value of $\Delta_r H^{\circ}$ at $298.15\ \mathrm{K}$, drawn through $K(298.15\ \mathrm{K})$. The scale on top gives the temperature.
+:tags: [hide-input]
+
+import sys
+
+import numpy as np
+import matplotlib.pyplot as plt
+from matplotlib.ticker import MaxNLocator
+
+sys.path.append("..")            # the book folder, which holds figstyle
+import figstyle as fs
+
+R = 8.314462618e-3               # kJ mol^-1 K^-1
+T_ref = 298.15                   # K
+
+# Standard Gibbs free energies of formation (kJ/mol) from the NIST-JANAF tables
+T_a = np.array([250, 298.15, 350, 400, 450, 500])                       # K
+dfG_NO2 = np.array([48.355, 51.258, 54.445, 57.560, 60.703, 63.867])
+dfG_N2O4 = np.array([83.513, 97.787, 113.251, 128.204, 143.163, 158.109])
+T_b = np.array([1000, 1200, 1500, 2000, 2500, 3000])                    # K
+dfG_NO = np.array([77.775, 75.239, 71.425, 65.060, 58.720, 52.439])
+
+lnK_a = -(dfG_N2O4 - 2 * dfG_NO2) / (R * T_a)            # 2 NO2 = N2O4
+lnK_b = -(2 * dfG_NO) / (R * T_b)                        # N2 + O2 = 2 NO
+
+# Integrated van't Hoff equation through K(298.15 K), with the reaction enthalpy at 298.15 K (kJ/mol)
+drH_a, lnK_ref_a = 9.079 - 2 * 33.095, -(97.787 - 2 * 51.258) / (R * T_ref)
+drH_b, lnK_ref_b = 2 * 90.291, -(2 * 86.600) / (R * T_ref)
+
+def lnK_line(T, drH, lnK_ref):
+    return lnK_ref - drH / R * (1 / T - 1 / T_ref)
+
+def reciprocal(x):
+    with np.errstate(divide="ignore"):
+        return 1 / x
+
+
+def draw_vant_hoff(c):
+    fig, axes = plt.subplots(1, 2, figsize=(fs.WIDTH, 3.5), constrained_layout=True)
+    panels = (("a", "Exothermic", T_a, lnK_a, drH_a, lnK_ref_a, [250, 300, 350, 400, 500]),
+              ("b", "Endothermic", T_b, lnK_b, drH_b, lnK_ref_b, [1000, 1200, 1500, 2000, 3000]))
+    for ax, (letter, title, T, lnK, drH, lnK_ref, ticks) in zip(axes, panels):
+        T_fit = np.linspace(T.min(), T.max(), 200)
+        ax.plot(1 / T_fit, lnK_line(T_fit, drH, lnK_ref), color=c.blue, lw=fs.LINE)
+        ax.plot(1 / T, lnK, "o", color=c.ink, ms=5.5, zorder=3)
+        ax.set(xlabel="$1/T$ (K$^{-1}$)", ylabel="$\\ln K$")
+        ax.xaxis.set_major_locator(MaxNLocator(4))
+        top = ax.secondary_xaxis("top", functions=(reciprocal, reciprocal))
+        top.set_xticks(ticks)
+        top.set_xlabel("Temperature (K)")
+        fs.panel(ax, letter, title)
+    axes[0].text(0.0030, -4.6, "$\\Delta_r H° = -57.11$ kJ mol$^{-1}$\nslope $-\\Delta_r H°/R > 0$", ha="left")
+    axes[1].text(0.00036, -17.2, "$\\Delta_r H° = +180.58$ kJ mol$^{-1}$\nslope $-\\Delta_r H°/R < 0$", ha="left")
+    return fig
+
+
+fs.show(draw_vant_hoff, alt="Two plots of the natural logarithm of the equilibrium constant against the reciprocal "
+                            "of the temperature, each with points from the NIST-JANAF tables on a straight line. "
+                            "Panel a, the dimerization of nitrogen dioxide between 250 and 500 kelvin: the line "
+                            f"rises from {lnK_a[-1]:.1f} at 500 kelvin to {lnK_a[0]:.1f} at 250 kelvin. Panel b, the "
+                            "formation of nitric oxide from nitrogen and oxygen between 1000 and 3000 kelvin: the "
+                            f"line falls from {lnK_b[-1]:.1f} at 3000 kelvin to {lnK_b[0]:.1f} at 1000 kelvin.")
+```
+
 ---
 
 (section:k-from-tables)=
