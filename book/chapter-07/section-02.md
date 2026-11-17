@@ -192,6 +192,73 @@ The prefactor $(k_{\mathrm B}T/P^\circ)^{\Delta\nu}$ converts between "molecules
 
 So, **once you can compute** the single-molecule partition functions $q_i$, you can compute $K_c$ (and then $K_p$).
 
+#### The Simplest Case: $\mathrm{A} \rightleftharpoons \mathrm{B}$
+
+For an isomerization, $\mathrm{A} \rightleftharpoons \mathrm{B}$, Eq. {eq}`eq:K-partition-numbers` reads
+
+```{math}
+:label: eq:K-isomerization
+K = \frac{N_{\mathrm{B}}}{N_{\mathrm{A}}} = \frac{q_{\mathrm{B}}}{q_{\mathrm{A}}}.
+```
+
+Both partition functions are sums over the levels of one molecule, and both measure the energy from the same zero. A molecule that can convert between the two forms therefore has a single set of levels, of which some belong to A and the others to B. At equilibrium every level is populated according to one Boltzmann distribution, and $K$ is the total population of the levels of B divided by the total population of the levels of A.
+
+[](#fig:K-populations) shows a model in which the lowest level of B lies above the lowest level of A, while the levels of B lie closer together. At the lower temperature almost all molecules occupy the lowest levels, which belong to A, and $K < 1$. At the higher temperature the many levels of B together hold more molecules than the few levels of A, and $K > 1$. The energy of the lowest level favors A, and the number of accessible levels favors B.
+
+```{code-cell} ipython3
+:label: fig:K-populations
+:caption: Populations of the levels of a model molecule with two forms, A and B, at (a) $k_{\mathrm{B}}T = \varepsilon$ and (b) $k_{\mathrm{B}}T = 4\varepsilon$. The levels of A lie at $0, 2\varepsilon, 4\varepsilon, \dots$ and those of B at $3\varepsilon, 3.5\varepsilon, 4\varepsilon, \dots$. The length of each bar is the population of its level relative to the lowest level, and the dashed curve is the Boltzmann factor $e^{-E/k_{\mathrm{B}}T}$, which is the same for both forms. $K$ is the total population of the levels of B divided by that of the levels of A, Eq. [](#eq:K-isomerization). The sums include the levels above $12\varepsilon$, which are not drawn.
+:tags: [hide-input]
+
+import sys
+
+import numpy as np
+import matplotlib.pyplot as plt
+
+sys.path.append("..")            # the book folder, which holds figstyle
+import figstyle as fs
+
+# Model: energies in units of epsilon, temperatures as t = k_B T / epsilon
+spacing_A, spacing_B, offset_B = 2.0, 0.5, 3.0
+E_top = 12.0
+levels_A = np.arange(0.0, E_top + 1e-9, spacing_A)
+levels_B = np.arange(offset_B, E_top + 1e-9, spacing_B)
+
+def K_model(t):
+    # q_B / q_A with the sums over all levels (geometric series)
+    q_A = 1 / (1 - np.exp(-spacing_A / t))
+    q_B = np.exp(-offset_B / t) / (1 - np.exp(-spacing_B / t))
+    return q_B / q_A
+
+
+def draw_populations(c):
+    fig, axes = plt.subplots(1, 2, figsize=(fs.WIDTH, 3.9), sharey=True, constrained_layout=True)
+    columns = (("A", 0.2, levels_A, c.blue), ("B", 1.95, levels_B, c.vermilion))
+    for ax, letter, t, title in zip(axes, "ab", (1.0, 4.0),
+                                    ("$k_{\\mathrm{B}}T = \\varepsilon$", "$k_{\\mathrm{B}}T = 4\\varepsilon$")):
+        for name, x0, levels, color in columns:
+            ax.hlines(levels, x0, x0 + 0.22, color=c.muted, lw=1.0)
+            ax.barh(levels, np.exp(-levels / t), left=x0 + 0.30, height=0.3, color=color, lw=0)
+            E = np.linspace(levels[0], E_top + 0.3, 200)
+            ax.plot(x0 + 0.30 + np.exp(-E / t), E, color=c.gray, lw=1.2, ls=(0, (4, 3)))
+            ax.text(x0 + 0.11, -0.75, name, color=color, ha="center", va="top", fontweight="bold")
+        ax.text(1.85, 13.2, f"$K = N_{{\\mathrm{{B}}}}/N_{{\\mathrm{{A}}}} = {K_model(t):.2f}$", ha="center")
+        ax.set(xlim=(0, 3.4), ylim=(-0.6, 13.9), xticks=[])
+        ax.spines["bottom"].set_visible(False)
+        fs.panel(ax, letter, title)
+    axes[0].set_ylabel("Energy, $E/\\varepsilon$")
+    return fig
+
+
+fs.show(draw_populations, alt="Two panels, each with two ladders of energy levels on one energy axis. The levels of "
+                              "form A start at zero and are 2 units apart. The levels of form B start at 3 units "
+                              "and are half a unit apart. A bar on each level shows its population, which falls "
+                              "with energy along the same exponential curve for both forms. In panel a, at the "
+                              "lower temperature, nearly all the population is on the lowest level of A, and K is "
+                              f"{K_model(1.0):.2f}. In panel b, at four times that temperature, many levels of B "
+                              f"are populated, and K is {K_model(4.0):.2f}.")
+```
+
 ---
 
 (section:hi-formation)=
