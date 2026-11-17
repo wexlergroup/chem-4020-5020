@@ -272,18 +272,18 @@ is called the translational partition function. It underpins the classical descr
 
 ### Computational Studio: Ideal Gas
 
-Use the interactive studio below (or open it in a new tab) to vary particle count ($N$), volume ($V$), and temperature ($T$). The studio visualizes how these parameters affect the gas while showing $P$, $U$, and $S$ derived from the partition function.
+In [](#fig:ideal-gas-studio), you can change the number of atoms $N$, the volume $V$, and the temperature $T$ of a small sample of a noble gas and follow the quantities that its partition function gives.
 
-<!-- <div style="width: 100%; border: 1px solid #cbd5e1; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.08);">
-  <iframe
-    src="https://wexlergroup.github.io/chem-4020-5020/computational-studios/ideal-gas-studio.html"
-    title="Ideal Gas Computational Studio"
-    style="width: 100%; height: 900px; border: 0;"
-    loading="lazy"
-  ></iframe>
-</div> -->
+```{iframe} https://wexlergroup.github.io/chem-4020-5020/computational-studios/ideal-gas-studio.html
+:label: fig:ideal-gas-studio
+:width: 100%
+:title: Ideal gas
+:placeholder: ../_static/ideal-gas-studio/ideal-gas-studio.png
 
-You can open the studio in a new tab: [Ideal Gas Computational Studio](https://wexlergroup.github.io/chem-4020-5020/computational-studios/ideal-gas-studio.html).
+A small sample of an ideal monatomic gas. Panel (a) shows $N$ atoms in a cube of volume $V$, seen from one side. Panel (b) lists the thermal de Broglie wavelength $\Lambda$, the mean distance between atoms, the translational partition function $q_{\mathrm{trans}}$ (Eq. [](#eq:translational-partition-function)), $\ln Q$ (Eq. [](#eq:partition-function-many-particles-cube)), the internal energy (Eq. [](#eq:internal-energy-cube)), the pressure (Eq. [](#eq:pressure-cube)), and the entropy, which [Section 4.3](../chapter-04/section-03.md) obtains from $\ln Q$. Because $N$ is small, $\ln N!$ is evaluated exactly and not with the Stirling approximation.
+```
+
+You can also open the studio in a new tab: [Ideal Gas Studio](https://wexlergroup.github.io/chem-4020-5020/computational-studios/ideal-gas-studio.html).
 
 ## Worked Example
 
