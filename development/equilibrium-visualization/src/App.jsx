@@ -1,217 +1,206 @@
-import React, { useState } from 'react';
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, ReferenceLine, ResponsiveContainer, ReferenceDot } from 'recharts';
+import React, { useEffect, useRef, useState } from 'react';
+import { LineChart, Line, XAxis, YAxis, ResponsiveContainer, ReferenceLine, ReferenceDot } from 'recharts';
+import { useBook, Studio, Panel, Slider, V, axis, seeded, LINE, DASH, STATIC } from '../../studio-kit/kit.jsx';
+import { reaction } from './reaction.js';
 
-const EquilibriumVis = () => {
-  // State for user controls
-  const [temperature, setTemperature] = useState(298.15); // Kelvin
-  const [pressure, setPressure] = useState(1); // Bar
-  const [currentXi, setCurrentXi] = useState(0.5); // Extent of reaction (0 to 1)
+/*
+  Chemical equilibrium (Section 7.1). Panel (a) is G(xi) - G(0) for 2 NO2 <=> N2O4 with the tangent at the extent that
+  the student chooses; its slope is the reaction Gibbs energy. Panel (b) shows the molecules of the mixture at that
+  extent (40 NO2 at the start, schematic) in a flask whose brown color follows the concentration of NO2.
+  Panel (c) lists K, Q_p, the slope, and the composition (src/reaction.js).
+*/
+const START = { T: 298.15, logP: 0, xi: 0.5 };
+const UNITS = 40;                                     // molecules of NO2 at xi = 0, for 2 mol
+const SIZE = 300;                                     // px, height of the flask
+const FONT = 'Inter, ui-sans-serif, system-ui, sans-serif';
+const BROWN = [150, 75, 20];                          // color of NO2 gas
+const ABSORB = 8.85;                                  // L/mol: pure NO2 at 1 bar and 298 K gives 30 % of the darkest shade
 
-  // 2 NO2(g) <=> N2O4(g), starting from 2 mol of NO2.
-  // Standard reaction enthalpy and entropy at 298.15 K (NIST-JANAF tables),
-  // taken as constant over the temperature range of the slider.
-  const dH_r = -57.112; // kJ/mol (gives -4.73 kJ/mol for the standard Gibbs energy at 298.15 K)
-  const dS_r = -0.17569; // kJ/(mol K)
-  const R = 0.008314462618; // kJ/(mol K)
+function ticksOf(lo, hi, n) {
+  const rough = (hi - lo) / n, power = 10 ** Math.floor(Math.log10(rough));
+  const step = [1, 2, 5, 10].map((m) => m * power).find((s) => s >= rough - 1e-12);
+  const ticks = [];
+  for (let v = Math.ceil(lo / step - 1e-9) * step; v <= hi + 1e-9; v += step) ticks.push(Number((Math.round(v / step) * step).toPrecision(10)));
+  return { ticks, step };
+}
+const minus = (s) => String(s).replace('-', '−');
+function num(x, digits = 3) {                         // 3 significant figures, as m × 10^n outside 0.01 to 10000
+  if (x === 0) return '0';
+  const a = Math.abs(x);
+  if (a >= 0.01 && a < 1e4) return minus(Number(x.toPrecision(digits)).toString());
+  const p = Math.floor(Math.log10(a)), m = x / 10 ** p;
+  return <>{minus(m.toFixed(digits - 1))} × 10<sup>{minus(p)}</sup></>;
+}
 
-  const RT = R * temperature;
-  const dG_r_not = dH_r - temperature * dS_r;
-  const K = Math.exp(-dG_r_not / RT);
-
-  // G(xi) - G(0) in kJ, where G(0) is pure NO2 at the same T and P:
-  // xi * (dG_r_not - RT ln P) + RT * sum_i n_i ln y_i   (P in bar, standard pressure 1 bar)
-  const gRel = (xi) => {
-    const n_NO2 = 2 - 2 * xi;
-    const n_N2O4 = xi;
-    const n_total = 2 - xi;
-    let mix = 0;
-    if (n_NO2 > 0) mix += n_NO2 * Math.log(n_NO2 / n_total);
-    if (n_N2O4 > 0) mix += n_N2O4 * Math.log(n_N2O4 / n_total);
-    return xi * (dG_r_not - RT * Math.log(pressure)) + RT * mix;
-  };
-
-  // The G vs xi curve
-  const data = [];
-  for (let i = 0; i <= 200; i += 1) {
-    const xi = i / 200;
-    data.push({ xi, G: gRel(xi) });
+function Flask({ xi, c1, playing, color }) {
+  const canvas = useRef(null), now = useRef({}), units = useRef(null);
+  if (!units.current) {                               // each NO2 unit has a home and a partner for dimerization
+    const random = seeded(7010), list = [], cells = [];  // start on a 7 x 6 grid with some disorder, so that no two overlap
+    for (let k = 0; k < 42; k++) cells.push(k);
+    for (let k = cells.length - 1; k > 0; k--) { const m = Math.floor(random() * (k + 1)); [cells[k], cells[m]] = [cells[m], cells[k]]; }
+    for (let i = 0; i < UNITS; i++) {
+      const cx = cells[i] % 7, cy = Math.floor(cells[i] / 7);
+      list.push({ x: (cx + 0.25 + 0.5 * random()) / 7, y: (cy + 0.25 + 0.5 * random()) / 6, vx: random() - 0.5, vy: random() - 0.5, a: 6.28 * random(), w: random() - 0.5 });
+    }
+    units.current = list;
   }
+  now.current = { xi, c1, playing, color };
 
-  // Equilibrium extent from K P = xi (2 - xi) / (2 - 2 xi)^2
-  const xiEq = 1 - 1 / Math.sqrt(1 + 4 * K * pressure);
-  const gEq = gRel(xiEq);
+  useEffect(() => {
+    let frame = 0, last = performance.now();
+    const draw = (time) => {
+      const { xi, c1, playing, color } = now.current;
+      const element = canvas.current;
+      if (!element) return;
+      const width = element.clientWidth, ratio = window.devicePixelRatio || 1;
+      if (element.width !== Math.round(width * ratio)) { element.width = Math.round(width * ratio); element.height = Math.round(SIZE * ratio); }
+      const seconds = Math.min((time - last) / 1000, 0.05);
+      last = time;
+      const ctx = element.getContext('2d');
+      ctx.setTransform(ratio, 0, 0, ratio, 0, 0);
+      ctx.clearRect(0, 0, width, SIZE);
+      const side = Math.min(width - 4, SIZE - 30), left = (width - side) / 2, top = 2;
+      // The gas, brown in proportion to the light that NO2 absorbs
+      const alpha = 0.55 * (1 - Math.exp(-ABSORB * c1));
+      ctx.fillStyle = color.fill; ctx.fillRect(left, top, side, side);
+      ctx.fillStyle = `rgba(${BROWN.join(',')},${alpha.toFixed(3)})`; ctx.fillRect(left, top, side, side);
+      ctx.strokeStyle = color.axis; ctx.lineWidth = 1.5; ctx.strokeRect(left, top, side, side);
+      // Molecules: pairs (2k, 2k+1) form N2O4 first, so that 2 xi of every 2 units are bound
+      const dimers = Math.round(xi * UNITS / 2), list = units.current, r = 5.5, pad = 10;
+      ctx.save(); ctx.beginPath(); ctx.rect(left, top, side, side); ctx.clip();
+      ctx.strokeStyle = color.ground; ctx.lineWidth = 1.5;                       // a thin rim keeps the molecules clear of the brown
+      for (let i = 0; i < UNITS; i++) {
+        const u = list[i];
+        if (playing) {
+          u.x += 0.05 * u.vx * seconds; u.y += 0.05 * u.vy * seconds; u.a += 1.5 * u.w * seconds;
+          if (u.x < 0 || u.x > 1) { u.vx = -u.vx; u.x = Math.min(1, Math.max(0, u.x)); }
+          if (u.y < 0 || u.y > 1) { u.vy = -u.vy; u.y = Math.min(1, Math.max(0, u.y)); }
+        }
+        const pair = Math.floor(i / 2), bound = pair < dimers;
+        if (bound && i % 2 === 1) continue;           // the partner draws the dimer
+        const x = left + pad + u.x * (side - 2 * pad), y = top + pad + u.y * (side - 2 * pad);
+        if (bound) {
+          const dx = r * Math.cos(u.a), dy = r * Math.sin(u.a);
+          ctx.fillStyle = color.blue;
+          ctx.beginPath(); ctx.arc(x - dx, y - dy, r, 0, 6.2832); ctx.stroke(); ctx.beginPath(); ctx.arc(x + dx, y + dy, r, 0, 6.2832); ctx.stroke();
+          ctx.beginPath(); ctx.arc(x - dx, y - dy, r, 0, 6.2832); ctx.arc(x + dx, y + dy, r, 0, 6.2832); ctx.fill();
+        } else {
+          ctx.fillStyle = color.vermilion;
+          ctx.beginPath(); ctx.arc(x, y, r, 0, 6.2832); ctx.stroke(); ctx.fill();
+        }
+      }
+      ctx.restore();
+      // Key
+      const y = top + side + 16;
+      ctx.font = `12.5px ${FONT}`; ctx.textBaseline = 'middle'; ctx.textAlign = 'left';
+      ctx.fillStyle = color.vermilion; ctx.beginPath(); ctx.arc(left + 6, y, r, 0, 6.2832); ctx.fill();
+      ctx.fillStyle = color.text; ctx.fillText('NO₂', left + 16, y);
+      ctx.fillStyle = color.blue; ctx.beginPath(); ctx.arc(left + 72, y, r, 0, 6.2832); ctx.arc(left + 82, y, r, 0, 6.2832); ctx.fill();
+      ctx.fillStyle = color.text; ctx.fillText('N₂O₄', left + 94, y);
+      frame = requestAnimationFrame(draw);
+    };
+    frame = requestAnimationFrame(draw);
+    return () => cancelAnimationFrame(frame);
+  }, []);
+  const dimers = Math.round(xi * UNITS / 2);
+  return <canvas ref={canvas} style={{ height: SIZE }} role="img"
+                 aria-label={`A flask with ${UNITS - 2 * dimers} molecules of NO2 and ${dimers} molecules of N2O4. The gas is brown in proportion to the concentration of NO2.`} />;
+}
 
-  // Vertical range of the plot, fixed by the curve so that the tangent line does not rescale it
-  const gMin = Math.min(...data.map((p) => p.G));
-  const gMax = Math.max(...data.map((p) => p.G));
-  const pad = 0.08 * (gMax - gMin);
-  const yDomain = [gMin - pad, gMax + pad];
-  // Round tick values (1, 2, or 5 times a power of ten apart)
-  const rough = (yDomain[1] - yDomain[0]) / 5;
-  const mag = Math.pow(10, Math.floor(Math.log10(rough)));
-  const step = [1, 2, 5, 10].map((m) => m * mag).find((v) => v >= rough);
-  const yTicks = [];
-  for (let v = Math.ceil(yDomain[0] / step) * step; v <= yDomain[1] + 1e-9; v += step) {
-    yTicks.push(Math.abs(v) < 1e-9 ? 0 : v);
-  }
+export default function Equilibrium() {
+  const { color } = useBook();
+  const [T, setT] = useState(START.T);
+  const [logP, setLogP] = useState(START.logP);
+  const [xi, setXi] = useState(START.xi);
+  const [playing, setPlaying] = useState(() => {
+    if (STATIC) return false;
+    try { return !window.matchMedia('(prefers-reduced-motion: reduce)').matches; } catch (e) { return true; }
+  });
+  const P = 10 ** logP;
+  const r = reaction(T, P);
+  const s = r.at(xi);
 
-  // Current state
-  const y_NO2 = (2 - 2 * currentXi) / (2 - currentXi);
-  const y_N2O4 = currentXi / (2 - currentXi);
-  const Q = y_N2O4 / (y_NO2 * y_NO2 * pressure);
-  const delta_r_G = RT * Math.log(Q / K); // slope of G(xi), kJ/mol
-  const gNow = gRel(currentXi);
-
-  let slopeText = 'At the minimum';
-  let slopeColor = 'text-blue-600';
-  if (currentXi < xiEq - 0.005) {
-    slopeText = 'Forward is spontaneous';
-    slopeColor = 'text-green-700';
-  } else if (currentXi > xiEq + 0.005) {
-    slopeText = 'Reverse is spontaneous';
-    slopeColor = 'text-red-600';
-  }
-
-  // Tangent line at the current point: its slope is the reaction Gibbs energy
-  const half = 0.12;
+  const curve = [];
+  for (let i = 0; i <= 200; i++) { const x = i / 200; curve.push({ xi: x, G: r.g(x) }); }
+  const gs = curve.map((p) => p.G), lo = Math.min(...gs), hi = Math.max(...gs), pad = 0.08 * (hi - lo);
+  const { ticks: yTicks, step } = ticksOf(lo - pad, hi + pad, 5);
+  const domain = [Math.min(yTicks[0], lo - pad), Math.max(yTicks[yTicks.length - 1], hi + pad)];
+  const half = 0.16;
   const tangent = [
-    { xi: Math.max(0, currentXi - half), G: gNow - Math.min(half, currentXi) * delta_r_G },
-    { xi: Math.min(1, currentXi + half), G: gNow + Math.min(half, 1 - currentXi) * delta_r_G },
+    { xi: Math.max(0, xi - half), T: s.G - Math.min(half, xi) * s.slope },
+    { xi: Math.min(1, xi + half), T: s.G + Math.min(half, 1 - xi) * s.slope },
   ];
 
-  const fmt = (x) => (x >= 1000 || x < 0.01 ? x.toExponential(1) : x >= 100 ? x.toFixed(0) : x.toFixed(2));
+  const dr = (sym) => <>Δ<sub>r</sub><V>{sym}</V></>;
+  const rows = [
+    [<>Standard reaction Gibbs energy</>, <>{dr('G')}<sup>∘</sup> = {dr('H')}<sup>∘</sup> − <V>T</V>{dr('S')}<sup>∘</sup></>, <>{minus(r.dG0.toFixed(2))} kJ mol<sup>−1</sup></>],
+    [<>Equilibrium constant</>, <><V>K</V> = exp(−{dr('G')}<sup>∘</sup>/<V>RT</V>)</>, num(r.K)],
+    [<>Reaction quotient at ξ</>, <><V sub="p">Q</V> = <V sub={<>N<sub>2</sub>O<sub>4</sub></>}>y</V><V>P</V><sup>∘</sup>/(<V sub={<>NO<sub>2</sub></>}>y</V><sup>2</sup><V>P</V>)</>, num(s.Q)],
+    [<>Slope of <V>G</V>(ξ) at ξ</>, <>{dr('G')} = <V>RT</V> ln(<V sub="p">Q</V>/<V>K</V>)</>, <>{minus(s.slope.toFixed(2))} kJ mol<sup>−1</sup></>],
+    [<>Mole fractions at ξ</>, <><V sub={<>NO<sub>2</sub></>}>y</V> and <V sub={<>N<sub>2</sub>O<sub>4</sub></>}>y</V></>, <>{s.y1.toFixed(3)} and {s.y2.toFixed(3)}</>],
+    [<>Extent at the minimum</>, <>ξ<sub>eq</sub>, from <V>K</V></>, <>{r.xiEq.toFixed(3)} mol</>],
+  ];
 
   return (
-    <div className="w-full max-w-4xl mx-auto p-2 bg-white font-sans text-slate-800">
-      <div className="flex flex-wrap items-baseline gap-x-3 border-b border-slate-200 pb-1 mb-2">
-        <h2 className="text-base font-bold">Minimizing Gibbs Free Energy</h2>
-        <span className="text-xs text-slate-500">2 NO₂(g) ⇌ N₂O₄(g), starting from 2 mol of NO₂</span>
-      </div>
-
-      <div className="grid grid-cols-1 sm:grid-cols-5 gap-3">
-        {/* Left column: plot and extent slider */}
-        <div className="sm:col-span-3">
-          <div className="bg-slate-50 rounded-lg border border-slate-200 relative" style={{ height: 284 }}>
+    <Studio title="Chemical equilibrium"
+            lede="Follow the Gibbs free energy of a mixture of NO₂ and N₂O₄ as the reaction 2 NO₂ ⇌ N₂O₄ proceeds, and change the temperature and the total pressure.">
+      <p className="key">
+        <span style={{ color: color.blue }}><i className="line" /><span><V>G</V>(ξ) − <V>G</V>(0)</span></span>
+        <span style={{ color: color.vermilion }}><i className="line" /><span>tangent at ξ</span></span>
+        <span style={{ color: color.gray }}><i className="dash" /><span>ξ<sub>eq</sub></span></span>
+      </p>
+      <div className="panels two left-wide" style={{ marginTop: 8 }}>
+        <Panel letter="a" title={<>Gibbs free energy, <V>G</V>(ξ) − <V>G</V>(0) (kJ)</>}>
+          <div className="chart" style={{ height: SIZE - 24 }}>
             <ResponsiveContainer width="100%" height="100%">
-              <LineChart margin={{ top: 12, right: 16, left: 6, bottom: 18 }}>
-                <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" />
-                <XAxis
-                  dataKey="xi"
-                  type="number"
-                  domain={[0, 1]}
-                  ticks={[0, 0.2, 0.4, 0.6, 0.8, 1]}
-                  tick={{ fontSize: 11 }}
-                  label={{ value: 'Extent of reaction ξ (mol)', position: 'bottom', offset: 2, fontSize: 12 }}
-                />
-                <YAxis
-                  domain={yDomain}
-                  allowDataOverflow={true}
-                  tick={{ fontSize: 11 }}
-                  ticks={yTicks}
-                  tickFormatter={(v) => v.toFixed(step < 1 ? 1 : 0)}
-                  width={46}
-                  label={{ value: 'G(ξ) − G(0) (kJ)', angle: -90, position: 'insideLeft', offset: 4, fontSize: 12, style: { textAnchor: 'middle' } }}
-                />
-                <ReferenceLine x={xiEq} stroke="#059669" strokeDasharray="4 3" />
-                <Line data={data} type="linear" dataKey="G" stroke="#2563eb" strokeWidth={2.5} dot={false} isAnimationActive={false} />
-                <Line data={tangent} type="linear" dataKey="G" stroke="#ef4444" strokeWidth={1.5} dot={false} isAnimationActive={false} />
-                <ReferenceDot x={xiEq} y={gEq} r={4} fill="#059669" stroke="#fff" strokeWidth={1} />
-                <ReferenceDot x={currentXi} y={gNow} r={6} fill="#ef4444" stroke="#fff" strokeWidth={2} />
+              <LineChart margin={{ top: 12, right: 14, bottom: -6, left: 0 }}>
+                <XAxis dataKey="xi" type="number" domain={[0, 1]} ticks={[0, 0.2, 0.4, 0.6, 0.8, 1]} {...axis(color)} />
+                <YAxis type="number" domain={domain} ticks={yTicks} width={44} allowDataOverflow
+                       tickFormatter={(v) => minus(v.toFixed(step < 1 ? 1 : 0))} {...axis(color)} />
+                <ReferenceLine x={r.xiEq} stroke={color.gray} strokeWidth={1.2} strokeDasharray={DASH} />
+                <Line data={curve} dataKey="G" stroke={color.blue} strokeWidth={LINE} dot={false} isAnimationActive={false} />
+                <Line data={tangent} dataKey="T" stroke={color.vermilion} strokeWidth={2.2} dot={false} isAnimationActive={false} />
+                <ReferenceDot x={r.xiEq} y={r.g(r.xiEq)} r={4} fill={color.text} stroke="none" />
+                <ReferenceDot x={xi} y={s.G} r={6} fill={color.vermilion} stroke={color.ground} strokeWidth={2} />
               </LineChart>
             </ResponsiveContainer>
-            <div className="absolute top-2 left-1/2 -translate-x-1/2 bg-white/90 px-2 py-0.5 rounded text-xs text-emerald-700 border border-emerald-200">
-              minimum at ξ = {xiEq.toFixed(2)}
-            </div>
           </div>
+          <p className="xlabel">Extent of reaction, ξ (mol)</p>
+        </Panel>
+        <Panel letter="b" title={<>The mixture at ξ</>}>
+          <Flask xi={xi} c1={s.c1} playing={playing} color={color} />
+        </Panel>
+      </div>
+      <div className="panels" style={{ marginTop: 14 }}>
+        <Panel letter="c" title={<>2 NO<sub>2</sub>(g) ⇌ N<sub>2</sub>O<sub>4</sub>(g), from 2 mol of NO<sub>2</sub>, at ξ = {xi.toFixed(2)} mol</>}>
+          <table className="values">
+            <tbody>
+              {rows.map(([name, formula, value], i) => (
+                <tr key={i}><td>{name}<span className="formula">{formula}</span></td><td>{value}</td></tr>
+              ))}
+            </tbody>
+          </table>
+        </Panel>
+      </div>
 
-          <div className="bg-slate-100 px-3 py-2 rounded-lg mt-2">
-            <div className="flex justify-between items-center">
-              <label htmlFor="xi" className="text-sm font-semibold">Extent ξ <span className="font-normal text-slate-500">(moves the red point)</span></label>
-              <span className="font-mono text-sm">{currentXi.toFixed(2)} mol</span>
-            </div>
-            <input
-              id="xi"
-              type="range"
-              min="0.01"
-              max="0.99"
-              step="0.01"
-              value={currentXi}
-              onChange={(e) => setCurrentXi(parseFloat(e.target.value))}
-              className="w-full h-2 bg-slate-300 rounded-lg appearance-none cursor-pointer accent-red-500"
-            />
-            <div className="flex justify-between text-xs text-slate-500">
-              <span>pure NO₂</span>
-              <span>pure N₂O₄</span>
-            </div>
-          </div>
-        </div>
-
-        {/* Right column: conditions and readouts */}
-        <div className="sm:col-span-2 space-y-2">
-          <div className="border border-slate-200 rounded-lg px-3 py-2">
-            <div className="flex justify-between">
-              <label htmlFor="T" className="text-sm">Temperature</label>
-              <span className="text-sm font-mono font-bold">{temperature} K</span>
-            </div>
-            <input
-              id="T"
-              type="range"
-              min="250"
-              max="400"
-              step="1"
-              value={temperature}
-              onChange={(e) => setTemperature(parseFloat(e.target.value))}
-              className="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-blue-600"
-            />
-            <div className="flex justify-between mt-2">
-              <label htmlFor="P" className="text-sm">Total pressure</label>
-              <span className="text-sm font-mono font-bold">{pressure.toFixed(1)} bar</span>
-            </div>
-            <input
-              id="P"
-              type="range"
-              min="0.1"
-              max="10"
-              step="0.1"
-              value={pressure}
-              onChange={(e) => setPressure(parseFloat(e.target.value))}
-              className="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-purple-600"
-            />
-          </div>
-
-          <div className="bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm">
-            <div className="flex justify-between py-0.5">
-              <span>Equilibrium constant K</span>
-              <span className="font-mono font-bold text-emerald-700">{fmt(K)}</span>
-            </div>
-            <div className="flex justify-between py-0.5">
-              <span>Reaction quotient Q<sub>p</sub></span>
-              <span className="font-mono font-bold">{fmt(Q)}</span>
-            </div>
-            <div className="flex justify-between py-0.5 border-t border-slate-200 mt-1 pt-1">
-              <span>Slope Δ<sub>r</sub>G</span>
-              <span className="font-mono font-bold">{delta_r_G.toFixed(2)} kJ/mol</span>
-            </div>
-            <div className="text-xs text-slate-500">Δ<sub>r</sub>G = RT ln(Q<sub>p</sub>/K), the slope of the red line</div>
-            <div className={`text-center font-semibold mt-1 ${slopeColor}`}>{slopeText}</div>
-
-            <div className="relative h-3 bg-slate-200 rounded-full w-full overflow-hidden mt-2">
-              <div className="absolute top-0 bottom-0 left-1/2 w-px bg-slate-500" />
-              <div
-                className="absolute top-0 bottom-0 w-1.5 bg-red-500"
-                style={{ left: `clamp(2%, ${50 + Math.log10(Q / K) * 15}%, 97%)` }}
-              />
-            </div>
-            <div className="flex justify-between text-xs text-slate-500 font-mono">
-              <span>Q &lt; K</span>
-              <span>Q = K</span>
-              <span>Q &gt; K</span>
-            </div>
-          </div>
+      <div className="controls">
+        <Slider label={<>Extent of reaction, ξ</>} show={<>{xi.toFixed(2)} mol</>} value={xi} min={0.01} max={0.99} step={0.01} onChange={setXi} />
+        <Slider label={<>Temperature, <V>T</V></>} show={<>{T.toFixed(T % 1 ? 2 : 0)} K</>} value={T} min={250} max={400} step={1} onChange={setT} />
+        <Slider label={<>Total pressure, <V>P</V></>} show={<>{num(P)} bar</>} value={logP} min={-1} max={1} step={0.02}
+                onChange={(v) => setLogP(Math.abs(v) < 1e-9 ? 0 : v)} />
+        <div className="row" style={{ gridColumn: 'auto', alignSelf: 'end' }}>
+          <button type="button" onClick={() => setXi(Number(r.xiEq.toFixed(2)))}>Go to ξ<sub>eq</sub></button>
+          <button type="button" onClick={() => setPlaying(!playing)}>{playing ? 'Pause' : 'Play'}</button>
+          <button type="button" onClick={() => { setT(START.T); setLogP(START.logP); setXi(START.xi); }}>Reset</button>
         </div>
       </div>
-    </div>
+      <p className="hint">
+        The curve is Eq. (7.1.32) of the notes with the total pressure <V>P</V>: <V>G</V>(ξ) − <V>G</V>(0) = ξ({dr('G')}<sup>∘</sup> − <V>RT</V> ln(<V>P</V>/<V>P</V><sup>∘</sup>))
+        + <V>RT</V>[(2 − 2ξ) ln <V sub={<>NO<sub>2</sub></>}>y</V> + ξ ln <V sub={<>N<sub>2</sub>O<sub>4</sub></>}>y</V>]. {dr('H')}<sup>∘</sup> = −57.11 kJ mol<sup>−1</sup> and
+        {' '}{dr('S')}<sup>∘</sup> = −175.69 J mol<sup>−1</sup> K<sup>−1</sup> are the values at 298.15 K from the NIST-JANAF tables, taken as constant.
+        Panel (b) shows 40 units of NO<sub>2</sub> for the 2 mol, so that each N<sub>2</sub>O<sub>4</sub> is two of them bound together. NO<sub>2</sub> is brown and
+        N<sub>2</sub>O<sub>4</sub> is colorless, and the shade of the flask follows the concentration of NO<sub>2</sub>, <V sub={<>NO<sub>2</sub></>}>y</V><V>P</V>/<V>RT</V>.
+      </p>
+    </Studio>
   );
-};
-
-export default EquilibriumVis;
+}
