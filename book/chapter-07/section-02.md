@@ -259,6 +259,22 @@ fs.show(draw_populations, alt="Two panels, each with two ladders of energy level
                               f"are populated, and K is {K_model(4.0):.2f}.")
 ```
 
+In [](#fig:equilibrium-levels-interactive), you can change the temperature and the energy of the lowest level of B in the same model, and follow $q_{\mathrm{A}}$, $q_{\mathrm{B}}$, and $K$.
+
+```{iframe} https://wexlergroup.github.io/chem-4020-5020/computational-studios/equilibrium-levels.html
+:label: fig:equilibrium-levels-interactive
+:width: 100%
+:title: Equilibrium from energy levels
+:placeholder: ../_static/equilibrium-levels/equilibrium-levels.png
+
+Populations of the levels of a molecule with two forms, A and B, and the equilibrium constant $K = q_{\mathrm{B}}/q_{\mathrm{A}}$. Panel (a) shows the levels of both forms on one energy scale, with a bar for the population of each level. Panel (b) shows $K$ against temperature for the chosen energy of the lowest level of B, on a logarithmic scale, with the present temperature marked. The dashed line marks $K = 1$.
+```
+
+Two things to try:
+
+1. Start from the levels of [](#fig:K-populations), and raise the temperature until $K = 1$. Compare the two partition functions at this temperature, and find the levels that hold most of the molecules of each form.
+2. Set the lowest level of B to the same energy as the lowest level of A, and raise the temperature from its lowest to its highest value. Neither form is now lower in energy. Follow how $K$ changes, and relate the change to the number of levels of each form that lie within $k_{\mathrm{B}}T$ of the lowest level.
+
 ---
 
 (section:hi-formation)=
