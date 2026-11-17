@@ -1,0 +1,327 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Course map · Physical Chemistry II</title>
+<!--
+  Course map for the lecture notes. This file is written by hand (it is not built from development/).
+
+  The notes embed it in an iframe on the Welcome page and at the start of the first section and of the review
+  of each module:
+      course-map.html                         opens with every module folded
+      course-map.html?module=5&here=5.1       opens Module 5 and marks Section 5.1 as the current section
+      course-map.html?module=5&here=review    opens Module 5 without the link to its review (used in the review)
+  Inside the notes, the page follows the light or dark mode of the book and sets the height of its own frame.
+
+  The PDF of the notes cannot show the frame, so each page also holds a picture of the map from
+  book/_static/course-map/ that is hidden on the website. After a change to this file, draw the pictures again
+  with development/course-map/static-pictures.js.
+
+  All content is in the MODULES list below. Math is written between dollar signs in a small markup:
+  _{...} subscript, ^{...} superscript, \rm{...} upright text, \bar{...} overbar, \, thin space.
+  Letters are set in italics except the words in ROMAN.
+-->
+<style>
+  :root {
+    --ground: #ffffff; --text: #1c1917; --muted: #6b645e; --border: #dedad5; --fill: #f1f0ee;
+    --blue: #0072b2; --on-blue: #ffffff; --blue-soft: #e8f2f8; --verm: #b84f00; --verm-soft: #fbeee4;
+  }
+  :root[data-theme="dark"] {
+    --ground: #1c1917; --text: #f5f5f4; --muted: #a8a29e; --border: #3a3531; --fill: #2a2623;
+    --blue: #56b4e9; --on-blue: #111111; --blue-soft: #1f3340; --verm: #f4915a; --verm-soft: #3a2a20;
+  }
+  * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body { margin: 0; background: var(--ground); color: var(--text);
+         font: 16px/1.5 Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+  main { max-width: 760px; margin: 0 auto; padding: 24px 16px 40px; }
+  .embedded main { max-width: none; padding: 0 0 14px; }
+  h1 { font-size: 1.5rem; line-height: 1.2; margin: 0 0 6px; }
+  .lede { color: var(--muted); margin: 0 0 16px; max-width: 68ch; }
+  .embedded h1, .embedded .lede { display: none; }
+  i { font-style: italic; }
+  sub, sup { font-size: 0.72em; line-height: 0; }
+  .bar { text-decoration: overline; }
+  a { color: inherit; }
+
+  .roadmap { border: 1px solid var(--border); border-radius: 12px; padding: 14px 12px; }
+  .scroll { overflow-x: auto; }
+  .map { min-width: 600px; display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); column-gap: 9px; padding: 2px; }
+  .lane { grid-column: 1 / -1; font-size: 0.72rem; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); }
+  .lane b { color: var(--text); font-weight: 600; }
+  .lane.top { margin-bottom: 6px; }
+  .lane.bottom { margin-top: 6px; }
+  .node { font: inherit; color: var(--text); background: var(--fill); border: 1.5px solid transparent; border-radius: 9px;
+          padding: 7px 8px; text-align: left; cursor: pointer; position: relative; min-height: 58px; }
+  .node:hover { border-color: var(--muted); }
+  .node:focus-visible { outline: 2px solid var(--blue); outline-offset: 2px; }
+  .node[aria-expanded="true"] { background: var(--blue); color: var(--on-blue); }
+  .node .head { display: flex; align-items: center; }
+  .node .num { font-weight: 700; font-size: 1.05rem; margin-right: 6px; opacity: 0.75; }
+  .node .name { font-size: 0.76rem; line-height: 1.2; }
+  .node .sym { display: block; text-align: center; font-size: 0.98rem; margin-top: 5px; }
+  .node.micro { grid-column: 2 / -1; display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+  .node.micro .name { font-size: 0.92rem; }
+  .node.micro .sym { margin: 0; white-space: nowrap; }
+  .chip { border: 1.5px dashed var(--border); border-radius: 9px; padding: 7px 8px; font-size: 0.76rem; line-height: 1.2;
+          color: var(--muted); display: flex; align-items: center; }
+  .macro:not(.end)::after { content: "›"; position: absolute; right: -8.5px; top: 50%; transform: translateY(-50%);
+          color: var(--muted); font-size: 1rem; }
+  .bridge { height: 70px; position: relative; display: flex; align-items: center; }
+  .bridge.on::before { content: ""; position: absolute; left: 50%; top: 3px; bottom: 9px; width: 2px; margin-left: -1px; background: var(--verm); }
+  .bridge.on::after { content: ""; position: absolute; left: 50%; bottom: 2px; margin-left: -5px; border: 5px solid transparent;
+          border-top: 8px solid var(--verm); border-bottom: 0; }
+  .bridge span { position: relative; z-index: 1; margin: 0 auto; background: var(--ground); color: var(--verm); font-size: 0.76rem;
+          line-height: 1.25; padding: 2px 3px; text-align: center; white-space: nowrap; }
+  .hint { color: var(--muted); font-size: 0.82rem; margin: 10px 2px 0; }
+
+  .panel { border-top: 1px solid var(--border); margin-top: 14px; padding: 14px 2px 0; }
+  .panel h2 { font-size: 1.05rem; margin: 0 0 2px; }
+  .panel .q { color: var(--muted); margin: 0 0 12px; font-size: 0.95rem; }
+  .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(196px, 1fr)); gap: 10px; }
+  .card { border: 1.5px solid var(--blue); border-radius: 10px; padding: 10px 11px 9px; }
+  .card.here { background: var(--blue-soft); }
+  .card h3 { margin: 0 0 7px; font-size: 0.95rem; line-height: 1.25; }
+  .card h3 span { color: var(--blue); margin-right: 7px; }
+  .card h3 a { text-decoration: none; }
+  .card h3 a:hover { text-decoration: underline; }
+  .card h3 a:focus-visible { outline: 2px solid var(--blue); outline-offset: 2px; border-radius: 3px; }
+  .tag { display: inline-block; font-size: 0.64rem; letter-spacing: 0.06em; text-transform: uppercase; font-weight: 600;
+         color: var(--on-blue); background: var(--blue); border-radius: 999px; padding: 1px 8px; margin-bottom: 6px; }
+  .band { font-size: 0.84rem; line-height: 1.35; }
+  .band .lab { font-size: 0.64rem; letter-spacing: 0.07em; text-transform: uppercase; color: var(--muted); margin-bottom: 2px; }
+  .band ul { margin: 0; padding: 0; list-style: none; }
+  .band li { margin-bottom: 3px; }
+  .band.none p { margin: 0; color: var(--muted); font-style: italic; }
+  .link { color: var(--verm); background: var(--verm-soft); border-radius: 7px; padding: 5px 8px 5px 23px; margin: 7px 0; font-size: 0.84rem;
+          line-height: 1.35; position: relative; }
+  .link::before { content: "↓"; position: absolute; left: 8px; top: 4px; font-weight: 700; }
+  .link ul { margin: 0; padding: 0; list-style: none; }
+  .gap { height: 9px; }
+  .around { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 6px 22px; margin-top: 12px; font-size: 0.86rem; }
+  .around b { display: block; font-size: 0.66rem; letter-spacing: 0.07em; text-transform: uppercase; color: var(--muted); font-weight: 600; }
+  .around ul { margin: 2px 0 0; padding-left: 1.1em; }
+  .review { margin: 10px 0 0; font-size: 0.86rem; }
+  .static .hint, .static .review { display: none; }
+  .static .node { cursor: default; }
+</style>
+</head>
+<body>
+<main>
+  <h1>Course map</h1>
+  <p class="lede">The course moves between two descriptions of matter: the microscopic one, in terms of molecules and
+    their energy levels, and the macroscopic one, in terms of properties measured in the laboratory. The map shows where
+    each module sits and which relation connects the two descriptions.</p>
+  <div class="roadmap">
+    <div class="scroll"><div class="map" id="map"></div></div>
+    <p class="hint">Select a module to unfold its sections. Select it again to fold it away.</p>
+    <div class="panel" id="panel" hidden></div>
+  </div>
+  <noscript><p>The course map needs JavaScript. The table of contents of the notes lists the same modules and sections.</p></noscript>
+</main>
+
+<script>
+const ROMAN = new Set(["ln", "trans", "rot", "vib", "elec", "res", "kin", "vap", "trs", "sat", "rev", "Carnot", "cold", "hot"]);
+function math(s) {
+  return s.replace(/\$([^$]+)\$/g, (_, t) => {
+    const keep = [];
+    const stash = h => { keep.push(h); return "\u0001" + (keep.length - 1) + "\u0002"; };
+    t = t.replace(/\\,/g, " ");
+    t = t.replace(/\\rm\{([^}]*)\}/g, (m, a) => stash(a));
+    t = t.replace(/\\bar\{([^}]*)\}/g, (m, a) => stash('<span class="bar"><i>' + a + "</i></span>"));
+    t = t.replace(/[A-Za-zα-ωħ]+/g, w => (ROMAN.has(w) ? w : "<i>" + w + "</i>"));
+    t = t.replace(/_\{([^}]*)\}/g, "<sub>$1</sub>").replace(/\^\{([^}]*)\}/g, "<sup>$1</sup>");
+    return t.replace(/\u0001(\d+)\u0002/g, (m, i) => keep[+i]);
+  });
+}
+const kB = "k_{\\rm{B}}";
+
+/* Each section lists its microscopic content, the relations that connect the two descriptions, and its macroscopic content. */
+const MODULES = [
+  { n: 1, name: "Equations of State", sym: "$P$, $V$, $T$", bridge: "kinetic theory",
+    q: "How are the pressure, volume, and temperature of a gas related, and why?",
+    sections: [
+      { id: "1.1", t: "Course Introduction", micro: [], link: [],
+        macro: ["system, surroundings, and boundary", "state functions and path functions", "mechanical, thermal, and chemical equilibrium"] },
+      { id: "1.2", t: "Kinetic Theory", micro: ["particles of mass $m$ in random motion", "Maxwell–Boltzmann distribution of speeds"],
+        link: ["$P = Nm⟨v^{2}⟩/(3V)$", `$⟨E_{\\rm{kin}}⟩ = (3/2)${kB}T$`], macro: ["pressure and temperature of a gas"] },
+      { id: "1.3", t: "Ideal Gases", micro: ["point particles that do not interact"], link: ["the assumptions of the ideal-gas model"],
+        macro: ["Boyle's, Charles's, Gay-Lussac's, and Avogadro's laws", `$PV = N${kB}T = nRT$`] },
+      { id: "1.4", t: "Real Gases", micro: ["attractions between molecules ($a$)", "volume excluded by the molecules ($b$)"], link: ["van der Waals equation of state"],
+        macro: ["compressibility factor $Z$", "critical constants", "corresponding states"] },
+    ],
+    from: ["general chemistry and calculus"], to: [`Module 2: the particle in a box gives $PV = N${kB}T$ again`, "Module 3: $PV$ work"] },
+  { n: 2, name: "Statistical Mechanics", sym: "energy levels → $q$ → $Q$",
+    q: "How do the energy levels of molecules determine the properties of a sample?",
+    sections: [
+      { id: "2.1", t: "Introduction to Statistical Mechanics", micro: ["microstates and ensembles", "$p_{i} = 1/M$ in the microcanonical ensemble"],
+        link: ["ensemble average $⟨X⟩$"], macro: ["macrostate at fixed $N$, $V$, $E$"] },
+      { id: "2.2", t: "Canonical Ensemble", micro: ["$p_{i} = e^{−βE_{i}}/Q$", "$Q = Σ_{i} e^{−βE_{i}}$"], link: [`$β = 1/(${kB}T)$`],
+        macro: ["system at fixed $N$, $V$, $T$ in contact with a heat bath"] },
+      { id: "2.3", t: "Ensemble Averages", micro: ["partition function $Q$"],
+        link: ["$U = ⟨E⟩ = −(∂ ln Q/∂β)_{N,V}$", `$σ_{E}^{2} = ${kB}T^{2}C_{V}$`, `$P = ${kB}T(∂ ln Q/∂V)_{N,T}$`],
+        macro: ["internal energy $U$", "heat capacity $C_{V}$", "pressure $P$"] },
+      { id: "2.4", t: "Molecular Partition Functions", micro: ["molecular partition function $q$", "$q = q_{trans}\\,q_{rot}\\,q_{vib}\\,q_{elec}$"], link: ["$Q = q^{N}/N!$"],
+        macro: ["extensive properties of $N$ identical molecules"] },
+      { id: "2.5", t: "Particle in a Box", micro: ["translational energy levels of a particle in a box", "$q_{trans} = V/Λ^{3}$"], link: ["$Q = (V/Λ^{3})^{N}/N!$"],
+        macro: [`$U = (3/2)N${kB}T$`, `$C_{V} = (3/2)N${kB}$`, `$P = N${kB}T/V$`] },
+      { id: "2.6", t: "Harmonic Oscillator", micro: ["vibrational levels $E_{n} = ħω(n + 1/2)$", "zero-point energy $(1/2)ħω$"], link: [`$Θ_{vib} = ħω/${kB}$`],
+        macro: ["vibrational energy and heat capacity, frozen out at $T ≪ Θ_{vib}$"] },
+      { id: "2.7", t: "Linear Rigid Rotor", micro: ["rotational levels $E_{J} = ħ^{2}J(J+1)/(2I)$", "degeneracy $g_{J} = 2J+1$"], link: ["$q_{rot} ≈ T/(σΘ_{rot})$"],
+        macro: ["rotational energy and heat capacity"] },
+      { id: "2.8", t: "Molecular Statistical Mechanics", micro: ["rotation of nonlinear molecules", "vibrations of polyatomic molecules", "electronic levels"],
+        link: ["$q = q_{trans}\\,q_{rot}\\,q_{vib}\\,q_{elec}$", "$q_{elec} ≈ g_{1}$"], macro: ["properties of gases of real molecules"] },
+    ],
+    from: ["Module 1: the ideal gas and kinetic theory"],
+    to: ["Module 3: heat and work in terms of $p_{i}$ and $E_{i}$", `Module 4: $S = ${kB} ln Ω$ and $A = −${kB}T ln Q$`, "Module 7: $K$ from $q$"] },
+  { n: 3, name: "First Law & Enthalpy", short: "First Law", sym: "$U$, $q$, $w$, $H$", bridge: "$U = ⟨E⟩$",
+    q: "How do heat and work change the energy of a system?",
+    sections: [
+      { id: "3.1", t: "Conservation of Energy", micro: [], link: [],
+        macro: ["$dU = δq + δw$", "$U$ is a state function; $q$ and $w$ depend on the path", "$PV$ work and other kinds of work"] },
+      { id: "3.2", t: "Applications of the First Law", micro: ["probabilities $p_{i}$ and energies $E_{i}$ of the microstates"],
+        link: ["$U = Σ_{i} p_{i}E_{i}$", "$δq = Σ_{i} E_{i}\\,dp_{i}$", "$δw = Σ_{i} p_{i}\\,dE_{i}$"],
+        macro: ["reversible and irreversible processes", "isothermal, isochoric, isobaric, and adiabatic processes of an ideal gas"] },
+      { id: "3.3", t: "Enthalpy", micro: [], link: [], macro: ["$H = U + PV$ and $q_{P} = ΔH$", "heat capacity $C_{P}$", "Hess's law and $Δ_{r}H°$"] },
+    ],
+    from: ["Module 1: equations of state", "Module 2: $U = ⟨E⟩$"], to: ["Module 4: $δq_{rev}/T$ defines the entropy", "Module 5: $H$ and $C_{P}$ in the free energies"] },
+  { n: 4, name: "Second Law & Entropy", short: "Second Law", sym: "$S$", bridge: `$S = ${kB} ln Ω$`,
+    q: "Why do some processes happen spontaneously while their reverse never does?",
+    sections: [
+      { id: "4.1", t: "Entropy", micro: [], link: [], macro: ["$dS = δq_{rev}/T$, a state function", "$dU = T\\,dS − P\\,dV$", "entropy changes along reversible paths"] },
+      { id: "4.2", t: "Carnot Cycle", micro: [], link: [], macro: ["two isotherms and two adiabats", "$η_{Carnot} = 1 − T_{cold}/T_{hot}$", "heat flows spontaneously from hot to cold"] },
+      { id: "4.3", t: "Microscopic View of Entropy", micro: ["number of microstates $Ω$", "probabilities $p_{i}$", "partition function $Q$"],
+        link: [`$S = ${kB} ln Ω$`, `$S = −${kB} Σ_{i} p_{i} ln p_{i}$`, `$S = U/T + ${kB} ln Q$`, `$A = −${kB}T ln Q$`],
+        macro: ["$dS ≥ 0$ for an isolated system", "Helmholtz free energy $A = U − TS$"] },
+    ],
+    from: ["Module 3: the First Law and reversible heat", "Module 2: $Q$ and $p_{i}$"], to: ["Module 5: free energies and the third law"] },
+  { n: 5, name: "Third Law & Free Energy", short: "Free Energy", sym: "$A$, $G$", bridge: `$A = −${kB}T ln Q$`,
+    q: "Which way does a process go at fixed temperature, and where does it stop?",
+    sections: [
+      { id: "5.1", t: "Free Energy", micro: ["partition function $Q$"], link: [`$A = −${kB}T ln Q$`, `$P = ${kB}T(∂ ln Q/∂V)_{T}$`],
+        macro: ["$dU ≤ T\\,dS − P\\,dV$", "$U$, $H$, $A$, $G$: each is a minimum at equilibrium under its own constraints", "$ΔG$ at fixed $T$ and $P$ is the reversible non-$PV$ work"] },
+      { id: "5.2", t: "Third Law", micro: ["number of ground-state arrangements $Ω_{0}$"], link: [`$S = ${kB} ln Ω$`, `$S_{res} = ${kB} ln Ω_{0}$`],
+        macro: ["$S(0) = 0$ for an ideal crystal", "$C_{V}$ and $C_{P}$ vanish as $T → 0$", "absolute entropies from heat capacities", "absolute zero is unattainable"] },
+      { id: "5.3", t: "Ammonia Formation", micro: ["active degrees of freedom of each molecule"], link: ["$C_{P}$ from the degrees of freedom"],
+        macro: ["$Δ_{r}G° = Δ_{r}H° − TΔ_{r}S°$", "$G(T,P) − G°(T) = RT ln(P/P°)$", "the Haber–Bosch process"] },
+    ],
+    from: ["Module 4: entropy and the Clausius inequality", `Module 4: $A = −${kB}T ln Q$`, "Module 3: enthalpy and $C_{P}$"],
+    to: ["Module 6: $μ$ and phase equilibrium", "Module 7: $Δ_{r}G°$ and $K$"] },
+  { n: 6, name: "Phase Equilibria", sym: "$μ$",
+    q: "Which phase is stable at a given temperature and pressure, and where do two phases coexist?",
+    sections: [
+      { id: "6.1", t: "Phase Diagrams", micro: [], link: [],
+        macro: ["coexistence curves, triple point, and critical point", "chemical potential $μ$; $μ_{α} = μ_{β}$ at coexistence", "$Δ\\bar{h}_{trs} = T_{trs}Δ\\bar{s}_{trs}$ and Trouton's rule"] },
+      { id: "6.2", t: "Clapeyron and Clausius–Clapeyron", micro: [], link: [],
+        macro: ["$dP/dT = Δ\\bar{s}_{trs}/Δ\\bar{v}_{trs}$", "$d ln P_{sat}/dT = Δ\\bar{h}_{vap}/(RT^{2})$", "$Δ\\bar{h}_{vap}$ from vapor-pressure data"] },
+    ],
+    from: ["Module 5: $G$ is a minimum at fixed $T$ and $P$"], to: ["Module 7: $μ_{i}$ of each species in a reaction"] },
+  { n: 7, name: "Chemical Equilibrium", sym: "$K$", bridge: "$K$ from $q$",
+    q: "How far does a reaction go, and how does that change with temperature?",
+    sections: [
+      { id: "7.1", t: "Equilibrium Constant", micro: [], link: [],
+        macro: ["extent of reaction $ξ$", "$Δ_{r}G = Σ_{i} ν_{i}μ_{i}$", "$Δ_{r}G = Δ_{r}G° + RT ln Q_{p}$", "$Δ_{r}G° = −RT ln K$", "the van 't Hoff equation"] },
+      { id: "7.2", t: "Equilibrium Constants from Microscopic Properties", micro: ["molecular partition functions $q_{i}$", "masses, rotational and vibrational constants, electronic degeneracies, and dissociation energies"],
+        link: ["$Q = Π_{i} q_{i}^{N_{i}}/N_{i}!$", `$μ_{i}$ from $A = −${kB}T ln Q$`], macro: ["$K(T)$ from spectroscopic data", "$K_{p}$ and $K_{c}$"] },
+    ],
+    from: ["Module 5: $Δ_{r}G°$", "Module 6: the chemical potential", "Module 2: $q$"], to: ["the end of the course: equilibrium predicted from molecular properties"] },
+];
+const LANE = [1, 3, 4, 5, 6, 7];
+
+/* ---- where the page is shown ---- */
+const params = new URLSearchParams(location.search);
+let host = null;                                   // the <html> element of the notes page, when embedded in the notes
+try { if (window.parent !== window) host = window.parent.document.documentElement; } catch (e) { host = null; }
+const embedded = window.parent !== window;
+const fixed = params.has("static");                // a plain picture of one module, for the PDF of the notes
+document.body.classList.toggle("embedded", embedded || fixed);
+document.body.classList.toggle("static", fixed);
+let open = Number(params.get("module")) || 0;
+const here = params.get("here") || "";
+
+function theme() {
+  let dark = false;
+  if (params.get("theme")) dark = params.get("theme") === "dark";
+  else if (host) dark = host.classList.contains("dark");
+  else { try { dark = window.matchMedia("(prefers-color-scheme: dark)").matches; } catch (e) {} }
+  document.documentElement.dataset.theme = dark ? "dark" : "light";
+}
+theme();
+if (host) new MutationObserver(theme).observe(host, { attributes: true, attributeFilter: ["class"] });
+else { try { window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", theme); } catch (e) {} }
+
+function fit() {                                    // inside the notes, make the frame as tall as the content
+  try {
+    const frame = window.frameElement;
+    if (!frame) return;
+    const height = Math.ceil(document.documentElement.getBoundingClientRect().height) + "px";
+    frame.style.height = height;
+    const box = frame.parentElement;                // the book theme wraps a frame in a box with a fixed 5:3 shape
+    if (box && box.style.paddingBottom) { box.style.paddingBottom = "0"; box.style.display = "block"; }
+    if (box && box.style.paddingBottom === "0px") box.style.height = height;
+  } catch (e) {}
+}
+
+/* ---- drawing ---- */
+const by = n => MODULES.find(m => m.n === n);
+const two = n => String(n).padStart(2, "0");
+const sectionURL = id => `../chapter-${two(id.split(".")[0])}/section-${two(id.split(".")[1])}/`;
+const list = items => "<ul>" + items.map(x => "<li>" + math(x) + "</li>").join("") + "</ul>";
+
+function node(m, cls) {
+  const b = document.createElement("button");
+  b.type = "button"; b.className = "node " + cls;
+  b.setAttribute("aria-expanded", String(open === m.n));
+  b.setAttribute("aria-controls", "panel");
+  b.setAttribute("aria-label", `Module ${m.n}, ${m.name}`);
+  const name = cls === "micro" ? m.name : (m.short || m.name);
+  b.innerHTML = `<span class="head"><span class="num">${m.n}</span><span class="name">${name}</span></span><span class="sym">${math(m.sym)}</span>`;
+  if (fixed) b.tabIndex = -1;
+  else b.addEventListener("click", () => { open = open === m.n ? 0 : m.n; render(m.n); });
+  return b;
+}
+
+function card(s) {
+  const current = s.id === here;
+  const micro = s.micro.length
+    ? `<div class="band"><div class="lab">Microscopic</div>${list(s.micro)}</div>`
+    : `<div class="band none"><div class="lab">Microscopic</div><p>no microscopic step in this section</p></div>`;
+  const link = s.link.length ? `<div class="link"><ul>${s.link.map(x => "<li>" + math(x) + "</li>").join("")}</ul></div>` : `<div class="gap"></div>`;
+  return `<div class="card${current ? " here" : ""}">${current ? '<div class="tag">This section</div>' : ""}
+    <h3><span>${s.id}</span><a href="${sectionURL(s.id)}" target="_top">${s.t}</a></h3>
+    ${micro}${link}<div class="band"><div class="lab">Macroscopic</div>${list(s.macro)}</div></div>`;
+}
+
+function render(focus) {
+  const map = document.getElementById("map");
+  map.innerHTML = "";
+  map.insertAdjacentHTML("beforeend", '<div class="lane top"><b>Microscopic</b> · molecules and their energy levels</div>');
+  map.insertAdjacentHTML("beforeend", '<div class="chip">molecules in motion (Section 1.2)</div>');
+  map.appendChild(node(by(2), "micro"));
+  for (const n of LANE) {
+    const m = by(n);
+    map.insertAdjacentHTML("beforeend", `<div class="bridge ${m.bridge ? "on" : ""}">${m.bridge ? "<span>" + math(m.bridge) + "</span>" : ""}</div>`);
+  }
+  for (const n of LANE) map.appendChild(node(by(n), n === 7 ? "macro end" : "macro"));
+  map.insertAdjacentHTML("beforeend", '<div class="lane bottom"><b>Macroscopic</b> · properties measured in the laboratory</div>');
+
+  const pressed = map.querySelector('.node[aria-expanded="true"]'), scroller = map.parentElement;
+  if (pressed && scroller.scrollWidth > scroller.clientWidth + 20)
+    scroller.scrollLeft = Math.max(0, pressed.offsetLeft - (scroller.clientWidth - pressed.offsetWidth) / 2);
+  if (focus) { const b = map.querySelector(`.node[aria-label^="Module ${focus},"]`); if (b) b.focus({ preventScroll: true }); }
+
+  const panel = document.getElementById("panel"), m = by(open);
+  panel.hidden = !m;
+  panel.innerHTML = !m ? "" : `<h2>Module ${m.n}. ${m.name}</h2><p class="q">${m.q}</p>
+    <div class="cards">${m.sections.map(card).join("")}</div>
+    <div class="around"><div><b>Builds on</b>${list(m.from)}</div><div><b>Leads to</b>${list(m.to)}</div></div>
+    ${here === "review" ? "" : `<p class="review"><a href="../chapter-${two(m.n)}/review/" target="_top">Module ${m.n} review</a></p>`}`;
+  fit();
+}
+render();
+try { new ResizeObserver(fit).observe(document.body); } catch (e) {}
+window.addEventListener("load", fit);
+</script>
+</body>
+</html>
