@@ -324,13 +324,20 @@ Applying these constraints to Equation {eq}`first-law-VT-ideal`:
 
 ### Comparing Isothermal and Adiabatic Expansions
 
-How does the path affect the work? The $P$–$V$ diagram below compares a reversible isothermal expansion with a reversible adiabatic expansion from the same initial state. The shaded areas represent $|w|$ for each process.
+How does the path affect the work? [](#fig:isothermal-adiabatic) compares a reversible isothermal expansion with a reversible adiabatic expansion from the same initial state. The area under each curve is $|w|$ for that process.
 
 ```{code-cell} ipython3
+:label: fig:isothermal-adiabatic
+:caption: Reversible isothermal and adiabatic expansions of one mole of a monatomic ideal gas from $(V_1, T_1) = (5\,\mathrm{L}, 300\,\mathrm{K})$ to $V_2 = 20\,\mathrm{L}$. The area under each curve is $|w|$ for that path, and the labels give $w$. The orange area lies under both curves.
 :tags: [hide-input]
 
-import numpy as np
+import sys
+
 import matplotlib.pyplot as plt
+import numpy as np
+
+sys.path.append("..")            # the book folder, which holds figstyle
+import figstyle as fs
 
 # Parameters
 n = 1.0        # mol
@@ -357,43 +364,39 @@ P_iso_bar = P_iso / 1e5
 P_adi_bar = P_adi / 1e5
 P1_bar = P1 / 1e5
 
-fig, ax = plt.subplots(figsize=(6, 4))
-
-# Shaded areas
-ax.fill_between(V_L, 0, P_iso_bar, alpha=0.15, color='C0', label=r'$|w_{\mathrm{iso}}|$')
-ax.fill_between(V_L, 0, P_adi_bar, alpha=0.15, color='C3', label=r'$|w_{\mathrm{adi}}|$')
-
-# Curves
-ax.plot(V_L, P_iso_bar, 'C0-', lw=2.5, label=f'Isothermal ($T = {T1}$ K)')
-ax.plot(V_L, P_adi_bar, 'C3-', lw=2.5, label=f'Adiabatic ($\\gamma = 5/3$)')
-
-# Initial state marker
-ax.plot(V1 * 1e3, P1_bar, 'ko', ms=7, zorder=5)
-ax.annotate('  initial state', xy=(V1 * 1e3, P1_bar), fontsize=10, va='center')
-
-# Compute numerical work values for annotation
+# Work along each path
 w_iso = -n * R * T1 * np.log(V2 / V1)  # J
 w_adi = -(P1 * V1**gamma / (1 - gamma)) * (V2**(1 - gamma) - V1**(1 - gamma))  # J
 
-ax.set_xlabel('Volume (L)', fontsize=11)
-ax.set_ylabel('Pressure (bar)', fontsize=11)
-ax.set_xlim(4, 22)
-ax.set_ylim(0, P1_bar * 1.15)
-ax.legend(loc='upper right', fontsize=10, framealpha=0.9)
-ax.set_title('Isothermal vs. Adiabatic Expansion from the Same Initial State', fontsize=11)
 
-# Add work annotations
-ax.text(14, 1.8, f'$w_{{\\mathrm{{iso}}}} = {w_iso/1e3:.2f}$ kJ', fontsize=10, color='C0',
-        bbox=dict(boxstyle='round,pad=0.3', fc='white', ec='C0', alpha=0.8))
-ax.text(14, 0.8, f'$w_{{\\mathrm{{adi}}}} = {w_adi/1e3:.2f}$ kJ', fontsize=10, color='C3',
-        bbox=dict(boxstyle='round,pad=0.3', fc='white', ec='C3', alpha=0.8))
+def draw(c):
+    fig, ax = plt.subplots(figsize=(6.4, 3.7), constrained_layout=True)
 
-plt.tight_layout()
-plt.show()
-plt.close(fig)
+    # Areas under the curves
+    ax.fill_between(V_L, P_adi_bar, P_iso_bar, color=c.tint(c.blue, 0.75), lw=0)
+    ax.fill_between(V_L, 0, P_adi_bar, color=c.tint(c.vermilion, 0.75), lw=0)
+
+    # Curves, each labeled at its final state
+    for P_bar, color, name, w in [(P_iso_bar, c.blue, f"isothermal ($T = {T1}$ K)", w_iso),
+                                  (P_adi_bar, c.vermilion, r"adiabatic ($\gamma = 5/3$)", w_adi)]:
+        ax.plot(V_L, P_bar, color=color)
+        ax.plot(V_L[-1], P_bar[-1], "o", color=color, ms=6.5, zorder=5, clip_on=False)
+        ax.text(V_L[-1] + 0.5, P_bar[-1], f"{name}\n$w = {w / 1e3:.2f}$ kJ".replace("-", "−"), color=color,
+                va="center", clip_on=False)
+
+    # Initial state
+    ax.plot(V1 * 1e3, P1_bar, "o", color=c.ink, ms=6.5, zorder=5)
+    ax.text(V1 * 1e3 + 0.4, P1_bar, "initial state", va="center")
+
+    ax.set(xlabel="Volume $V$ (L)", ylabel="Pressure $P$ (bar)", xlim=(4, 20), ylim=(0, 5.5))
+    return fig
+
+
+fs.show(draw, alt="Pressure against volume for two expansions of an ideal gas from 5 L and about 5 bar to 20 L. The "
+                  "isothermal curve at 300 K ends at about 1.2 bar, and the work is minus 3.46 kJ. The adiabatic "
+                  "curve falls more steeply and ends at about 0.5 bar, and the work is minus 2.26 kJ. The area under "
+                  "the adiabatic curve is smaller than the area under the isothermal curve.")
 ```
-
-Comparison of reversible isothermal and adiabatic expansions of one mole of a monatomic ideal gas from $(V_1, T_1) = (5\,\mathrm{L}, 300\,\mathrm{K})$ to $V_2 = 20\,\mathrm{L}$. The boxes give $w$ for each path.
 
 ```{admonition} Comparing the two paths
 :class: important
@@ -459,57 +462,90 @@ Comparing term by term with $dU = \delta q + \delta w = \delta q - P\,dV$, which
 - **Work** ($\delta w = \sum p_i\,dE_i$): Energy exchange via *shifting the energy levels themselves*. The distribution stays the same, but every level moves. This is what happens when you compress a gas—the particle-in-a-box energy levels all increase as the box shrinks.
 ```
 
-The figure below illustrates these two mechanisms. Reading left to right: the initial state, the result of adding heat (probabilities shift; energy levels unchanged), and the result of doing work via compression (energy levels shift; probabilities unchanged).
+[](#fig:heat-and-work-levels) illustrates these two mechanisms. Panel (a) shows the initial state, panel (b) the result of adding heat (the probabilities change, and the energy levels stay), and panel (c) the result of doing work by compression (the energy levels shift, and the probabilities stay).
 
 ```{code-cell} ipython3
+:label: fig:heat-and-work-levels
+:caption: Microstate energies (horizontal lines) and occupation probabilities (bars, with the value of $p_i$ beside each bar). (a) Initial state. (b) After heating: the energy levels are unchanged, and the distribution shifts toward higher-energy states ($\sum E_i\,dp_i > 0$). The dashed outlines are the initial probabilities. (c) After compression: the probabilities are unchanged, and every energy level shifts upward ($\sum p_i\,dE_i > 0$). The dashed lines are the initial levels, and each arrow joins a level before and after the compression. The probabilities in each panel are Boltzmann probabilities ([Section 2.2](../chapter-02/section-02.md)): heating doubles $T$ at fixed levels, and the compression doubles the level spacing and $T$ together, which leaves every $p_i$ unchanged.
 :tags: [hide-input]
 
-import numpy as np
-import matplotlib.pyplot as plt
+from matplotlib.patches import Rectangle
+
 
 def boltzmann(E, kT):
     """Boltzmann probabilities for levels E at thermal energy kT."""
     weights = np.exp(-E / kT)
     return weights / weights.sum()
 
+
 # Energies and kT in units of the initial level spacing
 E_initial = np.array([0.5, 1.5, 2.5, 3.5, 4.5])
 kT_initial = 1.5
+p_initial = boltzmann(E_initial, kT_initial)
+p_heated = boltzmann(E_initial, 2 * kT_initial)                  # heating: twice the temperature, same levels
+E_compressed = 2 * E_initial                                     # compression: twice the level spacing
+p_compressed = boltzmann(E_compressed, 2 * kT_initial)           # and twice the temperature: same probabilities
 
-panels = [
-    # (title, energies, kT, bar color)
-    ('Initial State', E_initial, kT_initial, 'C1'),
-    ('After Heating ($\\delta q > 0$)\n$\\{p_i\\}$ change; $\\{E_i\\}$ fixed',
-     E_initial, 2 * kT_initial, 'C3'),
-    ('After Compression ($\\delta w > 0$)\n$\\{E_i\\}$ change; $\\{p_i\\}$ fixed',
-     2 * E_initial, 2 * kT_initial, 'C4'),
-]
 
-fig, axs = plt.subplots(1, 3, figsize=(13, 4.5), constrained_layout=True, sharex=True)
+def draw_levels(c):
+    gutter = 0.2                                                 # room for the arrows of panel (c)
+    fig, axes = plt.subplots(1, 3, figsize=(fs.WIDTH, 4.0), constrained_layout=True, sharey=True,
+                             gridspec_kw=dict(width_ratios=[0.8, 0.8, 0.8 + gutter]))
+    bar = 0.44                                                   # height of a probability bar
+    small = fs.BASE - 1.5
 
-for ax, (title, E, kT, color) in zip(axs, panels):
-    p = boltzmann(E, kT)
-    ax.set_title(title, fontsize=11, fontweight='bold')
-    for i in range(len(E)):
-        ax.plot([0, 1], [E[i], E[i]], color='C0', alpha=0.5, lw=1.5)
-        ax.fill_betweenx([E[i], E[i] + 0.15], 0, p[i], color=color, alpha=0.5)
-        ax.text(p[i] + 0.02, E[i] + 0.07, f'$p_{i+1}={p[i]:.2f}$', fontsize=9, ha='left')
-    ax.set_xlabel('Probability')
-    ax.set_xlim(0, 0.75)
-    ax.set_ylim(0, 10)
+    def levels_and_bars(ax, E, p, level_color, bar_color, text_color, label_from=None):
+        """Levels E with a bar of length p on each, and the value of p beside the bar."""
+        ends = p if label_from is None else np.maximum(p, label_from)
+        for i in range(len(E)):
+            ax.plot([0, 0.8], [E[i], E[i]], color=level_color, lw=1.4, solid_capstyle="butt")
+            ax.add_patch(Rectangle((0, E[i]), p[i], bar, fc=bar_color, ec="none"))
+            ax.text(ends[i] + 0.02, E[i] + bar / 2, f"{p[i]:.2f}", color=text_color, va="center", fontsize=small)
 
-axs[0].set_ylabel('Energy')
+    # (a) Initial state
+    levels_and_bars(axes[0], E_initial, p_initial, c.gray, c.tint(c.gray, 0.45), c.ink)
+    axes[0].text(0.78, 8.25, "Boltzmann distribution", ha="right", va="center")
 
-plt.show()
-plt.close(fig)
+    # (b) After heating: same levels, new probabilities (the dashed outlines are the initial ones)
+    levels_and_bars(axes[1], E_initial, p_heated, c.gray, c.tint(c.vermilion, 0.3), c.vermilion,
+                    label_from=p_initial)
+    for E, p in zip(E_initial, p_initial):
+        axes[1].add_patch(Rectangle((0, E), p, bar, fc="none", ec=c.ink, lw=1.0, ls=(0, (3, 2))))
+    axes[1].text(0.78, 8.25, r"$\delta q = \sum_i E_i\,dp_i > 0$", ha="right", va="center")
+
+    # (c) After compression: new levels, same probabilities (the dashed lines are the initial levels)
+    for E in E_initial:
+        axes[2].plot([0, 0.8], [E, E], color=c.ink, lw=1.0, ls=(0, (3, 2)))
+    levels_and_bars(axes[2], E_compressed, p_compressed, c.vermilion, c.tint(c.gray, 0.45), c.ink)
+    for E_old, E_new, x in zip(E_initial, E_compressed, [-0.035, -0.035, -0.075, -0.115, -0.155]):
+        fs.arrow(axes[2], (x, E_old), (x, E_new), c.vermilion, lw=1.2, scale=9)
+    axes[2].text(0.78, 8.25, r"$\delta w = \sum_i p_i\,dE_i > 0$", ha="right", va="center")
+
+    for ax, letter, title in zip(axes, "abc", ["Initial state", "After heating", "After compression"]):
+        left = -gutter if ax is axes[2] else 0
+        ax.plot([0, 0], [0, 10], color=c.muted, lw=0.9)          # zero of the probability
+        ax.set(xlim=(left, 0.8), ylim=(0, 10), xticks=[0, 0.25, 0.5, 0.75], yticks=[], xlabel="Probability $p_i$")
+        ax.set_xticklabels(["0", "0.25", "0.5", "0.75"])
+        ax.spines["left"].set_visible(False)
+        ax.spines["bottom"].set_bounds(0, 0.8)
+        fs.panel(ax, letter, title)
+    axes[0].set_ylabel("Energy")
+    return fig
+
+
+fs.show(draw_levels,
+        alt="Three panels, each with five energy levels drawn as horizontal lines and a bar on each level whose "
+            "length is the probability of that level. Panel a, the initial state: the levels are equally spaced, "
+            "and the probabilities fall from 0.50 on the lowest level to 0.04 on the highest. Panel b, after "
+            "heating: the levels are at the same energies, and the probabilities have changed to 0.35, 0.25, 0.18, "
+            "0.13, and 0.09, so the higher levels are more populated. Panel c, after compression: every level has "
+            "moved up to twice its energy, and the probabilities are the same as in the initial state.")
 ```
-
-Schematic of microstate energies (vertical axis) and occupation probabilities (horizontal bars). **Left:** initial state. **Middle:** after heating—the energy levels are unchanged, but the distribution shifts toward higher-energy states ($\sum E_i\,dp_i > 0$). **Right:** after compression—the probabilities are unchanged, but every energy level shifts upward ($\sum p_i\,dE_i > 0$). The probabilities in each panel are Boltzmann probabilities ([Section 2.2](../chapter-02/section-02.md)): heating doubles $T$ at fixed levels, and the compression doubles the level spacing and $T$ together, which leaves every $p_i$ unchanged.
 
 ````{admonition} **Think–pair–share**
 :class: important
 
-In the microscopic picture, heating at *constant volume* changes $\{p_i\}$ while $\{E_i\}$ stay fixed (middle panel above). What would the figure look like if you heated at *constant pressure* instead? Would only the probabilities change, only the energies, or both? Why?
+In the microscopic picture, heating at *constant volume* changes $\{p_i\}$ while $\{E_i\}$ stay fixed (panel (b) of [](#fig:heat-and-work-levels)). What would the figure look like if you heated at *constant pressure* instead? Would only the probabilities change, only the energies, or both? Why?
 
 ```{admonition} Discussion
 :class: dropdown
@@ -571,9 +607,6 @@ Verify this result using Python. Compute $w = -nRT\ln(V_2/V_1)$ numerically and 
 ```{code-cell} ipython3
 :tags: [hide-input]
 
-import numpy as np
-import matplotlib.pyplot as plt
-
 n = 1.0        # mol
 R = 8.314      # J/(mol K)
 T = 300        # K
@@ -589,20 +622,29 @@ V = np.linspace(V1, V2, 10000)
 P = n * R * T / V
 w_numerical = -np.trapezoid(P, V)
 print(f"Work (numerical):  w = {w_numerical:.1f} J = {w_numerical/1e3:.3f} kJ")
+```
 
-# Plot
-fig, ax = plt.subplots(figsize=(5, 3.5))
-V_L = V * 1e3
-P_bar = P / 1e5
-ax.fill_between(V_L, 0, P_bar, alpha=0.2, color='C0', label=f'$|w| = {abs(w)/1e3:.2f}$ kJ')
-ax.plot(V_L, P_bar, 'C0-', lw=2)
-ax.set_xlabel('Volume (L)')
-ax.set_ylabel('Pressure (bar)')
-ax.set_title('Reversible Isothermal Expansion ($T = 300$ K)')
-ax.legend(fontsize=10)
-plt.tight_layout()
-plt.show()
-plt.close(fig)
+```{code-cell} ipython3
+:label: fig:isothermal-work
+:caption: Reversible isothermal expansion of one mole of an ideal gas at $T = 300\ \mathrm{K}$ from $V_1 = 5.0\ \mathrm{L}$ to $V_2 = 20.0\ \mathrm{L}$. The shaded area under the curve is $|w|$.
+:tags: [hide-input]
+
+def draw_isotherm(c):
+    fig, ax = plt.subplots(figsize=(5.4, 3.3), constrained_layout=True)
+    V_L = V * 1e3      # L
+    P_bar = P / 1e5    # bar
+    ax.fill_between(V_L, 0, P_bar, color=c.tint(c.blue, 0.75), lw=0)
+    ax.plot(V_L, P_bar, color=c.blue)
+    ax.plot([V_L[0], V_L[-1]], [P_bar[0], P_bar[-1]], "o", color=c.blue, ms=6.5, zorder=5, clip_on=False)
+    ax.text(9.5, 0.75, f"$|w| = {abs(w) / 1e3:.2f}$ kJ", ha="center", va="center")
+    ax.text(11.5, 2.75, "$T = 300$ K", color=c.blue, va="center")
+    ax.set(xlabel="Volume $V$ (L)", ylabel="Pressure $P$ (bar)", xlim=(4, 21), ylim=(0, 5.5))
+    return fig
+
+
+fs.show(draw_isotherm, alt="Pressure against volume for the isothermal expansion of an ideal gas at 300 K. The curve "
+                           "falls from about 5 bar at 5 L to about 1.2 bar at 20 L. The area under the curve between "
+                           "the two volumes is shaded, and it equals the magnitude of the work, 3.46 kJ.")
 ```
 ````
 
