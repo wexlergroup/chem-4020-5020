@@ -515,9 +515,9 @@ Use the following standard enthalpies of formation:
 
 | Species | $\Delta_f H^\circ$ (kJ/mol) |
 |:-------:|:---------------------------:|
-| $\mathrm{CH_4}(g)$ | $-74.8$ |
-| $\mathrm{CO_2}(g)$ | $-393.5$ |
-| $\mathrm{H_2O}(g)$ | $-241.8$ |
+| $\mathrm{CH_4}(g)$ | −74.8 |
+| $\mathrm{CO_2}(g)$ | −393.5 |
+| $\mathrm{H_2O}(g)$ | −241.8 |
 | $\mathrm{O_2}(g)$ | $0$ (element in standard state) |
 
 Set up the Hess's Law calculation before checking the solution.

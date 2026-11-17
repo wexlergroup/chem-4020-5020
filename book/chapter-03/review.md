@@ -346,8 +346,8 @@ Every answer is written first as a multiple of $nRT_A=(1.00\ \mathrm{mol})(8.314
 
    | | $w/(nRT_A)$ | $q/(nRT_A)$ | $\Delta U/(nRT_A)$ | $w$ (J) | $q$ (J) | $\Delta U$ (J) |
    |---|---:|---:|---:|---:|---:|---:|
-   | Path 1 | $+\tfrac{1}{2}$ | $+\tfrac{3}{4}$ | $+\tfrac{5}{4}$ | $+1247$ | $+1871$ | $+3118$ |
-   | Path 2 | $+\tfrac{3}{2}$ | $-\tfrac{1}{4}$ | $+\tfrac{5}{4}$ | $+3742$ | $-624$ | $+3118$ |
+   | Path 1 | $+\tfrac{1}{2}$ | $+\tfrac{3}{4}$ | $+\tfrac{5}{4}$ | +1247 | +1871 | +3118 |
+   | Path 2 | $+\tfrac{3}{2}$ | $-\tfrac{1}{4}$ | $+\tfrac{5}{4}$ | +3742 | −624 | +3118 |
 
 8. **$\Delta U$ from the end states**
 
@@ -451,9 +451,9 @@ The table lists data from the [NIST-JANAF tables](https://janaf.nist.gov/). Trea
 
 | Species | $\Delta_f H^\circ(298.15\ \mathrm{K})$ ($\mathrm{kJ\,mol^{-1}}$) | $C_{P,m}(500\ \mathrm{K})$ ($\mathrm{J\,mol^{-1}\,K^{-1}}$) | $\Delta_f H^\circ(700\ \mathrm{K})$ ($\mathrm{kJ\,mol^{-1}}$) |
 |---|---:|---:|---:|
-| $\mathrm{SO_2}(g)$ | $-296.842$ | 46.576 | $-306.291$ |
+| $\mathrm{SO_2}(g)$ | −296.842 | 46.576 | −306.291 |
 | $\mathrm{O_2}(g)$ | 0 | 31.091 | 0 |
-| $\mathrm{SO_3}(g)$ | $-395.765$ | 63.100 | $-405.014$ |
+| $\mathrm{SO_3}(g)$ | −395.765 | 63.100 | −405.014 |
 
 **(a)** Find $\Delta_r H^\circ$ at $298.15\ \mathrm{K}$.
 

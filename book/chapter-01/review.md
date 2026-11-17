@@ -377,7 +377,7 @@ The table lists the molar volume of neon at $P=0.0100\ \mathrm{bar}$ at three te
 
 | $T\ ({}^{\circ}\mathrm{C})$ | $V_\text{m}\ (\mathrm{m^3\,mol^{-1}})$ |
 |---:|---:|
-| $-100.00$ | 1.4397 |
+| −100.00 | 1.4397 |
 | 0.00 | 2.2711 |
 | 100.00 | 3.1026 |
 

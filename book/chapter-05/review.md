@@ -654,9 +654,9 @@ The table lists data at $298.15\ \mathrm{K}$ from the [NIST-JANAF tables](https:
 
 | Species | $\Delta_f H^\circ$ ($\mathrm{kJ\,mol^{-1}}$) | $S^\circ$ ($\mathrm{J\,mol^{-1}\,K^{-1}}$) |
 |---|---:|---:|
-| $\mathrm{CH_4}(g)$ | $-74.873$ | 186.251 |
-| $\mathrm{H_2O}(g)$ | $-241.826$ | 188.834 |
-| $\mathrm{CO}(g)$ | $-110.527$ | 197.653 |
+| $\mathrm{CH_4}(g)$ | −74.873 | 186.251 |
+| $\mathrm{H_2O}(g)$ | −241.826 | 188.834 |
+| $\mathrm{CO}(g)$ | −110.527 | 197.653 |
 | $\mathrm{H_2}(g)$ | 0 | 130.680 |
 
 Use $R=8.3145\ \mathrm{J\,mol^{-1}\,K^{-1}}$.
