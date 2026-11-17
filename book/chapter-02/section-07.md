@@ -34,55 +34,41 @@ Learning objectives:
 
 ### Review of the Linear Rigid Rotor
 
+[](#fig:rotor-levels) shows the first four energy levels of the linear rigid rotor that is reviewed in this subsection.
+
 ```{code-cell} ipython3
+:label: fig:rotor-levels
+:caption: Energy levels of a linear rigid rotor in units of $\hbar^2/2I$. Each short line is one microstate. The level $E_J$ has degeneracy $g_J = 2J + 1$, because the magnetic quantum number $m$ takes the $2J+1$ integer values from $-J$ to $J$. For example, the $J=2$ level contains five degenerate microstates, with $m=-2,-1,0,1,2$ (the numbers below the lines). The spacing between adjacent levels increases with $J$.
 :tags: [hide-input]
 
-import numpy as np
+import sys
+
 import matplotlib.pyplot as plt
-from mpl_toolkits.mplot3d.art3d import Poly3DCollection
-from scipy.constants import k, eV
-from labellines import labelLines
-from myst_nb import glue
 
-fig, axs = plt.subplot_mosaic([[0]], figsize=(4, 4))
+sys.path.append("..")            # the book folder, which holds figstyle
+import figstyle as fs
 
-# Plot the energy levels (blue lines)
-for J in range(0, 3):
-    g_J = 2 * J + 1
-    x_min = -0.04 - 0.1 * (g_J - 1) / 2
-    for i in range(g_J):
-        # Plot each degenerate sub-level horizontally
-        if i == (g_J - 1) / 2:
-            energy_line = axs[0].plot(
-                [x_min, x_min + 0.08], 
-                [J * (J + 1), J * (J + 1)], 
-                color='blue',
-                label=r'$E_{%d}$' % J
-            )
-        else:
-            axs[0].plot(
-                [x_min, x_min + 0.08], 
-                [J * (J + 1), J * (J + 1)], 
-                color='blue'
-            )
-        x_min += 0.1
-    # Label only one line at each J for clarity
-    labelLines(energy_line, zorder=2.5)
 
-axs[0].set_ylabel('Energy (arb. units)')
-axs[0].set_xticks([])
-axs[0].set_yticks([])
-axs[0].spines['top'].set_visible(False)
-axs[0].spines['bottom'].set_visible(False)
-axs[0].spines['right'].set_visible(False)
-axs[0].spines['left'].set_visible(False)
+def draw(c):
+    fig, ax = plt.subplots(figsize=(5.6, 3.7), constrained_layout=True)
+    for J in range(4):
+        energy = J * (J + 1)                 # in units of hbar^2 / (2 I)
+        for m in range(-J, J + 1):
+            ax.plot([m - 0.36, m + 0.36], [energy, energy], color=c.ink, solid_capstyle="butt")
+            ax.text(m, energy - 0.28, str(m).replace("-", "−"), color=c.muted, ha="center", va="top",
+                    fontsize=fs.BASE - 1.5)
+        ax.text(-J - 0.62, energy - 0.28, "$m =$", color=c.muted, ha="right", va="top", fontsize=fs.BASE - 1.5)
+        ax.text(4.0, energy, rf"$J = {J}$,  $g_J = {2 * J + 1}$", va="center", clip_on=False)
+    ax.set(ylabel=r"Energy $E_J$ in units of $\hbar^2/2I$", xlim=(-4.6, 3.8), ylim=(-1.4, 13), xticks=[],
+           yticks=[0, 2, 6, 12])
+    ax.spines["bottom"].set_visible(False)
+    return fig
 
-plt.tight_layout()
-plt.show()
-plt.close(fig)
+
+fs.show(draw, alt="Energy level diagram of a linear rigid rotor. The levels J equal to 0, 1, 2, and 3 lie at 0, 2, "
+                  "6, and 12 in units of h-bar squared over 2 I. Each level is drawn as a row of short lines, one "
+                  "for each value of m from minus J to J, so the rows have 1, 3, 5, and 7 lines.")
 ```
-
-Energy levels for a linear rigid rotor. Each level $E_J$ has degeneracy $g_J = 2J + 1$ (magnetic quantum numbers $m=-J,\ldots,J$). For example, the $J=2$ level contains five degenerate microstates with $m=-2,-1,0,1,2$.
 
 A linear rigid rotor is a linear molecule whose bond lengths are fixed. The molecule can rotate about two perpendicular axes, $a$ and $b$, that pass through its center of mass and are perpendicular to the molecular axis. Rotation about the molecular axis is not counted, because the nuclei lie on that axis. In classical mechanics, the rotational energy is
 
