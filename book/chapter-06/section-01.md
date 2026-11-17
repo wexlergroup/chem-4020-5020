@@ -161,6 +161,90 @@ The physical reading is that $\mu$ is the "price per mole" of adding substance t
 - If $\mu_\alpha < \mu_\beta$, the reverse transition is spontaneous.
 - If $\mu_\alpha = \mu_\beta$, the two phases coexist at equilibrium.
 
+[](#fig:liquid-vapor-molecules) shows what this condition means for the molecules of a liquid and its vapor. Molecules cross the boundary in both directions all the time. A molecule at the surface of the liquid that has enough energy escapes into the vapor, and a molecule of the vapor that strikes the surface is captured. At equilibrium the two rates are equal, so the amount of each phase stays constant. A molecule in the liquid has a lower energy, because its neighbors hold it, and a molecule in the vapor has far more microstates available to it, because it has far more room. The chemical potential weighs the two against each other, since $\mu = \bar g = \bar h - T\bar s$ for each phase. The two phases coexist when the enthalpy that a mole of molecules needs to leave the liquid is equal to $T$ times the entropy that it gains in the vapor.
+
+```{code-cell} ipython3
+:label: fig:liquid-vapor-molecules
+:caption: A liquid in equilibrium with its vapor. (a) Molecules leave the liquid and return to it at equal rates (schematic). (b) The molar Gibbs free energy of the vapor relative to the liquid for water at its normal boiling point, $373.12\ \mathrm{K}$. The enthalpy of vaporization raises it by $40.65\ \mathrm{kJ\,mol^{-1}}$, and the entropy of vaporization lowers it by $T\,\Delta\bar s_{\mathrm{vap}}$, which is the same amount, so that $\mu_{\mathrm{l}} = \mu_{\mathrm{g}}$. Data from the [NIST Chemistry WebBook](https://webbook.nist.gov/chemistry/).
+:tags: [hide-input]
+
+import sys
+
+import numpy as np
+import matplotlib.pyplot as plt
+from matplotlib.patches import Circle, Rectangle
+
+sys.path.append("..")            # the book folder, which holds figstyle
+import figstyle as fs
+
+# Water at 1.01325 bar (NIST Chemistry WebBook, saturation properties)
+T_b = 373.124                    # K
+dh_vap = 40.651                  # kJ/mol
+ds_vap = 108.95                  # J/(mol K)
+T_ds = T_b * ds_vap / 1e3        # kJ/mol
+
+# Positions of the molecules in panel (a): a jittered lattice for the liquid, a few molecules for the vapor
+rng = np.random.default_rng(6)
+radius = 0.036
+liquid = [(0.07 + 0.095 * i + 0.0475 * (j % 2) + rng.uniform(-0.012, 0.012),
+           0.06 + 0.083 * j + rng.uniform(-0.012, 0.012))
+          for j in range(5) for i in range(10 - j % 2)]
+vapor = [(0.14, 0.89), (0.49, 0.64), (0.52, 0.91), (0.90, 0.60), (0.10, 0.60)]
+leaving, returning = (0.31, 0.50), (0.67, 0.50)          # the two molecules that cross the boundary
+
+
+def draw_boundary(c):
+    fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(fs.WIDTH, 3.3), constrained_layout=True,
+                                   gridspec_kw={"width_ratios": [1.0, 1.15]})
+
+    # (a) Molecules at the boundary
+    ax1.set(xlim=(0, 1), ylim=(0, 1), aspect="equal")
+    ax1.axis("off")
+    ax1.add_patch(Rectangle((0, 0), 1, 0.44, color=c.tint(c.liquid, 0.82), lw=0))
+    ax1.add_patch(Rectangle((0, 0), 1, 1, fill=False, ec=c.muted, lw=1.2))
+    for x, y in liquid:
+        ax1.add_patch(Circle((x, y), radius, color=c.liquid, lw=0))
+    for x, y in vapor:
+        ax1.add_patch(Circle((x, y), radius, color=c.gas, lw=0))
+    ax1.add_patch(Circle(leaving, radius, color=c.liquid, lw=0))
+    ax1.add_patch(Circle(returning, radius, color=c.gas, lw=0))
+    fs.arrow(ax1, (leaving[0], leaving[1] + 0.06), (leaving[0], leaving[1] + 0.24), c.ink)
+    fs.arrow(ax1, (returning[0], returning[1] + 0.24), (returning[0], returning[1] + 0.06), c.ink)
+    ax1.text(leaving[0] - 0.035, leaving[1] + 0.27, "evaporation", ha="center", va="bottom")
+    ax1.text(returning[0] + 0.045, returning[1] + 0.27, "condensation", ha="center", va="bottom")
+    ax1.text(0.97, 0.955, "vapor", color=c.gas, ha="right", va="top")
+    ax1.text(0.5, -0.03, "liquid", color=c.liquid, ha="center", va="top")
+    fs.panel(ax1, "a", "At the boundary")
+
+    # (b) Enthalpy against entropy at the boiling point
+    ax2.plot([0.06, 0.34], [0, 0], color=c.liquid, lw=fs.LINE, solid_capstyle="butt")
+    ax2.plot([0.30, 0.70], [dh_vap, dh_vap], color=c.gray, lw=1.2, ls=(0, (4, 3)))
+    ax2.plot([0.66, 0.94], [0, 0], color=c.gas, lw=fs.LINE, solid_capstyle="butt")
+    fs.arrow(ax2, (0.34, 0.6), (0.34, dh_vap - 0.4), c.ink)
+    fs.arrow(ax2, (0.66, dh_vap - 0.4), (0.66, 0.6), c.ink)
+    ax2.text(0.31, 0.5 * dh_vap, "$+\\Delta\\bar{h}_{\\mathrm{vap}}$\nleave the\nneighbors", ha="right", va="center")
+    ax2.text(0.69, 0.5 * dh_vap, "$-T\\,\\Delta\\bar{s}_{\\mathrm{vap}}$\nmore room,\nmore microstates",
+             ha="left", va="center")
+    ax2.text(0.20, -1.6, "liquid", color=c.liquid, ha="center", va="top")
+    ax2.text(0.80, -1.6, "vapor", color=c.gas, ha="center", va="top")
+    ax2.text(0.50, 4.5, "$\\mu_{\\mathrm{l}} = \\mu_{\\mathrm{g}}$", ha="center", va="center")
+    ax2.set(xlim=(0, 1.22), ylim=(-6, 46), xticks=[],
+            ylabel="$\\bar{g}$ relative to the liquid (kJ mol$^{-1}$)")
+    ax2.spines["bottom"].set_visible(False)
+    fs.panel(ax2, "b", "Water at its boiling point")
+    return fig
+
+
+fs.show(draw_boundary, alt="Panel a is a schematic of a liquid below its vapor. The liquid is a dense layer of "
+                           "molecules and the vapor holds a few. One molecule leaves the surface, labeled "
+                           "evaporation, and one returns to it, labeled condensation. Panel b shows the molar Gibbs "
+                           "energy of water vapor relative to the liquid at the normal boiling point. An arrow "
+                           f"rises by the enthalpy of vaporization, {dh_vap:.2f} kilojoules per mole, and a second "
+                           "arrow falls by the temperature times the entropy of vaporization, "
+                           f"{T_ds:.2f} kilojoules per mole, back to the level of the liquid, so the chemical "
+                           "potentials of liquid and vapor are equal.")
+```
+
 Because $\mu$ depends on $T$ and $P$, the equation $\mu_\alpha(T,P) = \mu_\beta(T,P)$ is a single scalar constraint on two variables and therefore picks out a *curve* in the $(T,P)$ plane — precisely the coexistence curve we saw in the phase diagram of [A Quick Tour of a One-Component $P$–$T$ Phase Diagram](#section:phase-diagram-tour).
 
 (section:competing-phases)=
@@ -316,7 +400,64 @@ Frederick Trouton (1884) noticed that for many ordinary liquids at their *normal
 
 The rough constancy of $\Delta \bar s_{\mathrm{vap}}$ across chemically unrelated liquids suggests that the entropy gained when one mole of molecules leaves a liquid for a nearly ideal gas is governed mostly by the phase change itself (the volume increase, the loss of short-range order) rather than by the chemical identity of the liquid.
 
-Not every liquid follows the rule. Hydrogen-bonded liquids lie well above Trouton's value: at the normal boiling point, $\Delta \bar s_{\mathrm{vap}}$ is about $97\ \mathrm{J\,mol^{-1}\,K^{-1}}$ for ammonia, $104$ for methanol, $109$ for water, and $110$ for ethanol. Water is the familiar example: $\Delta \bar s_{\mathrm{vap}}(\mathrm{H_2O}) \approx 109\ \mathrm{J\,mol^{-1}\,K^{-1}}$ is roughly 25 % above Trouton's value. Liquids that boil at very low temperatures lie well below it: $\Delta \bar s_{\mathrm{vap}}$ is $64\ \mathrm{J\,mol^{-1}\,K^{-1}}$ for neon, $44$ for hydrogen, and $19.5$ (only $2.3\,R$) for helium.
+Not every liquid follows the rule. Hydrogen-bonded liquids lie well above Trouton's value: at the normal boiling point, $\Delta \bar s_{\mathrm{vap}}$ is about $97\ \mathrm{J\,mol^{-1}\,K^{-1}}$ for ammonia, $104$ for methanol, $109$ for water, and $110$ for ethanol. Water is the familiar example: $\Delta \bar s_{\mathrm{vap}}(\mathrm{H_2O}) \approx 109\ \mathrm{J\,mol^{-1}\,K^{-1}}$ is roughly 25 % above Trouton's value. Liquids that boil at very low temperatures lie well below it: $\Delta \bar s_{\mathrm{vap}}$ is $64\ \mathrm{J\,mol^{-1}\,K^{-1}}$ for neon, $44$ for hydrogen, and $19.5$ (only $2.3\,R$) for helium. [](#fig:trouton) compares fifteen liquids.
+
+```{code-cell} ipython3
+:label: fig:trouton
+:caption: Entropy of vaporization at the normal boiling point, $\Delta \bar s_{\mathrm{vap}} = \Delta \bar h_{\mathrm{vap}}/T_{\mathrm{vap}}$, for fifteen liquids in order of their boiling temperature, which is given beside each name. The dashed line marks Trouton's value, Eq. [](#eq:trouton). Data from the [NIST Chemistry WebBook](https://webbook.nist.gov/chemistry/).
+:tags: [hide-input]
+
+import sys
+
+import matplotlib.pyplot as plt
+
+sys.path.append("..")            # the book folder, which holds figstyle
+import figstyle as fs
+
+# Normal boiling temperature (K) and enthalpy of vaporization there (kJ/mol).
+# NIST Chemistry WebBook: saturation properties at 1.01325 bar; ethanol from its
+# phase-change data (Majer and Svoboda, 1985).
+liquids = [
+    ("helium", 4.224, 0.0823),
+    ("hydrogen", 20.37, 0.9046),
+    ("neon", 27.10, 1.731),
+    ("nitrogen", 77.36, 5.580),
+    ("argon", 87.30, 6.437),
+    ("methane", 111.7, 8.195),
+    ("propane", 231.0, 18.77),
+    ("ammonia", 239.8, 23.33),
+    ("pentane", 309.2, 25.81),
+    ("methanol", 337.6, 35.28),
+    ("hexane", 341.9, 28.88),
+    ("ethanol", 351.5, 38.56),
+    ("benzene", 353.2, 30.75),
+    ("water", 373.1, 40.65),
+    ("toluene", 383.7, 33.23),
+]
+trouton = 85.9                                            # J/(mol K)
+ds_vap = [1e3 * dh / T_b for _, T_b, dh in liquids]       # J/(mol K)
+
+
+def draw_trouton(c):
+    fig, ax = plt.subplots(figsize=(6.0, 4.5), constrained_layout=True)
+    rows = range(len(liquids))
+    ax.axvline(trouton, color=c.gray, lw=1.2, ls=(0, (4, 3)))
+    ax.hlines(rows, trouton, ds_vap, color=c.rule, lw=1.2)
+    ax.plot(ds_vap, rows, "o", color=c.blue, ms=6, zorder=3)
+    ax.set_yticks(rows, [f"{name}, {T_b:.0f} K" for name, T_b, _ in liquids])
+    ax.tick_params(axis="y", length=0)
+    ax.text(trouton + 2, 0, "Trouton's value", color=c.muted, ha="left", va="center")
+    ax.set(xlim=(0, 120), ylim=(-0.7, len(liquids) - 0.3),
+           xlabel="$\\Delta\\bar{s}_{\\mathrm{vap}}$ (J mol$^{-1}$ K$^{-1}$)")
+    return fig
+
+
+values = ", ".join(f"{name} {ds:.0f}" for (name, _, _), ds in zip(liquids, ds_vap))
+fs.show(draw_trouton, alt="Entropy of vaporization at the normal boiling point for fifteen liquids, listed from the "
+                          "lowest boiling temperature at the bottom to the highest at the top, with a dashed line at "
+                          f"Trouton's value of {trouton} joules per mole per kelvin. In joules per mole per kelvin: "
+                          f"{values}.")
+```
 
 ```{admonition} Reading a Deviation from Trouton's Rule
 :class: important
