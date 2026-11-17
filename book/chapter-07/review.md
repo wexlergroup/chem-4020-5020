@@ -14,6 +14,20 @@ kernelspec:
 
 # Review
 
+The course map shows where this module sits in the course and which relations connect the microscopic and macroscopic descriptions. Select a module to unfold its sections.
+
+<iframe
+  src="https://wexlergroup.github.io/chem-4020-5020/computational-studios/course-map.html?module=7&amp;here=review"
+  title="Course map, opened at Module 7"
+  style="width: 100%; height: 830px; border: 0;"
+  loading="lazy"
+></iframe>
+
+```{image} ../_static/course-map/module-7.png
+:class: hidden
+:alt: Course map with Module 7 unfolded. Statistical mechanics (Module 2) forms the microscopic strand, and Modules 1 and 3 to 7 form the macroscopic strand. A relation joins the two strands at each module except Module 6, and for Module 7 it is the equilibrium constant in terms of molecular partition functions. Below the map, one card for each of Sections 7.1 and 7.2 lists the microscopic content, the connecting relations, and the macroscopic content of the section.
+```
+
 ## 1. Checklist of Key Concepts
 
 ### Section 7.1: Equilibrium Constant
