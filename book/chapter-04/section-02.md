@@ -318,6 +318,83 @@ The thermal efficiency is defined as the fraction of absorbed heat converted to 
 = \frac{q_{AB} + q_{CD}}{q_{AB}}.
 ```
 
+[](#fig:carnot-energy-flow) shows the three energies of this definition for one cycle.
+
+```{code-cell} ipython3
+:label: fig:carnot-energy-flow
+:caption: Energy flow through a Carnot engine in one cycle. The widths of the three streams are drawn to scale for the engine of the Worked Example below, which runs between $T_{\mathrm{hot}} = 500\ \mathrm{K}$ and $T_{\mathrm{cold}} = 300\ \mathrm{K}$. Of every $1000\ \mathrm{J}$ of heat that the engine absorbs from the hot reservoir, $400\ \mathrm{J}$ leaves as net work and $600\ \mathrm{J}$ leaves as heat to the cold reservoir. Because $\Delta U_{\mathrm{cycle}} = 0$, the width of the stream that enters equals the sum of the widths of the two streams that leave.
+:tags: [hide-input]
+
+import sys
+
+import numpy as np
+import matplotlib.pyplot as plt
+from matplotlib.patches import FancyBboxPatch, Polygon, Rectangle
+
+sys.path.append("..")            # the book folder, which holds figstyle
+import figstyle as fs
+
+T_HOT, T_COLD = 500.0, 300.0                 # K, the reservoirs of the Worked Example
+Q_IN = 1000.0                                # J, heat absorbed from the hot reservoir in one cycle
+W_OUT = (1 - T_COLD / T_HOT) * Q_IN          # J, net work output
+Q_OUT = Q_IN - W_OUT                         # J, heat released to the cold reservoir
+
+WIDTH_PER_JOULE = 2.0 / Q_IN                 # drawn width of a stream per joule
+X_LEFT = 1.4                                 # left edge of the stream of heat
+Y_SPLIT = 3.6                                # height at which the stream of work turns aside
+R_INNER = 0.3                                # inner radius of that turn
+HEAD = 0.45                                  # length of the pointed end of a stream
+
+
+def draw_flow(c):
+    fig, ax = plt.subplots(figsize=(5.2, 4.5), constrained_layout=True)
+    w_in, w_work, w_out = (WIDTH_PER_JOULE * e for e in (Q_IN, W_OUT, Q_OUT))
+    heat, work = c.tint(c.vermilion, 0.3), c.tint(c.ink, 0.45)
+
+    # Reservoirs and engine
+    ax.add_patch(Rectangle((0, 4.8), 4.4, 0.7, fc=c.tint(c.vermilion, 0.78), ec="none"))
+    ax.add_patch(Rectangle((0, 0), 4.4, 0.7, fc=c.tint(c.blue, 0.78), ec="none"))
+    ax.add_patch(FancyBboxPatch((0.12, 1.72), 4.16, 2.16, boxstyle="round,pad=0.12", fc=c.fill, ec=c.ink, lw=1.4))
+    ax.text(2.2, 5.15, "hot reservoir, $T_{\\mathrm{hot}}$", ha="center", va="center")
+    ax.text(2.2, 0.35, "cold reservoir, $T_{\\mathrm{cold}}$", ha="center", va="center")
+    ax.text(0.7, 2.8, "engine", ha="center", va="center")
+
+    # Heat: from the hot reservoir down to the split, and on to the cold reservoir
+    ax.add_patch(Rectangle((X_LEFT, Y_SPLIT), w_in, 4.8 - Y_SPLIT, fc=heat, ec="none"))
+    ax.add_patch(Polygon([(X_LEFT, Y_SPLIT), (X_LEFT + w_out, Y_SPLIT), (X_LEFT + w_out, 0.7 + HEAD),
+                          (X_LEFT + w_out / 2, 0.7), (X_LEFT, 0.7 + HEAD)], fc=heat, ec="none"))
+
+    # Work: turns aside in a quarter circle and leaves the engine to the right
+    x_c, r_outer = X_LEFT + w_in + R_INNER, R_INNER + w_work
+    angle = np.linspace(np.pi, 1.5 * np.pi, 40)
+    outer = np.column_stack([x_c + r_outer * np.cos(angle), Y_SPLIT + r_outer * np.sin(angle)])
+    inner = np.column_stack([x_c + R_INNER * np.cos(angle), Y_SPLIT + R_INNER * np.sin(angle)])
+    y_low, y_high, x_tip = Y_SPLIT - r_outer, Y_SPLIT - R_INNER, 6.2
+    end = [(x_tip - HEAD, y_low), (x_tip, (y_low + y_high) / 2), (x_tip - HEAD, y_high)]
+    ax.add_patch(Polygon(np.vstack([outer, end, inner[::-1]]), fc=work, ec="none"))
+
+    # Labels beside the streams
+    ax.text(X_LEFT + w_in + 0.15, 4.4, "heat in\n$q_{AB}$", ha="left", va="center", color=c.vermilion)
+    ax.text(X_LEFT + w_out + 0.15, 1.2, "heat out\n$|q_{CD}|$", ha="left", va="center", color=c.vermilion)
+    ax.text(5.3, y_high + 0.12, "net work out\n$W_{\\mathrm{out}}$", ha="center", va="bottom")
+
+    # Energies of the Worked Example, written on the streams
+    ax.text(X_LEFT + w_in / 2, 4.4, f"{Q_IN:.0f} J", ha="center", va="center", color=fs.on(heat))
+    ax.text(X_LEFT + w_out / 2, 1.45, f"{Q_OUT:.0f} J", ha="center", va="center", color=fs.on(heat))
+    ax.text(5.0, (y_low + y_high) / 2, f"{W_OUT:.0f} J", ha="center", va="center", color=fs.on(work))
+
+    ax.set(xlim=(-0.1, 6.3), ylim=(-0.05, 5.55))
+    ax.set_aspect("equal")
+    ax.axis("off")
+    return fig
+
+
+fs.show(draw_flow, alt="Flow diagram of a Carnot engine. A wide stream of heat, q AB, runs from the hot reservoir at the top "
+                       "into the engine. Inside the engine the stream divides. Six tenths of its width continue down "
+                       "to the cold reservoir as heat out, and four tenths turn to the right and leave the engine as "
+                       "net work out.")
+```
+
 Now use the entropy definition on the isotherms:
 
 ```{math}
@@ -440,7 +517,7 @@ An ideal Carnot engine operates between $T_{\mathrm{hot}}=500\ \mathrm{K}$ and $
    q_{CD} = -q_{AB} - w_{\mathrm{cycle}} = -1000 - (-400) = -600\ \mathrm{J}.
    ```
 
-   The negative sign confirms that the system releases 600 J to the cold reservoir, as expected.
+   The negative sign confirms that the system releases 600 J to the cold reservoir, as expected. [](#fig:carnot-energy-flow) shows these three energies to scale.
 
 3. **Entropy changes of the reservoirs**
 
