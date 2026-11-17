@@ -19,7 +19,7 @@ See also: [Course-wide Conventions & Notation](../notation.md)
 
 ## Overview and Learning Objectives
 
-Chapter 6 treated one kind of equilibrium — the coexistence of two phases of a single substance — and showed that the condition for equilibrium reduces to equality of chemical potentials, $\mu_\alpha = \mu_\beta$. **Chemical equilibrium** is the multi-species generalization: instead of two phases of one substance, we now have several chemical *species* interconverting through a reaction, and the analogous condition (derived below) is
+Module 6 treated one kind of equilibrium — the coexistence of two phases of a single substance — and showed that the condition for equilibrium reduces to equality of chemical potentials, $\mu_\alpha = \mu_\beta$. **Chemical equilibrium** is the multi-species generalization: instead of two phases of one substance, we now have several chemical *species* interconverting through a reaction, and the analogous condition (derived below) is
 
 ```{math}
 \sum_i \nu_i\,\mu_i = 0.
@@ -46,7 +46,7 @@ This minimization gives the **chemical equilibrium condition** $\Delta_r G=0$, a
 ```{admonition} A note on the symbol $Q$
 :class: warning
 
-The symbol $Q$ is overloaded in physical chemistry. In this chapter we consistently use $Q_p$ (with the pressure subscript) for the ideal-gas **reaction quotient** to distinguish it from the canonical partition function $Q(T,V,N)$ of Chapters 2, 4, and 5. See the [course-wide notation page](../notation.md) for the global convention.
+The symbol $Q$ is overloaded in physical chemistry. In this module we consistently use $Q_p$ (with the pressure subscript) for the ideal-gas **reaction quotient** to distinguish it from the canonical partition function $Q(T,V,N)$ of Modules 2, 4, and 5. See the [course-wide notation page](../notation.md) for the global convention.
 ```
 
 Learning objectives:
@@ -59,31 +59,29 @@ Learning objectives:
 
 ## Core Ideas and Derivations
 
-### 7.1.1 Extent of reaction $\xi$
+(section:extent-of-reaction)=
+### Extent of Reaction $\xi$
 
-Consider a general reaction written with stoichiometric coefficients:
+Consider a general reaction, written with positive coefficients $a$, $b$, $y$, and $z$:
 
 ```{math}
-\nu_A A + \nu_B B \rightleftharpoons \nu_Y Y + \nu_Z Z.
+a\,\mathrm{A} + b\,\mathrm{B} \rightleftharpoons y\,\mathrm{Y} + z\,\mathrm{Z}.
 ```
 
-A convenient way to describe composition changes is the **extent of reaction** $\xi$ (units of moles). If $n_{i,0}$ are initial amounts, then as the reaction proceeds,
+Each species is given a **stoichiometric coefficient** $\nu_i$ that carries a sign, negative for reactants and positive for products: $\nu_{\mathrm{A}} = -a$, $\nu_{\mathrm{B}} = -b$, $\nu_{\mathrm{Y}} = y$, and $\nu_{\mathrm{Z}} = z$.
+
+A convenient way to describe composition changes is the **extent of reaction** $\xi$ (units of moles). If $n_{i,0}$ are initial amounts, then as the reaction proceeds, the amount of every species is
 
 ```{math}
-n_A = n_{A,0} - \nu_A\,\xi,\qquad
-n_B = n_{B,0} - \nu_B\,\xi,\qquad
-n_Y = n_{Y,0} + \nu_Y\,\xi,\qquad
-n_Z = n_{Z,0} + \nu_Z\,\xi.
+n_i = n_{i,0} + \nu_i\,\xi.
 ```
 
 Differentiating gives the compact relation
 
 ```{math}
 :label: eq:dn-from-xi
-dn_i = \nu_i\,d\xi
+dn_i = \nu_i\,d\xi.
 ```
-
-if we adopt the **signed stoichiometry convention**: $\nu_i<0$ for reactants and $\nu_i>0$ for products.
 
 ```{admonition} Sign convention for $\nu_i$
 :class: note
@@ -93,12 +91,13 @@ Equation {eq}`eq:dn-from-xi` requires that the stoichiometric coefficients carry
 
 ---
 
-### 7.1.2 Gibbs free energy and the equilibrium condition
+(section:reaction-gibbs-energy)=
+### Gibbs Free Energy and the Equilibrium Condition
 
 Treat the system Gibbs energy as a function of $T,P$, and composition:
 
 ```{math}
-G = G(T,P,n_A,n_B,n_Y,n_Z,\ldots).
+G = G(T,P,n_{\mathrm{A}},n_{\mathrm{B}},n_{\mathrm{Y}},n_{\mathrm{Z}},\ldots).
 ```
 
 Its total differential is
@@ -109,7 +108,7 @@ dG = \left(\frac{\partial G}{\partial T}\right)_{P,n}\! dT
     + \sum_i \left(\frac{\partial G}{\partial n_i}\right)_{T,P,n_{j\neq i}} dn_i.
 ```
 
-The partial derivative $\left(\partial G/\partial n_i\right)_{T,P,n_{j\ne i}}$ was introduced in § 6.1.2 as the **chemical potential** $\mu_i$, so
+The partial derivative $\left(\partial G/\partial n_i\right)_{T,P,n_{j\ne i}}$ was introduced under [Open Systems and the Chemical Potential](#section:chemical-potential) in [Section 6.1](../chapter-06/section-01.md) as the **chemical potential** $\mu_i$, so
 
 ```{math}
 dG = -S\,dT + V\,dP + \sum_i \mu_i\,dn_i.
@@ -140,7 +139,7 @@ and therefore
 \left(\frac{\partial G}{\partial \xi}\right)_{T,P} = \Delta_r G.
 ```
 
-#### Spontaneity and equilibrium (constant $T,P$)
+#### Spontaneity and Equilibrium (Constant $T,P$)
 
 - $\Delta_r G < 0$: reaction proceeds **forward** (toward products).
 - $\Delta_r G = 0$: **equilibrium**.
@@ -152,17 +151,18 @@ At equilibrium,
 \boxed{\Delta_r G = 0.}
 ```
 
-This is the multi-species analog of the phase-equilibrium condition $\mu_\alpha = \mu_\beta$ from § 6.1.2. Instead of transferring matter between two phases, we now transfer it among several chemical species; equilibrium is again the stationary point of $G$ at fixed $T,P$.
+This is the multi-species analog of the phase-equilibrium condition $\mu_\alpha = \mu_\beta$ of [Section 6.1](../chapter-06/section-01.md). Instead of transferring matter between two phases, we now transfer it among several chemical species; equilibrium is again the stationary point of $G$ at fixed $T,P$.
 
 ---
 
-### 7.1.3 Reaction quotient $Q_p$ and the equilibrium constant $K$
+(section:reaction-quotient)=
+### Reaction Quotient $Q_p$ and the Equilibrium Constant $K$
 
 To connect $\Delta_r G$ to measurable composition variables, we need an expression for the chemical potentials.
 
-#### Ideal-gas chemical potential
+#### Ideal-Gas Chemical Potential
 
-Section 5.3 showed that for one mole of an ideal gas at constant $T$, integrating $dG = V\,dP$ from $P^\circ$ to $P$ gives $G(T,P) - G^\circ(T) = RT\ln(P/P^\circ)$. For a single species in an ideal-gas *mixture*, the same argument with $P_i$ in place of $P$ yields
+[Section 5.3](../chapter-05/section-03.md) showed that for one mole of an ideal gas at constant $T$, integrating $dG = V\,dP$ from $P^\circ$ to $P$ gives $G(T,P) - G^\circ(T) = RT\ln(P/P^\circ)$. For a single species in an ideal-gas *mixture*, the same argument with $P_i$ in place of $P$ yields
 
 ```{math}
 :label: eq:mu-ideal-gas
@@ -171,36 +171,41 @@ Section 5.3 showed that for one mole of an ideal gas at constant $T$, integratin
 
 where $P^{\circ}$ is the standard-state pressure (1 bar, per the [notation conventions](../notation.md)) and $\mu_i^{\circ}(T)$ is the standard chemical potential.
 
-````{admonition} Why is $K$ unitless if it's built from pressures?
+````{admonition} A Numerical Example: Pressure and the Chemical Potential
 :class: note
 
-Any logarithm in thermodynamics must take a **dimensionless** argument. That's why we never write $\ln P$ (pressure has units), and instead write $\ln(P/P^\circ)$, where $P^\circ$ is the **standard-state pressure** (1 bar here).
-
-**Numerical example.** Take a gas with partial pressure $P_i = 2.50\ \text{bar}$ at $T=298\ \text{K}$, with $P^\circ = 1.00\ \text{bar}$:
+Take a gas with partial pressure $P_i = 2.50\ \mathrm{bar}$ at $T=298\ \mathrm{K}$, with the standard-state pressure $P^\circ = 1.00\ \mathrm{bar}$:
 
 ```{math}
-\frac{P_i}{P^\circ}=\frac{2.50\ \text{bar}}{1.00\ \text{bar}}=2.50 \quad \text{(dimensionless)}.
+\frac{P_i}{P^\circ}=\frac{2.50\ \mathrm{bar}}{1.00\ \mathrm{bar}}=2.50.
 ```
 
 The pressure contribution to the chemical potential is
 
 ```{math}
-\mu_i-\mu_i^\circ = RT\ln(2.50) \approx (2.48\ \text{kJ mol}^{-1})(0.916) = 2.27\ \text{kJ mol}^{-1}.
+\mu_i-\mu_i^\circ = RT\ln(2.50) \approx (2.48\ \mathrm{kJ\,mol^{-1}})(0.916) = 2.27\ \mathrm{kJ\,mol^{-1}}.
+```
+````
+
+```{admonition} Units Inside the Logarithm
+:class: important
+Repeat the calculation above with both pressures in pascals. Does the result change? Now suppose that the logarithm contained $P_i$ alone, without $P^\circ$: what would happen to $\mu_i-\mu_i^\circ$ when the unit of pressure is changed? Concept Check 2 asks what this means for $Q_p$ and $K$.
 ```
 
-**Why this matters:** the ratio makes the result **unit-independent**. Computing in pascals instead of bar gives the same ratio $2.50$ and therefore the same $\ln(2.50)$. Without the ratio, changing units would (incorrectly) change the number inside the logarithm.
+````{admonition} Later Generalization: Activities
+:class: note
 
-**Later generalization.** For non-ideal systems, we keep the same *structure* but replace the ratio $P_i/P^\circ$ with a more general **activity** $a_i$:
+For non-ideal systems, the ratio $P_i/P^\circ$ in Eq. {eq}`eq:mu-ideal-gas` is replaced by a more general **activity** $a_i$:
 
 ```{math}
-\mu_i=\mu_i^\circ + RT\ln a_i,\qquad Q=\prod_i a_i^{\nu_i}.
+\mu_i=\mu_i^\circ + RT\ln a_i.
 ```
 
 - ideal gas: $a_i = P_i/P^\circ$
 - real gas: $a_i = f_i/P^\circ$, where $f_i$ is the **fugacity** (often $f_i = \phi_i P_i$)
 - solutions: $a_i$ is built from concentration or mole fraction times an activity coefficient (e.g., $a_i=\gamma_i c_i/c^\circ$ or $a_i=\gamma_i x_i$).
 
-We won't develop activities/fugacities in detail here, but this is where they will "plug in" later.
+We won't develop activities/fugacities in detail here. Concept Check 5 asks what this replacement does to the derivation that follows.
 ````
 
 #### Derivation of $\Delta_r G = \Delta_r G^{\circ} + RT\ln Q_p$
@@ -251,9 +256,9 @@ K = \exp\!\left(-\frac{\Delta_r G^{\circ}}{RT}\right).
 }
 ```
 
-For an ideal-gas reaction this $K$ is the pressure-based equilibrium constant (and equals the limit of $Q_p$ at equilibrium).
+For an ideal-gas reaction this $K$ is the pressure-based equilibrium constant (the value of $Q_p$ at equilibrium).
 
-#### Using $Q_p$ vs $K$ to predict direction
+#### Using $Q_p$ vs $K$ to Predict Direction
 
 Since $\Delta_r G = RT\ln(Q_p/K)$:
 
@@ -263,7 +268,8 @@ Since $\Delta_r G = RT\ln(Q_p/K)$:
 
 ---
 
-### 7.1.4 Worked example: gas-phase dimerization of $\mathrm{NO_2}$
+(section:no2-dimerization)=
+### Worked Example: Gas-Phase Dimerization of $\mathrm{NO_2}$
 
 Consider the equilibrium
 
@@ -275,29 +281,31 @@ Consider the equilibrium
 
 #### Thermodynamics and $K$ at 298.15 K
 
-At $298.15\,\mathrm{K}$ (values from § 5.3-style tabulated data):
+At $298.15\,\mathrm{K}$, the NIST-JANAF tables (see [Computing $K$ from Tabulated Thermochemistry](#section:k-from-tables)) give
 
 ```{math}
-\Delta_r H^{\circ} = -57.1\ \mathrm{kJ\,mol^{-1}},\qquad
-\Delta_r S^{\circ} = -175.7\ \mathrm{J\,K^{-1}\,mol^{-1}},\qquad
-\Delta_r G^{\circ} = -4.74\ \mathrm{kJ\,mol^{-1}},
+\begin{aligned}
+\Delta_r H^{\circ} &= -57.11\ \mathrm{kJ\,mol^{-1}},\\
+\Delta_r S^{\circ} &= -175.69\ \mathrm{J\,mol^{-1}\,K^{-1}},\\
+\Delta_r G^{\circ} &= \Delta_r H^{\circ} - T\,\Delta_r S^{\circ} = -4.73\ \mathrm{kJ\,mol^{-1}},
+\end{aligned}
 ```
 
 giving
 
 ```{math}
 K = \exp\!\left(-\frac{\Delta_r G^{\circ}}{RT}\right)
-\approx \exp\!\left(\frac{4.74\times 10^3}{(8.314)(298.15)}\right)
+\approx \exp\!\left(\frac{4.73\times 10^3}{(8.314)(298.15)}\right)
 \approx 6.74.
 ```
 
-#### Equilibrium composition at a specified total pressure
+#### Equilibrium Composition at a Specified Total Pressure
 
 Suppose we start with 2 mol of $\mathrm{NO_2}$ and 0 mol of $\mathrm{N_2O_4}$. Build an ICE table in terms of $\xi$:
 
 - Initial: $n_{\mathrm{NO_2},0}=2$, $n_{\mathrm{N_2O_4},0}=0$
 - Change: $\Delta n_{\mathrm{NO_2}}=-2\xi$, $\Delta n_{\mathrm{N_2O_4}}=+\xi$
-- Equilibrium: $n_{\mathrm{NO_2}}=2-2\xi$, $n_{\mathrm{N_2O_4}}=\xi$, $n_{\text{tot}}=2-\xi$
+- Equilibrium: $n_{\mathrm{NO_2}}=2-2\xi$, $n_{\mathrm{N_2O_4}}=\xi$, $n_{\mathrm{tot}}=2-\xi$
 
 Mole fractions (ideal-gas mixture):
 
@@ -317,16 +325,16 @@ K
 For $P=P^{\circ}$ and $K=6.74$, numerical root-finding gives
 
 ```{math}
-\xi_{eq} \approx 0.81,
+\xi_{\mathrm{eq}} \approx 0.81,
 ```
 
 so
 
 ```{math}
-n_{\mathrm{NO_2},eq}\approx 0.38, \qquad n_{\mathrm{N_2O_4},eq}\approx 0.81.
+n_{\mathrm{NO_2,eq}}\approx 0.38, \qquad n_{\mathrm{N_2O_4,eq}}\approx 0.81.
 ```
 
-#### $G(\xi)$ has a minimum at $\xi_{\mathrm{eq}}$
+#### $G(\xi)$ Has a Minimum at $\xi_{\mathrm{eq}}$
 
 The equilibrium condition $\Delta_r G = 0$ is the statement that $G(\xi)$ has a stationary point at equilibrium. For this system, with mole fractions $y_i(\xi)$ and $P=P^\circ$, the Gibbs free energy relative to pure reactants is
 
@@ -337,54 +345,52 @@ G(\xi) - G(0)
 + RT\!\left[(2-2\xi)\ln y_{\mathrm{NO_2}}(\xi) + \xi\ln y_{\mathrm{N_2O_4}}(\xi)\right].
 ```
 
-The first term is the "bookkeeping" shift in standard chemical potentials; the second is the **ideal-mixing entropy** that prevents the reaction from running to completion. Plotting:
+The first term is the "bookkeeping" shift in standard chemical potentials, which is linear in $\xi$. The second is the **ideal-mixing** term, $-T\,\Delta_{\mathrm{mix}}S$, where $\Delta_{\mathrm{mix}}S = -R\sum_i n_i\ln y_i$ is the entropy of mixing of the two ideal gases. The figure shows their sum.
 
 ```{code-cell} ipython3
+:tags: [hide-input]
+
 import numpy as np
 import matplotlib.pyplot as plt
+from scipy.optimize import brentq
 
 R = 8.314462618          # J mol^-1 K^-1
-T = 298.15
-dG_std = -4.74e3         # J per mole of reaction
-K_eq = np.exp(-dG_std / (R*T))
+T = 298.15               # K
+dG_std = -4.73e3         # J per mole of reaction
+K_eq = np.exp(-dG_std / (R * T))
 
 def G_of_xi(xi):
-    n_NO2 = 2 - 2*xi
-    n_N2O4 = xi
-    n_tot = 2 - xi
-    mix = 0.0
-    if n_NO2 > 0:
-        mix += n_NO2 * np.log(n_NO2 / n_tot)
-    if n_N2O4 > 0:
-        mix += n_N2O4 * np.log(n_N2O4 / n_tot)
-    return xi*dG_std + R*T*mix   # J (per initial 2 mol NO2)
+    # G(xi) - G(0) in J, for 2 mol of NO2 initially and P equal to the standard pressure
+    n_NO2, n_N2O4, n_tot = 2 - 2 * xi, xi, 2 - xi
+    mix = n_NO2 * np.log(n_NO2 / n_tot) + n_N2O4 * np.log(n_N2O4 / n_tot)
+    return xi * dG_std + R * T * mix
 
 xis = np.linspace(1e-4, 1 - 1e-4, 400)
-G_vals = np.array([G_of_xi(x) for x in xis]) / 1e3   # kJ
 
-# Analytical xi_eq from K = xi(2-xi)/(2-2xi)^2
-from scipy.optimize import brentq
-xi_eq = brentq(lambda x: x*(2-x)/(2-2*x)**2 - K_eq, 0.01, 0.99)
+# Numerical root of K = xi (2 - xi) / (2 - 2 xi)^2
+xi_eq = brentq(lambda x: x * (2 - x) / (2 - 2 * x)**2 - K_eq, 0.01, 0.99)
+G_eq = G_of_xi(xi_eq) / 1e3   # kJ
 
-fig, ax = plt.subplots(figsize=(6.0, 4.0))
-ax.plot(xis, G_vals, lw=2)
-ax.axvline(xi_eq, color="k", ls="--", lw=1)
-ax.plot([xi_eq], [G_of_xi(xi_eq)/1e3], "o", color="tab:red", zorder=5)
-ax.annotate(fr"$\xi_{{\mathrm{{eq}}}} \approx {xi_eq:.2f}$",
-            xy=(xi_eq, G_of_xi(xi_eq)/1e3),
-            xytext=(xi_eq - 0.35, G_of_xi(xi_eq)/1e3 + 1.0),
-            arrowprops=dict(arrowstyle="->", lw=1))
+fig, ax = plt.subplots(figsize=(6, 4), constrained_layout=True)
+ax.plot(xis, G_of_xi(xis) / 1e3, lw=2.5, color="#0072B2")
+ax.axvline(xi_eq, color="0.5", ls="--", lw=1)
+ax.plot(xi_eq, G_eq, "o", color="0.2", ms=5, zorder=3)
+ax.text(xi_eq - 0.02, -2.5, fr"$\xi_{{\mathrm{{eq}}}} = {xi_eq:.2f}$", ha="right", fontsize=10)
 ax.set_xlabel(r"Extent of reaction $\xi$ (mol)")
 ax.set_ylabel(r"$G(\xi) - G(0)$ (kJ)")
-ax.set_title(r"$2\,\mathrm{NO_2}(g) \rightleftharpoons \mathrm{N_2O_4}(g)$, " 
-             r"$T=298.15$ K, $P=P^\circ$")
-fig.subplots_adjust(left=0.14, right=0.96, top=0.90, bottom=0.14)
+ax.set_xlim(0, 1)
+
 plt.show()
+plt.close(fig)
 ```
 
-The minimum of $G(\xi)$ lies precisely at the $\xi_{eq}$ computed from $K$. Note that the curve is asymmetric: the left branch is driven by $\Delta_r G^\circ < 0$ (pushing $\xi$ upward from pure reactants), while the right branch is pulled back up by the $RT\sum n_i \ln y_i$ mixing term as the mixture becomes dominated by $\mathrm{N_2O_4}$. The "tug-of-war" between these two terms is *the* reason chemical equilibrium is generically an interior minimum rather than either pure reactants or pure products.
+Gibbs free energy of the reacting mixture relative to pure $\mathrm{NO_2}$, from Eq. {eq}`eq:G-xi-NO2`, for $2\,\mathrm{NO_2(g)} \rightleftharpoons \mathrm{N_2O_4(g)}$ at $298.15\ \mathrm{K}$ and $P = P^\circ$, starting from 2 mol of $\mathrm{NO_2}$. The dashed line marks $\xi_{\mathrm{eq}} = 0.81$, the value computed from $K = 6.74$.
 
-#### Interactive visualization
+The minimum of $G(\xi)$ lies at the $\xi_{\mathrm{eq}}$ computed from $K$, where the slope $(\partial G/\partial\xi)_{T,P} = \Delta_r G$ is zero. The curve is not symmetric, and it is steep at both ends. To see why, evaluate the slope $\Delta_r G = \Delta_r G^\circ + RT\ln Q_p$ in the limits $\xi\to 0$ and $\xi\to 1$, and decide which of the two terms of Eq. {eq}`eq:G-xi-NO2` produces that behavior. Concept Check 4 builds on the result.
+
+#### Interactive Visualization
+
+The studio below draws the same curve, $G(\xi) - G(0)$, and lets you change the temperature and the total pressure. Move the red point with the slider for $\xi$. The slope of the red tangent line is $\Delta_r G$, and it is zero at the minimum, where $Q_p = K$.
 
 <div style="width: 100%; border: 1px solid #cbd5e1; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.08);">
   <iframe
@@ -397,9 +403,19 @@ The minimum of $G(\xi)$ lies precisely at the $\xi_{eq}$ computed from $K$. Note
 
 ---
 
-### 7.1.5 Temperature dependence: the van't Hoff equation
+(section:vant-hoff)=
+### Temperature Dependence: the van't Hoff Equation
 
-The temperature dependence of $K$ follows from the Gibbs–Helmholtz relation:
+The temperature dependence of $K$ follows from the **Gibbs–Helmholtz relation**. Because $G = H - TS$ and $(\partial G/\partial T)_P = -S$ (from $dG = -S\,dT + V\,dP$, [Section 5.1](../chapter-05/section-01.md)),
+
+```{math}
+\left(\frac{\partial}{\partial T}\frac{G}{T}\right)_P
+= \frac{1}{T}\left(\frac{\partial G}{\partial T}\right)_P - \frac{G}{T^2}
+= -\frac{S}{T} - \frac{H - TS}{T^2}
+= -\frac{H}{T^2}.
+```
+
+Applying this relation to each species in its standard state and summing with the coefficients $\nu_i$ gives
 
 ```{math}
 \left(\frac{\partial}{\partial T}\frac{\Delta_r G^{\circ}}{T}\right)_P
@@ -424,23 +440,26 @@ An equivalent integrated form between $T_1$ and $T_2$ (assuming $\Delta_r H^{\ci
 }
 ```
 
-#### Example trend for $2\,\mathrm{NO_2}\rightleftharpoons\mathrm{N_2O_4}$
+#### Example Trend for $2\,\mathrm{NO_2}\rightleftharpoons\mathrm{N_2O_4}$
 
-At $P=P^{\circ}$:
+The integrated form, with $\Delta_r H^{\circ} = -57.11\ \mathrm{kJ\,mol^{-1}}$ and $K(298.15\ \mathrm{K}) = 6.74$, gives the values below. The extent of reaction is for $P=P^{\circ}$.
 
-| $T$ (K) | $K$ | $\xi_{eq}$ (starting from 2 mol NO$_2$) |
+| $T$ (K) | $K$ | $\xi_{\mathrm{eq}}$ (starting from 2 mol NO$_2$) |
 | ---: | ---: | ---: |
-| 250 | 205.18 | 0.97 |
+| 250 | 570 | 0.98 |
 | 298.15 | 6.74 | 0.81 |
-| 350 | 0.17 | 0.23 |
+| 350 | 0.22 | 0.27 |
+
+The NIST-JANAF tables, which include the temperature dependence of $\Delta_r H^{\circ}$, give $K = 572$ at 250 K and $K = 0.22$ at 350 K, so the assumption of a constant $\Delta_r H^{\circ}$ costs less than 1 % over this range.
 
 Because $\Delta_r H^{\circ}<0$ for dimerization, increasing temperature drives $K$ **down** and shifts equilibrium toward $\mathrm{NO_2}$ (less $\mathrm{N_2O_4}$). This is the quantitative form of Le Châtelier's principle for an exothermic reaction.
 
 ---
 
-### 7.1.6 Computing $K$ from tabulated thermochemistry
+(section:k-from-tables)=
+### Computing $K$ from Tabulated Thermochemistry
 
-In § 7.1.3 we derived the key link between equilibrium and thermochemistry:
+Under [Reaction Quotient $Q_p$ and the Equilibrium Constant $K$](#section:reaction-quotient) we derived the key link between equilibrium and thermochemistry:
 
 ```{math}
 K(T) = \exp\!\left(-\frac{\Delta_r G^{\circ}(T)}{RT}\right).
@@ -448,12 +467,12 @@ K(T) = \exp\!\left(-\frac{\Delta_r G^{\circ}(T)}{RT}\right).
 
 So if you can compute $\Delta_r G^{\circ}$ at a temperature of interest, you can immediately compute the equilibrium constant. This subsection is a practical workflow for *getting* $\Delta_r G^{\circ}$ from tabulated thermochemical data.
 
-#### Step 0: Write the reaction (with phases) and choose a standard state
+#### Step 0: Write the Reaction (with Phases) and Choose a Standard State
 
-1. **Balance the reaction** and include phases, e.g. $\mathrm{NH_3(g)}$ vs $\mathrm{NH_3(\ell)}$.
+1. **Balance the reaction** and include phases, e.g. $\mathrm{NH_3(g)}$ vs $\mathrm{NH_3(l)}$.
 2. Use a consistent **standard state** across all species (most modern tables use $P^\circ=1\ \mathrm{bar}$ at $T=298.15\ \mathrm{K}$; always check the table header).
 
-#### Step 1: Pull species data at the same temperature
+#### Step 1: Pull Species Data at the Same Temperature
 
 For each species $i$ in the balanced equation, collect either:
 
@@ -466,7 +485,7 @@ Where to get the data:
 - **NIST–JANAF Thermochemical Tables**: best when you need $H^\circ(T)$ and $S^\circ(T)$ over a range of temperatures (not just 298.15 K).
 - **ATcT (Active Thermochemical Tables)**: best when you care about high-accuracy formation thermochemistry (often includes uncertainties). In practice, many workflows use **ATcT for $\Delta_f H^\circ$** and **JANAF for $S^\circ(T)$**.
 
-#### Step 2: Convert species data into reaction values
+#### Step 2: Convert Species Data into Reaction Values
 
 Once you have consistent species data, compute reaction properties using stoichiometric coefficients $\nu_i$ (positive for products, negative for reactants):
 
@@ -476,13 +495,13 @@ Once you have consistent species data, compute reaction properties using stoichi
 \Delta_r S^\circ = \sum_i \nu_i\,S_i^\circ.
 ```
 
-If your data are **enthalpies of formation**, this becomes the familiar "products minus reactants" form:
+If your data are **enthalpies of formation**, the same sum applies:
 
 ```{math}
-\Delta_r H^\circ
-= \sum_{\text{products}} \nu_p\,\Delta_f H_p^\circ
--\sum_{\text{reactants}} \nu_r\,\Delta_f H_r^\circ.
+\Delta_r H^\circ = \sum_i \nu_i\,\Delta_f H_i^\circ.
 ```
+
+Because the $\nu_i$ of the reactants are negative, this is the familiar "products minus reactants" form of Hess's law ([Section 3.3](../chapter-03/section-03.md)).
 
 ```{admonition} Shortcut for elements
 :class: tip
@@ -516,15 +535,15 @@ For an **ideal-gas** reaction, this $K$ corresponds to a pressure-based equilibr
 
 ---
 
-#### Worked example: ammonia formation at 298.15 K
+#### Worked Example: Ammonia Formation at 298.15 K
 
-For the Haber–Bosch reaction (as written in § 5.3),
+For the Haber–Bosch reaction (as written in [Section 5.3](../chapter-05/section-03.md)),
 
 ```{math}
 \mathrm{N_2(g) + 3H_2(g) \rightarrow 2NH_3(g)}.
 ```
 
-Using the reaction values quoted in § 5.3 at 298.15 K,
+Using the reaction values quoted in [Section 5.3](../chapter-05/section-03.md) at 298.15 K,
 
 ```{math}
 \Delta_r H^\circ \approx -92\ \mathrm{kJ\,mol^{-1}},\qquad
@@ -547,29 +566,29 @@ K(298.15\ \mathrm{K}) = \exp\!\left(-\frac{-33{,}000}{(8.314)(298.15)}\right)
 \approx 6\times 10^{5}.
 ```
 
-**Interpretation.** $K\gg 1$ at room temperature, so the equilibrium strongly favors $\mathrm{NH_3}$ *at the standard state*. (Section 5.3 explains why temperature and pressure "knobs" still matter for industrial operation, where the 500 °C kinetic sweet spot drives $K$ down dramatically.)
+**Interpretation.** $K\gg 1$ at room temperature, so the equilibrium strongly favors $\mathrm{NH_3}$ *at the standard state*. ([Section 5.3](../chapter-05/section-03.md) explains why temperature and pressure "knobs" still matter for industrial operation, where the 500 °C kinetic sweet spot drives $K$ down dramatically.)
 
 ---
 
-#### Common pitfalls (and quick fixes)
+#### Common Pitfalls (and Quick Fixes)
 
-- **Wrong phase:** $\mathrm{H_2O(\ell)}$ and $\mathrm{H_2O(g)}$ (or $\mathrm{NH_3(\ell)}$ vs $\mathrm{NH_3(g)}$) have very different $S^\circ$ and $\Delta_f H^\circ$.
+- **Wrong phase:** $\mathrm{H_2O(l)}$ and $\mathrm{H_2O(g)}$ (or $\mathrm{NH_3(l)}$ vs $\mathrm{NH_3(g)}$) have very different $S^\circ$ and $\Delta_f H^\circ$.
 - **Mixed standard states:** make sure all species use the same $P^\circ$ convention and the same temperature.
 - **Unit mismatches:** always reconcile kJ vs J and "per mole of reaction" vs "per mole of species."
 - **Sign mistakes:** products minus reactants (or use $\nu_i$ with the sign convention consistently).
 
 ## Concept Checks
 
-1. Why is $\Delta_r G=0$ the correct equilibrium condition at constant $T,P$? What would change if the reaction instead ran at constant $T,V$? (The constant-$T,V$ case is developed in § 7.2.)
+1. Why is $\Delta_r G=0$ the correct equilibrium condition at constant $T,P$? What would change if the reaction instead ran at constant $T,V$? (The constant-$T,V$ case is developed in [Section 7.2](section-02.md).)
 2. Why must $Q_p$ and $K$ be dimensionless? What role does $P^\circ$ play?
 3. How does comparing $Q_p$ to $K$ predict the direction of spontaneous change?
-4. Inspecting Eq. {eq}`eq:G-xi-NO2`: which term in $G(\xi)$ would vanish if the mixture were not ideal (i.e., if there were no entropy of mixing)? Why does this entropy term prevent the reaction from running to completion even when $\Delta_r G^\circ \ll 0$?
+4. Inspecting Eq. {eq}`eq:G-xi-NO2`: which term in $G(\xi)$ would vanish if there were no entropy of mixing? Why does this entropy term prevent the reaction from running to completion even when $\Delta_r G^\circ \ll 0$?
 5. What changes in the derivation of $\Delta_r G = \Delta_r G^\circ + RT\ln Q_p$ if the mixture is non-ideal and activities replace partial-pressure ratios?
 
 ## Key Takeaways
 
 - Extent of reaction $\xi$ provides a compact way to track composition changes via stoichiometry: $dn_i = \nu_i\,d\xi$.
-- At constant $T,P$, equilibrium corresponds to minimizing $G$, giving $\Delta_r G = \sum_i\nu_i\mu_i = 0$ — the multi-species analog of the phase-equilibrium condition of § 6.1.2.
+- At constant $T,P$, equilibrium corresponds to minimizing $G$, giving $\Delta_r G = \sum_i\nu_i\mu_i = 0$ — the multi-species analog of the phase-equilibrium condition of [Section 6.1](../chapter-06/section-01.md).
 - For ideal gases, $\Delta_r G = \Delta_r G^\circ + RT\ln Q_p$ and $\Delta_r G^\circ = -RT\ln K$.
 - The sign of $\Delta_r G$ (equivalently the comparison $Q_p$ vs $K$) determines spontaneous direction.
 - The temperature dependence of $K$ is governed by van't Hoff: $\partial\ln K/\partial T = \Delta_r H^\circ/(RT^2)$.
