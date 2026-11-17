@@ -342,9 +342,18 @@ Take the limits $T \ll \Theta_{\mathrm{vib}}$ and $T \gg \Theta_{\mathrm{vib}}$ 
 
 ### Computational Studio: Harmonic Oscillator
 
-Explore how the internal energy and heat capacity evolve with the characteristic temperature, visualizing the transition between quantum “freeze-out” and the classical high-temperature limit.
+In [](#fig:harmonic-oscillator-studio), you can set the vibrational temperature $\Theta_{\mathrm{vib}}$, for example to a value of {numref}`vibrational-temperatures`, and follow the probabilities of the levels, the internal energy, and the heat capacity at any temperature.
 
-You can open the studio in a new tab: [Harmonic Oscillator Studio](https://wexlergroup.github.io/chem-4020-5020/computational-studios/harmonic-oscillator-studio.html).
+```{iframe} https://wexlergroup.github.io/chem-4020-5020/computational-studios/harmonic-oscillator-studio.html
+:label: fig:harmonic-oscillator-studio
+:width: 100%
+:title: Harmonic oscillator
+:placeholder: ../_static/harmonic-oscillator-studio/harmonic-oscillator-studio.png
+
+One harmonic oscillator with the vibrational temperature $\Theta_{\mathrm{vib}}$. Panel (a) shows the probabilities $p_n$ of the levels at the temperature $T$. Panels (b) and (c) show the internal energy in units of $\hbar\omega$ and the heat capacity in units of $k_{\mathrm B}$ as functions of temperature, with the dashed lines of [](#fig:oscillator-energy). The dot marks the temperature $T$ of panel (a). The buttons set $\Theta_{\mathrm{vib}}$ to the values of {numref}`vibrational-temperatures`.
+```
+
+You can also open the studio in a new tab: [Harmonic Oscillator Studio](https://wexlergroup.github.io/chem-4020-5020/computational-studios/harmonic-oscillator-studio.html).
 
 ### Einstein Model
 
