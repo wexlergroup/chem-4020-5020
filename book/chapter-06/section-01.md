@@ -306,9 +306,9 @@ We will revisit the molecular interpretation of $\Delta \bar h_{\mathrm{vap}}$ f
 Equation {eq}`eq:phase-equilibrium` defines each coexistence curve implicitly as the set of $(T,P)$ pairs for which $\mu_\alpha(T,P) = \mu_\beta(T,P)$. To obtain the *slope* $dP/dT$ of that curve explicitly, we differentiate the equilibrium condition along the curve and apply the Gibbs differential to each phase. That calculation produces the **Clapeyron equation** and — in the liquid–vapor limit with an ideal gas — its specialization the **Clausius–Clapeyron equation**. Both are developed in [Section 6.2](section-02.md).
 :::
 
-## Worked Examples
+## Worked Example
 
-### Example 1: Heating Water from 298.15 K to 800 K at 1 bar
+### Heating Water from 298.15 K to 800 K at 1 bar
 
 **Goal.** Estimate $\Delta \bar s$ and $\Delta \bar h$ when one mole of water is heated reversibly at constant pressure $P = 1$ bar from **298.15 K** (liquid) to **800 K** (superheated steam), crossing the liquid–vapor coexistence curve. This example combines the single-phase heating integrals developed in [Section 3.3](../chapter-03/section-03.md) and [Section 5.3](../chapter-05/section-03.md) with the first-order transition relation {eq}`eq:latent-entropy`, and illustrates how strongly the overall entropy change is dominated by the phase transition itself.
 
