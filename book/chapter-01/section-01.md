@@ -10,6 +10,8 @@ kernelspec:
   display_name: Python 3
   language: python
   name: python3
+numbering:
+  enumerator: 1.1.%s
 ---
 
 # 1.1. Course Introduction
@@ -61,50 +63,23 @@ Typical chemical systems contain on the order of [Avogadro's number](https://phy
 
 Thermodynamics and statistical mechanics are central to diverse fields, including industrial chemistry, materials science, and biochemistry. The examples below illustrate a few representative applications:
 
-::::{grid}
+- **Industrial chemistry.** Predicting reaction spontaneity and modeling large-scale chemical processes.
+- **Materials chemistry.** Designing advanced materials for optical, electronic, or mechanical applications.
+- **Biochemistry.** Investigating protein folding and enzyme activity in biological systems.
 
-:::{grid-item-card} Industrial Chemistry
-Predicting reaction spontaneity and modeling large-scale chemical processes.
+:::::{figure}
+:label: fig:applications
 
-```{figure} ../_static/section-01/industrial_chemistry.jpg
----
-name: industrial-chemistry
----
-Hydrogen production via steam–methane reforming.[^1]
+::::{grid} 3
+![Industrial plant for hydrogen production with towers and pipework.](../_static/section-01/industrial_chemistry.jpg)
 
-[^1]: [https://www.energy.gov/eere/fuelcells/hydrogen-production-natural-gas-reforming](https://www.energy.gov/eere/fuelcells/hydrogen-production-natural-gas-reforming)
-```
+![Rows of solar panels in front of mountains.](../_static/section-01/materials_chemistry.jpg)
 
-:::
-
-:::{grid-item-card} Materials Chemistry
-Designing advanced materials for optical, electronic, or mechanical applications.
-
-```{figure} ../_static/section-01/materials_chemistry.jpg
----
-name: materials-chemistry
----
-Electricity generation using solar panels.[^2]
-
-[^2]: [https://www.energy.gov/eere/solar/cadmium-telluride](https://www.energy.gov/eere/solar/cadmium-telluride)
-```
-
-:::
-
-:::{grid-item-card} Biochemistry
-Investigating protein folding and enzyme activity in biological systems.
-
-```{figure} ../_static/section-01/biochemistry.jpg
----
-name: biochemistry
----
-Predicting protein structures with AlphaFold.[^3]
-
-[^3]: [https://alphafold.ebi.ac.uk/entry/P21852](https://alphafold.ebi.ac.uk/entry/P21852)
-```
-
-:::
+![Ribbon model of a protein structure predicted with AlphaFold.](../_static/section-01/biochemistry.jpg)
 ::::
+
+Three applications. From left to right: hydrogen production by steam–methane reforming ([U.S. Department of Energy](https://www.energy.gov/eere/fuelcells/hydrogen-production-natural-gas-reforming)), electricity generation with solar panels ([U.S. Department of Energy](https://www.energy.gov/eere/solar/cadmium-telluride)), and a protein structure predicted with AlphaFold ([AlphaFold Protein Structure Database](https://alphafold.ebi.ac.uk/entry/P21852)).
+:::::
 
 ---
 
@@ -113,56 +88,52 @@ Predicting protein structures with AlphaFold.[^3]
 #### Thermodynamic Systems
 
 ```{code-cell} ipython3
+:label: fig:systems
+:caption: Types of thermodynamic systems. (a) An isolated system exchanges neither energy nor matter with its surroundings. (b) A closed system exchanges energy but not matter. (c) An open system exchanges both energy and matter.
 :tags: [hide-input]
 
+import sys
+
 import matplotlib.pyplot as plt
-import matplotlib.patches as mpatches
-from myst_nb import glue
+from matplotlib.patches import FancyBboxPatch
 
-# Helper function to plot a system
-def plot_system(ax, title, annotations, boundary_color='b'):
-    box = mpatches.FancyBboxPatch((0, 0), 1, 1, boxstyle='roundtooth', ec=boundary_color, fc='w')
-    ax.add_patch(box)
-    ax.set_title(title, fontsize=14)
-    ax.text(0.5, 0.5, 'System', ha='center', va='center', fontsize=12)
-    ax.text(0.5, -0.65, 'Surroundings', ha='center', va='center', fontsize=12)
-    ax.text(0.5, 1.3, 'Boundary', ha='center', va='bottom', fontsize=12, color=boundary_color)
-    for annotation in annotations:
-        if "arrowprops" in annotation:  # Arrow annotations
-            ax.annotate('', **annotation)
-        else:  # Text annotations
-            ax.text(**annotation)
-    ax.set_xlim(-1, 2)
-    ax.set_ylim(-1, 2)
-    ax.set_aspect('equal')
-    ax.axis('off')
+sys.path.append("..")            # the book folder, which holds figstyle
+import figstyle as fs
 
-# Define annotations for each system
-annotations = [
-    [],  # Isolated system (no arrows)
-    [  # Closed system (energy arrow)
-        dict(xy=(-0.6, 0.15), xytext=(0.15, 0.15), arrowprops=dict(arrowstyle='<->', color='r')),
-        dict(x=-1, y=0.3, s='Energy', ha='left', va='bottom', fontsize=12, color='r'),
-    ],
-    [  # Open system (energy + matter arrows)
-        dict(xy=(-0.6, 0.15), xytext=(0.15, 0.15), arrowprops=dict(arrowstyle='<->', color='r')),
-        dict(xy=(0.85, 0.15), xytext=(1.6, 0.15), arrowprops=dict(arrowstyle='<->', color='m')),
-        dict(x=-1, y=0.3, s='Energy', ha='left', va='bottom', fontsize=12, color='r'),
-        dict(x=2, y=0.3, s='Matter', ha='right', va='bottom', fontsize=12, color='m'),
-    ],
-]
 
-titles = ["Isolated system", "Closed system", "Open system"]
+def draw_system(ax, c, energy=False, matter=False):
+    """Sketch of a system in its surroundings, with the exchanges that its boundary allows."""
+    ax.add_patch(FancyBboxPatch((0.32, 0.30), 0.36, 0.36, boxstyle="round,pad=0.03,rounding_size=0.06",
+                                fc=c.fill, ec=c.ink, lw=1.6))
+    ax.text(0.5, 0.56, "System", ha="center", va="center")
+    ax.text(0.5, 0.06, "Surroundings", ha="center", va="center", color=c.muted)
+    ax.annotate("Boundary", xy=(0.60, 0.69), xytext=(0.80, 0.90), ha="center", va="center", color=c.muted,
+                arrowprops=dict(arrowstyle="-", color=c.muted, lw=0.8, shrinkA=2, shrinkB=1))
+    if energy:
+        ax.annotate("", xy=(0.04, 0.40), xytext=(0.42, 0.40),
+                    arrowprops=dict(arrowstyle="<|-|>", color=c.vermilion, lw=1.6, mutation_scale=12))
+        ax.text(0.14, 0.45, "Energy", ha="center", va="bottom", color=c.vermilion)
+    if matter:
+        ax.annotate("", xy=(0.58, 0.40), xytext=(0.96, 0.40),
+                    arrowprops=dict(arrowstyle="<|-|>", color=c.blue, lw=1.6, mutation_scale=12))
+        ax.text(0.86, 0.45, "Matter", ha="center", va="bottom", color=c.blue)
+    ax.set(xlim=(0, 1), ylim=(0, 1), aspect="equal")
+    ax.axis("off")
 
-fig, axes = plt.subplots(1, 3, figsize=(12, 4))
-for i, ax in enumerate(axes):
-    plot_system(ax, titles[i], annotations[i])
 
-plt.show()
-plt.close(fig)
+def draw(c):
+    fig, axes = plt.subplots(1, 3, figsize=(6.0, 2.3), constrained_layout=True)
+    for ax, letter, title, exchange in zip(axes, "abc", ["Isolated system", "Closed system", "Open system"],
+                                           [dict(), dict(energy=True), dict(energy=True, matter=True)]):
+        draw_system(ax, c, **exchange)
+        fs.panel(ax, letter, title)
+    return fig
+
+
+fs.show(draw, alt="Three sketches of a system, drawn as a box inside its surroundings. In panel a, nothing crosses "
+                  "the boundary. In panel b, a two-headed arrow labeled energy crosses the boundary. In panel c, "
+                  "two-headed arrows labeled energy and matter cross the boundary.")
 ```
-
-**Types of thermodynamic systems.** (a) **Isolated**—no exchange of energy or matter; (b) **Closed**—exchanges energy but not matter; (c) **Open**—exchanges both energy and matter.
 
 ```{glossary}
 System
@@ -440,6 +411,64 @@ Heat
 [^5]: [https://www.nist.gov/pml/sensor-science/thermodynamic-metrology/unit-conversions](https://www.nist.gov/pml/sensor-science/thermodynamic-metrology/unit-conversions)  
 [^6]: [https://physics.nist.gov/cgi-bin/cuu/Value?evj](https://physics.nist.gov/cgi-bin/cuu/Value?evj)  
 [^7]: [https://www.nist.gov/pml/special-publication-811/nist-guide-si-appendix-b-conversion-factors/nist-guide-si-appendix-b8#C](https://www.nist.gov/pml/special-publication-811/nist-guide-si-appendix-b-conversion-factors/nist-guide-si-appendix-b8#C)
+
+#### Energy Scales
+
+The energies in this course span many orders of magnitude, and they are quoted per mole (kJ/mol) or per molecule (eV, or cm$^{-1}$ in spectroscopy). [](#fig:energy-scales) places several of them on one logarithmic axis.
+
+```{code-cell} ipython3
+:label: fig:energy-scales
+:caption: Energies that appear in this course on one logarithmic axis, in kJ/mol, with the equivalent energies per molecule in eV and in cm$^{-1}$. The thermal energy $k_{\mathrm{B}}T$ at room temperature (orange; per mole, $RT = 2.48\ \mathrm{kJ\,mol^{-1}}$) is the yardstick with which the other energies are compared throughout the course. The rotational and vibrational quanta of HI follow from the constants in [Section 7.2](../chapter-07/section-02.md), and the hydrogen-bond energy is the estimate of [Section 6.2](../chapter-06/section-02.md).
+:tags: [hide-input]
+
+import numpy as np
+from scipy.constants import N_A, R, c as c_light, e, h
+
+kJ_per_eV = e * N_A / 1000                     # 1 eV per molecule in kJ/mol
+kJ_per_wavenumber = h * c_light * 100 * N_A / 1000   # 1 cm^-1 per molecule in kJ/mol
+
+# Energies in kJ/mol, from small to large
+energies = [
+    ("rotation of HI, one quantum", 2 * 6.4264 * kJ_per_wavenumber),      # 2B, constants from Section 7.2
+    (r"$k_{\mathrm{B}}T$ at 298 K", R * 298.15 / 1000),
+    ("hydrogen bond in water", 20),                                       # estimate used in Section 6.2
+    ("vibration of HI, one quantum", 2309.01 * kJ_per_wavenumber),        # constants from Section 7.2
+    ("vaporization of water", 40.7),                                      # at 1 atm, NIST Chemistry WebBook
+    ("H–H bond", 436),
+    ("ionization of H", 13.598 * kJ_per_eV),
+]
+
+
+def draw_energy_scales(c):
+    fig, ax = plt.subplots(figsize=(fs.WIDTH, 4.0))
+    fig.subplots_adjust(left=0.035, right=0.965, top=0.99, bottom=0.44)
+    top = len(energies)
+    for row, (name, energy) in enumerate(energies):
+        height = top - row
+        thermal = "k_{\\mathrm{B}}T" in name
+        color = c.vermilion if thermal else c.ink
+        ax.plot([energy, energy], [0, height], color=c.vermilion if thermal else c.muted, lw=1.6 if thermal else 0.9)
+        ax.plot(energy, 0, "o", color=color, ms=5, clip_on=False, zorder=5)
+        value = f"{energy:.2f}" if energy < 10 else f"{energy:.0f}" if energy >= 100 or energy == 20 else f"{energy:.1f}"
+        about = "about " if energy == 20 else ""
+        ax.text(energy * 1.12, height, f"{name}, {about}{value} kJ/mol", color=color, va="center", ha="left")
+    ax.set(xscale="log", xlim=(3e-2, 3e5), ylim=(0, top + 0.6), yticks=[])
+    ax.spines["left"].set_visible(False)
+    ax.set_xlabel("Energy per mole (kJ/mol)")
+    for position, factor, label in [(-0.25, kJ_per_eV, "Energy per molecule (eV)"),
+                                    (-0.50, kJ_per_wavenumber, r"Energy per molecule, as a wavenumber (cm$^{-1}$)")]:
+        axis = ax.secondary_xaxis(position, functions=(lambda x, f=factor: x / f, lambda x, f=factor: x * f))
+        axis.set_xlabel(label)
+    return fig
+
+
+fs.show(draw_energy_scales,
+        alt="A logarithmic energy axis from 0.03 to 300,000 kilojoules per mole, with matching axes in electronvolts "
+            "and in wavenumbers. Seven energies are marked. In increasing order: one rotational quantum of hydrogen "
+            "iodide, 0.15; the thermal energy k B T at 298 K, 2.48; a hydrogen bond in water, about 20; one "
+            "vibrational quantum of hydrogen iodide, 27.6; the vaporization of water, 40.7; the H–H bond, 436; and "
+            "the ionization of the hydrogen atom, 1312 kilojoules per mole.")
+```
 
 ## Worked Example
 
