@@ -304,7 +304,6 @@ The values are the reference saturation pressures of water (the IAPWS-95 formula
 import io
 import numpy as np
 import pandas as pd
-import matplotlib.pyplot as plt
 from scipy import stats
 
 R = 8.314462618  # J mol^-1 K^-1
@@ -339,22 +338,51 @@ print(f"slope m            = {m:10.2f} K")
 print(f"intercept b        = {b:10.3f}")
 print(f"R^2                = {r**2:10.6f}")
 print(f"DeltaHvap (global) = {DeltaHvap/1000:10.2f} kJ/mol")
+```
 
-# Plot
+[](#fig:cc-fit) shows the data and the fitted line.
+
+```{code-cell} ipython3
+:label: fig:cc-fit
+:caption: Clausius–Clapeyron plot for water between 20 °C and 180 °C. The points are $\ln(P_{\mathrm{sat}}/1\ \mathrm{bar})$ from the dataset above, and the line is the least-squares fit through all thirteen points. The scale on top gives the temperature in °C.
+:tags: [hide-input]
+
+import sys
+
+import matplotlib.pyplot as plt
+
+sys.path.append("..")            # the book folder, which holds figstyle
+import figstyle as fs
+
 x = df["invT"].to_numpy()
 y = df["lnP"].to_numpy()
 x_fit = np.linspace(x.min(), x.max(), 200)
-y_fit = m*x_fit + b
+y_fit = m * x_fit + b
 
-plt.figure(figsize=(6,4))
-plt.plot(x, y, "o", label="data")
-plt.plot(x_fit, y_fit, "-", label="linear fit")
-plt.xlabel(r"$1/T\ (\mathrm{K^{-1}})$")
-plt.ylabel(r"$\ln(P_\mathrm{sat}/1\,\mathrm{bar})$")
-plt.grid(True)
-plt.legend()
-plt.tight_layout()
-plt.show()
+
+def celsius_axis(ax):
+    # A second scale on top that reads the same 1/T axis in degrees Celsius
+    top = ax.secondary_xaxis("top", functions=(lambda x: 1 / x - 273.15, lambda t: 1 / (t + 273.15)))
+    top.set_xticks([20, 40, 60, 80, 100, 140, 180])
+    top.set_xlabel("Temperature (°C)")
+    return top
+
+
+def draw_fit(c):
+    fig, ax = plt.subplots(figsize=(6.0, 4.0), constrained_layout=True)
+    ax.plot(x_fit, y_fit, color=c.blue, lw=fs.LINE)
+    ax.plot(x, y, "o", color=c.ink, ms=5.5, zorder=3)
+    ax.text(0.00247, 1.38, "least-squares line", color=c.blue)
+    ax.text(0.00304, -1.38, "data", color=c.ink)
+    ax.set(xlabel="$1/T$ (K$^{-1}$)", ylabel="$\\ln(P_{\\mathrm{sat}}/1\\ \\mathrm{bar})$")
+    celsius_axis(ax)
+    return fig
+
+
+fs.show(draw_fit, alt="Natural logarithm of the saturation pressure of water in bar against the reciprocal of the "
+                      "temperature, for thirteen points between 20 and 180 degrees Celsius. The points fall from "
+                      f"{y.max():.1f} at 180 degrees to {y.min():.1f} at 20 degrees, and a straight fitted line "
+                      "is drawn through them. A second scale on top gives the temperature in degrees Celsius.")
 ```
 
 **Interpretation prompts (one or two sentences each):**
@@ -370,15 +398,29 @@ A Clausius–Clapeyron plot can look linear by eye even when the constant-$\Delt
 ```{code-cell} ipython3
 df["lnP_fit"] = m*df["invT"] + b
 df["residual"] = df["lnP"] - df["lnP_fit"]
+```
 
-plt.figure(figsize=(6,4))
-plt.axhline(0, linewidth=1)
-plt.plot(df["invT"], df["residual"], "o-")
-plt.xlabel(r"$1/T\ (\mathrm{K^{-1}})$")
-plt.ylabel("residual = data − fit (in ln units)")
-plt.grid(True)
-plt.tight_layout()
-plt.show()
+[](#fig:cc-residuals) plots the residuals against $1/T$.
+
+```{code-cell} ipython3
+:label: fig:cc-residuals
+:caption: Residuals of the fit in [](#fig:cc-fit), the data minus the fitted line, in units of $\ln P_{\mathrm{sat}}$. The scale on top gives the temperature in °C.
+:tags: [hide-input]
+
+def draw_residuals(c):
+    fig, ax = plt.subplots(figsize=(6.0, 3.6), constrained_layout=True)
+    ax.axhline(0, color=c.gray, lw=1.2, ls=(0, (4, 3)))
+    ax.plot(df["invT"], df["residual"], "o-", color=c.blue, lw=1.4, ms=5.5)
+    ax.set(ylim=(-0.068, 0.046), xlabel="$1/T$ (K$^{-1}$)", ylabel="Residual, data $-$ fit")
+    celsius_axis(ax)
+    return fig
+
+
+res = df["residual"].to_numpy()
+fs.show(draw_residuals, alt="Residuals of the straight-line fit, the data minus the fitted line, against the "
+                            "reciprocal of the temperature, with a dashed line at zero. The residuals are "
+                            f"{res[-1]:.3f} at 180 degrees Celsius, rise to {res.max():.3f} near "
+                            f"{df['T_C'].to_numpy()[res.argmax()]:.0f} degrees, and fall to {res[0]:.3f} at 20 degrees.")
 ```
 
 **What to look for:**
@@ -428,18 +470,32 @@ local = pd.DataFrame({
     "DeltaHvap_ref_kJmol": dH_ref,
 })
 
-plt.figure(figsize=(6,4))
-plt.plot(local["T_mid_C"], local["local_slope_kJmol"], "o-", label="local slope")
-plt.plot(local["T_mid_C"], local["DeltaHvap_ref_kJmol"], "s--", color="0.4",
-         label=r"reference $\Delta\bar h_\mathrm{vap}$")
-plt.xlabel(r"$T\ (^\circ\mathrm{C})$")
-plt.ylabel("kJ/mol")
-plt.grid(True)
-plt.legend()
-plt.tight_layout()
-plt.show()
-
 local
+```
+
+[](#fig:cc-local-slope) plots the two columns of the table against the midpoint temperature.
+
+```{code-cell} ipython3
+:label: fig:cc-local-slope
+:caption: Local slope of the Clausius–Clapeyron plot, $-R\,\Delta\ln P_{\mathrm{sat}}/\Delta(1/T)$ for each pair of neighboring points, and the reference enthalpy of vaporization of water at the midpoint temperatures.
+:tags: [hide-input]
+
+def draw_local(c):
+    fig, ax = plt.subplots(figsize=(6.0, 4.0), constrained_layout=True)
+    ax.plot(local["T_mid_C"], local["DeltaHvap_ref_kJmol"], "s", color=c.gray, ms=5,
+            ls=(0, (4, 3)), lw=1.2)
+    ax.plot(local["T_mid_C"], local["local_slope_kJmol"], "o-", color=c.blue, lw=1.4, ms=5.5)
+    ax.text(128, 41.5, "local slope", color=c.blue)
+    ax.text(88, 39.2, "reference $\\Delta\\bar{h}_{\\mathrm{vap}}$", color=c.muted)
+    ax.set(xlabel="Temperature (°C)", ylabel="Energy (kJ mol$^{-1}$)")
+    return fig
+
+
+fs.show(draw_local, alt="Local slope of the Clausius-Clapeyron plot and the reference enthalpy of vaporization of "
+                        "water, both in kilojoules per mole, against temperature from 25 to 170 degrees Celsius. "
+                        f"Both fall as the temperature rises. The local slope falls from {local_slope[0]:.1f} to "
+                        f"{local_slope[-1]:.1f}, and the reference enthalpy from {dH_ref[0]:.1f} to {dH_ref[-1]:.1f}, "
+                        "so the two separate at high temperature.")
 ```
 
 **Interpretation.** The local slope decreases with increasing temperature, as $\Delta\bar h_{\mathrm{vap}}$ does, but the two separate as the temperature rises: at 170 °C the local slope gives $39.5\ \mathrm{kJ\,mol^{-1}}$ and the enthalpy of vaporization is $36.9\ \mathrm{kJ\,mol^{-1}}$. The reason is that the local slope is not $\Delta\bar h_{\mathrm{vap}}$ itself. By Eq. {eq}`eq:CC-exact`, $RT^2\,d\ln P_{\mathrm{sat}}/dT = \Delta\bar h_{\mathrm{vap}}/\Delta Z$, and $\Delta Z$ falls below 1 as the vapor becomes denser and less ideal. Physically, as $T$ rises toward the critical point, the liquid and vapor phases become more and more similar in density and structure, so both the molar enthalpy difference and the molar volume difference between them shrink. At the critical point itself, $\Delta\bar h_{\mathrm{vap}}\to 0$ and $\Delta\bar v_{\mathrm{vap}}\to 0$ together: there is no longer a meaningful "vaporization" because the two phases have merged.
