@@ -415,16 +415,18 @@ The minimum of $G(\xi)$ lies at the $\xi_{\mathrm{eq}}$ computed from $K$, where
 
 #### Interactive Visualization
 
-The studio below draws the same curve, $G(\xi) - G(0)$, and lets you change the temperature and the total pressure. Move the red point with the slider for $\xi$. The slope of the red tangent line is $\Delta_r G$, and it is zero at the minimum, where $Q_p = K$.
+[](#fig:equilibrium-studio) draws the same curve, $G(\xi) - G(0)$, and lets you change the temperature and the total pressure. Move the red point with the slider for $\xi$. The slope of the red tangent line is $\Delta_r G$, and it is zero at the minimum, where $Q_p = K$. The flask beside the curve shows the mixture at the same extent.
 
-<div style="width: 100%; border: 1px solid #cbd5e1; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.08);">
-  <iframe
-    src="https://wexlergroup.github.io/chem-4020-5020/computational-studios/equilibrium-visualization.html"
-    title="Equilibrium Visualization"
-    style="width: 100%; height: 1200px; border: 0;"
-    loading="lazy"
-  ></iframe>
-</div>
+```{iframe} https://wexlergroup.github.io/chem-4020-5020/computational-studios/equilibrium-visualization.html
+:label: fig:equilibrium-studio
+:width: 100%
+:title: Chemical equilibrium
+:placeholder: ../_static/equilibrium-visualization/equilibrium-visualization.png
+
+The reacting mixture $2\,\mathrm{NO_2(g)} \rightleftharpoons \mathrm{N_2O_4(g)}$, starting from 2 mol of $\mathrm{NO_2}$, at a temperature and a total pressure that you choose. (a) $G(\xi) - G(0)$ from Eq. [](#eq:G-xi-NO2), with the term $-\xi RT\ln(P/P^\circ)$ added when $P \neq P^\circ$, the tangent at the chosen extent, and $\xi_{\mathrm{eq}}$ (dashed line). (b) The mixture at that extent, with 40 units of $\mathrm{NO_2}$ for the 2 mol (schematic). The brown shade of the flask follows the concentration of $\mathrm{NO_2}$. (c) $\Delta_r G^\circ$, $K$, $Q_p$, the slope $\Delta_r G$, the mole fractions, and $\xi_{\mathrm{eq}}$. $\Delta_r H^\circ$ and $\Delta_r S^\circ$ are the values at $298.15\ \mathrm{K}$, taken as constant, as in [Temperature Dependence: the van't Hoff Equation](#section:vant-hoff).
+```
+
+You can also open the studio in a new tab: [Chemical Equilibrium Studio](https://wexlergroup.github.io/chem-4020-5020/computational-studios/equilibrium-visualization.html).
 
 ---
 
