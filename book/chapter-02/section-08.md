@@ -10,6 +10,8 @@ kernelspec:
   display_name: Python 3
   language: python
   name: python3
+numbering:
+  enumerator: 2.8.%s
 ---
 
 # 2.8. Molecular Statistical Mechanics
