@@ -81,97 +81,74 @@ The formation of water is spontaneous under standard conditions, and the heat th
 
 #### A Counter Example: Mixing of Two Ideal Gases
 
-If we mix two ideal gases, such as Ar and Kr, their intermolecular interactions are negligible (ideal-gas behavior), so $\Delta H = 0$. Nonetheless, mixing occurs spontaneously once the stopper is opened.
+If we mix two ideal gases, such as Ar and Kr, their intermolecular interactions are negligible (ideal-gas behavior), so $\Delta H = 0$. Nonetheless, mixing occurs spontaneously once the stopper is opened ([](#fig:mixing)).
 
 ```{code-cell} ipython3
+:label: fig:mixing
+:caption: Mixing of two ideal gases, Ar and Kr, (a) before and (b) after opening the stopper between the two bulbs. Because the atoms of an ideal gas do not interact, $\Delta H = 0$ for this process.
 :tags: [hide-input]
 
-import numpy as np
+import sys
+
 import matplotlib.pyplot as plt
+import numpy as np
+from matplotlib.patches import Circle, Polygon, Rectangle
 
-rng = np.random.default_rng(8251991)
+sys.path.append("..")            # the book folder, which holds figstyle
+import figstyle as fs
 
-fig, axs = plt.subplot_mosaic([[0, 1]], figsize=(8, 4), constrained_layout=True, sharex=True, sharey=True)
+RADIUS = {"Ar": 0.15, "Kr": 0.20}                          # drawn radius of an atom
+BULBS = {"left": (0.0, 4.0), "right": (5.0, 9.0)}          # range of x of each bulb; both span y from 0 to 3
 
-# Before
-axs[0].set_title('Before Opening the Stopper')
-x_Ar = rng.uniform(-4, 4, 6)
-y_Ar = rng.uniform(2, 5, 6)
-axs[0].scatter(x_Ar, y_Ar, color='r', label='Ar', s=100)
 
-x_Kr = rng.uniform(-4, 4, 6)
-y_Kr = rng.uniform(-5, -2, 6)
-axs[0].scatter(x_Kr, y_Kr, color='b', label='Kr', s=100)
+def place(rng, atoms, taken):
+    """Random positions for a list of (kind, bulb) without overlaps; `taken` holds (x, y, radius) of earlier atoms."""
+    for kind, bulb in atoms:
+        r, (x0, x1) = RADIUS[kind], BULBS[bulb]
+        while True:
+            x, y = rng.uniform(x0 + r + 0.2, x1 - r - 0.2), rng.uniform(r + 0.2, 3 - r - 0.2)
+            if all(np.hypot(x - xo, y - yo) > r + ro + 0.25 for xo, yo, ro in taken):
+                break
+        taken.append((x, y, r))
+        yield kind, x, y
 
-# Ar region
-axs[0].plot([1, 1], [0, 1], color='k')
-axs[0].plot([1, 5], [1, 1], color='k')
-axs[0].plot([5, 5], [1, 6], color='k')
-axs[0].plot([5, -5], [6, 6], color='k')
-axs[0].plot([-5, -5], [6, 1], color='k')
-axs[0].plot([-5, -1], [1, 1], color='k')
-axs[0].plot([-1, -1], [1, 0], color='k')
 
-# Kr region
-axs[0].plot([1, 1], [0, -1], color='k')
-axs[0].plot([1, 5], [-1, -1], color='k')
-axs[0].plot([5, 5], [-1, -6], color='k')
-axs[0].plot([5, -5], [-6, -6], color='k')
-axs[0].plot([-5, -5], [-6, -1], color='k')
-axs[0].plot([-5, -1], [-1, -1], color='k')
-axs[0].plot([-1, -1], [-1, 0], color='k')
+def draw_bulbs(ax, c, atoms, is_open, labels):
+    """Two bulbs joined by a neck with a stopper, the atoms inside, and the name of the gas below each bulb."""
+    outline = [(0, 0), (4, 0), (4, 1.1), (5, 1.1), (5, 0), (9, 0), (9, 3), (5, 3), (5, 1.9), (4, 1.9), (4, 3), (0, 3)]
+    ax.add_patch(Polygon(outline, closed=True, fc=c.ground, ec=c.ink, lw=1.4, joinstyle="round"))
+    color = {"Ar": c.vermilion, "Kr": c.blue}
+    for kind, x, y in atoms:
+        ax.add_patch(Circle((x, y), RADIUS[kind], fc=color[kind], ec="none"))
+    lift = 1.15 if is_open else 0.0                        # an open stopper is pulled out of the neck
+    ax.add_patch(Rectangle((4.38, 1.0 + lift), 0.24, 1.45, fc=c.ink, ec="none"))
+    ax.plot([4.12, 4.88], [2.45 + lift, 2.45 + lift], color=c.ink, lw=2.2, solid_capstyle="round")
+    ax.text(4.5, 3.85 if is_open else 3.2, "stopper open" if is_open else "stopper closed", ha="center", va="bottom",
+            color=c.muted)                                 # above the bulbs, whose tops are at y = 3
+    for x, (text, text_color) in zip((2.0, 7.0), labels):
+        ax.text(x, -0.3, text, ha="center", va="top", color=text_color)
+    ax.set(xlim=(-0.2, 9.2), ylim=(-0.85, 4.45), aspect="equal")
+    ax.axis("off")
 
-# Closed stopper
-axs[0].plot([-1.5, 1.5], [0, 0], color='m', lw=2)
-axs[0].text(2, 0, "Stopper (closed)", fontsize=10, ha='left', va='center', color='m')
-axs[0].set_aspect('equal')
-axs[0].axis('off')
 
-# After
-axs[1].set_title('After Opening the Stopper')
-x_Ar = rng.uniform(-4, 4, 6)
-y_Ar_1 = rng.uniform(2, 5, 3)
-y_Ar_2 = rng.uniform(-5, -2, 3)
-y_Ar = np.concatenate((y_Ar_1, y_Ar_2))
-axs[1].scatter(x_Ar, y_Ar, color='r', label='Ar', s=100)
+def draw_mixing(c):
+    rng = np.random.default_rng(8251991)
+    before = list(place(rng, [("Ar", "left")] * 8 + [("Kr", "right")] * 8, []))
+    after = list(place(rng, ([("Ar", "left"), ("Kr", "left"), ("Ar", "right"), ("Kr", "right")]) * 4, []))
+    fig, axes = plt.subplots(1, 2, figsize=(fs.WIDTH, 2.3), constrained_layout=True)
+    draw_bulbs(axes[0], c, before, False, [("Ar", c.vermilion), ("Kr", c.blue)])
+    draw_bulbs(axes[1], c, after, True, [("Ar and Kr", c.ink), ("Ar and Kr", c.ink)])
+    fs.panel(axes[0], "a", "Before opening the stopper")
+    fs.panel(axes[1], "b", "After opening the stopper")
+    return fig
 
-x_Kr = rng.uniform(-4, 4, 6)
-y_Kr_1 = rng.uniform(2, 5, 3)
-y_Kr_2 = rng.uniform(-5, -2, 3)
-y_Kr = np.concatenate((y_Kr_1, y_Kr_2))
-axs[1].scatter(x_Kr, y_Kr, color='b', label='Kr', s=100)
 
-axs[1].plot([1, 1], [0, 1], color='k')
-axs[1].plot([1, 5], [1, 1], color='k')
-axs[1].plot([5, 5], [1, 6], color='k')
-axs[1].plot([5, -5], [6, 6], color='k')
-axs[1].plot([-5, -5], [6, 1], color='k')
-axs[1].plot([-5, -1], [1, 1], color='k')
-axs[1].plot([-1, -1], [1, 0], color='k')
-axs[1].plot([1, 1], [0, -1], color='k')
-axs[1].plot([1, 5], [-1, -1], color='k')
-axs[1].plot([5, 5], [-1, -6], color='k')
-axs[1].plot([5, -5], [-6, -6], color='k')
-axs[1].plot([-5, -5], [-6, -1], color='k')
-axs[1].plot([-5, -1], [-1, -1], color='k')
-axs[1].plot([-1, -1], [-1, 0], color='k')
-
-# Open stopper
-axs[1].plot([-5, -2], [0, 0], color='m', lw=2)
-axs[1].text(2, 0, "Stopper (open)", fontsize=10, ha='left', va='center', color='m')
-axs[1].axis('off')
-axs[1].set_aspect('equal')
-axs[1].legend(bbox_to_anchor=(1.05, 1), loc='upper left', borderaxespad=0.)
-
-fig.suptitle(r'$\Delta H = 0$')
-
-plt.show()
-plt.close(fig)
+fs.show(draw_mixing, alt="Two sketches of two bulbs joined by a narrow neck with a stopper. In panel a, the stopper is "
+                         "closed, the left bulb holds eight argon atoms, and the right bulb holds eight krypton atoms. "
+                         "In panel b, the stopper is open, and each bulb holds four argon atoms and four krypton atoms.")
 ```
 
-Mixing of two ideal gases before and after opening the stopper that separates them.
-
-Even though $\Delta H = 0$, the process is still **spontaneous**. If you were shown the "before" and "after" snapshots without additional labels, you would know the natural direction of mixing. This spontaneous behavior underscores that **enthalpy** alone cannot capture whether a process will occur without additional driving forces. That driving force is **entropy**, which the rest of this section defines.
+Even though $\Delta H = 0$, the process is still **spontaneous**. If you were shown panels (a) and (b) of [](#fig:mixing) without their titles, you would know the natural direction of mixing. This spontaneous behavior underscores that **enthalpy** alone cannot capture whether a process will occur without additional driving forces. That driving force is **entropy**, which the rest of this section defines.
 
 ### Definition of Entropy
 
