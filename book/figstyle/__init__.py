@@ -15,8 +15,8 @@ book displays the version that matches the reader's theme.
 
     fs.show(draw, alt="One sentence that says what the figure shows.")
 
-Colors are named by role and belong to the argument ``c``: ``c.blue``, ``c.vermilion`` and ``c.green`` for data
-series (in that order of use), ``c.gray`` for reference curves, ``c.ink`` for text and annotations, ``c.muted``
+Colors are named by role and belong to the argument ``c``: ``c.blue``, ``c.vermilion``, ``c.green`` and ``c.purple`` for
+data series (in that order of use), ``c.gray`` for reference curves, ``c.ink`` for text and annotations, ``c.muted``
 for secondary text and axes, ``c.fill`` for quiet boxes, ``c.ground`` for the page behind the figure, and
 ``c.solid``, ``c.liquid``, ``c.gas``, ``c.carbon``, ``c.oxygen`` for phases and atoms. The series colors are the
 Okabe-Ito colors, which remain distinguishable with color-vision deficiency. The typeface is Inter (SIL Open
@@ -69,12 +69,13 @@ class Theme:
     blue: str
     vermilion: str
     green: str
+    purple: str
     gray: str
     carbon: str
 
     @property
     def series(self):
-        return [self.blue, self.vermilion, self.green, self.gray]
+        return [self.blue, self.vermilion, self.green, self.purple, self.gray]
 
     solid = property(lambda self: self.blue)
     liquid = property(lambda self: self.green)
@@ -109,9 +110,9 @@ class Theme:
 
 
 LIGHT = Theme("light", ground="#ffffff", ink="#1c1917", muted="#78716c", rule="#e7e5e4", fill="#f1f0ee",
-              blue="#0072B2", vermilion="#D55E00", green="#009E73", gray="#78716c", carbon="#57534e")
+              blue="#0072B2", vermilion="#D55E00", green="#009E73", purple="#AA4499", gray="#78716c", carbon="#57534e")
 DARK = Theme("dark", ground="#1c1917", ink="#f5f5f4", muted="#a8a29e", rule="#3a3531", fill="#2a2623",
-             blue="#56B4E9", vermilion="#F4915A", green="#3FCF9F", gray="#a8a29e", carbon="#a8a29e")
+             blue="#56B4E9", vermilion="#F4915A", green="#3FCF9F", purple="#E29AD0", gray="#a8a29e", carbon="#a8a29e")
 
 
 def panel(ax, letter, title=""):
@@ -145,8 +146,10 @@ def show(draw, alt=""):
     from IPython.display import display
 
     (light, width), (dark, _) = _png(draw, LIGHT), _png(draw, DARK)
-    image = ('<div class="{cls}"><img alt="{alt}" src="data:image/png;base64,{data}" '
-             'style="width:{px}px;max-width:100%;height:auto;margin:0"></div>')
+    # The figure is centered in the text column. The negative margin cancels the 20 px of padding that the
+    # book theme puts to the right of every HTML output, so that the center is the center of the column.
+    image = ('<div class="{cls}" style="margin-right:-20px"><img alt="{alt}" src="data:image/png;base64,{data}" '
+             'style="display:block;width:{px}px;max-width:100%;height:auto;margin:0 auto"></div>')
     px = round(width * PX_PER_INCH)
     html = (image.format(cls="dark:hidden", alt=escape(alt, quote=True), data=light, px=px)
             + image.format(cls="hidden dark:block", alt=escape(alt, quote=True), data=dark, px=px))
