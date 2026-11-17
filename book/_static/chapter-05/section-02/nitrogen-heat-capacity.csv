@@ -1,0 +1,37 @@
+# Heat capacity of condensed nitrogen at its saturation pressure.
+# Source: W. F. Giauque and J. O. Clayton, J. Am. Chem. Soc. 1933, 55, 4875-4889, Table I.
+# T_K: mean temperature of the measurement (K); Cp_cal: heat capacity in cal K^-1 mol^-1
+# (1 cal = 4.185 J in the paper); phase: alpha (solid below 35.61 K), beta (solid, 35.61 to 63.14 K),
+# liquid (63.14 K to the boiling point, 77.32 K).
+T_K,Cp_cal,phase
+15.82,3.124,alpha
+17.66,3.840,alpha
+19.51,4.577,alpha
+21.94,5.447,alpha
+24.49,6.331,alpha
+24.85,6.380,alpha
+27.14,7.170,alpha
+28.32,7.540,alpha
+29.89,8.137,alpha
+31.29,8.643,alpha
+32.84,9.397,alpha
+34.42,10.28,alpha
+34.68,10.49,alpha
+35.05,10.84,alpha
+35.33,10.67,alpha
+39.13,8.948,beta
+43.27,9.325,beta
+48.07,9.752,beta
+51.88,10.09,beta
+53.55,10.26,beta
+55.88,10.44,beta
+57.99,10.65,beta
+61.40,11.09,beta
+61.41,11.07,beta
+65.02,13.33,liquid
+68.41,13.45,liquid
+70.28,13.45,liquid
+72.69,13.56,liquid
+74.57,13.59,liquid
+76.58,13.68,liquid
+77.74,13.64,liquid
