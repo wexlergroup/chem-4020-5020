@@ -60,14 +60,18 @@ Learning objectives:
 
 A schematic $P$–$T$ phase diagram for a single component contains regions where one phase is stable (solid, liquid, gas) separated by **coexistence curves** on which two phases are simultaneously in equilibrium.
 
-<div style="width: 100%; border: 1px solid #cbd5e1; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.08);">
-  <iframe
-    src="https://wexlergroup.github.io/chem-4020-5020/computational-studios/phase-diagram-schematic.html"
-    title="Phase Diagram Schematic"
-    style="width: 100%; height: 850px; border: 0;"
-    loading="lazy"
-  ></iframe>
-</div>
+In [](#fig:phase-diagram-studio), you can move a state through the phase diagram of water and look at the molecules of the phases that are stable there. Near a coexistence curve, the state moves onto the curve, and the studio then shows the two phases that coexist.
+
+```{iframe} https://wexlergroup.github.io/chem-4020-5020/computational-studios/phase-diagram-schematic.html
+:label: fig:phase-diagram-studio
+:width: 100%
+:title: Phase diagram of water
+:placeholder: ../_static/phase-diagram-schematic/phase-diagram-schematic.png
+
+The phase diagram of water. (a) Pressure, on a logarithmic scale, against temperature. The solid lines are the coexistence curves, and the dotted lines at the critical temperature and the critical pressure mark the conventional limits of the supercritical fluid. (b) The molecules of each phase present at the state in panel (a), in a layer of water $0.33\ \mathrm{nm}$ thick, which is about one molecule. The number of molecules is the real one, and their motion is schematic. (c) The density, the molar volume $\bar v$, and the mean distance between the molecules of each phase. The curves and the densities follow the equations of the [International Association for the Properties of Water and Steam](https://www.iapws.org/release.html).
+```
+
+You can also open the studio in a new tab: [Phase Diagram Studio](https://wexlergroup.github.io/chem-4020-5020/computational-studios/phase-diagram-schematic.html).
 
 Two special points deserve named attention:
 
