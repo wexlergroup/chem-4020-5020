@@ -291,6 +291,97 @@ C_V &= \frac{\sigma_E^2}{k_{\mathrm B} T^2}
 ```
 ````
 
+#### Fluctuations and System Size
+
+How large are these fluctuations? For independent particles, both $U$, measured from the lowest energy of the system, and $C_V$ are proportional to the number of particles $N$. The standard deviation $\sigma_E = \sqrt{k_{\mathrm B} T^2 C_V}$ is then proportional to $\sqrt{N}$, so the width of the energy distribution relative to its mean falls as
+
+```{math}
+:label: eq:relative-energy-fluctuation
+\frac{\sigma_E}{U} \;\propto\; \frac{1}{\sqrt{N}}.
+```
+
+[](#fig:energy-fluctuations) shows this for $N$ independent two-state particles with $E_1 = 0$ and $E_2 = \varepsilon$. Each particle is in state 2 with probability $p_2$, so the number of particles in state 2 follows the binomial distribution, and
+
+```{math}
+U = N \varepsilon\, p_2,
+\qquad
+\sigma_E^2 = N \varepsilon^2\, p_1 p_2,
+\qquad
+\frac{\sigma_E}{U} = \sqrt{\frac{p_1}{N p_2}}.
+```
+
+The energy of 10 particles is spread over a wide range around $U$. For one mole of particles, $\sigma_E/U$ is about $10^{-12}$. The energy of a macroscopic system in contact with a heat bath never stops fluctuating, but the fluctuations are far too small to measure, and this is why thermodynamics can speak of *the* internal energy of the system.
+
+```{code-cell} ipython3
+:label: fig:energy-fluctuations
+:caption: Energy of $N$ independent two-state particles with $E_1 = 0$ and $E_2 = \varepsilon = 0.01\ \mathrm{eV}$ at $300\ \mathrm{K}$, the conditions of the worked example below. (a) Distribution of the energy per particle, $E/N$, for three values of $N$. Each distribution has an area of 1, and the dashed line marks $U/N = 4.04\ \mathrm{meV}$. (b) Relative width $\sigma_E/U$ of the distribution against $N$ on logarithmic axes. The filled points are the three systems of panel (a), and the open point is one mole of particles.
+:tags: [hide-input]
+
+from scipy.constants import N_A
+from scipy.stats import binom
+
+epsilon = 0.01                   # energy of state 2 in eV; state 1 has the energy 0
+T_room = 300                     # K
+x_room = epsilon / (k_B * T_room)
+p2 = np.exp(-x_room) / (1 + np.exp(-x_room))     # probability of state 2
+p1 = 1 - p2
+
+sizes = [10, 100, 1000]          # numbers of particles in panel (a)
+
+
+def relative_width(N):
+    """sigma_E / U for N independent two-state particles."""
+    return np.sqrt(p1 / (N * p2))
+
+
+def draw(c):
+    fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(fs.WIDTH, 3.1), constrained_layout=True,
+                                   gridspec_kw={"width_ratios": [1.25, 1]})
+    colors = [c.blue, c.vermilion, c.green]
+
+    # (a) The energy is E = n * epsilon, where n, the number of particles in state 2, is binomial.
+    for N, color in zip(sizes, colors):
+        n = np.arange(N + 1)
+        step = 1e3 * epsilon / N                               # spacing of the values of E/N in meV
+        density = binom.pmf(n, N, p2) / step                   # probability per meV of E/N
+        edges = (np.arange(N + 2) - 0.5) * step
+        ax1.stairs(density, edges, color=color, lw=1.6, fill=False)
+        ax1.stairs(density, edges, color=c.tint(color, 0.8), fill=True, zorder=0)
+    ax1.axvline(1e3 * epsilon * p2, color=c.muted, lw=1.2, ls=(0, (4, 3)), zorder=1)
+    ax1.text(1e3 * epsilon * p2 + 0.15, 2.72, "$U/N$", color=c.muted, ha="left", va="top")
+    ax1.text(7.3, 0.36, "$N = 10$", color=colors[0], ha="left", va="center")
+    ax1.text(5.35, 0.95, "$N = 100$", color=colors[1], ha="left", va="center")
+    ax1.text(4.75, 2.2, "$N = 1000$", color=colors[2], ha="left", va="center")
+    ax1.set(xlabel="Energy per particle $E/N$ (meV)", ylabel="Probability per meV of $E/N$", xlim=(0, 10),
+            ylim=(0, 2.8))
+    fs.panel(ax1, "a", "Distribution of the energy")
+
+    # (b) sigma_E / U = sqrt(p1 / (N p2)), a straight line of slope -1/2 on logarithmic axes
+    N_line = np.logspace(0, 24, 200)
+    ax2.plot(N_line, relative_width(N_line), color=c.ink, lw=1.6)
+    for N, color in zip(sizes, colors):
+        ax2.plot(N, relative_width(N), "o", color=color, ms=6.5, zorder=3)
+    ax2.plot(N_A, relative_width(N_A), "o", mfc=c.ground, mec=c.ink, mew=1.6, ms=6.5, zorder=3)
+    ax2.annotate("1 mol", (N_A, relative_width(N_A)), xytext=(-9, -4), textcoords="offset points", ha="right",
+                 va="top", color=c.ink)
+    ax2.text(1e9, 6e-4, r"$\sigma_E/U \propto 1/\sqrt{N}$", color=c.ink, ha="left", va="bottom")
+    ax2.set(xscale="log", yscale="log", xlabel="Number of particles $N$", ylabel=r"Relative width $\sigma_E/U$",
+            xlim=(1, 1e25), ylim=(1e-13, 10))
+    ax2.set_xticks([1, 1e6, 1e12, 1e18, 1e24])
+    ax2.set_yticks([1, 1e-3, 1e-6, 1e-9, 1e-12])
+    ax2.minorticks_off()
+    fs.panel(ax2, "b", "Relative width")
+    return fig
+
+
+fs.show(draw, alt="Two panels. Panel a: three distributions of the energy per particle between 0 and 10 meV, all "
+                  "centered on a dashed line at 4.04 meV. For 10 particles the distribution is a low staircase that "
+                  "covers almost the whole range. For 100 particles it is a narrower peak, and for 1000 particles a "
+                  "tall, sharp peak. Panel b: on logarithmic axes, the relative width of the distribution falls "
+                  "along a straight line from about 1.2 at one particle to about 0.38, 0.12, and 0.038 at 10, 100, "
+                  "and 1000 particles, and to about 1.6 times ten to the minus twelve at one mole.")
+```
+
 ### Pressure
 
 The pressure follows from two results that are derived in later sections:
