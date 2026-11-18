@@ -459,6 +459,8 @@ From the differential form {eq}`eq:CC-differential`,
 so we can estimate $\Delta\bar h_{\mathrm{vap}}(T)$ from finite differences of the $(T,\ln P_{\mathrm{sat}})$ data. The code below applies the two-point formula {eq}`eq:CC-two-point` to each pair of neighboring points and assigns the result to the midpoint of the interval. It then compares the result with the reference enthalpy of vaporization at the same temperature (NIST Chemistry WebBook).
 
 ```{code-cell} ipython3
+from IPython.display import HTML
+
 T = df["T_K"].to_numpy()
 lnP = df["lnP"].to_numpy()
 
@@ -476,7 +478,12 @@ local = pd.DataFrame({
     "DeltaHvap_ref_kJmol": dH_ref,
 })
 
-local
+# the table, with the quantity and the unit of each column as its heading
+HTML(local.rename(columns={
+    "T_mid_C": "Midpoint temperature (°C)",
+    "local_slope_kJmol": "Local slope (kJ mol⁻¹)",
+    "DeltaHvap_ref_kJmol": "Reference enthalpy of vaporization (kJ mol⁻¹)",
+}).to_html(index=False))
 ```
 
 [](#fig:cc-local-slope) plots the two columns of the table against the midpoint temperature.
