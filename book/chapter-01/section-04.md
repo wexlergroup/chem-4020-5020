@@ -39,6 +39,8 @@ Learning objectives:
 
 #### Compressibility Factor
 
+% Try this: In the name of the data file, change `Tr=1.2` to `Tr=1.5`, which loads water at 970 K. Files exist from `Tr=0.9` to `Tr=2.1`. How does the depth of the minimum of $Z$ change, and at which pressure is the gas coincidentally ideal?
+
 ```{code-cell} ipython3
 :label: fig:compressibility-water
 :caption: Compressibility factor $Z$ of water at 776 K, above its critical temperature of 647 K, as a function of pressure, with the ideal-gas line ($Z=1$) for comparison. Where $Z<1$ (blue), attractive forces dominate, most strongly at the minimum of $Z$. Where $Z>1$ (orange), repulsive forces dominate. The crossing of $Z=1$ marks a “coincidentally ideal” state.
@@ -163,6 +165,8 @@ where $a$ and $b$ are substance-dependent parameters capturing two departures fr
 
 [](#fig:pair-potential) relates the two parameters to the potential energy of a pair of molecules.
 
+% Try this: Change the exponent of the repulsion from `r**-12` to `r**-9`. What happens to the steepness of the wall and to the depth of the well?
+
 ```{code-cell} ipython3
 :label: fig:pair-potential
 :caption: Schematic potential energy of two molecules as a function of the distance between them. The steep rise at short distance keeps the molecules apart, and the parameter $b$ accounts for the volume that they exclude. The shallow well at larger distance is the net attraction between the molecules, which the parameter $a$ accounts for.
@@ -197,6 +201,8 @@ fs.show(draw_pair_potential,
 ```
 
 #### Van der Waals Isotherm
+
+% Try this: In the function `vdw_pressure`, delete the attraction term `- a_m / V**2`. What do the dashed isotherms lose without attraction?
 
 ```{code-cell} ipython3
 :label: fig:vdw-isotherms
@@ -250,6 +256,8 @@ fs.show(draw, alt="Pressure against molar volume for carbon dioxide at 0.9, 1.0,
                   "coexist, and the van der Waals isotherm has a loop there. The two sets of curves agree at large "
                   "volume and differ most at small volume.")
 ```
+
+% Try this: Change `Tr_loop` from `0.9` to `0.95`. What happens to the tie line and to the volumes of the liquid and the vapor as $T$ approaches $T_c$?
 
 ```{code-cell} ipython3
 :label: fig:maxwell-construction
@@ -462,6 +470,8 @@ T_{\text{c}} &= \frac{8 a_\text{m}}{27 b_\text{m} R}.
 ````
 
 ##### Corresponding States
+
+% Try this: Delete `"water": r"H$_2$O", ` from `substances`. How closely do the remaining three gases follow one curve, and which one deviates most now?
 
 ```{code-cell} ipython3
 :label: fig:corresponding-states
