@@ -18,6 +18,8 @@ numbering:
 
 See also: [Course-wide Conventions & Notation](../notation.md)
 
+Run the code: [Notebook for Section 1.2](https://wexlergroup.github.io/chem-4020-5020/lite/notebooks/index.html?path=chapter-01/section-02.ipynb), in which you can change and rerun the Python cells of this section in your browser.
+
 ## Overview and Learning Objectives
 
 Kinetic theory provides a microscopic route to macroscopic gas behavior by modeling a gas as a large number of rapidly moving particles that undergo elastic collisions. In this section, we derive the pressure of an ideal gas from particle–wall momentum transfer, connect temperature to average kinetic energy, and interpret molecular speed distributions.
