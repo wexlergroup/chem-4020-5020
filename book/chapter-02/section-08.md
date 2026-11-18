@@ -117,7 +117,7 @@ Use the high-temperature $q_{\mathrm{rot}}$ of a nonlinear molecule and the deri
 
 ### Nonlinear Rigid Rotors
 
-{numref}`rotational-temperatures-nonlinear` lists the rotational constants, rotational temperatures, and symmetry numbers of one molecule of each kind. The rotational temperatures are calculated from the rotational constants $\tilde{A}$, $\tilde{B}$, and $\tilde{C}$ as $\Theta_{\mathrm{rot},A} = hc\tilde{A}/k_{\mathrm{B}}$ (and likewise for $B$ and $C$), with $hc/k_{\mathrm{B}} = 1.43878\ \mathrm{cm\,K}$, as in [Section 2.7](section-07.md). The rotational constants of $\mathrm{CH_4}$ and $\mathrm{H_2O}$ are from the [NIST Computational Chemistry Comparison and Benchmark Database](https://cccbdb.nist.gov/), and those of $\mathrm{NH_3}$ are from S. Urban et al., *J. Mol. Spectrosc.* **101**, 1 (1983).
+{numref}`rotational-temperatures-nonlinear` lists the rotational constants, rotational temperatures, and symmetry numbers of one molecule of each kind. The rotational temperatures are calculated from the rotational constants $\tilde{A}$, $\tilde{B}$, and $\tilde{C}$ as $\Theta_{\mathrm{rot},A} = hc\tilde{A}/k_{\mathrm{B}}$ (and likewise for $B$ and $C$), with $hc/k_{\mathrm{B}} = 1.43878\ \mathrm{cm\,K}$, as in [Section 2.7](section-07.md). The rotational constants of $\mathrm{CH_4}$ and $\mathrm{H_2O}$ are from the [NIST Computational Chemistry Comparison and Benchmark Database](https://cccbdb.nist.gov/), and those of $\mathrm{NH_3}$ are from @urban1983.
 
 ```{list-table} Rotational constants, rotational temperatures, and symmetry numbers of three nonlinear molecules
 :header-rows: 1
