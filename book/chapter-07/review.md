@@ -121,7 +121,7 @@ See [Section 7.1](section-01.md).
 8. **Computing $K$ from Tabulated Thermochemistry**
    - The standard workflow for any gas-phase reaction at a specified $T$:
      1. Balance the reaction and fix a consistent standard state ($P^\circ = 1\ \mathrm{bar}$, usually at 298.15 K).
-     2. Pull $\Delta_f H_i^\circ$ and $S_i^\circ$ (or $H_i^\circ(T)$ and $S_i^\circ(T)$ if $T \neq 298.15\ \mathrm{K}$) from NIST WebBook, NIST–JANAF, or ATcT.
+     2. Pull $\Delta_f H_i^\circ$ and $S_i^\circ$ (or $H_i^\circ(T)$ and $S_i^\circ(T)$ if $T \neq 298.15\ \mathrm{K}$) from the [NIST Chemistry WebBook](https://webbook.nist.gov/chemistry/), the [NIST-JANAF Thermochemical Tables](https://janaf.nist.gov/), or the [Active Thermochemical Tables](https://atct.anl.gov/) (ATcT).
      3. Form $\Delta_r H^\circ = \sum_i \nu_i H_i^\circ$ and $\Delta_r S^\circ = \sum_i \nu_i S_i^\circ$ using signed stoichiometry.
      4. Combine into $\Delta_r G^\circ(T) = \Delta_r H^\circ(T) - T\,\Delta_r S^\circ(T)$, and finally $K(T) = \exp(-\Delta_r G^\circ(T)/RT)$.
    - Common pitfalls: mixing phases (e.g., $\mathrm{H_2O(l)}$ vs. $\mathrm{H_2O(g)}$), mismatched standard states, and the near-universal unit mismatch between $\Delta H^\circ$ (kJ/mol) and $S^\circ$ (J/mol·K).
@@ -781,3 +781,17 @@ Take the zero of energy at the separated atoms, as in [Section 7.2](section-02.m
 
 **Result.** At $1000\ \mathrm{K}$, $q_{\mathrm{I}}/V=3.398\times10^{34}\ \mathrm{m^{-3}}$ and $q_{\mathrm{I_2}}/V=4.982\times10^{46}\ \mathrm{m^{-3}}$, which give $K_c=2.318\times10^{22}\ \mathrm{m^{-3}}$, $K_p=3.20\times10^{-3}$, and $\Delta_r G^\circ=+47.76\ \mathrm{kJ\,mol^{-1}}$ (NIST-JANAF: $48.08\ \mathrm{kJ\,mol^{-1}}$). At $1.00\ \mathrm{bar}$, $\xi_{\mathrm{eq}}=0.0283\ \mathrm{mol}$, $P_{\mathrm{I}}=0.0550\ \mathrm{bar}$, and $P_{\mathrm{I_2}}=0.945\ \mathrm{bar}$.
 ````
+
+## 4. Further Reading
+
+**Textbooks**
+
+- @mcquarrie1997, Chapter 26, Sections 26.1 to 26.9 (chemical equilibrium).
+- @dill2011, Chapter 13 (chemical equilibria).
+- @hill1986, Chapter 10 (chemical equilibrium in ideal gas mixtures).
+
+**Original papers**
+
+- @vanthoff1884 contains the relation between the equilibrium constant and the temperature, the van't Hoff equation of [Section 7.1](section-01.md). The English edition, translated by T. Ewan, is *Studies in Chemical Dynamics* (1896).
+- @lechatelier1884 states the principle that carries his name ([Section 7.1](section-01.md)). An [English translation](https://web.lemoyne.edu/giunta/lechat.html) is available.
+- @taylor1941 measure the rate and the equilibrium constant of the reaction $\mathrm{H_2 + I_2 \rightleftharpoons 2\,HI}$ of [Section 7.2](section-02.md).
