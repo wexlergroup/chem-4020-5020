@@ -1,0 +1,364 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Gas in a box · Physical Chemistry II</title>
+<!--
+  Gas in a box: an interactive companion to Section 1.2 (kinetic theory). This file is written by hand
+  (it is not built from development/).
+
+  N identical hard spheres move in a cubic box. The page measures the pressure from the momentum that the
+  particles hand to the walls and compares it with N k_B T / V, and it compares the speeds of the particles
+  with the Maxwell-Boltzmann distribution.
+
+      gas-in-a-box.html               the interactive page
+      gas-in-a-box.html?static=1      one still picture after 400 ps, for the PDF of the notes
+      ...&theme=light or dark         fixes the colors (otherwise the page follows the book or the system)
+
+  Inside the notes, the page follows the light or dark mode of the book and sets the height of its own frame.
+
+  Units inside the program: lengths in nm, times in ps, speeds in m/s, masses in kg.
+-->
+<style>
+  :root {
+    --ground: #ffffff; --text: #1c1917; --muted: #6b645e; --border: #dedad5; --fill: #f1f0ee;
+    --blue: #0072b2; --on-blue: #ffffff; --blue-soft: #cfe3ef; --verm: #b84f00; --verm-soft: #fbeee4;
+  }
+  :root[data-theme="dark"] {
+    --ground: #1c1917; --text: #f5f5f4; --muted: #a8a29e; --border: #3a3531; --fill: #2a2623;
+    --blue: #56b4e9; --on-blue: #111111; --blue-soft: #24465a; --verm: #f4915a; --verm-soft: #3a2a20;
+  }
+  * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body { margin: 0; background: var(--ground); color: var(--text);
+         font: 15px/1.45 Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+  main { max-width: 760px; margin: 0 auto; padding: 24px 16px 40px; }
+  .embedded main { max-width: none; padding: 0 0 12px; }
+  h1 { font-size: 1.5rem; line-height: 1.2; margin: 0 0 6px; }
+  .embedded h1, .embedded .lede { display: none; }
+  .lede { color: var(--muted); margin: 0 0 18px; max-width: 64ch; }
+  i.v { font-style: italic; font-family: inherit; }
+  .sim { display: grid; grid-template-columns: minmax(0, 340px) minmax(0, 1fr); gap: 18px; align-items: start; }
+  @media (max-width: 600px) { .sim { grid-template-columns: minmax(0, 1fr); } }
+  .stage { position: relative; }
+  canvas { display: block; width: 100%; }
+  #box { aspect-ratio: 1 / 1; background: var(--fill); border-radius: 8px; }
+  .clock { margin-top: 6px; font-size: 0.86rem; color: var(--muted); font-variant-numeric: tabular-nums; }
+  .read { display: grid; grid-template-columns: 1fr auto; gap: 2px 12px; align-items: baseline; margin-bottom: 4px; }
+  .read .num { font-size: 1.15rem; font-weight: 600; font-variant-numeric: tabular-nums; text-align: right; white-space: nowrap; }
+  .read .wall { color: var(--blue); } .read .ideal { color: var(--verm); }
+  .cap { font-size: 0.82rem; color: var(--muted); margin: 3px 0 12px; }
+  #trace { height: 88px; } #hist { height: 156px; }
+  .controls { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px 18px; margin-top: 14px;
+              padding-top: 12px; border-top: 1px solid var(--border); }
+  @media (max-width: 600px) { .controls { grid-template-columns: minmax(0, 1fr); } }
+  label { display: block; font-size: 0.9rem; }
+  label output { float: right; font-variant-numeric: tabular-nums; color: var(--muted); }
+  input[type="range"] { width: 100%; margin: 4px 0 0; accent-color: var(--blue); }
+  .row { grid-column: 1 / -1; display: flex; gap: 8px 14px; flex-wrap: wrap; align-items: center; font-size: 0.9rem; }
+  .seg { display: inline-flex; gap: 4px; }
+  button { font: inherit; font-size: 0.88rem; color: var(--text); background: var(--fill); border: 1px solid var(--border);
+           border-radius: 999px; padding: 4px 12px; cursor: pointer; }
+  button:hover { border-color: var(--muted); }
+  button[aria-pressed="true"] { background: var(--blue); border-color: var(--blue); color: var(--on-blue); font-weight: 600; }
+  button:focus-visible, input:focus-visible { outline: 2px solid var(--blue); outline-offset: 2px; }
+  .hint { font-size: 0.84rem; color: var(--muted); margin: 12px 0 0; }
+  .static .controls, .static .hint, .static h1, .static .lede { display: none; }
+  .static main { padding: 0; }
+</style>
+</head>
+<body>
+<main>
+  <h1>Gas in a box</h1>
+  <p class="lede">Particles move in a cubic box and collide elastically with the walls and with one another, as kinetic theory assumes. Change the number of particles, the temperature, or the volume, and compare what the particles do with the ideal-gas law.</p>
+
+  <div class="sim">
+    <div class="stage">
+      <canvas id="box" role="img" aria-label="Particles moving in a box, seen from one side"></canvas>
+      <div class="clock" id="clock"></div>
+    </div>
+    <div class="side">
+      <div class="read" aria-live="off">
+        <span>Pressure from wall collisions</span><span class="num wall" id="p-wall">–</span>
+        <span>Ideal-gas law, <i class="v">N</i><i class="v">k</i><sub>B</sub><i class="v">T</i>/<i class="v">V</i></span><span class="num ideal" id="p-ideal">–</span>
+      </div>
+      <canvas id="trace" role="img" aria-label="Pressure from the wall collisions in successive intervals of 10 picoseconds, with the ideal-gas value as a horizontal line"></canvas>
+      <p class="cap">Pressure from the wall collisions in successive intervals of 10 ps (blue) around the ideal-gas value (orange). The number above is the average since the last change.</p>
+      <canvas id="hist" role="img" aria-label="Histogram of the speeds of the particles with the Maxwell-Boltzmann distribution drawn over it"></canvas>
+      <p class="cap">Speeds of the particles, averaged over the last 40 ps (bars), and the Maxwell–Boltzmann distribution (orange).</p>
+    </div>
+  </div>
+
+  <div class="controls">
+    <label>Number of particles <i class="v">N</i> <output id="o-n"></output><input id="s-n" type="range" min="20" max="300" step="10" value="200"></label>
+    <label>Temperature <i class="v">T</i> <output id="o-t"></output><input id="s-t" type="range" min="100" max="1000" step="10" value="300"></label>
+    <label>Volume <i class="v">V</i> <output id="o-v"></output><input id="s-l" type="range" min="16" max="26" step="1" value="20"></label>
+    <div class="row">
+      <span>Gas</span>
+      <span class="seg" id="gas" role="group" aria-label="Gas">
+        <button type="button" data-m="4.002602" aria-pressed="false">He</button>
+        <button type="button" data-m="28.0134" aria-pressed="true">N<sub>2</sub></button>
+        <button type="button" data-m="44.0095" aria-pressed="false">CO<sub>2</sub></button>
+      </span>
+      <button type="button" id="same">Give every particle the same speed</button>
+      <button type="button" id="pause" aria-pressed="false">Pause</button>
+    </div>
+  </div>
+  <p class="hint">The box is a cube, seen from one side. Fainter particles are farther from the viewer. A blue mark appears where a particle has just hit one of the four walls that are seen edge-on. Each particle is drawn, and collides, with a diameter of 0.6 nm, somewhat larger than a nitrogen molecule (0.36 nm), so that collisions between particles are frequent enough to watch. One second on the screen is 15 ps.</p>
+</main>
+
+<script>
+"use strict";
+const params = new URLSearchParams(location.search);
+const fixed = params.has("static");
+document.body.classList.toggle("static", fixed);
+
+/* ---- colors of the book, and the height of the frame ---- */
+let host = null;
+try { if (window.parent !== window) host = window.parent.document.documentElement; } catch (e) { host = null; }
+try { if (window.frameElement) document.body.classList.add("embedded"); } catch (e) {}
+let color = {};
+function theme() {
+  let dark = false;
+  if (params.get("theme")) dark = params.get("theme") === "dark";
+  else if (host) dark = host.classList.contains("dark");
+  else { try { dark = window.matchMedia("(prefers-color-scheme: dark)").matches; } catch (e) {} }
+  document.documentElement.dataset.theme = dark ? "dark" : "light";
+  const css = getComputedStyle(document.documentElement);
+  for (const name of ["ground", "text", "muted", "border", "fill", "blue", "blue-soft", "verm"]) color[name] = css.getPropertyValue("--" + name).trim();
+}
+theme();
+if (host) new MutationObserver(theme).observe(host, { attributes: true, attributeFilter: ["class"] });
+else { try { window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", theme); } catch (e) {} }
+
+function fit() {                                    // inside the notes, make the frame as tall as the content
+  try {
+    const frame = window.frameElement;
+    if (!frame) return;
+    const height = Math.ceil(document.documentElement.getBoundingClientRect().height) + "px";
+    frame.style.height = height;
+    const box = frame.parentElement;                // the book theme wraps a frame in a box with a fixed 5:3 shape
+    if (box && box.style.paddingBottom) { box.style.paddingBottom = "0"; box.style.display = "block"; }
+    if (box && box.style.paddingBottom === "0px") box.style.height = height;
+  } catch (e) {}
+}
+
+/* ---- the gas ---- */
+const K_B = 1.380649e-23, N_A = 6.02214076e23;      // J/K, 1/mol
+const DIAMETER = 0.6;                               // nm, for drawing and for collisions between particles
+const PS_PER_SECOND = 15;                           // simulated time per second on the screen
+const BLOCK = 10, MEMORY = 40;                      // ps: interval of the pressure trace, averaging time of the histogram
+const BINS = 24, TRACE = 48;
+
+let N = 200, T = 300, L = 20, mass = 28.0134e-3 / N_A;        // particles, K, nm, kg
+let x = [], y = [], z = [], vx = [], vy = [], vz = [];        // nm and m/s
+let time = 0, impulse = 0, since = 0, blockImpulse = 0, blockTime = 0, trace = [], counts = new Array(BINS).fill(0);
+let paused = false, flashes = [];                    // [wall, position along the wall (nm), time (ps)]
+const FLASH = 5;                                    // ps that a mark stays on a wall
+
+// A seeded generator keeps the still picture for the PDF the same from run to run.
+let seed = 4020;
+function random() { seed = (seed + 0x6D2B79F5) | 0; let t = Math.imul(seed ^ (seed >>> 15), 1 | seed);
+  t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t; return ((t ^ (t >>> 14)) >>> 0) / 4294967296; }
+function gauss() { return Math.sqrt(-2 * Math.log(1 - random())) * Math.cos(2 * Math.PI * random()); }
+
+const sigma = () => Math.sqrt(K_B * T / mass);       // spread of each velocity component (m/s)
+const vMax = () => 3.2 * Math.sqrt(2) * sigma();     // right end of the histogram (m/s)
+const pIdeal = () => N * K_B * T / (L * L * L * 1e-27) / 1e5;   // bar
+
+function addParticle() {
+  x.push(random() * L); y.push(random() * L); z.push(random() * L);
+  vx.push(sigma() * gauss()); vy.push(sigma() * gauss()); vz.push(sigma() * gauss());
+}
+function resize(n) {
+  while (x.length < n) addParticle();
+  for (const a of [x, y, z, vx, vy, vz]) a.length = n;
+  setEnergy();
+}
+// The temperature fixes the total kinetic energy, (3/2) N k_B T. Collisions conserve it, so it is set only here.
+function setEnergy() {
+  let sum = 0;
+  for (let i = 0; i < x.length; i++) sum += vx[i] * vx[i] + vy[i] * vy[i] + vz[i] * vz[i];
+  const f = Math.sqrt(3 * x.length * K_B * T / mass / sum);
+  for (let i = 0; i < x.length; i++) { vx[i] *= f; vy[i] *= f; vz[i] *= f; }
+}
+function restartAverages(histogramToo) {
+  impulse = 0; since = 0; blockImpulse = 0; blockTime = 0; trace = [];
+  if (histogramToo) counts = instantCounts();
+}
+function instantCounts() {
+  const c = new Array(BINS).fill(0), top = vMax();
+  for (let i = 0; i < x.length; i++) {
+    const b = Math.floor(Math.hypot(vx[i], vy[i], vz[i]) / top * BINS);
+    if (b < BINS) c[b] += 1;
+  }
+  return c;
+}
+
+function step(dt) {                                  // dt in ps
+  const n = x.length, move = dt * 1e-3;              // 1 m/s = 0.001 nm/ps
+  let hit = 0;
+  for (let i = 0; i < n; i++) {
+    x[i] += vx[i] * move; y[i] += vy[i] * move; z[i] += vz[i] * move;
+    if (x[i] < 0) { x[i] = -x[i]; vx[i] = -vx[i]; hit += Math.abs(vx[i]); flashes.push([0, y[i], time]); } else if (x[i] > L) { x[i] = 2 * L - x[i]; vx[i] = -vx[i]; hit += Math.abs(vx[i]); flashes.push([1, y[i], time]); }
+    if (y[i] < 0) { y[i] = -y[i]; vy[i] = -vy[i]; hit += Math.abs(vy[i]); flashes.push([2, x[i], time]); } else if (y[i] > L) { y[i] = 2 * L - y[i]; vy[i] = -vy[i]; hit += Math.abs(vy[i]); flashes.push([3, x[i], time]); }
+    if (z[i] < 0) { z[i] = -z[i]; vz[i] = -vz[i]; hit += Math.abs(vz[i]); } else if (z[i] > L) { z[i] = 2 * L - z[i]; vz[i] = -vz[i]; hit += Math.abs(vz[i]); }
+  }
+  // Elastic collisions between particles of equal mass: they exchange the velocity components along the line of centers.
+  const d2 = DIAMETER * DIAMETER;
+  for (let i = 0; i < n; i++) for (let j = i + 1; j < n; j++) {
+    const dx = x[j] - x[i]; if (dx > DIAMETER || dx < -DIAMETER) continue;
+    const dy = y[j] - y[i]; if (dy > DIAMETER || dy < -DIAMETER) continue;
+    const dz = z[j] - z[i], r2 = dx * dx + dy * dy + dz * dz;
+    if (r2 >= d2 || r2 === 0) continue;
+    const along = ((vx[j] - vx[i]) * dx + (vy[j] - vy[i]) * dy + (vz[j] - vz[i]) * dz) / r2;
+    if (along >= 0) continue;                        // already moving apart
+    vx[i] += along * dx; vy[i] += along * dy; vz[i] += along * dz;
+    vx[j] -= along * dx; vy[j] -= along * dy; vz[j] -= along * dz;
+  }
+  // Each wall collision hands the wall a momentum of 2 m |v| along the normal of the wall.
+  const kick = 2 * mass * hit;                       // kg m/s
+  while (flashes.length && time - flashes[0][2] > FLASH) flashes.shift();
+  time += dt; since += dt; impulse += kick; blockImpulse += kick; blockTime += dt;
+  if (blockTime >= BLOCK) { trace.push(pressure(blockImpulse, blockTime)); if (trace.length > TRACE) trace.shift(); blockImpulse = 0; blockTime = 0; }
+  const now = instantCounts(), keep = Math.exp(-dt / MEMORY);
+  for (let b = 0; b < BINS; b++) counts[b] = keep * counts[b] + (1 - keep) * now[b];
+}
+// Pressure (bar) = momentum handed to the walls / (time x total area of the six walls)
+const pressure = (kick, t) => kick / (t * 1e-12 * 6 * L * L * 1e-18) / 1e5;
+
+/* ---- drawing ---- */
+function prepare(canvas) {
+  const ratio = window.devicePixelRatio || 1, w = canvas.clientWidth, h = canvas.clientHeight;
+  if (canvas.width !== Math.round(w * ratio) || canvas.height !== Math.round(h * ratio)) { canvas.width = Math.round(w * ratio); canvas.height = Math.round(h * ratio); }
+  const g = canvas.getContext("2d"); g.setTransform(ratio, 0, 0, ratio, 0, 0); g.clearRect(0, 0, w, h);
+  g.font = "12px Inter, ui-sans-serif, system-ui, sans-serif";
+  return [g, w, h];
+}
+const $ = id => document.getElementById(id);
+const digits = p => p.toFixed(p < 1 ? 3 : 2) + " bar";
+
+function drawBox() {
+  const [g, w] = prepare($("box"));
+  const side = w * 0.94 * L / 26, x0 = (w - side) / 2, y0 = (w - side) / 2, scale = side / L;   // the largest box fills the canvas
+  g.fillStyle = color.ground; g.strokeStyle = color.text; g.lineWidth = 1.6;
+  g.fillRect(x0, y0, side, side); g.strokeRect(x0, y0, side, side);
+  const order = x.map((_, i) => i).sort((a, b) => z[b] - z[a]);            // far particles first
+  g.fillStyle = color.blue;
+  for (const i of order) {
+    g.globalAlpha = 1 - 0.6 * z[i] / L;
+    g.beginPath(); g.arc(x0 + x[i] * scale, y0 + (L - y[i]) * scale, Math.max(1.5, DIAMETER / 2 * scale), 0, 2 * Math.PI); g.fill();
+  }
+  g.strokeStyle = color.blue; g.lineWidth = 3; g.lineCap = "round";            // a mark where a particle has just hit a wall
+  for (const [wall, at, when] of flashes) {
+    g.globalAlpha = Math.max(0, 1 - (time - when) / FLASH);
+    const a = at * scale, far = side + 5;
+    g.beginPath();
+    if (wall === 0) { g.moveTo(x0 - 5, y0 + side - a - 4); g.lineTo(x0 - 5, y0 + side - a + 4); }
+    else if (wall === 1) { g.moveTo(x0 + far, y0 + side - a - 4); g.lineTo(x0 + far, y0 + side - a + 4); }
+    else if (wall === 2) { g.moveTo(x0 + a - 4, y0 + far); g.lineTo(x0 + a + 4, y0 + far); }
+    else { g.moveTo(x0 + a - 4, y0 - 5); g.lineTo(x0 + a + 4, y0 - 5); }
+    g.stroke();
+  }
+  g.globalAlpha = 1; g.lineCap = "butt";
+  $("clock").textContent = "Time " + time.toFixed(0) + " ps · edge of the box " + L + " nm";
+}
+
+function drawTrace() {
+  const [g, w, h] = prepare($("trace"));
+  // The vertical range runs from 40 % below to 40 % above the ideal-gas value, which sits in the middle.
+  const ideal = pIdeal(), left = 4, right = w - 4, top = 5, bottom = h - 5;
+  const Y = p => bottom - Math.min(Math.max(p / ideal - 0.6, 0), 0.8) / 0.8 * (bottom - top);
+  g.textBaseline = "middle"; g.textAlign = "right"; g.fillStyle = color.muted; g.strokeStyle = color.border; g.lineWidth = 1;
+  for (const [f, label] of [[1.25, "+25 %"], [0.75, "−25 %"]]) {
+    const y = Math.round(Y(f * ideal)) + 0.5;
+    g.beginPath(); g.moveTo(left, y); g.lineTo(right - 44, y); g.stroke(); g.fillText(label, right, y);
+  }
+  g.strokeStyle = color.verm; g.lineWidth = 1.6; g.setLineDash([5, 4]); g.beginPath(); g.moveTo(left, Y(ideal)); g.lineTo(right, Y(ideal)); g.stroke(); g.setLineDash([]);
+  if (trace.length) {
+    const dx = (right - 50 - left) / (TRACE - 1);
+    g.strokeStyle = color.blue; g.lineWidth = 1.6; g.lineJoin = "round"; g.beginPath();
+    trace.forEach((p, k) => { const X = left + k * dx; if (k) g.lineTo(X, Y(p)); else g.moveTo(X, Y(p)); }); g.stroke();
+    g.fillStyle = color.blue; g.beginPath(); g.arc(left + (trace.length - 1) * dx, Y(trace[trace.length - 1]), 3, 0, 2 * Math.PI); g.fill();
+  }
+  $("p-ideal").textContent = digits(ideal);
+  $("p-wall").textContent = since >= BLOCK ? digits(pressure(impulse, since)) : "…";
+}
+
+function drawHistogram() {
+  const [g, w, h] = prepare($("hist"));
+  const top = vMax(), left = 4, right = w - 4, base = h - 38, width = (right - left) / BINS, dv = top / BINS, s = sigma();
+  const f = v => Math.sqrt(2 / Math.PI) * v * v / (s * s * s) * Math.exp(-v * v / (2 * s * s));   // Maxwell-Boltzmann distribution (s/m)
+  const peak = N * f(Math.sqrt(2) * s) * dv, Y = c => base - Math.min(c / (1.45 * peak), 1) * (base - 4);
+  g.fillStyle = color["blue-soft"]; g.strokeStyle = color.blue; g.lineWidth = 1;
+  for (let b = 0; b < BINS; b++) { const X = left + b * width; g.fillRect(X + 1, Y(counts[b]), width - 2, base - Y(counts[b])); g.strokeRect(X + 1.5, Y(counts[b]) + 0.5, width - 3, base - Y(counts[b])); }
+  g.strokeStyle = color.verm; g.lineWidth = 2; g.beginPath();
+  for (let k = 0; k <= 120; k++) { const v = top * k / 120, X = left + (right - left) * k / 120; if (k) g.lineTo(X, Y(N * f(v) * dv)); else g.moveTo(X, Y(0)); }
+  g.stroke();
+  g.strokeStyle = color.muted; g.lineWidth = 1; g.beginPath(); g.moveTo(left, base + 0.5); g.lineTo(right, base + 0.5); g.stroke();
+  g.fillStyle = color.text; g.textBaseline = "top";
+  const tick = [100, 200, 250, 500, 1000, 2000].find(t => top / t <= 6);
+  for (let v = 0; v <= top - 0.03 * top; v += tick) {
+    const X = left + (right - left) * v / top;
+    g.beginPath(); g.moveTo(X + 0.5, base); g.lineTo(X + 0.5, base + 4); g.stroke();
+    g.textAlign = v === 0 ? "left" : "center"; g.fillText(String(v), X, base + 6);
+  }
+  g.textAlign = "center"; g.fillStyle = color.muted; g.fillText("speed (m/s)", (left + right) / 2, base + 22);
+}
+function draw() { drawBox(); drawTrace(); drawHistogram(); }
+
+/* ---- controls ---- */
+function labels() {
+  $("o-n").textContent = N; $("o-t").textContent = T + " K"; $("o-v").textContent = (L * L * L).toLocaleString("en-US") + " nm³";
+}
+$("s-n").addEventListener("input", e => { N = +e.target.value; resize(N); restartAverages(true); labels(); draw(); });
+$("s-t").addEventListener("input", e => {
+  const f = Math.sqrt(+e.target.value / T); T = +e.target.value;
+  for (let i = 0; i < x.length; i++) { vx[i] *= f; vy[i] *= f; vz[i] *= f; }
+  restartAverages(true); labels(); draw();
+});
+$("s-l").addEventListener("input", e => {
+  const f = +e.target.value / L; L = +e.target.value;
+  for (let i = 0; i < x.length; i++) { x[i] *= f; y[i] *= f; z[i] *= f; }
+  flashes = []; restartAverages(false); labels(); draw();
+});
+$("gas").addEventListener("click", e => {
+  const b = e.target.closest("button"); if (!b) return;
+  const m = +b.dataset.m * 1e-3 / N_A, f = Math.sqrt(mass / m); mass = m;      // same temperature, so the speeds scale with 1/sqrt(m)
+  for (let i = 0; i < x.length; i++) { vx[i] *= f; vy[i] *= f; vz[i] *= f; }
+  $("gas").querySelectorAll("button").forEach(o => o.setAttribute("aria-pressed", o === b ? "true" : "false"));
+  restartAverages(true); draw();
+});
+$("same").addEventListener("click", () => {             // every particle gets the kinetic energy (3/2) k_B T, in a random direction
+  const speed = Math.sqrt(3) * sigma();
+  for (let i = 0; i < x.length; i++) {
+    const c = 2 * random() - 1, s = Math.sqrt(1 - c * c), phi = 2 * Math.PI * random();
+    vx[i] = speed * s * Math.cos(phi); vy[i] = speed * s * Math.sin(phi); vz[i] = speed * c;
+  }
+  restartAverages(true); draw();
+});
+$("pause").addEventListener("click", e => { paused = !paused; e.target.setAttribute("aria-pressed", paused); e.target.textContent = paused ? "Continue" : "Pause"; });
+
+/* ---- run ---- */
+resize(N); counts = instantCounts(); labels();
+const SUBSTEPS = 4;
+if (fixed) {
+  for (let k = 0; k < 4000; k++) step(0.1);            // 400 ps
+  draw();
+} else {
+  let last = null;
+  const frame = now => {
+    if (last !== null && !paused && !document.hidden) {
+      const dt = Math.min((now - last) / 1000, 0.05) * PS_PER_SECOND;          // ps
+      for (let k = 0; k < SUBSTEPS; k++) step(dt / SUBSTEPS);
+    }
+    last = now; draw(); requestAnimationFrame(frame);
+  };
+  requestAnimationFrame(frame);
+}
+try { new ResizeObserver(() => { fit(); if (fixed) draw(); }).observe(document.body); } catch (e) {}
+window.addEventListener("load", fit);
+</script>
+</body>
+</html>
