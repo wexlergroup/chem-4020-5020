@@ -21,7 +21,7 @@ See also: [Course-wide Conventions & Notation](../notation.md)
 
 ## Overview and Learning Objectives
 
-[Section 7.1](section-01.md) derived the equilibrium constant from macroscopic thermochemistry: given $\Delta_r H^\circ$ and $\Delta_r S^\circ$ (e.g., from NIST/JANAF/ATcT tables), one computes $\Delta_r G^\circ$ and then $K = \exp(-\Delta_r G^\circ/RT)$.
+[Section 7.1](section-01.md) derived the equilibrium constant from macroscopic thermochemistry: given $\Delta_r H^\circ$ and $\Delta_r S^\circ$ (e.g., from the [NIST-JANAF Thermochemical Tables](https://janaf.nist.gov/) or the Active Thermochemical Tables), one computes $\Delta_r G^\circ$ and then $K = \exp(-\Delta_r G^\circ/RT)$.
 
 In this section we derive the same $K$ from **microscopic** information — molecular masses, rotational and vibrational constants, electronic degeneracies, and bond dissociation energies. This completes the statistical-mechanical bridge built in Modules 2, 4, and 5: Module 4 connected the canonical partition function to the Helmholtz free energy, $A = -k_{\mathrm B}T\ln Q$; Module 5 showed that $A$ is the master potential at constant $T,V$, generating $S$, $U$, $P$, and — as we now develop — the chemical potentials $\mu_i$. Once we have $\mu_i$ in terms of the single-molecule partition functions $q_i$, the equilibrium condition $\sum_i\nu_i\mu_i = 0$ gives $K$ directly in terms of molecular properties.
 
