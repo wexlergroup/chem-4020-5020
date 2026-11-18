@@ -332,8 +332,8 @@ def draw(c):
     fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(fs.WIDTH, 3.35), constrained_layout=True)
     draw_atoms(ax1, c, spacing_gas, thermal_wavelength(T_gas))
     draw_atoms(ax2, c, spacing_liquid, thermal_wavelength(T_liquid))
-    fs.panel(ax1, "a", "Helium gas at 300 K and 1 bar")
-    fs.panel(ax2, "b", "Liquid helium at 4.22 K")
+    fs.panel(ax1, "a", f"Helium gas at {T_gas:g} K and {P_gas / 1e5:g} bar")
+    fs.panel(ax2, "b", f"Liquid helium at {T_liquid:g} K")
     return fig
 
 
