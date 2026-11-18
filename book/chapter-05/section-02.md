@@ -154,7 +154,7 @@ fs.show(draw, alt="Two square lattices of 36 carbon monoxide molecules, each dra
 :title: Solid carbon monoxide
 :placeholder: ../_static/solid-carbon-monoxide/solid-carbon-monoxide.png
 
-One unit cell of solid CO in its low-temperature phase, with the 14 molecules at the corners and on the faces of the cell. The switch changes between the ordered structure and a crystal in which each molecule is frozen at random in one of its two head-to-tail orientations. A blue outline marks a molecule that is flipped end for end. The atom positions are those of the X-ray structure of L. Vegard, *Z. Physik* **61**, 185 (1930).
+One unit cell of solid CO in its low-temperature phase, with the 14 molecules at the corners and on the faces of the cell. The switch changes between the ordered structure and a crystal in which each molecule is frozen at random in one of its two head-to-tail orientations. A blue outline marks a molecule that is flipped end for end. The atom positions are those of the X-ray structure of @vegard1930.
 ```
 
 Each press of "Another random arrangement" draws one of the $2^{14} = 16{,}384$ arrangements of the 14 molecules shown. The same count for the $N$ molecules of a crystal gives $\Omega_0 = 2^N$.
@@ -275,11 +275,11 @@ S^\circ(T) = \int_0^T \frac{C_P(T')}{T'}\,dT' + \sum_{\text{transitions}} \frac{
 
 where the sum runs over any phase transitions (melting, boiling, etc.) between $0$ and $T$, each contributing $\Delta H_{\mathrm{trs}}/T_{\mathrm{trs}}$ to the entropy.
 
-[](#fig:nitrogen-entropy) applies Eq. {eq}`eq:absolute-entropy` to nitrogen at $1\ \mathrm{atm}$, with the calorimetric measurements of Giauque and Clayton ([*J. Am. Chem. Soc.* **1933**, *55*, 4875](https://doi.org/10.1021/ja01339a024)). Nitrogen has two solid phases, $\alpha$ below $35.61\ \mathrm{K}$ and $\beta$ from there to the melting point at $63.14\ \mathrm{K}$, and it boils at $77.32\ \mathrm{K}$. The measurements begin near $15\ \mathrm{K}$ and end at the boiling point. Below $10\ \mathrm{K}$, the authors extrapolated the heat capacity with the Debye model of a crystal, which reduces to the $T^3$ law of Example 1 below at the lowest temperatures. Above the boiling point, the curve is that of the ideal gas with $C_P = \tfrac{7}{2}R$ ([Section 5.3](section-03.md)). The three transitions contribute $6.4$, $11.4$, and $72.1\ \mathrm{J\,mol^{-1}\,K^{-1}}$, the last of which is more than a third of the total. The result at $298.15\ \mathrm{K}$ is $192.3\ \mathrm{J\,mol^{-1}\,K^{-1}}$, which is $0.4\%$ above the value in the [NIST-JANAF Thermochemical Tables](https://janaf.nist.gov/), $191.61\ \mathrm{J\,mol^{-1}\,K^{-1}}$.
+[](#fig:nitrogen-entropy) applies Eq. {eq}`eq:absolute-entropy` to nitrogen at $1\ \mathrm{atm}$, with the calorimetric measurements of @giauque1933. Nitrogen has two solid phases, $\alpha$ below $35.61\ \mathrm{K}$ and $\beta$ from there to the melting point at $63.14\ \mathrm{K}$, and it boils at $77.32\ \mathrm{K}$. The measurements begin near $15\ \mathrm{K}$ and end at the boiling point. Below $10\ \mathrm{K}$, the authors extrapolated the heat capacity with the Debye model of a crystal, which reduces to the $T^3$ law of Example 1 below at the lowest temperatures. Above the boiling point, the curve is that of the ideal gas with $C_P = \tfrac{7}{2}R$ ([Section 5.3](section-03.md)). The three transitions contribute $6.4$, $11.4$, and $72.1\ \mathrm{J\,mol^{-1}\,K^{-1}}$, the last of which is more than a third of the total. The result at $298.15\ \mathrm{K}$ is $192.3\ \mathrm{J\,mol^{-1}\,K^{-1}}$, which is $0.4\%$ above the value in the [NIST-JANAF Thermochemical Tables](https://janaf.nist.gov/), $191.61\ \mathrm{J\,mol^{-1}\,K^{-1}}$.
 
 ```{code-cell} ipython3
 :label: fig:nitrogen-entropy
-:caption: Absolute entropy of nitrogen at $1\ \mathrm{atm}$ from the heat capacities and transition enthalpies measured by Giauque and Clayton (1933). (a) The integrand $C_P/T$ of Eq. [](#eq:absolute-entropy). Symbols are the measurements, and the shaded area under each branch is the entropy gained within that phase. Dashed lines are calculated: the Debye model below $10\ \mathrm{K}$ and the ideal gas above the boiling point. (b) The entropy, which rises continuously within each phase and increases by $\Delta H_{\mathrm{trs}}/T_{\mathrm{trs}}$ (labels, in $\mathrm{J\,mol^{-1}\,K^{-1}}$) at the solid–solid transition, at melting, and at boiling. The step at the boiling point includes the correction of $0.9\ \mathrm{J\,mol^{-1}\,K^{-1}}$ that the authors applied to convert the vapor to an ideal gas.
+:caption: Absolute entropy of nitrogen at $1\ \mathrm{atm}$ from the heat capacities and transition enthalpies measured by @giauque1933. (a) The integrand $C_P/T$ of Eq. [](#eq:absolute-entropy). Symbols are the measurements, and the shaded area under each branch is the entropy gained within that phase. Dashed lines are calculated: the Debye model below $10\ \mathrm{K}$ and the ideal gas above the boiling point. (b) The entropy, which rises continuously within each phase and increases by $\Delta H_{\mathrm{trs}}/T_{\mathrm{trs}}$ (labels, in $\mathrm{J\,mol^{-1}\,K^{-1}}$) at the solid–solid transition, at melting, and at boiling. The step at the boiling point includes the correction of $0.9\ \mathrm{J\,mol^{-1}\,K^{-1}}$ that the authors applied to convert the vapor to an ideal gas.
 :tags: [hide-input]
 
 import sys
@@ -375,7 +375,7 @@ fs.show(draw, alt="Two panels for nitrogen at 1 atm. Panel a: the heat capacity 
                   "per kelvin.")
 ```
 
-These absolute entropies are tabulated in standard references (NIST WebBook, JANAF tables) as $S^\circ(298.15\ \mathrm{K})$. Combined with standard enthalpies of formation, they provide the reaction entropies and Gibbs energies that we will use in [Section 5.3](section-03.md) to analyze the Haber–Bosch process.
+These absolute entropies are tabulated in standard references ([NIST Chemistry WebBook](https://webbook.nist.gov/chemistry/), NIST-JANAF tables) as $S^\circ(298.15\ \mathrm{K})$. Combined with standard enthalpies of formation, they provide the reaction entropies and Gibbs energies that we will use in [Section 5.3](section-03.md) to analyze the Haber–Bosch process.
 
 ---
 
