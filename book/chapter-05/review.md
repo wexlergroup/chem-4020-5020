@@ -161,7 +161,7 @@ See [Section 5.2](section-02.md).
    S^\circ(T) = \int_0^T \frac{C_P(T')}{T'}\,dT' + \sum_{\text{transitions}} \frac{\Delta H_{\mathrm{trs}}}{T_{\mathrm{trs}}}.
    ```
 
-   - Tabulated $S^\circ(298.15\ \mathrm{K})$ values (NIST WebBook, JANAF) are the basis for computing reaction entropies and Gibbs energies.
+   - Tabulated $S^\circ(298.15\ \mathrm{K})$ values ([NIST Chemistry WebBook](https://webbook.nist.gov/chemistry/), [NIST-JANAF Thermochemical Tables](https://janaf.nist.gov/)) are the basis for computing reaction entropies and Gibbs energies.
 
 ---
 
@@ -745,3 +745,17 @@ Use $R=8.3145\ \mathrm{J\,mol^{-1}\,K^{-1}}$.
 
 **Result.** At $298.15\ \mathrm{K}$, $\Delta_r H^\circ=+206.17\ \mathrm{kJ\,mol^{-1}}$, $\Delta_r S^\circ=+214.61\ \mathrm{J\,mol^{-1}\,K^{-1}}$, and $\Delta_r G^\circ=+142.19\ \mathrm{kJ\,mol^{-1}}$. $\Delta_r G^\circ$ changes sign near $961\ \mathrm{K}$. At $1200\ \mathrm{K}$ the constant-$C_P$ model gives $\Delta_r G^\circ=-89.7\ \mathrm{kJ\,mol^{-1}}$ (tabulated: $-77.9\ \mathrm{kJ\,mol^{-1}}$), and $\Delta_r G=-25.5\ \mathrm{kJ\,mol^{-1}}$ with every species at $25\ \mathrm{bar}$.
 ````
+
+## 4. Further Reading
+
+**Textbooks**
+
+- @mcquarrie1997, Chapter 21 (entropy and the third law of thermodynamics) and Chapter 22, Sections 22.1 to 22.7 (Helmholtz and Gibbs energies).
+- @dill2011, Chapter 8 (laboratory conditions and free energies) and Chapter 9 (Maxwell's relations and mixtures).
+- @hill1986, Chapter 2 (the second and third laws in terms of ensembles).
+
+**Original papers**
+
+- @clayton1932 measure the entropy of carbon monoxide by calorimetry and compare it with the value calculated from spectroscopic data. The difference is the residual entropy of [Section 5.2](section-02.md).
+- @pauling1935 counts the arrangements of the hydrogen atoms in ice, the model of Example 2 of [Section 5.2](section-02.md).
+- @haber1920 gives his account of the synthesis of ammonia from nitrogen and hydrogen ([Section 5.3](section-03.md)).
