@@ -2,7 +2,8 @@
   Small corrections to the book theme. Loaded through `site.options.style` in myst.yml.
 
   Rules 1 to 3 keep a page from scrolling sideways on a narrow screen, and rule 4 is for screen readers. They change
-  nothing that is visible.
+  nothing that is visible. Rule 5 applies only to a page that is printed from the browser, or saved as a PDF from
+  the print dialog.
 */
 
 /* 1. Math inside a wide table. KaTeX adds a hidden copy of each formula for screen readers and positions it
@@ -39,4 +40,164 @@
       read them after the name of the logo. */
 .myst-home-link > .sr-only {
   display: none;
+}
+
+/* 5. Printing. The notes have no separate PDF: a page is printed from the browser. */
+@media print {
+  @page {
+    margin: 0.5in;
+  }
+
+  /* 5a. Leave out what belongs to the screen: the top bar with the menu and the search, the list of pages, the
+         contents of the page, the icons beside the title, the links to the previous and the next page, and the
+         buttons of the code cells. */
+  .myst-top-nav,
+  .myst-primary-sidebar,
+  .myst-skip-to-article,
+  div:has(> .myst-outline-section),
+  .myst-fm-block-badges,
+  .myst-fm-edit-link,
+  .myst-fm-downloads-dropdown,
+  .myst-footer-links,
+  .myst-jp-nb-block-spinner,
+  .myst-jp-nb-block > .myst-jp-nb-block,
+  :is(h1, h2, h3, h4, h5, h6) > a[aria-label="Link to this Section"] {
+    display: none !important;
+  }
+
+  /* 5b. The text takes the full width between the margins, which is 720 px on US Letter paper. */
+  main.article-grid,
+  article.article-grid {
+    display: block;
+  }
+  .myst-fm-block {
+    padding-top: 0;
+  }
+
+  /* 5c. Page breaks: a heading stays with the text that follows it, and a figure, a table row, a displayed
+         equation and a studio are not divided. A dropdown is printed as it is on the screen, open or closed. */
+  :is(h1, h2, h3, h4, h5, h6) {
+    break-after: avoid;
+  }
+  figure,
+  aside,
+  tr,
+  div:has(> iframe),
+  .katex-display {
+    break-inside: avoid;
+  }
+
+  /* 5d. A studio keeps on paper the width that it has on the screen, which it reports in --paper-width when the
+         page is printed (720 px if it does not), and is reduced to the width of the text where that is narrower.
+         The tangent of the arctangent is the ratio of the two lengths. */
+  div:has(> iframe) {
+    container-type: inline-size;
+  }
+  div > iframe {
+    width: var(--paper-width, 720px) !important;
+    transform: scale(min(1, tan(atan2(100cqw, var(--paper-width, 720px)))));
+    transform-origin: 0 0;
+  }
+
+  /* 5e. A page printed from the dark theme uses the colors of the light theme: the variables of the theme are
+         set back to their light values (copied from the book theme), the figures show their light versions
+         (each figure is on the page twice), and the code has its light colors. The studios do the same for
+         themselves when the page is printed. */
+  html.dark {
+    color-scheme: light;
+    --myst-color-link: #1d4ed8;
+    --myst-color-link-hover: #3b82f6;
+    --myst-color-link-underline: #60a5fa;
+    --myst-color-active: #2563eb;
+    --myst-color-active-bg: #93c5fd4d;
+    --myst-color-active-surface: #eff6ff;
+    --myst-color-focus-ring: #3b82f6;
+    --myst-color-focus-outline: #bfdbfe;
+    --myst-color-accent-text: #1e3a8a;
+    --myst-color-accent-surface: #eff6ff;
+    --myst-color-accent-surface-border: #bfdbfe;
+    --myst-color-accent-surface-text: #1e3a8a;
+    --myst-color-bg: #fff;
+    --myst-color-bg-secondary: #f9fafb;
+    --myst-color-surface: #f3f4f6;
+    --myst-color-surface-hover: #e5e7eb;
+    --myst-color-text: #111827;
+    --myst-color-text-secondary: #4b5563;
+    --myst-color-text-tertiary: #6b7280;
+    --myst-color-prose-body: #44403c;
+    --myst-color-border: #e5e7eb;
+    --myst-color-border-strong: #d1d5db;
+    --myst-color-inverse-bg: #1e3a8a;
+    --myst-color-inverse-text: #fff;
+    --myst-color-code: #be185d;
+    --myst-color-kbd-shadow: #1c19171a;
+    --myst-color-info-bg: #eff6ff;
+    --myst-color-info-text: #2563eb;
+    --myst-color-success: #16a34a;
+    --myst-color-success-bg: #f0fdf4;
+    --myst-color-success-text: #16a34a;
+    --myst-color-warning: #d97706;
+    --myst-color-warning-bg: #fffbeb;
+    --myst-color-warning-text: #d97706;
+    --myst-color-danger: #dc2626;
+    --myst-color-danger-bg: #fef2f2;
+    --myst-color-danger-text: #dc2626;
+    --myst-color-error: #ef4444;
+    --myst-color-error-bg: #fee2e2;
+    --myst-color-error-text: #b91c1c;
+    --myst-color-theorem-bg: #faf5ff;
+    --myst-color-theorem-text: #9333ea;
+    --myst-color-example-bg: #fff7ed;
+    --myst-color-example-text: #ea580c;
+    --myst-color-proof-bg: #f9fafb;
+    --myst-color-proof-text: #4b5563;
+    --jp-ui-font-color0: #000;
+    --jp-ui-font-color1: #000000de;
+    --jp-ui-font-color2: #0000008a;
+    --jp-ui-font-color3: #00000061;
+    --jp-content-font-color0: #000;
+    --jp-content-font-color1: #000000de;
+    --jp-content-font-color2: #0000008a;
+    --jp-content-font-color3: #00000061;
+    --jp-layout-color0: #fff;
+    --jp-layout-color1: #fff;
+  }
+  html.dark main .dark\:hidden {
+    display: revert !important;
+  }
+  html.dark main .hidden.dark\:block {
+    display: none !important;
+  }
+  html.dark .hljs {
+    color: #44403c;
+    background: transparent !important;
+  }
+  html.dark :is(.hljs-function, .hljs-subst, .hljs-formula) {
+    color: #44403c;
+  }
+  html.dark :is(.hljs-keyword, .hljs-literal, .hljs-name, .hljs-tag, .hljs-attribute, .hljs-selector-tag) {
+    color: #aa0d91;
+  }
+  html.dark :is(.hljs-string, .hljs-code) {
+    color: #c41a16;
+  }
+  html.dark :is(.hljs-comment, .hljs-quote) {
+    color: #007400;
+    font-style: normal;
+  }
+  html.dark :is(.hljs-number, .hljs-symbol, .hljs-title, .hljs-bullet) {
+    color: #1c00cf;
+  }
+  html.dark :is(.hljs-built_in, .hljs-params, .hljs-type) {
+    color: #5c2699;
+  }
+  html.dark :is(.hljs-variable, .hljs-template-variable) {
+    color: #3f6e74;
+  }
+  html.dark :is(.hljs-meta, .hljs-section) {
+    color: #643820;
+  }
+  html.dark .hljs-attr {
+    color: #836c28;
+  }
 }
