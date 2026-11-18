@@ -207,6 +207,8 @@ Both partition functions are sums over the levels of one molecule, and both meas
 
 [](#fig:K-populations) shows a model in which the lowest level of B lies above the lowest level of A, while the levels of B lie closer together. At the lower temperature almost all molecules occupy the lowest levels, which belong to A, and $K < 1$. At the higher temperature the many levels of B together hold more molecules than the few levels of A, and $K > 1$. The energy of the lowest level favors A, and the number of accessible levels favors B.
 
+% Try this: Give the levels of B the same spacing as those of A: change `spacing_A, spacing_B, offset_B = 2.0, 0.5, 3.0` to `spacing_A, spacing_B, offset_B = 2.0, 2.0, 3.0`. Does $K$ still exceed 1 at the higher temperature, and can it exceed 1 at any temperature now?
+
 ```{code-cell} ipython3
 :label: fig:K-populations
 :caption: Populations of the levels of a model molecule with two forms, A and B, at (a) $k_{\mathrm{B}}T = \varepsilon$ and (b) $k_{\mathrm{B}}T = 4\varepsilon$. The levels of A lie at $0, 2\varepsilon, 4\varepsilon, \dots$ and those of B at $3\varepsilon, 3.5\varepsilon, 4\varepsilon, \dots$. The length of each bar is the population of its level relative to the lowest level, and the dashed curve is the Boltzmann factor $e^{-E/k_{\mathrm{B}}T}$, which is the same for both forms. $K$ is the total population of the levels of B divided by that of the levels of A, Eq. [](#eq:K-isomerization). The sums include the levels above $12\varepsilon$, which are not drawn.
@@ -405,6 +407,8 @@ To see the microscopic-to-macroscopic bridge at work, we evaluate Eq. {eq}`eq:K-
 | $\mathrm{H_2}$ | 2.016 | 87.55 | 6332 | 432.07 | 2 | 1 |
 | $\mathrm{I_2}$ | 253.808 | 0.05377 | 309 | 148.81 | 2 | 1 |
 | $\mathrm{HI}$ | 127.912 | 9.25 | 3322 | 294.67 | 1 | 1 |
+
+% Try this: Change `D0=294.67e3`, the dissociation energy of HI, to `D0=295.17e3`, which is $0.5\ \mathrm{kJ\,mol^{-1}}$ more, and run this cell and the next one. By what factor does $K(700\ \mathrm{K})$ change, and why does the change of $D_0$ count twice in the exponent?
 
 ```{code-cell} ipython3
 import numpy as np
