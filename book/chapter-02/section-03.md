@@ -382,6 +382,23 @@ fs.show(draw, alt="Two panels. Panel a: three distributions of the energy per pa
                   "and 1000 particles, and to about 1.6 times ten to the minus twelve at one mole.")
 ```
 
+The simulation in [](#fig:energy-fluctuations-interactive) follows the same particles in time. In each step, a tenth of the particles exchange energy with the heat bath, so the energy $E$ of the system moves around its average $U$. The simulation collects the energies that the system visits and compares them with the binomial distribution.
+
+```{iframe} https://wexlergroup.github.io/chem-4020-5020/computational-studios/energy-fluctuations.html
+:label: fig:energy-fluctuations-interactive
+:width: 100%
+:title: Energy fluctuations and system size: an interactive simulation of two-state particles in contact with a heat bath
+:placeholder: ../_static/energy-fluctuations/energy-fluctuations.png
+
+$N$ independent two-state particles with $E_1 = 0$ and $E_2 = \varepsilon = 0.01\ \mathrm{eV}$ in contact with a heat bath. The energy per particle $E/N$ is shown in successive steps around $U/N$, with a band that reaches one standard deviation $\sigma_E/N$ to either side. The bars are the energies that the system has visited, and the line is the binomial distribution. The relative width $\sigma_E/U$ is given as its exact value and as measured from the visited energies.
+```
+
+Three things to try:
+
+1. Increase the number of particles from 10 to 10,000 in steps, and compare how far the energy strays from $U$ in each system.
+2. Each time $N$ grows by a factor of 100, note the factor by which $\sigma_E/U$ changes, and compare it with Eq. {eq}`eq:relative-energy-fluctuation`.
+3. Change the temperature at a fixed number of particles, and relate the changes of $U/N$ and of $\sigma_E/U$ to the probabilities $p_1$ and $p_2$.
+
 ### Pressure
 
 The pressure follows from two results that are derived in later sections:
