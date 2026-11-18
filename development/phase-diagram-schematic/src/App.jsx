@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { useBook, Studio, Panel, Slider, Sci, V, seeded, LINE, DASH, STATIC } from '../../studio-kit/kit.jsx';
+import { useBook, Studio, Panel, Slider, Sci, V, seeded, LINE, DASH, STATIC, onPaper } from '../../studio-kit/kit.jsx';
 import { TRIPLE, CRITICAL, saturationPressure, sublimationPressure, meltingPressure,
          saturationTemperature, sublimationTemperature, meltingTemperature, phases } from './water.js';
 import { Sample, THICK, RADIUS } from './layer.js';
@@ -214,7 +214,8 @@ function Layer({ list, T, playing, color }) {
       frame = requestAnimationFrame(draw);
     };
     frame = requestAnimationFrame(draw);
-    return () => cancelAnimationFrame(frame);
+    const off = onPaper(() => { cancelAnimationFrame(frame); draw(performance.now()); });
+    return () => { off(); cancelAnimationFrame(frame); };
   }, []);
 
   return <canvas ref={canvas} style={{ height: PICTURE * TALL / EDGE + 50 }} role="img"

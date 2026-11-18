@@ -3,10 +3,12 @@
   Every studio imports this file and kit.css, so that all studios have one look.
 
   Inside the notes, a studio follows the light or dark mode of the book and sets the height of its own frame.
+  On paper it uses the colors of the light page.
   On its own page it follows the system, or ?theme=light or ?theme=dark.
   With ?static=1 it shows only the panels, for the still picture that the PDF of the notes uses.
 */
 import React, { useEffect, useState } from 'react';
+import { flushSync } from 'react-dom';
 import './kit.css';
 
 const NAMES = ['ground', 'text', 'muted', 'border', 'fill', 'blue', 'vermilion', 'green', 'purple', 'gray', 'axis'];
@@ -17,10 +19,13 @@ function bookRoot() {                                 // the <html> element of t
   try { return window.parent !== window ? window.parent.document.documentElement : null; } catch (e) { return null; }
 }
 
+let printing = false;                                 // on paper, the colors of the light page, whatever the mode of the screen
+
 function readTheme() {
   const host = bookRoot();
   let dark = false;
-  if (params.get('theme')) dark = params.get('theme') === 'dark';
+  if (printing) dark = false;
+  else if (params.get('theme')) dark = params.get('theme') === 'dark';
   else if (host) dark = host.classList.contains('dark');
   else { try { dark = window.matchMedia('(prefers-color-scheme: dark)').matches; } catch (e) { dark = false; } }
   document.documentElement.dataset.theme = dark ? 'dark' : 'light';
@@ -42,6 +47,26 @@ function fit() {                                      // inside the notes, make 
   } catch (e) { /* the studio is on its own page */ }
 }
 
+// A picture that is drawn in a loop of animation frames would be printed in its old colors. onPaper(redraw) calls
+// redraw at once when the page is about to be printed, and again after it. It returns the function that ends this.
+const REDRAW = 'studio-redraw';
+export function onPaper(redraw) {
+  window.addEventListener(REDRAW, redraw);
+  return () => window.removeEventListener(REDRAW, redraw);
+}
+
+// On paper the frame keeps the width that it has on the screen, so that nothing in the studio is laid out again
+// while the page is printed. The print rules of the notes (book/custom.css) read this width and reduce the frame
+// to the width of the text.
+function keepWidth(on) {
+  try {
+    const frame = window.frameElement;
+    if (!frame) return;
+    if (on) frame.style.setProperty('--paper-width', frame.getBoundingClientRect().width + 'px');
+    else frame.style.removeProperty('--paper-width');
+  } catch (e) { /* the studio is on its own page */ }
+}
+
 // The colors of the present mode, as { dark, color }. The component draws again when the mode changes.
 export function useBook() {
   const [theme, setTheme] = useState(readTheme);
@@ -56,11 +81,25 @@ export function useBook() {
     try { sizes = new ResizeObserver(fit); sizes.observe(document.body); } catch (e) { sizes = null; }
     window.addEventListener('load', fit);
     fit();
+    const print = (on) => () => {                     // before and after the page is printed
+      keepWidth(on);
+      printing = on;
+      const was = document.documentElement.dataset.theme === 'dark', next = readTheme();
+      if (next.dark === was) return;                  // the light page is printed as it is
+      flushSync(() => setTheme(next));
+      window.dispatchEvent(new Event(REDRAW));
+      document.body.getBoundingClientRect();          // lays the redrawn charts out now, or the printer leaves their curves out
+    };
+    const before = print(true), after = print(false);
+    window.addEventListener('beforeprint', before);
+    window.addEventListener('afterprint', after);
     return () => {
       if (observer) observer.disconnect();
       if (media) media.removeEventListener('change', update);
       if (sizes) sizes.disconnect();
       window.removeEventListener('load', fit);
+      window.removeEventListener('beforeprint', before);
+      window.removeEventListener('afterprint', after);
     };
   }, []);
   return theme;

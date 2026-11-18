@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { BarChart, Bar, LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer, ReferenceLine } from 'recharts';
-import { useBook, Studio, Panel, Slider, Sci, V, axis, niceTicks, DASH, STATIC } from '../../studio-kit/kit.jsx';
+import { useBook, Studio, Panel, Slider, Sci, V, axis, niceTicks, DASH, STATIC, onPaper } from '../../studio-kit/kit.jsx';
 import { MOLECULES, rotor } from './rotor.js';
 
 /*
@@ -58,7 +58,8 @@ function Molecule({ mA, mB, r, omega, same, playing, color }) {
       frame = requestAnimationFrame(draw);
     };
     frame = requestAnimationFrame(draw);
-    return () => cancelAnimationFrame(frame);
+    const off = onPaper(() => { cancelAnimationFrame(frame); draw(performance.now()); });
+    return () => { off(); cancelAnimationFrame(frame); };
   }, []);
 
   return <canvas ref={canvas} style={{ height: SIZE }} role="img"

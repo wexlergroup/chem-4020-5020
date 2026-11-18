@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { useBook, Studio, Panel, Slider, Select, Sci, V, seeded, STATIC } from '../../studio-kit/kit.jsx';
+import { useBook, Studio, Panel, Slider, Select, Sci, V, seeded, STATIC, onPaper } from '../../studio-kit/kit.jsx';
 import { GASES, gas } from './gas.js';
 
 /*
@@ -68,7 +68,8 @@ function Atoms({ N, edge, speed, playing, color }) {
       frame = requestAnimationFrame(draw);
     };
     frame = requestAnimationFrame(draw);
-    return () => cancelAnimationFrame(frame);
+    const off = onPaper(() => { cancelAnimationFrame(frame); draw(performance.now()); });
+    return () => { off(); cancelAnimationFrame(frame); };
   }, []);
 
   return <canvas ref={canvas} style={{ height: SIZE }} role="img"

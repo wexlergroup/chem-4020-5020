@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { LineChart, Line, XAxis, YAxis, ResponsiveContainer, ReferenceLine, ReferenceDot } from 'recharts';
-import { useBook, Studio, Panel, Slider, V, axis, seeded, LINE, DASH, STATIC } from '../../studio-kit/kit.jsx';
+import { useBook, Studio, Panel, Slider, V, axis, seeded, LINE, DASH, STATIC, onPaper } from '../../studio-kit/kit.jsx';
 import { reaction } from './reaction.js';
 
 /*
@@ -100,7 +100,8 @@ function Flask({ xi, c1, playing, color }) {
       frame = requestAnimationFrame(draw);
     };
     frame = requestAnimationFrame(draw);
-    return () => cancelAnimationFrame(frame);
+    const off = onPaper(() => { cancelAnimationFrame(frame); draw(performance.now()); });
+    return () => { off(); cancelAnimationFrame(frame); };
   }, []);
   const dimers = Math.round(xi * UNITS / 2);
   return <canvas ref={canvas} style={{ height: SIZE }} role="img"
