@@ -91,7 +91,7 @@ align: center
 Joule's apparatus for measuring the mechanical equivalent of heat. The falling weights turn a paddle wheel immersed in water, converting a known amount of mechanical work into a measurable temperature rise. Modern calorimeters ([Section 3.3](section-03.md)) use the same principle—measuring temperature changes to quantify energy transfers—but with electrical heating in place of falling weights. Engraving from *Harper's New Monthly Magazine* (1869), via [Wikimedia Commons](https://commons.wikimedia.org/wiki/File:Joule%27s_Apparatus_(Harper%27s_Scan).png) (public domain).
 ```
 
-In 1847, James Prescott Joule measured how mechanical work converts into heat. He famously found that $778\,\mathrm{ft}\cdot\mathrm{lbf}$ of mechanical work (done, for example, by falling weights that turn a paddle in water) raised the temperature of $1$ lb of water by $1\,\text{°F}$. Converting to SI units:
+In the 1840s, James Prescott Joule measured how mechanical work converts into heat. In the paper that reports his final experiments, he concluded that $772\,\mathrm{ft}\cdot\mathrm{lbf}$ of mechanical work (done by falling weights that turn a paddle in water) raises the temperature of $1$ lb of water by $1\,\text{°F}$ [@joule1850]. The modern value is $778\,\mathrm{ft}\cdot\mathrm{lbf}$, which is $0.8\%$ above Joule's. Converting the modern value to SI units:
 
 ```{math}
 \mathrm{MEH}
