@@ -19,6 +19,8 @@ numbering:
 
 See also: [Course-wide Conventions & Notation](../notation.md)
 
+Run the code: [Notebook for Section 2.2](https://wexlergroup.github.io/chem-4020-5020/lite/notebooks/index.html?path=chapter-02/section-02.ipynb), in which you can change and rerun the Python cells of this section in your browser.
+
 ## Overview and Learning Objectives
 
 The canonical ensemble describes a closed system in thermal contact with a large heat bath at fixed temperature. Its central result is the Boltzmann assignment $p_i \propto e^{-\beta E_i}$, normalized by the partition function. This section derives and interprets that probability distribution and introduces a two-state system as a concrete model.
