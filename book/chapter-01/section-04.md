@@ -18,6 +18,8 @@ numbering:
 
 See also: [Course-wide Conventions & Notation](../notation.md)
 
+Run the code: [Notebook for Section 1.4](https://wexlergroup.github.io/chem-4020-5020/lite/notebooks/index.html?path=chapter-01/section-04.ipynb), in which you can change and rerun the Python cells of this section in your browser.
+
 ## Overview and Learning Objectives
 
 Real gases deviate from ideal behavior when finite molecular size and intermolecular forces become important. This section introduces the compressibility factor as a quantitative measure of nonideality and develops the van der Waals equation of state (EOS), including its critical constants and the principle of corresponding states.
