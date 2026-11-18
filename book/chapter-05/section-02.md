@@ -107,6 +107,8 @@ S_{\mathrm{res,m}} = R\ln 2 \approx 5.76\ \mathrm{J\,mol^{-1}\,K^{-1}}.
 
 [](#fig:residual-entropy-CO) contrasts the ordered crystal with the disordered one for a small part of a lattice.
 
+% Try this: Change the seed `4020` to another whole number. Each seed draws one of the arrangements that $\Omega_0$ counts. How many different pictures of panel (b) exist for the 36 molecules that are drawn?
+
 ```{code-cell} ipython3
 :label: fig:residual-entropy-CO
 :caption: Schematic of solid CO, drawn in two dimensions. (a) Every molecule has the orientation that the ordered structure assigns to its site, which is a single arrangement. (b) Each molecule is frozen at random in one of its two head-to-tail orientations. The positions of the molecules are the same as in (a), and $N$ molecules have $2^N$ arrangements of this kind.
@@ -215,6 +217,8 @@ The intuitive argument is as follows. Cooling to very low temperature typically 
 
 [](#fig:adiabatic-demagnetization) shows the construction for a model paramagnet of $N$ independent magnetic moments. Each moment is a two-state system ([Section 2.3](../chapter-02/section-03.md)) whose energy gap is $\varepsilon_0$ when the field is off, because of the interactions between the moments, and $2\varepsilon_0$ when the field is on. The entropy of a two-state system depends on the gap $\varepsilon$ and on the temperature only through the ratio $\varepsilon/(k_{\mathrm B}T)$. An adiabatic step that returns the gap from $2\varepsilon_0$ to $\varepsilon_0$ therefore halves the temperature, and after $n$ cycles that start at $T_0$ the temperature is $T_0/2^n$, which is greater than zero for every finite $n$.
 
+% Try this: Change `ratio` from `2.0` to `3.0`, a stronger field. By what factor does each cycle lower the temperature now?
+
 ```{code-cell} ipython3
 :label: fig:adiabatic-demagnetization
 :caption: Entropy of a model paramagnet with the magnetic field off (blue) and on (orange), and successive cooling cycles between the two curves. Each vertical arrow is an isothermal magnetization, in which entropy leaves the system as heat. Each horizontal arrow is an adiabatic demagnetization at constant entropy. Both curves approach the same entropy as $T \to 0$, so each cycle removes less entropy and lowers the temperature by less than the one before.
@@ -278,6 +282,8 @@ S^\circ(T) = \int_0^T \frac{C_P(T')}{T'}\,dT' + \sum_{\text{transitions}} \frac{
 where the sum runs over any phase transitions (melting, boiling, etc.) between $0$ and $T$, each contributing $\Delta H_{\mathrm{trs}}/T_{\mathrm{trs}}$ to the entropy.
 
 [](#fig:nitrogen-entropy) applies Eq. {eq}`eq:absolute-entropy` to nitrogen at $1\ \mathrm{atm}$, with the calorimetric measurements of @giauque1933. Nitrogen has two solid phases, $\alpha$ below $35.61\ \mathrm{K}$ and $\beta$ from there to the melting point at $63.14\ \mathrm{K}$, and it boils at $77.32\ \mathrm{K}$. The measurements begin near $15\ \mathrm{K}$ and end at the boiling point. Below $10\ \mathrm{K}$, the authors extrapolated the heat capacity with the Debye model of a crystal, which reduces to the $T^3$ law of Example 1 below at the lowest temperatures. Above the boiling point, the curve is that of the ideal gas with $C_P = \tfrac{7}{2}R$ ([Section 5.3](section-03.md)). The three transitions contribute $6.4$, $11.4$, and $72.1\ \mathrm{J\,mol^{-1}\,K^{-1}}$, the last of which is more than a third of the total. The result at $298.15\ \mathrm{K}$ is $192.3\ \mathrm{J\,mol^{-1}\,K^{-1}}$, which is $0.4\%$ above the value in the [NIST-JANAF Thermochemical Tables](https://janaf.nist.gov/), $191.61\ \mathrm{J\,mol^{-1}\,K^{-1}}$.
+
+% Try this: Take the rotation away from the gas: change `3.5 * R` to `2.5 * R`. By how much does the entropy at 298.15 K fall, and which integral gives this difference?
 
 ```{code-cell} ipython3
 :label: fig:nitrogen-entropy
