@@ -128,9 +128,26 @@ def arrow(ax, start, end, color, lw=1.4, scale=13):
                                  shrinkA=0, shrinkB=0, zorder=4))
 
 
+# On the light page the vermilion and the green are too pale for text: their contrast with white is 3.9 and 3.4,
+# and text needs 4.5. Text in these two colors is therefore drawn in a darker shade of the same hue. Lines, markers
+# and fills keep the Okabe-Ito colors, and the dark page needs no change.
+TEXT_SHADE = {LIGHT.vermilion.lower(): "#b44f00", LIGHT.green.lower(): "#007d5b"}
+
+
+def _legible(fig):
+    for text in fig.findobj(mpl.text.Text):
+        try:
+            shade = TEXT_SHADE.get(mcolors.to_hex(text.get_color()))
+        except ValueError:
+            shade = None
+        if shade:
+            text.set_color(shade)
+
+
 def _png(draw, theme):
     with mpl.rc_context(theme.rc()):
         fig = draw(theme)
+        _legible(fig)
         buffer = io.BytesIO()
         fig.savefig(buffer, format="png", dpi=DPI, transparent=True)
         width = fig.get_figwidth()
