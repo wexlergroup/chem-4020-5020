@@ -225,6 +225,78 @@ In general, for $N$ indistinguishable particles in a system with $M$ one-particl
 This assumes no more than one particle per one-particle state.
 ````
 
+[](#fig:label-counting) places the two counts side by side. Each microstate of the indistinguishable particles corresponds to $2! = 2$ microstates of the distinguishable particles, which differ only by the exchange of the labels a and b.
+
+```{code-cell} ipython3
+:label: fig:label-counting
+:caption: Two particles in a system of four one-particle microstates, with at most one particle per one-particle microstate. Each row shows two microstates of the distinguishable particles a and b that differ only by the exchange of the labels, and the single microstate of indistinguishable particles to which both correspond. The Roman numerals are those of the two tables above. The 12 microstates of the distinguishable particles correspond to $12/2! = 6$ microstates of the indistinguishable particles.
+:tags: [hide-input]
+
+import sys
+from itertools import combinations
+
+import matplotlib.pyplot as plt
+from matplotlib.patches import Circle, FancyBboxPatch, Rectangle
+
+sys.path.append("..")            # the book folder, which holds figstyle
+import figstyle as fs
+
+M = 4                                                   # number of one-particle microstates
+pairs = list(combinations(range(M), 2))                 # the 6 ways to choose two of them, in the order of the tables
+numerals = ["I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X", "XI", "XII"]
+
+CELL = 0.62                                             # width and height of one one-particle microstate
+PITCH = 0.92                                            # distance between rows
+X_FIRST, X_SECOND, X_SINGLE = 1.05, 4.75, 10.55         # left edges of the three columns of microstates
+
+
+def draw_microstate(ax, c, x, y, numeral, particles):
+    """One N-particle microstate: four one-particle microstates in a row; particles = {position: (label, color)}."""
+    ax.text(x - 0.22, y, numeral, ha="right", va="center", color=c.muted)
+    for i in range(M):
+        ax.add_patch(Rectangle((x + i * CELL, y - CELL / 2), CELL, CELL, fc=c.ground, ec=c.ink, lw=1.0, zorder=2))
+    for i, (label, color) in particles.items():
+        center = (x + (i + 0.5) * CELL, y)
+        ax.add_patch(Circle(center, 0.21, fc=color, ec="none", zorder=3))
+        ax.text(*center, label, ha="center", va="center", color=fs.on(color), fontsize=fs.BASE - 1, zorder=4)
+
+
+def draw(c):
+    fig, ax = plt.subplots(figsize=(fs.WIDTH, 3.55))
+    fig.subplots_adjust(left=0, right=1, bottom=0, top=1)
+    top = 5.35                                          # height of the first row
+    for row, (i, j) in enumerate(pairs):
+        y = top - row * PITCH
+        # the two microstates of a and b that belong together share a shaded band
+        ax.add_patch(FancyBboxPatch((0.2, y - 0.38), 7.25 - 0.2, 0.76, boxstyle="round,pad=0,rounding_size=0.14",
+                                    fc=c.fill, ec="none", zorder=1))
+        draw_microstate(ax, c, X_FIRST, y, numerals[row], {i: ("a", c.blue), j: ("b", c.vermilion)})
+        draw_microstate(ax, c, X_SECOND, y, numerals[row + 6], {i: ("b", c.vermilion), j: ("a", c.blue)})
+        fs.arrow(ax, (7.75, y), (9.25, y), c.muted, lw=1.2, scale=11)
+        draw_microstate(ax, c, X_SINGLE, y, numerals[row], {i: ("", c.gray), j: ("", c.gray)})
+    # one-particle microstates 1 to 4 above each column
+    for x in (X_FIRST, X_SECOND, X_SINGLE):
+        for i in range(M):
+            ax.text(x + (i + 0.5) * CELL, top + 0.56, str(i + 1), ha="center", va="center", color=c.muted,
+                    fontsize=fs.BASE - 1)
+    ax.text((0.2 + 7.25) / 2, 6.78, "Distinguishable particles a and b\n12 microstates", ha="center", va="center",
+            linespacing=1.35)
+    ax.text(X_SINGLE + 2 * CELL, 6.78, "Indistinguishable particles\n6 microstates", ha="center", va="center",
+            linespacing=1.35)
+    ax.text(8.5, top + 0.56, "remove the labels", ha="center", va="center", color=c.muted, fontsize=fs.BASE - 1)
+    ax.set(xlim=(-0.2, 13.8), ylim=(0.2, 7.3), aspect="equal")
+    ax.axis("off")
+    return fig
+
+
+fs.show(draw, alt="Six rows. Each row shows two arrangements of the labeled particles a and b in four boxes and, after "
+                  "an arrow, one arrangement of two unlabeled particles in the same two boxes. The pairs are "
+                  "microstates I and VII, II and VIII, III and IX, IV and X, V and XI, and VI and XII of the "
+                  "distinguishable particles. Within a pair, the same two boxes are occupied, and a and b have "
+                  "changed places. Twelve microstates of the distinguishable particles correspond to six microstates "
+                  "of the indistinguishable particles.")
+```
+
 If the particles are indistinguishable and identical, we can write the canonical partition function as
 
 ```{math}
