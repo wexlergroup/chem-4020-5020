@@ -272,6 +272,106 @@ q \;\approx\; q_{\mathrm{trans}}\;q_{\mathrm{rot}}\;q_{\mathrm{vib}}\;q_{\mathrm
 
 with each factor evaluated using the formulas above. The product holds when the energy of a molecule is a sum of translational, rotational, vibrational, and electronic parts ([Section 2.4](section-04.md)).
 
+### Characteristic Temperatures and the Heat Capacity
+
+Because $q$ is a product of factors, $\ln q$ is a sum, and the heat capacity of a gas is a sum of translational, rotational, vibrational, and electronic contributions. The rotational and vibrational temperatures mark the temperatures near which the rotational and vibrational contributions appear. [](#fig:heat-capacity-steps) shows the molar heat capacity at constant volume, $C_{V,m}$, of a gas of $\mathrm{CO}$ molecules in the rigid-rotor and harmonic-oscillator models, with $\Theta_{\mathrm{rot}} = 2.779\ \mathrm{K}$ ([Section 2.7](section-07.md)) and $\Theta_{\mathrm{vib}} = 3122\ \mathrm{K}$ ([Section 2.6](section-06.md)).
+
+Translation contributes $\tfrac{3}{2}R$ at all temperatures in the figure ([Section 2.5](section-05.md)). Rotation adds $R$ when $T$ exceeds $\Theta_{\mathrm{rot}}$, and vibration adds up to $R$ more when $T$ approaches and exceeds $\Theta_{\mathrm{vib}}$. At $300\ \mathrm{K}$, which lies far above $\Theta_{\mathrm{rot}}$ and far below $\Theta_{\mathrm{vib}}$, $C_{V,m} = 2.50\,R$. The figure leaves out the electronic contribution, which is negligible for $\mathrm{CO}$ below several thousand kelvin.
+
+```{code-cell} ipython3
+:label: fig:heat-capacity-steps
+:caption: Molar heat capacity at constant volume of a gas of $\mathrm{CO}$ molecules as a function of temperature on a logarithmic axis, calculated as the sum of a translational contribution ($\tfrac{3}{2}R$), the rotational contribution of a rigid rotor with $\Theta_{\mathrm{rot}} = 2.779\ \mathrm{K}$ (sum over the levels $J$), and the vibrational contribution of a harmonic oscillator with $\Theta_{\mathrm{vib}} = 3122\ \mathrm{K}$. The dashed lines mark the two characteristic temperatures, and the open point marks $300\ \mathrm{K}$. The models are applied at all temperatures, although $\mathrm{CO}$ condenses at $82\ \mathrm{K}$ at a pressure of 1 atm, and at the highest temperatures anharmonic vibration, excited electronic levels, and dissociation change the heat capacity of the real gas.
+:tags: [hide-input]
+
+import sys
+
+import matplotlib.pyplot as plt
+import numpy as np
+from matplotlib.patches import Circle, FancyArrowPatch
+
+sys.path.append("..")            # the book folder, which holds figstyle
+import figstyle as fs
+
+theta_rot, theta_vib = 2.779, 3122.0             # K, for CO (Sections 2.7 and 2.6)
+T = np.logspace(np.log10(0.3), np.log10(4e4), 700)
+
+# Rotation: C/R = (<e^2> - <e>^2) / T^2 with e_J = J (J + 1) theta_rot in K and the weights (2J + 1) exp(-e_J / T)
+J = np.arange(0, 1500)
+e_J = J * (J + 1) * theta_rot
+weight = (2 * J + 1) * np.exp(-e_J / T[:, None])
+mean = (weight * e_J).sum(axis=1) / weight.sum(axis=1)
+mean_square = (weight * e_J**2).sum(axis=1) / weight.sum(axis=1)
+C_rot = (mean_square - mean**2) / T**2
+
+# Vibration: C/R = x^2 e^(-x) / (1 - e^(-x))^2 with x = theta_vib / T
+x = theta_vib / T
+C_vib = x**2 * np.exp(-x) / (1 - np.exp(-x)) ** 2
+
+C_trans = np.full_like(T, 1.5)
+C_total = C_trans + C_rot + C_vib
+
+
+def draw_motion(ax, c, kind, color, position):
+    """Small sketch of a diatomic molecule with arrows for one kind of motion, at a position in axes fractions."""
+    icon = ax.inset_axes([position[0], position[1], 0.095, 0.145])
+    angle = np.radians(35 if kind == "rotation" else 0)
+    dx, dy = 0.42 * np.cos(angle), 0.42 * np.sin(angle)
+    icon.plot([-dx, dx], [-dy, dy], color=c.ink, lw=1.6, solid_capstyle="round", zorder=1)
+    for sign in (-1, 1):
+        icon.add_patch(Circle((sign * dx, sign * dy), 0.24, fc=color, ec="none", zorder=2))
+    arrows = dict(arrowstyle="-|>", mutation_scale=8, lw=1.3, color=c.ink, shrinkA=0, shrinkB=0, zorder=3)
+    if kind == "translation":
+        icon.add_patch(FancyArrowPatch((0.8, 0), (1.45, 0), **arrows))
+    elif kind == "rotation":
+        icon.add_patch(FancyArrowPatch((0.95, -0.35), (0.35, 0.9), connectionstyle="arc3,rad=0.45", **arrows))
+        icon.add_patch(FancyArrowPatch((-0.95, 0.35), (-0.35, -0.9), connectionstyle="arc3,rad=0.45", **arrows))
+    else:
+        icon.add_patch(FancyArrowPatch((0.78, 0), (1.4, 0), **arrows))
+        icon.add_patch(FancyArrowPatch((-0.78, 0), (-1.4, 0), **arrows))
+    icon.set(xlim=(-1.5, 1.5), ylim=(-1.05, 1.05), aspect="equal")
+    icon.axis("off")
+
+
+def draw(c):
+    fig, ax = plt.subplots(figsize=(fs.WIDTH, 3.7), constrained_layout=True)
+    for level in (1.5, 2.5, 3.5):
+        ax.axhline(level, color=c.rule, lw=0.9, zorder=0)
+    ax.fill_between(T, 0, C_trans, color=c.tint(c.blue, 0.75), lw=0)
+    ax.fill_between(T, C_trans, C_trans + C_rot, color=c.tint(c.vermilion, 0.75), lw=0)
+    ax.fill_between(T, C_trans + C_rot, C_total, color=c.tint(c.green, 0.75), lw=0)
+    ax.plot(T, C_total, color=c.ink)
+    for theta in (theta_rot, theta_vib):
+        ax.plot([theta, theta], [0, 3.72], color=c.muted, lw=1.2, ls=(0, (4, 3)))
+    ax.text(theta_rot, 3.9, rf"$\Theta_{{\mathrm{{rot}}}}$ = {theta_rot:.3f} K", ha="center", va="center")
+    ax.text(theta_vib, 3.9, rf"$\Theta_{{\mathrm{{vib}}}}$ = {theta_vib:.0f} K", ha="center", va="center")
+    ax.plot(300, np.interp(300, T, C_total), "o", mfc=c.ground, mec=c.ink, mew=1.6, ms=6.5, zorder=4)
+    ax.text(300, 2.72, "300 K", ha="center", va="center")
+
+    # the three kinds of motion, each inside its contribution
+    draw_motion(ax, c, "translation", c.blue, (0.36, 0.11))
+    ax.text(0.47, 0.1825, "Translation", transform=ax.transAxes, ha="left", va="center")
+    draw_motion(ax, c, "rotation", c.vermilion, (0.36, 0.415))
+    ax.text(0.47, 0.4875, "Rotation", transform=ax.transAxes, ha="left", va="center")
+    draw_motion(ax, c, "vibration", c.green, (0.795, 0.66))
+    ax.text(0.9, 0.7325, "Vibration", transform=ax.transAxes, ha="left", va="center")
+
+    ax.set(xscale="log", xlabel="Temperature $T$ (K)", ylabel="Molar heat capacity $C_{V,m}/R$", xlim=(0.3, 4e4),
+           ylim=(0, 4.1))
+    ax.set_xticks([1, 10, 100, 1000, 10000], ["1", "10", "100", "1000", "10 000"])
+    ax.minorticks_off()
+    ax.set_yticks([0, 1.5, 2.5, 3.5], ["0", "3/2", "5/2", "7/2"])
+    return fig
+
+
+fs.show(draw, alt="Heat capacity of carbon monoxide gas divided by R against temperature from 0.3 to 40 000 kelvin on a "
+                  "logarithmic axis. Three shaded bands are stacked. The translational band has a constant height of "
+                  "3/2. The rotational band rises near the rotational temperature of 2.779 kelvin, passes through a "
+                  "shallow maximum, and then has a height of 1, which brings the total to 5/2 from about 10 kelvin "
+                  "to several hundred kelvin, including 300 kelvin. The vibrational band rises around the "
+                  "vibrational temperature of 3122 kelvin, and the total approaches 7/2 at the highest temperatures. "
+                  "Small sketches of a diatomic molecule that moves, rotates, and vibrates label the three bands.")
+```
+
 ## Worked Example
 
 ### High-$T$ rotational partition function for a spherical top (CH$_4$)
