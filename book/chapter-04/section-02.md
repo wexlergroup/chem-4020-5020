@@ -80,6 +80,8 @@ The key geometric features are:
 - The **adiabats** (black) are *steeper* than the isotherms and follow $PV^\gamma = \text{constant}$
   for a reversible adiabatic process of an ideal gas ([Section 3.2](../chapter-03/section-02.md)).
 
+% Try this: Shorten the isothermal expansion: change `V_B` from `2.6` to `1.4`. How does the area enclosed by the cycle change, and does the efficiency of the engine change?
+
 ```{code-cell} ipython3
 :label: fig:carnot-cycle
 :caption: The Carnot cycle for one mole of a monatomic ideal gas between $T_{\mathrm{hot}} = 500\ \mathrm{K}$ and $T_{\mathrm{cold}} = 300\ \mathrm{K}$. The arrows on the curves give the direction of each step. Heat enters the system on the hot isotherm and leaves it on the cold isotherm. The adiabats, which are steeper than the isotherms, exchange no heat. The thin lines continue the two isotherms beyond the cycle.
@@ -321,6 +323,8 @@ The thermal efficiency is defined as the fraction of absorbed heat converted to 
 ```
 
 [](#fig:carnot-energy-flow) shows the three energies of this definition for one cycle.
+
+% Try this: Change `T_HOT` from `500.0` to `600.0`. How do the two streams that leave the engine compare now, and what is the efficiency?
 
 ```{code-cell} ipython3
 :label: fig:carnot-energy-flow
