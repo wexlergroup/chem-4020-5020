@@ -153,6 +153,8 @@ Different process constraints (isobaric, isochoric, isothermal, adiabatic) dicta
 
 [](#fig:process-paths) shows the four constraints as paths of an ideal gas on a $P$–$V$ diagram. All four paths start from the same state.
 
+% Try this: Change `V_2` from `20.0` to `10.0`, so that every expansion stops at half the final volume. Which of the three paths keeps the largest fraction of its work, and why?
+
 ```{code-cell} ipython3
 :label: fig:process-paths
 :caption: Four reversible paths of one mole of a monatomic ideal gas from the same initial state, $(V_1, T_1) = (5\,\mathrm{L}, 300\,\mathrm{K})$: isochoric heating, and isobaric, isothermal, and adiabatic expansion to $V_2 = 20\,\mathrm{L}$. The area between a path and the volume axis is $|w|$ for that path. The areas overlap: the area under the isobaric path includes the blue and orange areas, and the area under the isothermal path includes the orange area. The isochoric path has no area under it, so $w = 0$.
@@ -386,6 +388,8 @@ Applying these constraints to Equation {eq}`first-law-VT-ideal`:
 
 How does the path affect the work? [](#fig:isothermal-adiabatic) compares a reversible isothermal expansion with a reversible adiabatic expansion from the same initial state. The area under each curve is $|w|$ for that process.
 
+% Try this: Change `gamma` from `5/3` to `7/5`, the value of a diatomic gas near room temperature. How does the work of the adiabatic expansion change, and why does the work of the isothermal expansion stay the same?
+
 ```{code-cell} ipython3
 :label: fig:isothermal-adiabatic
 :caption: Reversible isothermal and adiabatic expansions of one mole of a monatomic ideal gas from $(V_1, T_1) = (5\,\mathrm{L}, 300\,\mathrm{K})$ to $V_2 = 20\,\mathrm{L}$. The area under each curve is $|w|$ for that path, and the labels give $w$. The orange area lies under both curves.
@@ -525,6 +529,8 @@ Comparing term by term with $dU = \delta q + \delta w = \delta q - P\,dV$, which
 ```
 
 [](#fig:heat-and-work-levels) illustrates these two mechanisms. Panel (a) shows the initial state, panel (b) the result of adding heat (the probabilities change, and the energy levels stay), and panel (c) the result of doing work by compression (the energy levels shift, and the probabilities stay).
+
+% Try this: Keep the temperature fixed during the compression: replace `boltzmann(E_compressed, 2 * kT_initial)` by `boltzmann(E_compressed, kT_initial)`. In which direction do the probabilities of panel (c) shift, and what does that say about the heat in an isothermal compression?
 
 ```{code-cell} ipython3
 :label: fig:heat-and-work-levels
@@ -681,6 +687,8 @@ We switch to per-mole notation ($n$, $R$) for this macroscopic calculation, foll
 :class: important
 
 Verify this result using Python. Compute $w = -nRT\ln(V_2/V_1)$ numerically and confirm it matches the hand calculation. Then plot $P$ vs. $V$ for this isothermal expansion and shade the area under the curve. Does the shaded area match $|w|$?
+
+% Try this: Change the number of points of the numerical integration from `10000` to `5`, and run this cell and the next one. By how many percent does the numerical work differ from the analytical one, and on which side of the curve do the straight segments of the figure lie?
 
 ```{code-cell} ipython3
 :tags: [hide-input]
