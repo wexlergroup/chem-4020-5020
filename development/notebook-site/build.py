@@ -5,6 +5,13 @@ each under the heading and the figure caption that it has in the notes. The note
 (book/figstyle) and the data files (book/_static) are then built into a JupyterLite site, in which Python runs
 in the browser.
 
+A suggestion for the reader is written in the page as a comment line above its cell, which the book does not show:
+
+    % Try this: Change `T0` from `290.0` to `145.0`. Which of the four panels change, and by what factor?
+
+The notebook shows it under the figure caption. The first piece of code that a suggestion names (between
+backticks) must occur in the cell, so that a suggestion cannot outlive the code that it refers to.
+
 Run it after the book is built, because figure numbers, equation numbers and citations are read from the build:
 
     cd book && myst build --execute --html && cd ..
@@ -34,6 +41,8 @@ CELL = re.compile(r"^```\{code-cell\}[^\n]*\n(.*?)^```[ \t]*$", re.S | re.M)
 TITLE = re.compile(r"^# +(.+?)\s*$", re.M)
 HEADING = re.compile(r"^#{2,4} +(.+?)\s*$", re.M)
 FENCE = re.compile(r"^(```|:::).*?^\1[ \t]*$", re.S | re.M)
+TRY = re.compile(r"^% Try this: +(.+?)\s*$", re.M)
+CODE = re.compile(r"`([^`]+)`")
 
 INTRO = """# Code for {title}
 
@@ -42,7 +51,7 @@ the figure caption that it has there. It runs in your browser, and nothing is in
 
 - **Run a cell.** Click the cell and press Shift+Enter. The first time, run the cells in order, or choose Run and \
 then Run All Cells. Python needs about half a minute to start.
-- **Explore.** Change a number in a cell and run the cell again.
+- **Explore.** Change a number in a cell and run the cell again.{suggestions}
 - **Start over.** Your changes are saved in this browser only. To get the original notebook back, open the \
 [file list]({site}/lite/tree/index.html), right-click this notebook, choose Delete, and open the notebook again \
 from the notes."""
@@ -110,8 +119,8 @@ def notebook(source, built):
     figures, references, citations = read_build(built)
     title = TITLE.search(text).group(1)
     page = f"{SITE}/{source.relative_to(source.parents[1]).with_suffix('').as_posix()}"
-    cells = [("markdown", INTRO.format(title=title, page=page, site=SITE))]
-    position, shown = 0, None
+    cells = []
+    position, shown, suggested = 0, None, False
     for match in CELL.finditer(text):
         lines = match.group(1).split("\n")
         options = {}
@@ -129,10 +138,20 @@ def notebook(source, built):
             if label not in figures:
                 raise SystemExit(f"{source}: the build has no figure number for {label}")
             notes.append(f"**Figure {figures[label]}.** " + caption(options["caption"], source, references, citations))
+        code = "\n".join(lines).strip("\n")
+        suggestion = TRY.findall(between)
+        if suggestion:
+            named = CODE.search(suggestion[-1])
+            if named and named.group(1) not in code:
+                raise SystemExit(f"{source}: a suggestion names `{named.group(1)}`, which is not in the cell below it")
+            notes.append(f"**Try this.** {suggestion[-1]}")
+            suggested = True
         if notes:
             cells.append(("markdown", "\n\n".join(notes)))
-        cells.append(("code", "\n".join(lines).strip("\n")))
+        cells.append(("code", code))
         position = match.end()
+    pointer = " Where a figure has a suggestion, it is marked **Try this**." if suggested else ""
+    cells.insert(0, ("markdown", INTRO.format(title=title, page=page, site=SITE, suggestions=pointer)))
     return {
         "cells": [{"cell_type": "markdown", "metadata": {}, "source": body} if kind == "markdown" else
                   {"cell_type": "code", "metadata": {}, "execution_count": None, "outputs": [], "source": body}
