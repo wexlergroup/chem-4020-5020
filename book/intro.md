@@ -6,7 +6,7 @@ Long before quantum mechanics sharpened our knowledge of atoms and molecules, a 
 
 > *[Thermodynamics] is the only physical theory of universal content concerning which I am convinced that, within the framework of the applicability of its basic concepts, it will never be overthrown (for the special attention of those who are skeptics on principle).*
 >
-> Einstein, A.; Schilpp, P. A., Ed. *Autobiographical Notes*. Centennial ed.; Open Court: La Salle, IL, 1979; pp 1–89. ISBN 0875483526. [Permalink](https://wash-primo.hosted.exlibrisgroup.com/permalink/f/1kqpcd6/WUSTL_SIERRA21017225)
+> @einstein1979, *Autobiographical Notes* ([WashU Libraries record](https://wash-primo.hosted.exlibrisgroup.com/permalink/f/1kqpcd6/WUSTL_SIERRA21017225))
 
 In this course, we will develop the laws of thermodynamics and statistical mechanics—the framework that deepens our microscopic understanding and connects quantum theory to macroscopic observations. I like to refer to this course as "Statistical Thermochemistry" because it bridges the inherently quantum nature of particles with the bulk properties they collectively produce.
 
