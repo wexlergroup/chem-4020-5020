@@ -169,7 +169,7 @@ The physical reading is that $\mu$ is the "price per mole" of adding substance t
 
 ```{code-cell} ipython3
 :label: fig:liquid-vapor-molecules
-:caption: A liquid in equilibrium with its vapor. (a) Molecules leave the liquid and return to it at equal rates (schematic). (b) The molar Gibbs free energy of the vapor relative to the liquid for water at its normal boiling point, $373.12\ \mathrm{K}$. The enthalpy of vaporization raises it by $40.65\ \mathrm{kJ\,mol^{-1}}$, and the entropy of vaporization lowers it by $T\,\Delta\bar s_{\mathrm{vap}}$, which is the same amount, so that $\mu_{\mathrm{l}} = \mu_{\mathrm{g}}$. Data from the [NIST Chemistry WebBook](https://webbook.nist.gov/chemistry/).
+:caption: A liquid in equilibrium with its vapor. (a) Molecules leave the liquid and return to it at equal rates (schematic). (b) The molar Gibbs free energy of the vapor relative to the liquid for water at its normal boiling point, $373.12\ \mathrm{K}$. The enthalpy of vaporization raises it by $40.65\ \mathrm{kJ\,mol^{-1}}$, and the entropy of vaporization lowers it by $T\,\Delta\bar s_{\mathrm{vap}}$, which is the same amount, so that $\mu_{\mathrm{l}} = \mu_{\mathrm{g}}$. Data from the [NIST Chemistry WebBook](https://webbook.nist.gov/chemistry/fluid/).
 :tags: [hide-input]
 
 import sys
@@ -408,7 +408,7 @@ Not every liquid follows the rule. Hydrogen-bonded liquids lie well above Trouto
 
 ```{code-cell} ipython3
 :label: fig:trouton
-:caption: Entropy of vaporization at the normal boiling point, $\Delta \bar s_{\mathrm{vap}} = \Delta \bar h_{\mathrm{vap}}/T_{\mathrm{vap}}$, for fifteen liquids in order of their boiling temperature, which is given beside each name. The dashed line marks Trouton's value, Eq. [](#eq:trouton). Data from the [NIST Chemistry WebBook](https://webbook.nist.gov/chemistry/).
+:caption: Entropy of vaporization at the normal boiling point, $\Delta \bar s_{\mathrm{vap}} = \Delta \bar h_{\mathrm{vap}}/T_{\mathrm{vap}}$, for fifteen liquids in order of their boiling temperature, which is given beside each name. The dashed line marks Trouton's value, Eq. [](#eq:trouton). Data from the [NIST Chemistry WebBook](https://webbook.nist.gov/chemistry/fluid/).
 :tags: [hide-input]
 
 import sys
@@ -495,7 +495,7 @@ and at the coexistence temperature $T_{\mathrm{trs}}$ the entropy has a finite j
 \Delta \bar s_{\mathrm{vap}}(T_{\mathrm{trs}}) = \frac{\Delta \bar h_{\mathrm{vap}}(T_{\mathrm{trs}})}{T_{\mathrm{trs}}}.
 ```
 
-We use a coarse set of $\bar c_P^{\,\circ}(T)$ values from the **NIST–JANAF thermochemical tables** for $\mathrm{H_2O(l)}$ and $\mathrm{H_2O(g)}$ at $P^\circ = 0.1\ \mathrm{MPa} = 1\ \mathrm{bar}$. In that dataset, the liquid–vapor transition occurs at
+We use a coarse set of $\bar c_P^{\,\circ}(T)$ values from the [NIST-JANAF Thermochemical Tables](https://janaf.nist.gov/) for $\mathrm{H_2O(l)}$ and $\mathrm{H_2O(g)}$ at $P^\circ = 0.1\ \mathrm{MPa} = 1\ \mathrm{bar}$. In that dataset, the liquid–vapor transition occurs at
 
 ```{math}
 T_{\mathrm{trs}} = 372.780\ \mathrm{K}\quad\text{(the normal boiling point, at 1 atm, is 373.12 K).}
@@ -518,7 +518,7 @@ T_{\mathrm{trs}} = 372.780\ \mathrm{K}\quad\text{(the normal boiling point, at 1
 | | 700 | 37.495 |
 | | 800 | 38.721 |
 
-The gas-phase heat capacity at $T_{\mathrm{trs}}$ is obtained by linear interpolation of the 300–400 K JANAF entries. The latent heat at $T_{\mathrm{trs}}$ is obtained from the tabulated standard enthalpies of formation:
+The gas-phase heat capacity at $T_{\mathrm{trs}}$ is obtained by linear interpolation of the 300–400 K NIST-JANAF entries. The latent heat at $T_{\mathrm{trs}}$ is obtained from the tabulated standard enthalpies of formation:
 
 ```{math}
 \Delta \bar h_{\mathrm{vap}}(T_{\mathrm{trs}})
@@ -530,7 +530,7 @@ The gas-phase heat capacity at $T_{\mathrm{trs}}$ is obtained by linear interpol
 import numpy as np
 
 # ---- Cp(T) data (J/mol/K) ----
-T_tr = 372.780  # K (liquid <-> vapor at 1 bar in the JANAF tables)
+T_tr = 372.780  # K (liquid <-> vapor at 1 bar in the NIST-JANAF tables)
 
 T_liq = np.array([298.15, 300, 320, 340, 360, T_tr])
 Cp_liq = np.array([75.351, 75.349, 75.344, 75.388, 75.679, 75.962])
@@ -551,7 +551,7 @@ dH_liq = np.trapezoid(Cp_liq, T_liq)/1000           # kJ/mol
 dS_gas = np.trapezoid(Cp_gas/T_gas, T_gas)          # J/mol/K
 dH_gas = np.trapezoid(Cp_gas, T_gas)/1000           # kJ/mol
 
-# ---- Vaporization jump from the JANAF enthalpies of formation ----
+# ---- Vaporization jump from the NIST-JANAF enthalpies of formation ----
 # (linear interpolation to T_tr; values in kJ/mol)
 Hf_liq_tr = np.interp(T_tr, [360, 400], [-283.874, -282.591])   # liquid
 Hf_gas_tr = np.interp(T_tr, [300, 400], [-241.844, -242.846])   # gas
