@@ -387,7 +387,7 @@ Just below the triple point, the enthalpy of sublimation is $\Delta\bar h_{\math
 
 **(c)** Find the slopes $dP/dT$ of the sublimation curve and of the vaporization curve at the triple point. Treat the vapor as an ideal gas and neglect the molar volumes of the solid and the liquid.
 
-**(d)** Near the triple point, the melting curve of ammonia follows $dT/dP=aT$ with $a=4\times10^{-5}\ \mathrm{atm^{-1}}$ ([Haar and Gallagher, 1977](https://nvlpubs.nist.gov/nistpubs/Legacy/IR/nbsir77-1409.pdf)). Find $dP/dT$ of the melting curve at the triple point in $\mathrm{Pa\,K^{-1}}$, and compare it with the slopes of part (c). Then find $\Delta\bar v_{\mathrm{fus}}$ from the Clapeyron equation and the result of part (b).
+**(d)** Near the triple point, the melting curve of ammonia follows $dT/dP=aT$ with $a=4\times10^{-5}\ \mathrm{atm^{-1}}$ [@haar1977]. Find $dP/dT$ of the melting curve at the triple point in $\mathrm{Pa\,K^{-1}}$, and compare it with the slopes of part (c). Then find $\Delta\bar v_{\mathrm{fus}}$ from the Clapeyron equation and the result of part (b).
 
 ````{admonition} Solution
 :class: dropdown
@@ -536,7 +536,7 @@ with $A=3.98292$, $B=819.296\ \mathrm{K}$, and $C=-24.417\ \mathrm{K}$. Use $R=8
 
 **(c)** At the normal boiling point, $\bar v_{\mathrm g}=18.25\ \mathrm{L\,mol^{-1}}$ and $\bar v_{\mathrm l}=0.076\ \mathrm{L\,mol^{-1}}$. Find $\Delta Z$, and repeat the estimate of part (b) with the exact relation between the slope and $\Delta\bar h_{\mathrm{vap}}$.
 
-**(d)** A cylinder that holds liquid propane and its vapor stands in the sun at $318.15\ \mathrm{K}$ ($45\ ^\circ\mathrm{C}$). Find the pressure in the cylinder, and compare it with $15.34\ \mathrm{bar}$ from the NIST equation of state.
+**(d)** A cylinder that holds liquid propane and its vapor stands in the sun at $318.15\ \mathrm{K}$ ($45\ ^\circ\mathrm{C}$). Find the pressure in the cylinder, and compare it with $15.34\ \mathrm{bar}$ from the NIST Chemistry WebBook.
 
 ````{admonition} Solution
 :class: dropdown
@@ -608,3 +608,16 @@ with $A=3.98292$, $B=819.296\ \mathrm{K}$, and $C=-24.417\ \mathrm{K}$. Use $R=8
 
 **Result.** The equation gives a normal boiling point of $230.41\ \mathrm{K}$ and $P_{\mathrm{sat}}=15.62\ \mathrm{bar}$ at $318.15\ \mathrm{K}$. At the boiling point, $\Delta\bar h_{\mathrm{vap}}=19.61\ \mathrm{kJ\,mol^{-1}}$ from the Clausius–Clapeyron equation and $18.80\ \mathrm{kJ\,mol^{-1}}$ with $\Delta Z=0.9586$, against the calorimetric $18.77\ \mathrm{kJ\,mol^{-1}}$.
 ````
+
+## 4. Further Reading
+
+**Textbooks**
+
+- @mcquarrie1997, Chapter 23, Sections 23.1 to 23.5 (phase equilibria).
+- @dill2011, Chapter 14 (equilibria between liquids, solids, and gases) and Chapter 25 (phase transitions).
+
+**Original papers**
+
+- @clapeyron1834 relates the slope of the vapor-pressure curve to the heat of vaporization, the first form of the Clapeyron equation of [Section 6.2](section-02.md). The English translation by R. Taylor is in *Scientific Memoirs* **1**, 347–376 (1837).
+- @clausius1850 rederives Clapeyron's relation from the equivalence of heat and work ([Section 6.2](section-02.md)). An English translation appeared in *Philosophical Magazine* **2**, 1–21 and 102–119 (1851).
+- @trouton1884 observes that the molar heat of vaporization divided by the boiling temperature is nearly the same for many liquids, which is Trouton's rule of [Section 6.1](section-01.md).
