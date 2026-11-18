@@ -32,7 +32,7 @@
     --blue: #56b4e9; --on-blue: #111111; --blue-soft: #1f3340; --verm: #f4915a; --verm-soft: #3a2a20;
   }
   * { box-sizing: border-box; }
-  html { -webkit-text-size-adjust: 100%; }
+  html { -webkit-text-size-adjust: 100%; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
   body { margin: 0; background: var(--ground); color: var(--text);
          font: 16px/1.5 Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
   main { max-width: 760px; margin: 0 auto; padding: 24px 16px 40px; }
@@ -240,9 +240,11 @@ document.body.classList.toggle("static", fixed);
 let open = Number(params.get("module")) || 0;
 const here = params.get("here") || "";
 
+let printing = false;                            // on paper, the colors of the light page, whatever the mode of the screen
 function theme() {
   let dark = false;
-  if (params.get("theme")) dark = params.get("theme") === "dark";
+  if (printing) dark = false;
+  else if (params.get("theme")) dark = params.get("theme") === "dark";
   else if (host) dark = host.classList.contains("dark");
   else { try { dark = window.matchMedia("(prefers-color-scheme: dark)").matches; } catch (e) {} }
   document.documentElement.dataset.theme = dark ? "dark" : "light";
@@ -255,7 +257,7 @@ function fit() {                                    // inside the notes, make th
   try {
     const frame = window.frameElement;
     if (!frame) return;
-    const height = Math.ceil(document.documentElement.getBoundingClientRect().height) + "px";
+    const height = Math.ceil((printing ? document.body : document.documentElement).getBoundingClientRect().height) + "px";
     frame.style.height = height;
     const box = frame.parentElement;                // the book theme wraps a frame in a box with a fixed 5:3 shape
     if (box && box.style.paddingBottom) { box.style.paddingBottom = "0"; box.style.display = "block"; }
@@ -322,6 +324,34 @@ function render(focus) {
 render();
 try { new ResizeObserver(fit).observe(document.body); } catch (e) {}
 window.addEventListener("load", fit);
+
+/* ---- on paper: the colors of the light page, and a map small enough to stay on one page of the notes ---- */
+const PAPER = 700;                                 // the tallest map, in CSS pixels, that fits under the title of a review page
+function paper(on) {
+  try {                                             // the frame keeps its width of the screen (see book/custom.css)
+    const frame = window.frameElement;
+    if (frame && on) frame.style.setProperty("--paper-width", frame.getBoundingClientRect().width + "px");
+    else if (frame) frame.style.removeProperty("--paper-width");
+  } catch (e) {}
+  printing = on;
+  theme();
+  const body = document.body, set = scale => {
+    body.style.transformOrigin = scale < 1 ? "0 0" : "";
+    body.style.width = scale < 1 ? width / scale + "px" : "";
+    body.style.transform = scale < 1 ? `scale(${scale})` : "";
+    return body.getBoundingClientRect().height;    // the height as drawn
+  };
+  set(1);
+  const width = body.getBoundingClientRect().width;
+  if (on && embedded && set(1) > PAPER) {           // a wider and smaller map is shorter: find the largest scale that fits
+    let low = 0.4, high = 1;
+    for (let i = 0; i < 7; i++) { const scale = (low + high) / 2; if (set(scale) > PAPER) high = scale; else low = scale; }
+    set(low);
+  }
+  fit();
+}
+window.addEventListener("beforeprint", () => paper(true));
+window.addEventListener("afterprint", () => paper(false));
 </script>
 </body>
 </html>

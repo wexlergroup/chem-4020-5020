@@ -36,7 +36,7 @@
     --blue: #56b4e9; --on-blue: #111111; --vermilion: #f0894a; --axis: #a8a29e;
   }
   * { box-sizing: border-box; }
-  html { -webkit-text-size-adjust: 100%; }
+  html { -webkit-text-size-adjust: 100%; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
   body { margin: 0; background: var(--ground); color: var(--text);
          font: 15px/1.45 Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
   main { max-width: 760px; margin: 0 auto; padding: 24px 16px 40px; }
@@ -111,9 +111,11 @@ let host = null;
 try { if (window.parent !== window) host = window.parent.document.documentElement; } catch (e) { host = null; }
 try { if (window.frameElement) document.body.classList.add("embedded"); } catch (e) {}
 let color = {};
+let printing = false;                            // on paper, the colors of the light page, whatever the mode of the screen
 function theme() {
   let dark = false;
-  if (params.get("theme")) dark = params.get("theme") === "dark";
+  if (printing) dark = false;
+  else if (params.get("theme")) dark = params.get("theme") === "dark";
   else if (host) dark = host.classList.contains("dark");
   else { try { dark = window.matchMedia("(prefers-color-scheme: dark)").matches; } catch (e) {} }
   document.documentElement.dataset.theme = dark ? "dark" : "light";
@@ -267,6 +269,15 @@ if (fixed) state.t = 2.5;                           // the still picture: both f
 theme();
 if (host) new MutationObserver(theme).observe(host, { attributes: true, attributeFilter: ["class"] });
 else { try { window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", theme); } catch (e) {} }
+function keepWidth(on) {                            // on paper the frame keeps its width of the screen (see book/custom.css)
+  try {
+    const frame = window.frameElement;
+    if (!frame) return;
+    if (on) frame.style.setProperty("--paper-width", frame.getBoundingClientRect().width + "px");
+    else frame.style.removeProperty("--paper-width");
+  } catch (e) {}
+}
+for (const [name, on] of [["beforeprint", true], ["afterprint", false]]) window.addEventListener(name, () => { keepWidth(on); printing = on; theme(); });
 try { new ResizeObserver(() => { fit(); drawAll(); }).observe(document.body); } catch (e) {}
 window.addEventListener("load", () => { fit(); drawAll(); });
 </script>
