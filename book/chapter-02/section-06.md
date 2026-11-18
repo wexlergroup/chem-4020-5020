@@ -19,6 +19,8 @@ numbering:
 
 See also: [Course-wide Conventions & Notation](../notation.md)
 
+Run the code: [Notebook for Section 2.6](https://wexlergroup.github.io/chem-4020-5020/lite/notebooks/index.html?path=chapter-02/section-06.ipynb), in which you can change and rerun the Python cells of this section in your browser.
+
 ## Overview and Learning Objectives
 
 The quantum harmonic oscillator is a canonical model for molecular vibrations and lattice modes in solids. In this section we derive the oscillator partition function, compute ensemble averages such as internal energy and heat capacity, and examine how the classical (equipartition) limit emerges when $T\gg \Theta_{\mathrm{vib}}$. We begin with a review of the one-dimensional oscillator, then connect the result to three-dimensional oscillators in the Einstein model.
