@@ -273,7 +273,7 @@ The literature value is about $+25.7\,\mathrm{kJ/mol}$; the discrepancy comes fr
 
 #### Standard Conditions
 
-Standard conditions are defined as $P^\circ = 1\text{ bar}$. The superscript $^\circ$ denotes a standard-state quantity (see [Notation](../notation.md)). Reference databases—e.g., the [NIST-JANAF Thermochemical Tables](https://doi.org/10.18434/T42S31) and [Active Thermochemical Tables](https://atct.anl.gov/)—typically tabulate properties at $T = 25\,\text{°C}$ (298.15 K), though standard-state quantities can be defined at any temperature.
+Standard conditions are defined as $P^\circ = 1\text{ bar}$. The superscript $^\circ$ denotes a standard-state quantity (see [Notation](../notation.md)). Reference databases—e.g., the [NIST-JANAF Thermochemical Tables](https://janaf.nist.gov/) and [Active Thermochemical Tables](https://atct.anl.gov/)—typically tabulate properties at $T = 25\,\text{°C}$ (298.15 K), though standard-state quantities can be defined at any temperature.
 
 #### Standard Enthalpy of Formation
 
