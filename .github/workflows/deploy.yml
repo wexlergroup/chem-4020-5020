@@ -51,12 +51,17 @@ jobs:
         run: rm -rf _build
       - name: Build HTML Assets
         working-directory: book
-        run: myst build --execute --html
+        run: myst build --execute --html --strict
       - name: Copy computational studios
         working-directory: book
         run: |
           mkdir -p _build/html/computational-studios
           cp computational-studios/*.html _build/html/computational-studios/
+      - name: Build the notebook site
+        run: |
+          python -m venv "$RUNNER_TEMP/notebook-site"
+          "$RUNNER_TEMP/notebook-site/bin/pip" install -r development/notebook-site/requirements.txt
+          "$RUNNER_TEMP/notebook-site/bin/python" development/notebook-site/build.py
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
