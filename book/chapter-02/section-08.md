@@ -18,6 +18,8 @@ numbering:
 
 See also: [Course-wide Conventions & Notation](../notation.md)
 
+Run the code: [Notebook for Section 2.8](https://wexlergroup.github.io/chem-4020-5020/lite/notebooks/index.html?path=chapter-02/section-08.ipynb), in which you can change and rerun the Python cells of this section in your browser.
+
 ## Overview and Learning Objectives
 
 Molecular statistical mechanics often builds the total molecular partition function as a product of translational, rotational, vibrational, and electronic factors ([Section 2.4](section-04.md)). The translational factor is derived in [Section 2.5](section-05.md), the vibrational factor of a single oscillator in [Section 2.6](section-06.md), and the rotational factor of a linear molecule in [Section 2.7](section-07.md). This section collects high-temperature rigid-rotor formulas for different molecular shapes, reviews vibrational and electronic partition functions, and summarizes standard textbook approximations used to connect molecular constants to thermodynamic properties. We use *rotational temperatures* $\Theta_{\mathrm{rot}}$ and *vibrational temperatures* $\Theta_{\mathrm{vib}}$, which package molecular constants into energy scales expressed in Kelvin (i.e., divided by Boltzmann’s constant $k_{\mathrm{B}}$).
