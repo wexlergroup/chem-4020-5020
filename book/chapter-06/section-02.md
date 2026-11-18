@@ -344,6 +344,8 @@ print(f"DeltaHvap (global) = {DeltaHvap/1000:10.2f} kJ/mol")
 
 [](#fig:cc-fit) shows the data and the fitted line.
 
+% Try this: Extend the fitted line to the critical temperature of water, 647.1 K: replace `x.min()` by `1 / 647.1`. What pressure does the line predict there, and how does it compare with the critical pressure of water, 220.6 bar?
+
 ```{code-cell} ipython3
 :label: fig:cc-fit
 :caption: Clausius–Clapeyron plot for water between 20 °C and 180 °C. The points are $\ln(P_{\mathrm{sat}}/1\ \mathrm{bar})$ from the dataset above, and the line is the least-squares fit through all thirteen points. The scale on top gives the temperature in °C.
@@ -433,6 +435,8 @@ fs.show(draw_residuals, alt="Residuals of the straight-line fit, the data minus 
 ### Part C. Two-Range Fits: Do You Get the Same $\Delta\bar h_{\mathrm{vap}}$?
 
 If $\Delta\bar h_{\mathrm{vap}}$ were truly constant, then fitting two separate temperature subranges should give the same slope within uncertainty. If they disagree systematically, that is hard evidence that $\Delta\bar h_{\mathrm{vap}}$ depends on $T$.
+
+% Try this: Change the range of the low-temperature fit from `20, 90` to `20, 50`. How does $\Delta\bar h_{\mathrm{vap}}$ of this fit change, and what does that say about its dependence on temperature?
 
 ```{code-cell} ipython3
 def fit_subset(df_sub):
