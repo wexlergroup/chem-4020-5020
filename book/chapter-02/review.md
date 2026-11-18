@@ -1014,3 +1014,16 @@ $N$ atoms of mass $m$ move along a narrow channel of length $L$ and do not inter
 
 **Result.** $q=L/\Lambda$, $Q=(L/\Lambda)^N/N!$, $U=\tfrac{1}{2}Nk_{\mathrm B}T$, $C_V=\tfrac{1}{2}Nk_{\mathrm B}$, and $fL=Nk_{\mathrm B}T$. For 20 argon atoms in a $10.0\ \mathrm{nm}$ channel at $300\ \mathrm{K}$, $\Lambda=1.595\times10^{-11}\ \mathrm{m}$, $q=627$, $U=4.14\times10^{-20}\ \mathrm{J}$, and $f=8.28\ \mathrm{pN}$.
 ````
+
+## 4. Further Reading
+
+**Textbooks**
+
+- @mcquarrie1997, Chapter 17 (the Boltzmann factor and partition functions) and Chapter 18 (partition functions and ideal gases). Chapters 3 and 5 review the particle in a box, the harmonic oscillator, and the rigid rotor.
+- @dill2011, Chapter 1 (probability), Chapter 5 (entropy and the Boltzmann law), Chapter 10 (the Boltzmann distribution law), and Chapter 11 (the statistical mechanics of simple gases and solids).
+- @hill1986, Chapters 1 and 2 (ensembles and thermodynamics), Chapter 5 (monatomic crystals), and Chapter 8 (the ideal diatomic gas).
+
+**Original papers**
+
+- @petit1819 report that the heat capacity per mole of atoms is nearly the same for the solid elements they measured, which is the Dulong–Petit law of [Section 2.6](section-06.md). An [English translation](https://web.lemoyne.edu/giunta/PETIT.html) appeared in *Annals of Philosophy* **14**, 189–198 (1819).
+- @einstein1907 applies Planck's quantization of energy to the vibrations of the atoms of a crystal and obtains the heat capacity of the Einstein model of [Section 2.6](section-06.md).
