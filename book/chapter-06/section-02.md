@@ -207,7 +207,7 @@ Use the integrated Clausius–Clapeyron form {eq}`eq:CC-two-point` to estimate $
 - $T_1 = 363.15\ \mathrm{K}$ (90 °C), $P_1 = 70.18\ \mathrm{kPa}$
 - $T_2 = 373.15\ \mathrm{K}$ (100 °C), $P_2 = 101.42\ \mathrm{kPa}$
 
-Both points are taken from the saturation tables for water of the NIST Chemistry WebBook.
+Both points are taken from the saturation tables for water of the [NIST Chemistry WebBook](https://webbook.nist.gov/chemistry/fluid/).
 
 **Step 1.** Compute the logarithm of the pressure ratio:
 
@@ -260,7 +260,7 @@ This whole mini-lab assumes the **liquid–vapor approximation** developed under
 
 ### Dataset: Saturation Vapor Pressure of Water
 
-The values are the reference saturation pressures of water (the IAPWS-95 formulation, as tabulated in the NIST Chemistry WebBook). Use them as if they were experimental measurements; they are smooth and consistent, so they are good for analysis practice rather than for assessing experimental uncertainty.
+The values are the reference saturation pressures of water (the IAPWS-95 formulation [@wagner2002], as tabulated in the NIST Chemistry WebBook). Use them as if they were experimental measurements; they are smooth and consistent, so they are good for analysis practice rather than for assessing experimental uncertainty.
 
 ```{list-table}
 :header-rows: 1
@@ -527,7 +527,7 @@ In [](#fig:cc-studio), you can repeat Parts A to C of the mini-lab for water, et
 :title: Clausius–Clapeyron
 :placeholder: ../_static/clausius-clapeyron-studio/clausius-clapeyron-studio.png
 
-Clausius–Clapeyron fits for three liquids. (a) The vapor pressure against temperature. (b) The Clausius–Clapeyron plot, $\ln(P_{\mathrm{sat}}/1\ \mathrm{bar})$ against $1/T$, with a straight line fitted to the filled points, as in [](#fig:cc-fit). (c) The residuals of the fit, as in [](#fig:cc-residuals). (d) The slope of the line, $R^2$, the enthalpy of vaporization from the slope, Eq. [](#eq:CC-integrated), and the reference value at the temperature at which $1/T$ is the mean of $1/T$ over the points in the fit. The data come from the reference equation of state of each liquid, evaluated with [CoolProp](https://coolprop.org); for water they are the values of the table of the mini-lab.
+Clausius–Clapeyron fits for three liquids. (a) The vapor pressure against temperature. (b) The Clausius–Clapeyron plot, $\ln(P_{\mathrm{sat}}/1\ \mathrm{bar})$ against $1/T$, with a straight line fitted to the filled points, as in [](#fig:cc-fit). (c) The residuals of the fit, as in [](#fig:cc-residuals). (d) The slope of the line, $R^2$, the enthalpy of vaporization from the slope, Eq. [](#eq:CC-integrated), and the reference value at the temperature at which $1/T$ is the mean of $1/T$ over the points in the fit. The data come from the reference equation of state of each liquid, evaluated with [CoolProp](https://coolprop.org) [@bell2014]; for water they are the values of the table of the mini-lab.
 ```
 
 You can also open the studio in a new tab: [Clausius–Clapeyron Studio](https://wexlergroup.github.io/chem-4020-5020/computational-studios/clausius-clapeyron-studio.html).
