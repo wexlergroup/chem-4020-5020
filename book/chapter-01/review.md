@@ -453,3 +453,15 @@ The table lists the molar volume of neon at $P=0.0100\ \mathrm{bar}$ at three te
 
 **Result.** The line through the data has slope $8.3145\times10^{-3}\ \mathrm{m^3\,mol^{-1}\,K^{-1}}$ and reaches zero volume at $-273.16\,{}^{\circ}\mathrm{C}$. The slope gives $R=8.31\ \mathrm{J\,mol^{-1}\,K^{-1}}$, and the gas contains $2.65\times10^{23}$ atoms per cubic meter at $0.00\,{}^{\circ}\mathrm{C}$.
 ````
+
+## Further Reading
+
+**Textbooks**
+
+- @mcquarrie1997, Chapter 27, Sections 27.1 to 27.3 (the kinetic theory of gases), and Chapter 16, Sections 16.1 to 16.7 (the properties of gases).
+- @dill2011, Chapter 24 (intermolecular interactions).
+
+**Original papers**
+
+- @maxwell1860 derives the distribution of molecular speeds of [Section 1.2](section-02.md).
+- @vanderwaals1910 describes how he arrived at the equation of state of [Section 1.4](section-04.md) and how it compares with experiment.
