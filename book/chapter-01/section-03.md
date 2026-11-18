@@ -18,6 +18,8 @@ numbering:
 
 See also: [Course-wide Conventions & Notation](../notation.md)
 
+Run the code: [Notebook for Section 1.3](https://wexlergroup.github.io/chem-4020-5020/lite/notebooks/index.html?path=chapter-01/section-03.ipynb), in which you can change and rerun the Python cells of this section in your browser.
+
 ## Overview and Learning Objectives
 
 The ideal-gas model consolidates several empirical gas laws into a single equation of state and is accurate when intermolecular interactions are negligible. In this section, we review the classical gas laws, derive $PV=Nk_{\mathrm{B}}T=nRT$, use the result to estimate microscopic length scales, and see how it motivates an absolute temperature scale.
