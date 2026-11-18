@@ -358,7 +358,7 @@ Every answer is written first as a multiple of $nRT_A=(1.00\ \mathrm{mol})(8.314
 
 7. **Totals for each path**
 
-   | | $w/(nRT_A)$ | $q/(nRT_A)$ | $\Delta U/(nRT_A)$ | $w$ (J) | $q$ (J) | $\Delta U$ (J) |
+   | Path | $w/(nRT_A)$ | $q/(nRT_A)$ | $\Delta U/(nRT_A)$ | $w$ (J) | $q$ (J) | $\Delta U$ (J) |
    |---|---:|---:|---:|---:|---:|---:|
    | Path 1 | $+\tfrac{1}{2}$ | $+\tfrac{3}{4}$ | $+\tfrac{5}{4}$ | +1247 | +1871 | +3118 |
    | Path 2 | $+\tfrac{3}{2}$ | $-\tfrac{1}{4}$ | $+\tfrac{5}{4}$ | +3742 | −624 | +3118 |
