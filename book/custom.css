@@ -1,7 +1,8 @@
 /*
   Small corrections to the book theme. Loaded through `site.options.style` in myst.yml.
 
-  All three rules keep a page from scrolling sideways on a narrow screen. They change nothing that is visible.
+  Rules 1 to 3 keep a page from scrolling sideways on a narrow screen, and rule 4 is for screen readers. They change
+  nothing that is visible.
 */
 
 /* 1. Math inside a wide table. KaTeX adds a hidden copy of each formula for screen readers and positions it
@@ -31,4 +32,11 @@
     margin-left: 0;
     margin-top: 1rem;
   }
+}
+
+/* 4. The link on the logo. The logo has its text alternative from `logo_alt` in myst.yml. Without a `logo_text`
+      the theme also puts the words "Made with MyST" into the link, hidden from sight, and a screen reader would
+      read them after the name of the logo. */
+.myst-home-link > .sr-only {
+  display: none;
 }

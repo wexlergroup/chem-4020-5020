@@ -66,6 +66,7 @@ project:
 site:
   options:
     logo: logo.png
+    logo_alt: Physical Chemistry II, home
     folders: true
     style: custom.css
   template: book-theme
