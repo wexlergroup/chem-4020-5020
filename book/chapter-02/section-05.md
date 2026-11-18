@@ -40,6 +40,8 @@ Learning objectives:
 
 [](#fig:particle-in-a-box) shows the first four energy levels and wavefunctions of a particle in a one-dimensional box.
 
+% Try this: Draw the shape of the probability density in place of the wavefunction: replace `np.sin(n * np.pi * (x + 0.5))` by `np.sin(n * np.pi * (x + 0.5))**2`. At how many places inside the box is the particle never found in level $n$? (The labels still read $\psi_n$.)
+
 ```{code-cell} ipython3
 :label: fig:particle-in-a-box
 :caption: Energy levels $E_n$ (gray lines) and wavefunctions $\psi_n$ (blue curves) of a particle in a one-dimensional box with walls at $x=\pm L/2$. Each wavefunction is drawn on its energy level, and the energy increases as $n^2$.
@@ -273,6 +275,8 @@ q_{\mathrm{trans}}
 is called the translational partition function. It underpins the classical description of dilute gases when $\Lambda \ll (V/N)^{1/3}$, the mean spacing between particles, so quantum effects are negligible at ordinary densities and temperatures.
 
 [](#fig:thermal-wavelength) draws the two lengths to scale for helium. In the gas at $300\ \mathrm{K}$ and $1\ \mathrm{bar}$, the conditions of the worked example below, the mean spacing is about 69 times $\Lambda$. In liquid helium at its normal boiling point of $4.22\ \mathrm{K}$, $\Lambda$ is larger than the mean spacing, which is the case that requires the full quantum treatment of identical particles.
+
+% Try this: Change `T_gas` from `300` to `10`. How does the ratio of the mean spacing to $\Lambda$ change, and what does that mean for the classical treatment of the gas?
 
 ```{code-cell} ipython3
 :label: fig:thermal-wavelength
