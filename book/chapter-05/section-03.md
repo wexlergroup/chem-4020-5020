@@ -302,6 +302,8 @@ Because $\Delta\nu < 0$, increasing pressure favors the side with fewer gas mole
 
 [](#fig:ammonia-synthesis) collects the two results of this section: the standard reaction Gibbs energy at 1 bar as a function of temperature, and the pressure at which the reaction Gibbs energy vanishes.
 
+% Try this: Neglect the difference of the heat capacities: change `dCp = -6 * R` to `dCp = 0 * R`. By how many kelvin does the temperature at which $\Delta_r G^\circ$ changes sign move, and does the model move toward the NIST curve or away from it?
+
 ```{code-cell} ipython3
 :label: fig:ammonia-synthesis
 :caption: Ammonia synthesis as a function of temperature. (a) $\Delta_r G^\circ$ at 1 bar from the constant-$C_P$ model of this section (solid line) and from the Shomate heat-capacity equations of the NIST Chemistry WebBook [@chase1998] (dashed line). Both change sign at 456 K (183 °C). (b) The pressure at which $\Delta_r G = 0$ when each species is at the pressure $P$, from Eq. [](#eq:P-crossover); the points mark the estimates of this section at 400 °C and 500 °C. The shaded areas mark the operating range of the Haber–Bosch process.
