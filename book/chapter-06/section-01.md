@@ -273,6 +273,8 @@ On a $\bar g$-vs-$T$ plot at fixed $P$:
 
 Because typically $\bar s_{\mathrm{g}} > \bar s_{\mathrm{l}} > \bar s_{\mathrm{s}}$, the gas line is steepest, then liquid, then solid. Starting at low $T$ the solid curve is the lowest (most stable); as $T$ increases, the liquid curve eventually crosses the solid curve, and then the gas curve crosses the liquid. Each crossing marks a first-order phase transition at which the lowest-$\bar g$ phase — the stable one — changes. [](#fig:gibbs-phases) shows the three curves for water at 1 bar.
 
+% Try this: Extend the dashed curve of ice to 420 K: in `drawn`, change `"ice": (230, 330)` to `"ice": (230, 420)`. At about which temperature would ice turn directly into steam at 1 bar if the liquid did not exist, and why is this crossing never observed?
+
 ```{code-cell} ipython3
 :label: fig:gibbs-phases
 :caption: Molar Gibbs free energy of ice, liquid water, and steam at 1 bar. Each curve is solid where its phase is the stable one and dashed where it is not. The curves cross at the melting point ($273.15\ \mathrm{K}$) and at the boiling point ($372.76\ \mathrm{K}$ at 1 bar). The curves were computed with a constant heat capacity for each phase ($37.8$, $75.3$, and $36\ \mathrm{J\,mol^{-1}\,K^{-1}}$), the standard entropy of the liquid at $298.15\ \mathrm{K}$ ($69.95\ \mathrm{J\,mol^{-1}\,K^{-1}}$), and the enthalpies of fusion ($6.01\ \mathrm{kJ\,mol^{-1}}$) and vaporization ($40.67\ \mathrm{kJ\,mol^{-1}}$). The zero of enthalpy is that of the liquid at $273.15\ \mathrm{K}$.
@@ -407,6 +409,8 @@ Frederick Trouton (1884) noticed that for many ordinary liquids at their *normal
 The rough constancy of $\Delta \bar s_{\mathrm{vap}}$ across chemically unrelated liquids suggests that the entropy gained when one mole of molecules leaves a liquid for a nearly ideal gas is governed mostly by the phase change itself (the volume increase, the loss of short-range order) rather than by the chemical identity of the liquid.
 
 Not every liquid follows the rule. Hydrogen-bonded liquids lie well above Trouton's value: at the normal boiling point, $\Delta \bar s_{\mathrm{vap}}$ is about $97\ \mathrm{J\,mol^{-1}\,K^{-1}}$ for ammonia, $104$ for methanol, $109$ for water, and $110$ for ethanol. Water is the familiar example: $\Delta \bar s_{\mathrm{vap}}(\mathrm{H_2O}) \approx 109\ \mathrm{J\,mol^{-1}\,K^{-1}}$ is roughly 25 % above Trouton's value. Liquids that boil at very low temperatures lie well below it: $\Delta \bar s_{\mathrm{vap}}$ is $64\ \mathrm{J\,mol^{-1}\,K^{-1}}$ for neon, $44$ for hydrogen, and $19.5$ (only $2.3\,R$) for helium. [](#fig:trouton) compares fifteen liquids.
+
+% Try this: Add acetic acid at the end of the list `liquids`: `("acetic acid", 391.1, 23.70),`. On which side of Trouton's value does it fall, and is the cause more likely in the liquid or in the vapor?
 
 ```{code-cell} ipython3
 :label: fig:trouton
