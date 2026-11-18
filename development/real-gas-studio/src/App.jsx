@@ -93,6 +93,22 @@ export default function RealGas() {
   ];
   const below = sat.vdw || sat.pr;
   const coexist = ['vdw', 'pr'].filter((key) => shown[key] && sat[key]);
+  // What each plot shows, for a reader who cannot see it
+  const real = ['vdw', 'pr'].filter((key) => shown[key]);
+  const names = [shown.ideal ? 'the ideal-gas law' : null, ...real.map((key) => `the ${NAMES[key]} equation`)].filter(Boolean);
+  const list = names.length > 1 ? `${names.slice(0, -1).join(', ')} and ${names[names.length - 1]}` : names[0] || 'no equation';
+  const lowest = (key) => rows.reduce((best, row) => (row[key] < best[key] ? row : best), rows[0]);
+  const said = {
+    a: `Compressibility factor Z of ${gas.name.toLowerCase()} at ${kelvin(T)} kelvin against pressure from 0 to ${bar(top)} bar, for ${list}.`
+       + (shown.ideal ? ' For the ideal gas, Z = 1 at every pressure.' : '')
+       + real.map((key) => ` With the ${NAMES[key]} equation, Z is lowest, ${lowest(key)[key].toFixed(2)}, at ${bar(lowest(key).P)} bar, and it is `
+                           + `${rows[rows.length - 1][key].toFixed(2)} at the largest pressure shown.`).join('')
+       + (coexist.length ? ' Z jumps at the pressure at which liquid and vapor coexist.' : ''),
+    b: `Isotherm of ${gas.name.toLowerCase()} at ${kelvin(T)} kelvin: pressure from 0 to ${bar(top)} bar against molar volume on a logarithmic `
+       + `scale from ${digits3(volumes[0])} to ${digits3(volumes[1])} liters per mole, for ${list}. The pressure falls as the molar volume grows.`
+       + (real.length ? ' At large molar volume the curves of the real-gas equations approach the ideal-gas isotherm, and at small molar volume they rise steeply.' : '')
+       + (coexist.length ? ` The isotherm is horizontal where liquid and vapor coexist, at ${coexist.map((key) => `${bar(sat[key].P)} bar (${NAMES[key]})`).join(' and ')}.` : ''),
+  };
 
   return (
     <Studio title="Real gas"
@@ -106,7 +122,7 @@ export default function RealGas() {
         <Panel letter="a" title={<>Compressibility factor, <V>Z</V></>}>
           <div className="chart" style={{ height: 250 }}>
             <ResponsiveContainer width="100%" height="100%">
-              <LineChart data={rows} margin={margin}>
+              <LineChart data={rows} margin={margin} aria-label={said.a}>
                 <XAxis dataKey="P" type="number" domain={[0, top]} ticks={pTicks} {...axis(color)} />
                 <YAxis domain={[0, zTop]} ticks={zAll} width={44} allowDataOverflow {...axis(color)} />
                 <Tooltip content={<Tip head={<V>P</V>} unit="bar" value={<V>Z</V>} shown={shown} />} isAnimationActive={false} />
@@ -119,7 +135,7 @@ export default function RealGas() {
         <Panel letter="b" title={<>Isotherm: pressure, <V>P</V> (bar)</>}>
           <div className="chart" style={{ height: 250 }}>
             <ResponsiveContainer width="100%" height="100%">
-              <LineChart data={isotherm} margin={margin}>
+              <LineChart data={isotherm} margin={margin} aria-label={said.b}>
                 <XAxis dataKey="V" type="number" scale="log" domain={volumes} ticks={logTicks(volumes[0], volumes[1])}
                        allowDataOverflow {...axis(color)} />
                 <YAxis domain={[0, top]} ticks={pTicks} width={44} allowDataOverflow {...axis(color)} />

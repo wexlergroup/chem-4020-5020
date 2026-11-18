@@ -70,6 +70,17 @@ export default function HarmonicOscillator() {
   const molecule = MOLECULES.find(([, value]) => value === theta);
   const changeRange = (value) => { setRange(value); if (T > value) setT(value); };
   const pick = (value) => setTheta(value);
+  // What each plot shows, for a reader who cannot see it
+  const said = {
+    a: `Bar chart of the probabilities of the levels n = 0 to ${LEVELS - 1}, with one more bar for all higher levels together, at `
+       + `${T.toFixed(0)} kelvin for a vibrational temperature of ${theta.toFixed(0)} kelvin. The probability of level 0 is `
+       + `${levels[0].p.toFixed(3)} and the probability of level 1 is ${levels[1].p.toFixed(3)}.`,
+    b: `Internal energy in units of h-bar omega against temperature from 0 to ${range.toFixed(0)} kelvin. The curve starts at the `
+       + `zero-point energy, one half, and approaches the line of kBT at high temperature. At ${T.toFixed(0)} kelvin the internal `
+       + `energy is ${energy(x).toFixed(3)}.`,
+    c: `Heat capacity in units of the Boltzmann constant against temperature from 0 to ${range.toFixed(0)} kelvin. The curve rises `
+       + `from zero toward 1, its limit at high temperature. At ${T.toFixed(0)} kelvin the heat capacity is ${heat(x).toFixed(3)}.`,
+  };
 
   return (
     <Studio title="Harmonic oscillator"
@@ -78,7 +89,7 @@ export default function HarmonicOscillator() {
         <Panel letter="a" title={<>Probabilities of the levels at <V>T</V> = {T.toFixed(0)} K</>}>
           <div className="chart" style={{ height: 190 }}>
             <ResponsiveContainer width="100%" height="100%">
-              <BarChart data={levels} margin={margin} barCategoryGap="22%">
+              <BarChart data={levels} margin={margin} barCategoryGap="22%" aria-label={said.a}>
                 <XAxis dataKey="n" {...axis(color)} />
                 <YAxis domain={[0, 1]} ticks={[0, 0.25, 0.5, 0.75, 1]} width={44} {...axis(color)} />
                 <Tooltip content={<LevelTip />} cursor={{ fill: color.fill }} isAnimationActive={false} />
@@ -104,7 +115,7 @@ export default function HarmonicOscillator() {
           </p>
           <div className="chart" style={{ height: 190 }}>
             <ResponsiveContainer width="100%" height="100%">
-              <LineChart data={curves} margin={margin}>
+              <LineChart data={curves} margin={margin} aria-label={said.b}>
                 <XAxis {...xAxis} />
                 <YAxis domain={[0, uTop]} ticks={niceTicks(uTop, Math.round(uTop / uStep))} width={44} allowDataOverflow {...axis(color)} />
                 <Tooltip content={<Tip name={<><V>U</V>/{hw}</>} digits={3} />} isAnimationActive={false} />
@@ -124,7 +135,7 @@ export default function HarmonicOscillator() {
           </p>
           <div className="chart" style={{ height: 190 }}>
             <ResponsiveContainer width="100%" height="100%">
-              <LineChart data={curves} margin={margin}>
+              <LineChart data={curves} margin={margin} aria-label={said.c}>
                 <XAxis {...xAxis} />
                 <YAxis domain={[0, 1.2]} ticks={[0, 0.25, 0.5, 0.75, 1]} width={44} {...axis(color)} />
                 <Tooltip content={<Tip name={<>{Cv}/{kB}</>} digits={3} />} isAnimationActive={false} />

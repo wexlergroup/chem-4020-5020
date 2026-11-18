@@ -48,6 +48,18 @@ export default function TwoStateSystem() {
   const margin = { top: 14, right: 12, bottom: -6, left: 0 };
   const xTitle = <p className="xlabel">Temperature, <V sub="B">k</V><V>T</V>/<V>ε</V></p>;
   const p1 = <><V sub="1">p</V></>, p2 = <><V sub="2">p</V></>;
+  // What each plot shows, for a reader who cannot see it
+  const end = data[data.length - 1];
+  const axes = `against temperature, with kBT from 0 to ${range.toFixed(1)} epsilon, for an energy difference of ${gap.toFixed(1)} epsilon`;
+  const said = {
+    a: `Probabilities of the two states ${axes}. The probability of state 1 falls from 1 and the probability of state 2 rises `
+       + `from 0, and both approach one half. At the largest temperature shown they are ${end.p1.toFixed(2)} and ${end.p2.toFixed(2)}.`,
+    b: `Heat capacity in units of the Boltzmann constant ${axes}. `
+       + (peak <= range
+         ? `It rises from zero to its largest value, ${PEAK_C.toFixed(3)}, at kBT = ${peak.toFixed(2)} epsilon, and then falls.`
+         : `It rises from zero to ${end.c.toFixed(3)} at the largest temperature shown. Its largest value, ${PEAK_C.toFixed(3)}, lies at kBT = ${peak.toFixed(2)} epsilon, beyond the temperatures shown.`),
+    c: `Partition function ${axes}. It rises from 1 toward 2, and it is ${end.q.toFixed(2)} at the largest temperature shown.`,
+  };
 
   return (
     <Studio title="Two-state system"
@@ -60,7 +72,7 @@ export default function TwoStateSystem() {
           </p>
           <div className="chart" style={{ height: 220 }}>
             <ResponsiveContainer width="100%" height="100%">
-              <LineChart data={data} margin={margin}>
+              <LineChart data={data} margin={margin} aria-label={said.a}>
                 <XAxis {...x} />
                 <YAxis domain={[0, 1]} ticks={[0, 0.25, 0.5, 0.75, 1]} width={44} {...axis(color)} />
                 <Tooltip content={<Tip rows={[[p1, 'p1', 3], [p2, 'p2', 3]]} />} isAnimationActive={false} />
@@ -78,7 +90,7 @@ export default function TwoStateSystem() {
         <Panel letter="b" title={<>Heat capacity, <V sub={<i className="v">V</i>}>C</V>/<V sub="B">k</V></>}>
           <div className="chart" style={{ height: 190 }}>
             <ResponsiveContainer width="100%" height="100%">
-              <LineChart data={data} margin={margin}>
+              <LineChart data={data} margin={margin} aria-label={said.b}>
                 <XAxis {...x} />
                 <YAxis domain={[0, 0.5]} ticks={[0, 0.1, 0.2, 0.3, 0.4, 0.5]} width={44} {...axis(color)} />
                 <Tooltip content={<Tip rows={[[<><V sub={<i className="v">V</i>}>C</V>/<V sub="B">k</V></>, 'c', 3]]} />} isAnimationActive={false} />
@@ -95,7 +107,7 @@ export default function TwoStateSystem() {
         <Panel letter="c" title={<>Partition function, <V>Q</V></>}>
           <div className="chart" style={{ height: 190 }}>
             <ResponsiveContainer width="100%" height="100%">
-              <LineChart data={data} margin={margin}>
+              <LineChart data={data} margin={margin} aria-label={said.c}>
                 <XAxis {...x} />
                 <YAxis domain={[1, 2]} ticks={[1, 1.25, 1.5, 1.75, 2]} width={44} {...axis(color)} />
                 <Tooltip content={<Tip rows={[[<V>Q</V>, 'q', 3]]} />} isAnimationActive={false} />

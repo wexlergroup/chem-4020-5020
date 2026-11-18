@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { LineChart, Line, XAxis, YAxis, ResponsiveContainer, ReferenceLine, ReferenceDot } from 'recharts';
-import { useBook, Studio, Panel, Slider, V, axis, seeded, LINE, DASH, STATIC, onPaper } from '../../studio-kit/kit.jsx';
+import { useBook, Studio, Panel, Slider, V, axis, aloud, seeded, LINE, DASH, STATIC, onPaper } from '../../studio-kit/kit.jsx';
 import { reaction } from './reaction.js';
 
 /*
@@ -133,6 +133,11 @@ export default function Equilibrium() {
   ];
 
   const dr = (sym) => <>Δ<sub>r</sub><V>{sym}</V></>;
+  // What the plot shows, for a reader who cannot see it
+  const said = `Gibbs free energy of the mixture relative to pure NO2, in kilojoules, against the extent of reaction from 0 to 1 mole, at `
+    + `${T.toFixed(T % 1 ? 2 : 0)} kelvin and ${num(P)} bar. The curve has its minimum, ${aloud(r.g(r.xiEq).toFixed(2))} kilojoules, at the `
+    + `extent ${r.xiEq.toFixed(3)} mole. The chosen extent is ${xi.toFixed(2)} mole, where the Gibbs free energy is ${aloud(s.G.toFixed(2))} `
+    + `kilojoules and the slope of the tangent is ${aloud(s.slope.toFixed(2))} kilojoules per mole.`;
   const rows = [
     [<>Standard reaction Gibbs energy</>, <>{dr('G')}<sup>∘</sup> = {dr('H')}<sup>∘</sup> − <V>T</V>{dr('S')}<sup>∘</sup></>, <>{minus(r.dG0.toFixed(2))} kJ mol<sup>−1</sup></>],
     [<>Equilibrium constant</>, <><V>K</V> = exp(−{dr('G')}<sup>∘</sup>/<V>RT</V>)</>, num(r.K)],
@@ -154,7 +159,7 @@ export default function Equilibrium() {
         <Panel letter="a" title={<>Gibbs free energy, <V>G</V>(ξ) − <V>G</V>(0) (kJ)</>}>
           <div className="chart" style={{ height: SIZE - 24 }}>
             <ResponsiveContainer width="100%" height="100%">
-              <LineChart margin={{ top: 12, right: 14, bottom: -6, left: 0 }}>
+              <LineChart margin={{ top: 12, right: 14, bottom: -6, left: 0 }} aria-label={said}>
                 <XAxis dataKey="xi" type="number" domain={[0, 1]} ticks={[0, 0.2, 0.4, 0.6, 0.8, 1]} {...axis(color)} />
                 <YAxis type="number" domain={domain} ticks={yTicks} width={44} allowDataOverflow
                        tickFormatter={(v) => minus(v.toFixed(step < 1 ? 1 : 0))} {...axis(color)} />

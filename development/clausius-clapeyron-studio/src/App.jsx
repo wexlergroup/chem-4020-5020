@@ -1,7 +1,7 @@
 import React, { useId, useState } from 'react';
 import { ComposedChart, Scatter, XAxis, YAxis, Tooltip, ResponsiveContainer, ReferenceLine, usePlotArea, useXAxisDomain,
          useYAxisDomain } from 'recharts';
-import { useBook, Studio, Panel, Slider, Select, V, axis, LINE, DASH } from '../../studio-kit/kit.jsx';
+import { useBook, Studio, Panel, Slider, Select, V, axis, aloud, LINE, DASH } from '../../studio-kit/kit.jsx';
 import { LIQUIDS } from './data.js';
 import { fit, referenceAt } from './fit.js';
 
@@ -107,6 +107,20 @@ export default function ClausiusClapeyron() {
      <>{reference.toFixed(2)} kJ mol<sup>−1</sup></>],
   ];
 
+  // What each plot shows, for a reader who cannot see it
+  const residuals = points.map((p) => p.residual), name = liquid.name.toLowerCase();
+  const fitted = `${f.n} points, from ${aloud(points[from].t)} to ${aloud(points[to].t)} degrees Celsius`;
+  const said = {
+    a: `Vapor pressure of ${name} in kilopascals against temperature: ${points.length} points from ${aloud(points[0].t)} to `
+       + `${aloud(points[last].t)} degrees Celsius, over which the vapor pressure rises from ${Number(points[0].P.toPrecision(3))} to `
+       + `${Number(points[last].P.toPrecision(3))} kilopascals. The fit uses ${fitted}, and the fitted line is drawn over them as a curve.`,
+    b: `Clausius–Clapeyron plot of ${name}: the natural logarithm of the vapor pressure in bar against 1000 divided by the temperature `
+       + `in kelvin. The points lie close to a straight line that falls. The line fitted to ${fitted}, has the slope `
+       + `${aloud(Math.round(f.slope))} kelvin, which gives an enthalpy of vaporization of ${f.dh.toFixed(2)} kilojoules per mole.`,
+    c: `Residuals of the fit, the data minus the fitted line, in the natural logarithm of the vapor pressure, against 1000 divided by `
+       + `the temperature in kelvin. They run from ${aloud(Math.min(...residuals).toFixed(4))} to ${aloud(Math.max(...residuals).toFixed(4))}.`,
+  };
+
   const scatter = (dataKey) => (
     <Scatter data={points} dataKey={dataKey} shape={(p) => <Dot {...p} color={color} />} isAnimationActive={false} />
   );
@@ -123,7 +137,7 @@ export default function ClausiusClapeyron() {
         <Panel letter="a" title={<>Vapor pressure, <V sub="sat">P</V> (kPa)</>}>
           <div className="chart" style={{ height: HEIGHT }}>
             <ResponsiveContainer width="100%" height="100%">
-              <ComposedChart margin={margin}>
+              <ComposedChart margin={margin} aria-label={said.a}>
                 <XAxis dataKey="t" type="number" domain={[tTicks[0], tTicks[tTicks.length - 1]]} ticks={tTicks} allowDataOverflow
                        tickFormatter={(v) => String(v).replace('-', '−')} {...axis(color)} />
                 <YAxis type="number" domain={[0, pTicks[pTicks.length - 1]]} ticks={pTicks} width={48} allowDataOverflow {...axis(color)} />
@@ -138,7 +152,7 @@ export default function ClausiusClapeyron() {
         <Panel letter="b" title={<>Clausius–Clapeyron plot, ln(<V sub="sat">P</V>/1 bar)</>}>
           <div className="chart" style={{ height: HEIGHT }}>
             <ResponsiveContainer width="100%" height="100%">
-              <ComposedChart margin={margin}>
+              <ComposedChart margin={margin} aria-label={said.b}>
                 <XAxis dataKey="inv" type="number" domain={[xTicks[0], xTicks[xTicks.length - 1]]} ticks={xTicks} allowDataOverflow
                        tickFormatter={(v) => v.toFixed(fixed(xStep))} {...axis(color)} />
                 <YAxis type="number" domain={[yTicks[0], yTicks[yTicks.length - 1]]} ticks={yTicks} width={48} allowDataOverflow
@@ -156,7 +170,7 @@ export default function ClausiusClapeyron() {
         <Panel letter="c" title={<>Residuals, data − fit, in ln(<V sub="sat">P</V>/1 bar)</>}>
           <div className="chart" style={{ height: HEIGHT }}>
             <ResponsiveContainer width="100%" height="100%">
-              <ComposedChart margin={margin}>
+              <ComposedChart margin={margin} aria-label={said.c}>
                 <XAxis dataKey="inv" type="number" domain={[xTicks[0], xTicks[xTicks.length - 1]]} ticks={xTicks} allowDataOverflow
                        tickFormatter={(v) => v.toFixed(fixed(xStep))} {...axis(color)} />
                 <YAxis type="number" domain={[rTicks[0], rTicks[rTicks.length - 1]]} ticks={rTicks} width={48} allowDataOverflow

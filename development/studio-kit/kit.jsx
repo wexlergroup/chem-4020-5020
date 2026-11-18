@@ -209,6 +209,7 @@ export function axisLabel(color, value, side) {
   if (side === 'left') return { value, angle: -90, position: 'insideLeft', offset: 12, fill: color.text, fontSize: 12.5, style: { textAnchor: 'middle' } };
   return { value, position: 'insideBottom', offset: -4, fill: color.text, fontSize: 12.5 };
 }
+export const aloud = (number) => String(number).replace(/^[-−]/, 'minus ');   // a number as a screen reader should say it
 export const LINE = 2.4;                              // width of a data line
 export const DASH = '4 3';                            // dashes of a reference line
 

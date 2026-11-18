@@ -116,6 +116,13 @@ export default function RigidRotor() {
   const pick = (m) => { setMA(m.mA); setMB(m.mB); setR(m.r); setSame(m.same); };
   const picked = (m) => Math.abs(m.mA - mA) < 1e-9 && Math.abs(m.mB - mB) < 1e-9 && Math.abs(m.r - r) < 1e-9 && m.same === same;
   const reset = () => { pick(CO); setT(START.T); };
+  // What each plot shows, for a reader who cannot see it
+  const said = {
+    c: `Bar chart of the probabilities of the rotational levels J = 0 to ${top} at ${T.toFixed(0)} kelvin. The most probable level is `
+       + `J = ${most.J}, with the probability ${most.p.toFixed(3)}.`,
+    d: `Energies of the rotational levels J = 0 to ${top}, divided by the Boltzmann constant, in kelvin. The energies rise in `
+       + `proportion to the product of J and J + 1, from 0 to ${big(shown[top].e)} kelvin. A dashed line marks the temperature, ${T.toFixed(0)} kelvin.`,
+  };
 
   return (
     <Studio title="Linear rigid rotor"
@@ -139,7 +146,7 @@ export default function RigidRotor() {
         <Panel letter="c" title={<>Probabilities of the levels, <V sub={<i className="v">J</i>}>p</V></>}>
           <div className="chart" style={{ height: 190 }}>
             <ResponsiveContainer width="100%" height="100%">
-              <BarChart data={shown} margin={margin} barCategoryGap={shown.length > 40 ? 0 : '18%'}>
+              <BarChart data={shown} margin={margin} barCategoryGap={shown.length > 40 ? 0 : '18%'} aria-label={said.c}>
                 <XAxis dataKey="J" interval={jStep - 1} {...axis(color)} />
                 <YAxis domain={[0, pTop]} ticks={niceTicks(pTop, Math.round(pTop / pStep))} width={44} {...axis(color)} />
                 <Tooltip content={<LevelTip name={<V sub={<i className="v">J</i>}>p</V>} digits={4} unit="" />} cursor={{ fill: color.fill }} isAnimationActive={false} />
@@ -153,7 +160,7 @@ export default function RigidRotor() {
         <Panel letter="d" title={<>Energies of the levels, {EJ}/{kB} (K)</>}>
           <div className="chart" style={{ height: 190 }}>
             <ResponsiveContainer width="100%" height="100%">
-              <LineChart data={shown} margin={margin}>
+              <LineChart data={shown} margin={margin} aria-label={said.d}>
                 <XAxis dataKey="J" type="number" domain={[0, top]} ticks={jTicks} {...axis(color)} />
                 <YAxis domain={[0, eTop]} ticks={niceTicks(eTop, Math.round(eTop / eStep))} width={44} {...axis(color)} />
                 <Tooltip content={<LevelTip name={<>{EJ}/{kB}</>} digits={1} unit=" K" />} isAnimationActive={false} />
