@@ -2,7 +2,8 @@
 
 Every figure in the notes is drawn by a function ``draw(c)`` that returns a Matplotlib figure. ``show(draw)``
 calls it twice, once with the colors for the light page and once with the colors for the dark page, and the
-book displays the version that matches the reader's theme.
+book displays the version that matches the reader's theme. In a notebook that runs in the browser (the notebook
+site of the course), ``show`` displays the light version alone, on a white ground.
 
     import sys
     sys.path.append("..")            # the book folder, which holds figstyle
@@ -24,6 +25,7 @@ Font License, files in ``fonts/``).
 """
 import base64
 import io
+import sys
 from dataclasses import dataclass
 from pathlib import Path
 
@@ -144,6 +146,15 @@ def show(draw, alt=""):
     """
     from html import escape
     from IPython.display import display
+
+    if sys.platform == "emscripten":
+        # Python runs in the browser: this is a notebook, which has no theme classes and would show both versions.
+        light, width = _png(draw, LIGHT)
+        display({"text/html": '<img alt="{alt}" src="data:image/png;base64,{data}" style="display:block;width:{px}px;'
+                              'max-width:100%;height:auto;background:{ground}">'.format(
+                                  alt=escape(alt, quote=True), data=light, px=round(width * PX_PER_INCH),
+                                  ground=LIGHT.ground)}, raw=True)
+        return
 
     (light, width), (dark, _) = _png(draw, LIGHT), _png(draw, DARK)
     # The figure is centered in the text column. The negative margin cancels the 20 px of padding that the
