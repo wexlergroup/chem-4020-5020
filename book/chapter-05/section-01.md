@@ -458,7 +458,7 @@ def draw(c):
     ax2.plot(x_eq, 0, "o", color=c.ink, ms=6.5, zorder=3)
     ax2.plot(x_p, dA(x_p), "o", mfc=c.ground, mec=c.ink, ms=6.5, zorder=3)
     ax2.annotate(r"$P_1 = P_2$", (x_eq, 0), xytext=(0, 12), textcoords="offset points", ha="center")
-    for xa, xb in ((x_p - 0.02, x_p - 0.14), (0.10, 0.20)):
+    for xa, xb in ((x_p - 0.02, x_p - 0.14), (0.3 * x_eq, 0.6 * x_eq)):
         ax2.annotate("", xy=(xb, dA(xb) + 0.25), xytext=(xa, dA(xa) + 0.25),
                      arrowprops=dict(arrowstyle="-|>", color=c.muted, lw=1.3))
     ax2.text(x_eq, 1.55, "spontaneous\n" + r"$dA < 0$", ha="center", color=c.muted)
