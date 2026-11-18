@@ -1,0 +1,330 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Energy fluctuations and system size · Physical Chemistry II</title>
+<!--
+  Energy fluctuations and system size: an interactive companion to Section 2.3 (ensemble averages). This file is
+  written by hand (it is not built from development/).
+
+  N independent two-state particles, with E_1 = 0 and E_2 = epsilon = 10 meV, are in contact with a heat bath at
+  the temperature T. The page follows the total energy E in time and compares the energies that the system
+  visits with the binomial distribution, for which U = N epsilon p_2 and sigma_E^2 = N epsilon^2 p_1 p_2.
+
+      energy-fluctuations.html               the interactive page
+      energy-fluctuations.html?static=1      one still picture after 600 steps, for the PDF of the notes
+      ...&theme=light or dark                fixes the colors (otherwise the page follows the book or the system)
+
+  Inside the notes, the page follows the light or dark mode of the book and sets the height of its own frame.
+
+  Dynamics: in each step, a tenth of the particles (at least one), chosen at random, exchange energy with the
+  heat bath. Each of them is then in state 2 with the Boltzmann probability p_2, whatever its state was before.
+  The stationary distribution of this rule is the canonical one.
+-->
+<style>
+  :root {
+    --ground: #ffffff; --text: #1c1917; --muted: #6b645e; --border: #dedad5; --fill: #f1f0ee;
+    --blue: #0072b2; --on-blue: #ffffff; --blue-soft: #cfe3ef; --verm: #b84f00; --verm-soft: #f6dcc8; --low: #cfcbc6;
+  }
+  :root[data-theme="dark"] {
+    --ground: #1c1917; --text: #f5f5f4; --muted: #a8a29e; --border: #3a3531; --fill: #2a2623;
+    --blue: #56b4e9; --on-blue: #111111; --blue-soft: #24465a; --verm: #f4915a; --verm-soft: #4a3122; --low: #4a443f;
+  }
+  * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body { margin: 0; background: var(--ground); color: var(--text);
+         font: 15px/1.45 Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+  main { max-width: 760px; margin: 0 auto; padding: 24px 16px 40px; }
+  .embedded main { max-width: none; padding: 0 0 12px; }
+  h1 { font-size: 1.5rem; line-height: 1.2; margin: 0 0 6px; }
+  .embedded h1, .embedded .lede { display: none; }
+  .lede { color: var(--muted); margin: 0 0 18px; max-width: 64ch; }
+  i.v { font-style: italic; font-family: inherit; }
+  .sim { display: grid; grid-template-columns: minmax(0, 300px) minmax(0, 1fr); gap: 18px; align-items: start; }
+  @media (max-width: 600px) { .sim { grid-template-columns: minmax(0, 1fr); } }
+  canvas { display: block; width: 100%; }
+  #particles { aspect-ratio: 1 / 1; background: var(--fill); border-radius: 8px; }
+  .key { margin-top: 6px; font-size: 0.86rem; color: var(--muted); display: flex; flex-wrap: wrap; gap: 2px 14px; }
+  .key b { font-weight: 400; white-space: nowrap; }
+  .key #clock { flex-basis: 100%; font-variant-numeric: tabular-nums; }
+  .dot { display: inline-block; width: 0.7em; height: 0.7em; border-radius: 50%; margin-right: 5px; }
+  .dot.two { background: var(--blue); } .dot.one { background: var(--low); }
+  .read { display: grid; grid-template-columns: 1fr auto; gap: 2px 12px; align-items: baseline; margin-bottom: 4px; }
+  .read .num { font-size: 1.15rem; font-weight: 600; font-variant-numeric: tabular-nums; text-align: right; white-space: nowrap; }
+  .read .now { color: var(--blue); } .read .mean { color: var(--verm); }
+  .read small { display: block; font-size: 0.82rem; color: var(--muted); }
+  .cap { font-size: 0.82rem; color: var(--muted); margin: 3px 0 12px; }
+  #trace { height: 112px; } #hist { height: 136px; }
+  .controls { display: grid; grid-template-columns: minmax(0, 1fr); gap: 10px; margin-top: 12px; padding-top: 12px;
+              border-top: 1px solid var(--border); }
+  label { display: block; font-size: 0.9rem; }
+  label output { float: right; font-variant-numeric: tabular-nums; color: var(--muted); }
+  input[type="range"] { width: 100%; margin: 4px 0 0; accent-color: var(--blue); }
+  .row { display: flex; margin-top: 2px; gap: 8px 10px; flex-wrap: wrap; align-items: center; font-size: 0.9rem; }
+  button { font: inherit; font-size: 0.88rem; color: var(--text); background: var(--fill); border: 1px solid var(--border);
+           border-radius: 999px; padding: 4px 12px; cursor: pointer; white-space: nowrap; }
+  button:hover { border-color: var(--muted); }
+  button[aria-pressed="true"] { background: var(--blue); border-color: var(--blue); color: var(--on-blue); font-weight: 600; }
+  button:focus-visible, input:focus-visible { outline: 2px solid var(--blue); outline-offset: 2px; }
+  .hint { font-size: 0.84rem; color: var(--muted); margin: 12px 0 0; }
+  .settings { display: none; margin: 10px 0 0; font-size: 0.95rem; }
+  .static .settings { display: block; }
+  .static .stage { align-self: center; }
+  .static .controls, .static .hint, .static h1, .static .lede { display: none; }
+  .static main { padding: 0; }
+</style>
+</head>
+<body>
+<main>
+  <h1>Energy fluctuations and system size</h1>
+  <p class="lede">Independent two-state particles exchange energy with a heat bath. Change the number of particles, and compare how far the energy of the system strays from its average.</p>
+
+  <div class="sim">
+    <div class="stage">
+      <canvas id="particles" role="img" aria-label="The particles of the system, each drawn in the color of its present state"></canvas>
+      <div class="key"><b><span class="dot two"></span>state 2, energy <i class="v">ε</i></b><b><span class="dot one"></span>state 1, energy 0</b><b id="clock"></b></div>
+      <div class="controls">
+        <label>Number of particles <i class="v">N</i> <output id="o-n"></output><input id="s-n" type="range" min="0" max="9" step="1" value="3"></label>
+        <label>Temperature <i class="v">T</i> <output id="o-t"></output><input id="s-t" type="range" min="50" max="1000" step="10" value="300"></label>
+        <div class="row">
+          <button type="button" id="again">Start the count again</button>
+          <button type="button" id="pause" aria-pressed="false">Pause</button>
+        </div>
+      </div>
+      <p class="settings" id="settings"></p>
+    </div>
+    <div class="side">
+      <div class="read" aria-live="off">
+        <span>Energy per particle now, <i class="v">E</i>/<i class="v">N</i></span><span class="num now" id="e-now">–</span>
+        <span>Average, <i class="v">U</i>/<i class="v">N</i> = <i class="v">ε</i><i class="v">p</i><sub>2</sub></span><span class="num mean" id="e-mean">–</span>
+        <span>Relative width, <i class="v">σ</i><sub><i class="v">E</i></sub>/<i class="v">U</i> = (<i class="v">p</i><sub>1</sub>/<i class="v">N</i><i class="v">p</i><sub>2</sub>)<sup>1/2</sup><small id="measured">&nbsp;</small></span><span class="num" id="width">–</span>
+      </div>
+      <canvas id="trace" role="img" aria-label="Energy per particle in successive steps, with its average as a horizontal line and a band of one standard deviation on either side"></canvas>
+      <p class="cap">Energy per particle in successive steps (blue) around <i class="v">U</i>/<i class="v">N</i> (orange). The band reaches one standard deviation, <i class="v">σ</i><sub><i class="v">E</i></sub>/<i class="v">N</i>, to either side.</p>
+      <canvas id="hist" role="img" aria-label="Histogram of the energies per particle that the system has visited, with the binomial distribution drawn over it"></canvas>
+      <p class="cap">Energies that the system has visited (bars) and the binomial distribution (orange). The tallest value of the distribution sets the height.</p>
+    </div>
+  </div>
+
+  <p class="hint">Each particle has two states, with <i class="v">E</i><sub>1</sub> = 0 and <i class="v">E</i><sub>2</sub> = <i class="v">ε</i> = 10 meV, and the particles do not interact. In each step, a tenth of the particles, chosen at random, exchange energy with the heat bath: each of them is then in state 2 with the probability <i class="v">p</i><sub>2</sub> = <i class="v">e</i><sup>−<i class="v">ε</i>/<i class="v">k</i><sub>B</sub><i class="v">T</i></sup>/(1 + <i class="v">e</i><sup>−<i class="v">ε</i>/<i class="v">k</i><sub>B</sub><i class="v">T</i></sup>). The steps are not a physical time.</p>
+</main>
+
+<script>
+"use strict";
+const params = new URLSearchParams(location.search);
+const fixed = params.has("static");
+document.body.classList.toggle("static", fixed);
+const $ = id => document.getElementById(id);
+
+/* ---- colors of the book, and the height of the frame ---- */
+let host = null;
+try { if (window.parent !== window) host = window.parent.document.documentElement; } catch (e) { host = null; }
+try { if (window.frameElement) document.body.classList.add("embedded"); } catch (e) {}
+let color = {};
+function theme() {
+  let dark = false;
+  if (params.get("theme")) dark = params.get("theme") === "dark";
+  else if (host) dark = host.classList.contains("dark");
+  else { try { dark = window.matchMedia("(prefers-color-scheme: dark)").matches; } catch (e) {} }
+  document.documentElement.dataset.theme = dark ? "dark" : "light";
+  const css = getComputedStyle(document.documentElement);
+  for (const name of ["ground", "text", "muted", "border", "fill", "blue", "blue-soft", "verm", "verm-soft", "low"]) color[name] = css.getPropertyValue("--" + name).trim();
+}
+theme();
+if (host) new MutationObserver(() => { theme(); draw(); }).observe(host, { attributes: true, attributeFilter: ["class"] });
+else { try { window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", () => { theme(); draw(); }); } catch (e) {} }
+
+function fit() {                                    // inside the notes, make the frame as tall as the content
+  try {
+    const frame = window.frameElement;
+    if (!frame) return;
+    const height = Math.ceil(document.documentElement.getBoundingClientRect().height) + "px";
+    frame.style.height = height;
+    const box = frame.parentElement;                // the book theme wraps a frame in a box with a fixed 5:3 shape
+    if (box && box.style.paddingBottom) { box.style.paddingBottom = "0"; box.style.display = "block"; }
+    if (box && box.style.paddingBottom === "0px") box.style.height = height;
+  } catch (e) {}
+}
+
+/* ---- the system ---- */
+const K_B = 8.617333262e-5;                         // eV/K
+const EPSILON = 0.010;                              // eV, energy of state 2; state 1 has the energy 0
+const SIZES = [10, 20, 50, 100, 200, 500, 1000, 2000, 5000, 10000];
+const SHARE = 0.1;                                  // share of the particles that meet the heat bath in one step
+const TRACE = 240;                                  // steps kept in the trace
+const STEPS_PER_SECOND = 15;
+
+let seed = 4020;                                    // the still picture uses a fixed sequence of random numbers
+const random = fixed ? () => { seed |= 0; seed = seed + 0x6D2B79F5 | 0; let t = Math.imul(seed ^ seed >>> 15, 1 | seed);
+                               t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }
+                     : Math.random;
+
+let N = SIZES[3], T = 300;                          // number of particles, temperature in K
+let state = new Uint8Array(0);                      // 0 for state 1, 1 for state 2
+let n2 = 0;                                         // number of particles in state 2; the energy is E = n2 * epsilon
+let visits = new Float64Array(0);                   // how often each value of n2 has been visited
+let steps = 0, sum = 0, sumSq = 0;                  // for the measured average and standard deviation of n2
+let trace = [];
+let paused = false;
+
+const p2 = () => { const b = Math.exp(-EPSILON / (K_B * T)); return b / (1 + b); };
+const meanN2 = () => N * p2();                      // U / epsilon
+const sigmaN2 = () => Math.sqrt(N * p2() * (1 - p2()));   // sigma_E / epsilon
+
+function restart(fresh) {                           // a new system (fresh) or only a new count
+  if (fresh) {
+    state = new Uint8Array(N); n2 = 0;
+    const p = p2();
+    for (let i = 0; i < N; i++) if (random() < p) { state[i] = 1; n2++; }
+    trace = [n2];
+  }
+  visits = new Float64Array(N + 1); steps = 0; sum = 0; sumSq = 0;
+}
+
+function step() {
+  const p = p2(), meet = Math.max(1, Math.round(SHARE * N));
+  for (let k = 0; k < meet; k++) {
+    const i = Math.floor(random() * N), next = random() < p ? 1 : 0;
+    n2 += next - state[i]; state[i] = next;
+  }
+  visits[n2]++; steps++; sum += n2; sumSq += n2 * n2;
+  trace.push(n2); if (trace.length > TRACE) trace.shift();
+}
+
+/* The binomial distribution P(n2), from logarithms so that it also works for 10,000 particles. */
+function binomial() {
+  const p = p2(), logP = Math.log(p), logQ = Math.log(1 - p), P = new Float64Array(N + 1);
+  let logC = 0;                                     // log of the binomial coefficient
+  for (let n = 0; n <= N; n++) {
+    if (n > 0) logC += Math.log(N - n + 1) - Math.log(n);
+    P[n] = Math.exp(logC + n * logP + (N - n) * logQ);
+  }
+  return P;
+}
+
+/* ---- drawing ---- */
+function prepare(canvas) {
+  const ratio = window.devicePixelRatio || 1, w = canvas.clientWidth, h = canvas.clientHeight;
+  if (canvas.width !== Math.round(w * ratio) || canvas.height !== Math.round(h * ratio)) { canvas.width = Math.round(w * ratio); canvas.height = Math.round(h * ratio); }
+  const g = canvas.getContext("2d");
+  g.setTransform(ratio, 0, 0, ratio, 0, 0); g.clearRect(0, 0, w, h);
+  g.font = "12px Inter, ui-sans-serif, system-ui, sans-serif";
+  return [g, w, h];
+}
+const meV = n => 1e3 * EPSILON * n / N;             // energy per particle in meV for n particles in state 2
+const digits = v => v >= 0.1 ? v.toFixed(3) : v >= 0.01 ? v.toFixed(4) : v.toFixed(5);
+
+function drawParticles() {
+  const [g, w, h] = prepare($("particles"));
+  const cols = Math.ceil(Math.sqrt(N)), rows = Math.ceil(N / cols), pad = 14;
+  const cell = Math.min((w - 2 * pad) / cols, (h - 2 * pad) / rows, 44);
+  const x0 = (w - cell * cols) / 2, y0 = (h - cell * rows) / 2, r = Math.max(0.5, 0.38 * cell);
+  for (const kind of [0, 1]) {                      // all of one color in one path
+    g.fillStyle = kind ? color.blue : color.low; g.beginPath();
+    for (let i = 0; i < N; i++) {
+      if (state[i] !== kind) continue;
+      const X = x0 + (i % cols + 0.5) * cell, Y = y0 + (Math.floor(i / cols) + 0.5) * cell;
+      if (cell < 5) g.rect(X - cell * 0.42, Y - cell * 0.42, cell * 0.84, cell * 0.84);
+      else { g.moveTo(X + r, Y); g.arc(X, Y, r, 0, 2 * Math.PI); }
+    }
+    g.fill();
+  }
+  $("clock").textContent = "Step " + steps.toLocaleString("en-US");
+}
+
+function drawTrace() {
+  const [g, w, h] = prepare($("trace"));
+  const left = 4, right = w - 4, top = 8, bottom = h - 8, plot = right - 52;
+  const Y = n => bottom - n / N * (bottom - top);   // the vertical axis runs from E/N = 0 to epsilon
+  g.textBaseline = "middle"; g.textAlign = "right"; g.fillStyle = color.muted; g.strokeStyle = color.border; g.lineWidth = 1;
+  for (const [f, label] of [[1, "10 meV"], [0.5, "5"], [0, "0"]]) {
+    const y = Math.round(Y(f * N)) + 0.5;
+    g.beginPath(); g.moveTo(left, y); g.lineTo(plot, y); g.stroke(); g.fillText(label, right, y);
+  }
+  const mean = meanN2(), sigma = sigmaN2();
+  g.fillStyle = color["verm-soft"]; g.fillRect(left, Y(Math.min(N, mean + sigma)), plot - left, Y(Math.max(0, mean - sigma)) - Y(Math.min(N, mean + sigma)));
+  g.strokeStyle = color.verm; g.lineWidth = 1.6; g.setLineDash([5, 4]); g.beginPath(); g.moveTo(left, Y(mean)); g.lineTo(plot, Y(mean)); g.stroke(); g.setLineDash([]);
+  if (trace.length) {
+    const dx = (plot - 6 - left) / (TRACE - 1);
+    g.strokeStyle = color.blue; g.lineWidth = 1.4; g.lineJoin = "round"; g.beginPath();
+    trace.forEach((n, k) => { const X = left + k * dx; if (k) g.lineTo(X, Y(n)); else g.moveTo(X, Y(n)); }); g.stroke();
+    g.fillStyle = color.blue; g.beginPath(); g.arc(left + (trace.length - 1) * dx, Y(trace[trace.length - 1]), 3, 0, 2 * Math.PI); g.fill();
+  }
+}
+
+function drawHistogram() {
+  const [g, w, h] = prepare($("hist"));
+  const left = 4, right = w - 4, base = h - 38, span = right - left;
+  // One column of the picture per value of the energy while there is room (at least 3 px); otherwise the values
+  // that fall on the same pixel are added up.
+  const columns = Math.min(N + 1, Math.floor(span / 3)), P = binomial();
+  const exact = new Float64Array(columns), seen = new Float64Array(columns);
+  const column = n => Math.min(columns - 1, Math.floor((n + 0.5) / (N + 1) * columns));
+  for (let n = 0; n <= N; n++) { exact[column(n)] += P[n]; seen[column(n)] += steps ? visits[n] / steps : 0; }
+  let peak = 0; for (const v of exact) peak = Math.max(peak, v);
+  const width = span / columns, Y = v => base - Math.min(v / (1.2 * peak), 1) * (base - 4);
+  g.fillStyle = color["blue-soft"]; g.strokeStyle = color.blue; g.lineWidth = 1;
+  for (let c = 0; c < columns; c++) {
+    if (!seen[c]) continue;
+    const X = left + c * width, gap = width >= 6 ? 1 : 0;
+    g.fillRect(X + gap, Y(seen[c]), width - 2 * gap, base - Y(seen[c]));
+    if (width >= 6) g.strokeRect(X + gap + 0.5, Y(seen[c]) + 0.5, width - 2 * gap - 1, base - Y(seen[c]));
+  }
+  g.strokeStyle = color.verm; g.lineWidth = 2; g.lineJoin = "round"; g.beginPath();   // the distribution, as steps
+  g.moveTo(left, Y(exact[0]));
+  for (let c = 0; c < columns; c++) { g.lineTo(left + c * width, Y(exact[c])); g.lineTo(left + (c + 1) * width, Y(exact[c])); }
+  g.stroke();
+  g.strokeStyle = color.muted; g.lineWidth = 1; g.beginPath(); g.moveTo(left, base + 0.5); g.lineTo(right, base + 0.5); g.stroke();
+  g.fillStyle = color.text; g.textBaseline = "top";
+  for (let e = 0; e <= 10; e += 2) {                // the horizontal axis runs from E/N = 0 to epsilon = 10 meV
+    const X = left + (e / 10 * N + 0.5) / (N + 1) * span;
+    g.beginPath(); g.moveTo(Math.round(X) + 0.5, base); g.lineTo(Math.round(X) + 0.5, base + 4); g.stroke();
+    g.textAlign = e === 0 ? "left" : e === 10 ? "right" : "center"; g.fillText(String(e), e === 0 ? left : e === 10 ? right : X, base + 6);
+  }
+  g.textAlign = "center"; g.fillStyle = color.muted; g.fillText("energy per particle (meV)", (left + right) / 2, base + 22);
+}
+
+function numbers() {
+  const mean = meanN2(), sigma = sigmaN2();
+  $("e-now").textContent = meV(n2).toFixed(2) + " meV";
+  $("e-mean").textContent = meV(mean).toFixed(2) + " meV";
+  $("width").textContent = digits(sigma / mean);
+  if (steps >= 50) {
+    const m = sum / steps, s = Math.sqrt(Math.max(0, sumSq / steps - m * m));
+    $("measured").textContent = "measured over " + steps.toLocaleString("en-US") + " steps: " + (m > 0 ? digits(s / m) : "–");
+  } else $("measured").textContent = "measured: after 50 steps";
+}
+function draw() { drawParticles(); drawTrace(); drawHistogram(); numbers(); }
+
+/* ---- controls ---- */
+function labels() {
+  $("o-n").textContent = N.toLocaleString("en-US"); $("o-t").textContent = T + " K";
+  $("settings").textContent = N.toLocaleString("en-US") + " particles at " + T + " K";
+}
+$("s-n").addEventListener("input", e => { N = SIZES[+e.target.value]; restart(true); labels(); draw(); });
+$("s-t").addEventListener("input", e => { T = +e.target.value; restart(false); labels(); draw(); });
+$("again").addEventListener("click", () => { restart(false); draw(); });
+$("pause").addEventListener("click", e => { paused = !paused; e.target.setAttribute("aria-pressed", paused); e.target.textContent = paused ? "Continue" : "Pause"; });
+
+/* ---- run ---- */
+restart(true); labels();
+if (fixed) {
+  for (let k = 0; k < 600; k++) step();
+  draw();
+} else {
+  let last = null, owed = 0;
+  const frame = now => {
+    if (last !== null && !paused && !document.hidden) {
+      owed += Math.min((now - last) / 1000, 0.1) * STEPS_PER_SECOND;
+      while (owed >= 1) { step(); owed -= 1; }
+    }
+    last = now; draw(); requestAnimationFrame(frame);
+  };
+  requestAnimationFrame(frame);
+}
+try { new ResizeObserver(() => { fit(); if (fixed) draw(); }).observe(document.body); } catch (e) {}
+window.addEventListener("load", fit);
+</script>
+</body>
+</html>
