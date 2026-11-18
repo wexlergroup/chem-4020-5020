@@ -19,6 +19,8 @@ numbering:
 
 See also: [Course-wide Conventions & Notation](../notation.md)
 
+Run the code: [Notebook for Section 2.5](https://wexlergroup.github.io/chem-4020-5020/lite/notebooks/index.html?path=chapter-02/section-05.ipynb), in which you can change and rerun the Python cells of this section in your browser.
+
 ## Overview and Learning Objectives
 
 A particle in a box is the simplest quantized model of translation and provides a clean route to the translational partition function. We review the 1D and 3D energy levels, derive $q_{\mathrm{trans}}=V/\Lambda^3$ in the high-temperature/large-volume limit, and use $Q=q^N/N!$ to recover ideal-gas thermodynamic relations.
