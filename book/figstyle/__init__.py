@@ -138,6 +138,11 @@ def _png(draw, theme):
     return base64.b64encode(buffer.getvalue()).decode("ascii"), width
 
 
+# Added to the description of a figure in a notebook, where a reader can change the code and with it the picture.
+NOTEBOOK_NOTE = ("This text describes the figure as it is in the notes. "
+                 "The picture follows the code, so it differs if the code was changed.")
+
+
 def show(draw, alt=""):
     """Draw the figure for the light and the dark page and display the pair.
 
@@ -149,7 +154,10 @@ def show(draw, alt=""):
 
     if sys.platform == "emscripten":
         # Python runs in the browser: this is a notebook, which has no theme classes and would show both versions.
+        # The description is a fixed sentence of the cell, so it says which figure it describes.
         light, width = _png(draw, LIGHT)
+        if alt:
+            alt = alt.rstrip() + " " + NOTEBOOK_NOTE
         display({"text/html": '<img alt="{alt}" src="data:image/png;base64,{data}" style="display:block;width:{px}px;'
                               'max-width:100%;height:auto;background:{ground}">'.format(
                                   alt=escape(alt, quote=True), data=light, px=round(width * PX_PER_INCH),
