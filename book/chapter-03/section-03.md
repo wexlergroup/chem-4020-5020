@@ -416,6 +416,8 @@ Either approach gives the same result, thanks to Hess's Law.
 
 [](#fig:enthalpy-levels) visualizes the path independence that underlies Hess's Law. The direct route (green arrow) and the stepwise route through the elements (two purple arrows) connect the same initial and final states, so they produce the same $\Delta_r H^\circ$.
 
+% Try this: Start from liquid water: change `'H2O': -241.8` to `'H2O': -285.8`, the standard enthalpy of formation of $\mathrm{H_2O}(l)$. By how much does $\Delta_r H^\circ$ change, and which process accounts for the difference? (The label still reads $\mathrm{H_2O(g)}$.)
+
 ```{code-cell} ipython3
 :label: fig:enthalpy-levels
 :caption: Enthalpy-level diagram for the steam–methane reforming reaction, drawn to scale in $\mathrm{kJ\,mol^{-1}}$ with the elements in their standard states as the zero. The direct path (green arrow) and the stepwise path through the elements (two purple arrows) both connect reactants to products. Because $H$ is a state function, both paths give the same $\Delta_r H^\circ$. This is Hess's Law.
