@@ -365,6 +365,8 @@ G(\xi) - G(0)
 
 The first term is the "bookkeeping" shift in standard chemical potentials, which is linear in $\xi$. The second is the **ideal-mixing** term, $-T\,\Delta_{\mathrm{mix}}S$, where $\Delta_{\mathrm{mix}}S = -R\sum_i n_i\ln y_i$ is the entropy of mixing of the two ideal gases. [](#fig:gibbs-extent) shows their sum.
 
+% Try this: Make the reaction more favorable: change `dG_std` from `-4.73e3` to `-10e3`. Where does the minimum lie now, and does the curve still rise before $\xi = 1$?
+
 ```{code-cell} ipython3
 :label: fig:gibbs-extent
 :caption: Gibbs free energy of the reacting mixture relative to pure $\mathrm{NO_2}$, from Eq. [](#eq:G-xi-NO2), for $2\,\mathrm{NO_2(g)} \rightleftharpoons \mathrm{N_2O_4(g)}$ at $298.15\ \mathrm{K}$ and $P = P^\circ$, starting from 2 mol of $\mathrm{NO_2}$. The dashed line marks $\xi_{\mathrm{eq}} = 0.81$, the value computed from $K = 6.74$.
