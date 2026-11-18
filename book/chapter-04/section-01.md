@@ -19,6 +19,8 @@ numbering:
 
 See also: [Course-wide Conventions & Notation](../notation.md)
 
+Run the code: [Notebook for Section 4.1](https://wexlergroup.github.io/chem-4020-5020/lite/notebooks/index.html?path=chapter-04/section-01.ipynb), in which you can change and rerun the Python cells of this section in your browser.
+
 The course map shows where this module sits in the course and which relations connect the microscopic and macroscopic descriptions. Select a module to unfold its sections.
 
 <iframe
