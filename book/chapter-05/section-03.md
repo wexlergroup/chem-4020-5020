@@ -19,6 +19,8 @@ numbering:
 
 See also: [Course-wide Conventions & Notation](../notation.md)
 
+Run the code: [Notebook for Section 5.3](https://wexlergroup.github.io/chem-4020-5020/lite/notebooks/index.html?path=chapter-05/section-03.ipynb), in which you can change and rerun the Python cells of this section in your browser.
+
 ## Overview and Learning Objectives
 
 Ammonia synthesis is one of the most important industrial chemical processes: the Haber–Bosch reaction produces the nitrogen feedstock for most synthetic fertilizers, supporting roughly half the world's food production. It is also a textbook example of the tension between thermodynamics and kinetics. At room temperature the reaction is thermodynamically favorable ($\Delta_r G^\circ < 0$) but kinetically inert. Raising the temperature makes the kinetics manageable but can push $\Delta_r G^\circ$ positive. Increasing pressure can restore favorability for reactions that decrease the number of gas molecules. Understanding and quantifying these tradeoffs is the goal of this section.
