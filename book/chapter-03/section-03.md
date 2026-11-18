@@ -19,6 +19,8 @@ numbering:
 
 See also: [Course-wide Conventions & Notation](../notation.md)
 
+Run the code: [Notebook for Section 3.3](https://wexlergroup.github.io/chem-4020-5020/lite/notebooks/index.html?path=chapter-03/section-03.ipynb), in which you can change and rerun the Python cells of this section in your browser.
+
 ## Overview and Learning Objectives
 
 Most chemistry happens at constant pressure—reactions in open beakers, biological processes at atmospheric pressure, industrial reactors vented to the atmosphere. Under these conditions, the heat we measure is not $\Delta U$ but something slightly different: some of the energy goes into $PV$ work as the system expands or contracts against the atmosphere. Enthalpy $H = U + PV$ provides the natural accounting for constant-pressure heat flow, absorbing that $PV$ bookkeeping into a single state function.
