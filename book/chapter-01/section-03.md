@@ -265,16 +265,19 @@ from scipy.constants import N_A, k as k_B
 
 window = 10.0                                              # width of each slice (nm)
 diameter = 0.364                                           # kinetic diameter of N2 (nm)
-d_gas = (k_B * 300 / 1e5) ** (1 / 3) * 1e9                 # mean spacing at 300 K and 1 bar (nm), from the equation above
+T_gas, P_gas = 300, 1e5                                    # temperature (K) and pressure (Pa) of the gas
+d_gas = (k_B * T_gas / P_gas) ** (1 / 3) * 1e9             # mean spacing of the gas (nm), from the equation above
 d_liquid = (28.0134e-3 / (806.2 * N_A)) ** (1 / 3) * 1e9   # liquid N2 at its boiling point, 806.2 kg/m^3 (nm)
 
 rng = np.random.default_rng(4020)
 
-# Gas: a slice one mean spacing thick holds (window / d_gas)^2 molecules. They are placed at random.
+# Gas: a slice one mean spacing thick holds (window / d_gas)^2 molecules. They are placed at random, no closer to
+# each other than 1.5 nm (in a denser gas, than 0.6 mean spacings, so that all of them find a place).
+closest = min(1.5, 0.6 * d_gas)
 gas = []
 while len(gas) < round((window / d_gas) ** 2):
     point = rng.uniform(0.4, window - 0.4, 2)
-    if all(np.hypot(*(point - other)) > 1.5 for other in gas):
+    if all(np.hypot(*(point - other)) > closest for other in gas):
         gas.append(point)
 
 # Liquid: one layer of molecules in contact, as a hexagonal arrangement with small random displacements.
@@ -287,7 +290,8 @@ liquid = np.array(liquid) + rng.normal(0, 0.025, (len(liquid), 2))
 
 def draw_to_scale(c):
     fig, axs = plt.subplots(1, 2, figsize=(fs.WIDTH, 3.75), constrained_layout=True)
-    for ax, letter, title, points in zip(axs, "ab", ["Gas at 300 K and 1 bar", "Liquid"], [gas, liquid]):
+    titles = [f"Gas at {T_gas:g} K and {P_gas / 1e5:g} bar", "Liquid"]
+    for ax, letter, title, points in zip(axs, "ab", titles, [gas, liquid]):
         ax.add_patch(Rectangle((0, 0), window, window, fc="none", ec=c.muted, lw=0.9, zorder=3))
         for x, y in points:
             ax.add_patch(Circle((x, y), diameter / 2, fc=c.blue, ec="none", clip_path=None))
