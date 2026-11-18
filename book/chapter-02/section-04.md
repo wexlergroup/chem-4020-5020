@@ -19,6 +19,8 @@ numbering:
 
 See also: [Course-wide Conventions & Notation](../notation.md)
 
+Run the code: [Notebook for Section 2.4](https://wexlergroup.github.io/chem-4020-5020/lite/notebooks/index.html?path=chapter-02/section-04.ipynb), in which you can change and rerun the Python cells of this section in your browser.
+
 ## Overview and Learning Objectives
 
 Molecular partition functions extend the canonical framework from a single particle to many particles, and then to molecules with internal degrees of freedom. This section shows how distinguishability affects counting (and therefore $Q$), introduces the $1/N!$ correction for identical particles, and motivates factorization into translational, rotational, vibrational, and electronic contributions.
