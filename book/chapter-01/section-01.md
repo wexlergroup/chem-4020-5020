@@ -418,6 +418,8 @@ Heat
 
 The energies in this course span many orders of magnitude, and they are quoted per mole (kJ/mol) or per molecule (eV, or cm$^{-1}$ in spectroscopy). [](#fig:energy-scales) places several of them on one logarithmic axis.
 
+% Try this: Add an energy of your own to the list `energies`. For example, add the line `("photon of green light, 500 nm", h * c_light / 500e-9 * N_A / 1000),` above the line of the H–H bond. Which of the other energies is it closest to?
+
 ```{code-cell} ipython3
 :label: fig:energy-scales
 :caption: Energies that appear in this course on one logarithmic axis, in kJ/mol, with the equivalent energies per molecule in eV and in cm$^{-1}$. The thermal energy $k_{\mathrm{B}}T$ at room temperature (orange; per mole, $RT = 2.48\ \mathrm{kJ\,mol^{-1}}$) is the yardstick with which the other energies are compared throughout the course. The rotational and vibrational quanta of HI follow from the constants in [Section 7.2](../chapter-07/section-02.md), and the hydrogen-bond energy is the estimate of [Section 6.2](../chapter-06/section-02.md).
