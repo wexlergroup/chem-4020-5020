@@ -406,6 +406,8 @@ p_2 = 1 - p_1.
 
 When energies are measured from the lowest state ($E_1 = 0$), every Boltzmann factor $e^{-\beta E_m}$ is at most 1, and the factor for the lowest state equals 1. The partition function therefore lies between 1 and the total number of microstates, and it can be read as the effective number of microstates that are thermally accessible at temperature $T$. [](#fig:two-state-probabilities) shows $Q_\text{two-state}$ and the two probabilities as functions of temperature for $E_1 = 0$ and $\Delta E = 0.01\ \mathrm{eV}$. The dashed lines in panel (a) mark the low- and high-temperature limits of $Q_\text{two-state}$.
 
+% Try this: Change the energy of state 2, `E2`, from `0.01` to `0.05`. At which temperature does $p_2$ reach 0.25 now, and by what factor has that temperature changed?
+
 ```{code-cell} ipython3
 :label: fig:two-state-probabilities
 :caption: Two-state system with $E_1 = 0$ and $\Delta E = 0.01\ \mathrm{eV}$ as a function of temperature. (a) The partition function $Q_\text{two-state}$ rises from 1, where only state 1 is thermally accessible, toward 2, where both states are. (b) Probabilities $p_1$ and $p_2$ of finding the system in state 1 and in state 2.
