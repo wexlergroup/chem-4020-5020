@@ -152,6 +152,8 @@ As an example, place $N$ distinguishable particles in a box and record only whic
 
 microstates. [](#fig:two-halves) shows all microstates for $N = 4$ and the shape of $\Omega(n_L)$ for larger $N$.
 
+% Try this: Change `N_LARGE` from `[10, 100, 1000]` to `[100, 400, 1600]`, so that $N$ grows by a factor of 4 from curve to curve. By what factor does the width of the peak shrink from curve to curve?
+
 ```{code-cell} ipython3
 :label: fig:two-halves
 :caption: Microstates of $N$ distinguishable particles in the two halves of a box. (a) The $2^4 = 16$ microstates for $N = 4$, sorted by the number $n_L$ of particles in the left half. Each color marks one particle. (b) The number of microstates $\Omega(n_L)$, divided by its largest value $\Omega_{\max}$, against the fraction of the particles in the left half for three values of $N$. As $N$ grows, almost all microstates lie close to the even split.
@@ -291,6 +293,8 @@ S = -k_{\mathrm{B}} \sum_{i=1}^{M} p_i\,\ln p_i.
 A microstate with $p_i = 0$ contributes nothing to the sum, because $p\ln p \to 0$ as $p \to 0$. For two independent subsystems $A$ and $B$, the probability that $A$ is in microstate $i$ while $B$ is in microstate $j$ is the product $p_i^{(A)}\,p_j^{(B)}$.
 
 [](#fig:gibbs-entropy) compares three distributions over the same six microstates.
+
+% Try this: Change `M_STATES` from `6` to `12`. By how much does the entropy of each distribution grow, and why does the entropy of the concentrated one hardly change?
 
 ```{code-cell} ipython3
 :label: fig:gibbs-entropy
