@@ -342,7 +342,7 @@ Use $R=8.3145\ \mathrm{J\,mol^{-1}\,K^{-1}}$. Along a reversible adiabat of this
 
 6. **Totals for Paths 1 and 2**
 
-   | | $q_{\mathrm{rev}}$ (J) | $\Delta S$ ($\mathrm{J\,K^{-1}}$) |
+   | Path | $q_{\mathrm{rev}}$ (J) | $\Delta S$ ($\mathrm{J\,K^{-1}}$) |
    |---|---:|---:|
    | Path 1 | $2494+4841=7335$ | $6.994+11.526=18.52$ |
    | Path 2 | $3458+2494=5952$ | $11.526+6.994=18.52$ |
@@ -376,7 +376,7 @@ Use $R=8.3145\ \mathrm{J\,mol^{-1}\,K^{-1}}$. Along a reversible adiabat of this
 
 **Result.** The three paths have different heats and the same entropy change.
 
-| | $q_{\mathrm{rev}}$ (J) | $\Delta S$ ($\mathrm{J\,K^{-1}}$) |
+| Path | $q_{\mathrm{rev}}$ (J) | $\Delta S$ ($\mathrm{J\,K^{-1}}$) |
 |---|---:|---:|
 | Path 1 | 7335 | 18.52 |
 | Path 2 | 5952 | 18.52 |
