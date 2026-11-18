@@ -6,10 +6,6 @@ project:
   github: wexlergroup/chem-4020-5020
   bibliography:
     - references.bib
-  exports:
-    - format: pdf
-      template: plain_latex_book
-      output: exports/book.pdf
   toc:
     - file: intro.md
     - file: notation.md
