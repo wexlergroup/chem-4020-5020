@@ -19,6 +19,8 @@ numbering:
 
 See also: [Course-wide Conventions & Notation](../notation.md)
 
+Run the code: [Notebook for Section 6.2](https://wexlergroup.github.io/chem-4020-5020/lite/notebooks/index.html?path=chapter-06/section-02.ipynb), in which you can change and rerun the Python cells of this section in your browser.
+
 ## Overview and Learning Objectives
 
 In [Section 6.1](section-01.md) we showed that two phases of a pure substance are in equilibrium at a given $(T,P)$ if and only if their chemical potentials are equal:
