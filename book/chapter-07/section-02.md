@@ -19,6 +19,8 @@ numbering:
 
 See also: [Course-wide Conventions & Notation](../notation.md)
 
+Run the code: [Notebook for Section 7.2](https://wexlergroup.github.io/chem-4020-5020/lite/notebooks/index.html?path=chapter-07/section-02.ipynb), in which you can change and rerun the Python cells of this section in your browser.
+
 ## Overview and Learning Objectives
 
 [Section 7.1](section-01.md) derived the equilibrium constant from macroscopic thermochemistry: given $\Delta_r H^\circ$ and $\Delta_r S^\circ$ (e.g., from the [NIST-JANAF Thermochemical Tables](https://janaf.nist.gov/) or the Active Thermochemical Tables), one computes $\Delta_r G^\circ$ and then $K = \exp(-\Delta_r G^\circ/RT)$.
