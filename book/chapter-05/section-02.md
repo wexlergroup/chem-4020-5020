@@ -19,6 +19,8 @@ numbering:
 
 See also: [Course-wide Conventions & Notation](../notation.md)
 
+Run the code: [Notebook for Section 5.2](https://wexlergroup.github.io/chem-4020-5020/lite/notebooks/index.html?path=chapter-05/section-02.ipynb), in which you can change and rerun the Python cells of this section in your browser.
+
 ## Overview and Learning Objectives
 
 The first and second laws tell us *how* energy and entropy change but leave the entropy scale with an undetermined reference point — the integration constant in $\Delta S = \int \delta q_{\mathrm{rev}}/T$ is never fixed. The third law resolves this by specifying what happens to entropy as $T \to 0$. Using Boltzmann's formula ([Section 4.3](../chapter-04/section-03.md)), we explain why an ideal crystal has $S(0) = 0$, examine how ground-state degeneracy or frozen-in disorder produces a nonzero *residual entropy*, and note two further consequences: heat capacities must vanish as $T \to 0$, and absolute zero itself is unattainable in a finite number of steps.
