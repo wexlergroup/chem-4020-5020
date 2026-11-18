@@ -1,0 +1,334 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The P–V–T surface of an ideal gas · Physical Chemistry II</title>
+<!--
+  The P-V-T surface: an interactive companion to Section 1.3 (ideal-gas equation of state). This file is written
+  by hand (it is not built from development/).
+
+  The states of an ideal gas with a fixed number of particles form one surface, P = N k_B T / V. The page draws
+  the surface for N = N_A (one mole) and shows the three gas laws as cuts through it: Boyle (constant T),
+  Charles (constant P), and Gay-Lussac (constant V). The reader chooses the variable that is held constant and
+  moves the state along the corresponding cut.
+
+      pvt-surface.html               the interactive page
+      pvt-surface.html?static=1      one still picture, for the PDF of the notes
+      ...&theme=light or dark        fixes the colors (otherwise the page follows the book or the system)
+
+  Inside the notes, the page follows the light or dark mode of the book and sets the height of its own frame.
+
+  Units inside the program: pressure in bar, volume in L, temperature in K.
+-->
+<style>
+  :root {
+    --ground: #ffffff; --text: #1c1917; --muted: #6b645e; --border: #dedad5; --fill: #f1f0ee; --shade: #d9d6d1;
+    --blue: #0072b2; --on-blue: #ffffff; --verm: #b84f00; --green: #00795a;
+  }
+  :root[data-theme="dark"] {
+    --ground: #1c1917; --text: #f5f5f4; --muted: #a8a29e; --border: #3a3531; --fill: #2a2623; --shade: #45403b;
+    --blue: #56b4e9; --on-blue: #111111; --verm: #f4915a; --green: #3fcf9f;
+  }
+  * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body { margin: 0; background: var(--ground); color: var(--text);
+         font: 15px/1.45 Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+  main { max-width: 760px; margin: 0 auto; padding: 24px 16px 40px; }
+  .embedded main { max-width: none; padding: 0 0 12px; }
+  h1 { font-size: 1.5rem; line-height: 1.2; margin: 0 0 6px; }
+  .embedded h1, .embedded .lede { display: none; }
+  .lede { color: var(--muted); margin: 0 0 18px; max-width: 64ch; }
+  i.v { font-style: italic; font-family: inherit; }
+  .sim { display: grid; grid-template-columns: minmax(0, 1.42fr) minmax(0, 1fr); gap: 18px; align-items: start; }
+  @media (max-width: 600px) {                      /* on a phone: picture, controls, then the three small plots */
+    main { display: flex; flex-direction: column; } .sim { display: contents; }
+    .controls { order: 2; margin-top: 4px; } .laws { order: 3; margin-top: 14px; } .hint { order: 4; }
+  }
+  canvas { display: block; width: 100%; }
+  #surface { aspect-ratio: 1 / 0.9; touch-action: pan-y; cursor: grab; border-radius: 8px; }
+  #surface:active { cursor: grabbing; }
+  .state { display: none; flex-wrap: wrap; gap: 4px 18px; margin-top: 4px; font-variant-numeric: tabular-nums; }
+  .static .state { display: flex; }
+  .state b { font-weight: 600; }
+  .laws { display: grid; gap: 8px; }
+  .law { border: 1px solid var(--border); border-radius: 8px; padding: 6px 8px 4px; }
+  .law .name { font-size: 0.86rem; line-height: 1.3; }
+  .law .name span { color: var(--muted); }
+  .law canvas { height: 92px; margin-top: 2px; }
+  .law[data-hold="T"] .name b { color: var(--blue); } .law[data-hold="P"] .name b { color: var(--verm); } .law[data-hold="V"] .name b { color: var(--green); }
+  .law.on[data-hold="T"] { border-color: var(--blue); box-shadow: inset 0 0 0 1px var(--blue); }
+  .law.on[data-hold="P"] { border-color: var(--verm); box-shadow: inset 0 0 0 1px var(--verm); }
+  .law.on[data-hold="V"] { border-color: var(--green); box-shadow: inset 0 0 0 1px var(--green); }
+  .controls { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px 18px; margin-top: 14px;
+              padding-top: 12px; border-top: 1px solid var(--border); }
+  @media (max-width: 600px) { .controls { grid-template-columns: minmax(0, 1fr); border-top: 0; padding-top: 0; } }
+  label { display: block; font-size: 0.9rem; }
+  label output { float: right; font-variant-numeric: tabular-nums; color: var(--muted); }
+  label.held { color: var(--muted); }
+  input[type="range"] { width: 100%; margin: 4px 0 0; accent-color: var(--blue); }
+  .row { grid-column: 1 / -1; display: flex; gap: 8px 12px; flex-wrap: wrap; align-items: center; font-size: 0.9rem; }
+  .seg { display: inline-flex; gap: 4px; flex-wrap: wrap; }
+  button { font: inherit; font-size: 0.88rem; color: var(--text); background: var(--fill); border: 1px solid var(--border);
+           border-radius: 999px; padding: 4px 12px; cursor: pointer; }
+  button:hover { border-color: var(--muted); }
+  button[aria-pressed="true"] { background: var(--blue); border-color: var(--blue); color: var(--on-blue); font-weight: 600; }
+  button:focus-visible, input:focus-visible, canvas:focus-visible { outline: 2px solid var(--blue); outline-offset: 2px; }
+  .hint { font-size: 0.84rem; color: var(--muted); margin: 12px 0 0; }
+  .static .controls, .static .hint, .static h1, .static .lede { display: none; }
+  .static main { padding: 0; }
+</style>
+</head>
+<body>
+<main>
+  <h1>The <i class="v">P</i>–<i class="v">V</i>–<i class="v">T</i> surface of an ideal gas</h1>
+  <p class="lede">For a fixed number of particles, every state of an ideal gas lies on one surface. Each gas law is a cut through this surface. Choose the variable to hold constant, and move the state along the cut.</p>
+
+  <div class="sim">
+    <div>
+      <canvas id="surface" tabindex="0" role="img" aria-label="Surface of the pressure of an ideal gas over the plane of volume and temperature, with the current state and the three cuts through it"></canvas>
+      <div class="state" aria-live="polite">
+        <span><i class="v">P</i> = <b id="r-p"></b></span><span><i class="v">V</i> = <b id="r-v"></b></span><span><i class="v">T</i> = <b id="r-t"></b></span>
+      </div>
+    </div>
+    <div class="laws">
+      <div class="law" data-hold="T"><div class="name"><b>Boyle</b> <span>· <i class="v">P</i> against <i class="v">V</i> at constant <i class="v">T</i></span></div><canvas id="c-T" role="img" aria-label="Pressure against volume at the current temperature"></canvas></div>
+      <div class="law" data-hold="P"><div class="name"><b>Charles</b> <span>· <i class="v">V</i> against <i class="v">T</i> at constant <i class="v">P</i></span></div><canvas id="c-P" role="img" aria-label="Volume against temperature at the current pressure"></canvas></div>
+      <div class="law" data-hold="V"><div class="name"><b>Gay-Lussac</b> <span>· <i class="v">P</i> against <i class="v">T</i> at constant <i class="v">V</i></span></div><canvas id="c-V" role="img" aria-label="Pressure against temperature at the current volume"></canvas></div>
+    </div>
+  </div>
+
+  <div class="controls">
+    <div class="row">
+      <span>Hold constant</span>
+      <span class="seg" id="hold" role="group" aria-label="Variable that is held constant">
+        <button type="button" data-hold="T" aria-pressed="true">Temperature</button>
+        <button type="button" data-hold="P" aria-pressed="false">Pressure</button>
+        <button type="button" data-hold="V" aria-pressed="false">Volume</button>
+      </span>
+    </div>
+    <label id="l-P">Pressure <i class="v">P</i> <output id="o-P"></output><input id="s-P" type="range" min="0.17" max="10" step="0.01"></label>
+    <label id="l-V">Volume <i class="v">V</i> <output id="o-V"></output><input id="s-V" type="range" min="5" max="50" step="0.1"></label>
+    <label id="l-T">Temperature <i class="v">T</i> <output id="o-T"></output><input id="s-T" type="range" min="100" max="600" step="1"></label>
+  </div>
+  <p class="hint">The surface is drawn for one mole of gas (<i class="v">N</i> = <i class="v">N</i><sub>A</sub>). The thick curve is the cut for the variable that is held constant, and the two thin curves are the other two cuts through the same state. Drag the surface sideways, or use the arrow keys, to turn it.</p>
+</main>
+
+<script>
+"use strict";
+const params = new URLSearchParams(location.search);
+const fixed = params.has("static");
+document.body.classList.toggle("static", fixed);
+
+/* ---- colors of the book, and the height of the frame ---- */
+let host = null;
+try { if (window.parent !== window) host = window.parent.document.documentElement; } catch (e) { host = null; }
+try { if (window.frameElement) document.body.classList.add("embedded"); } catch (e) {}
+let color = {};
+function theme() {
+  let dark = false;
+  if (params.get("theme")) dark = params.get("theme") === "dark";
+  else if (host) dark = host.classList.contains("dark");
+  else { try { dark = window.matchMedia("(prefers-color-scheme: dark)").matches; } catch (e) {} }
+  document.documentElement.dataset.theme = dark ? "dark" : "light";
+  const css = getComputedStyle(document.documentElement);
+  for (const name of ["ground", "text", "muted", "border", "fill", "shade", "blue", "verm", "green"]) color[name] = css.getPropertyValue("--" + name).trim();
+  if (typeof draw === "function") draw();
+}
+
+function fit() {                                    // inside the notes, make the frame as tall as the content
+  try {
+    const frame = window.frameElement;
+    if (!frame) return;
+    const height = Math.ceil(document.documentElement.getBoundingClientRect().height) + "px";
+    frame.style.height = height;
+    const box = frame.parentElement;                // the book theme wraps a frame in a box with a fixed 5:3 shape
+    if (box && box.style.paddingBottom) { box.style.paddingBottom = "0"; box.style.display = "block"; }
+    if (box && box.style.paddingBottom === "0px") box.style.height = height;
+  } catch (e) {}
+}
+
+/* ---- the gas ---- */
+const R = 0.08314462618;                            // L bar / (mol K); the surface is drawn for one mole
+const V_MIN = 5, V_MAX = 50, T_MIN = 100, T_MAX = 600, P_MAX = 10;   // L, K, bar; the surface starts at T = 0
+const P_MIN = R * T_MIN / V_MAX;
+let T = 300, V = 25, hold = "T", heldP = R * T / V;
+const pressure = () => (hold === "P" ? heldP : R * T / V);
+const clamp = (x, lo, hi) => Math.min(Math.max(x, lo), hi);
+
+// Move one variable. The held variable stays, and the third follows from P V = N k_B T.
+function move(name, value) {
+  if (hold === "T") {
+    if (name === "P") value = R * T / clamp(value, P_MIN, P_MAX);
+    if (name !== "T") V = clamp(value, Math.max(V_MIN, R * T / P_MAX), V_MAX);
+  } else if (hold === "V") {
+    if (name === "P") value = value * V / R;
+    if (name !== "V") T = clamp(value, T_MIN, Math.min(T_MAX, P_MAX * V / R));
+  } else {
+    if (name === "V") value = heldP * value / R;
+    if (name !== "P") { T = clamp(value, Math.max(T_MIN, heldP * V_MIN / R), Math.min(T_MAX, heldP * V_MAX / R)); V = R * T / heldP; }
+  }
+  update();
+}
+
+/* ---- drawing ---- */
+const $ = id => document.getElementById(id);
+function prepare(canvas) {
+  const ratio = window.devicePixelRatio || 1, w = canvas.clientWidth, h = canvas.clientHeight;
+  if (canvas.width !== Math.round(w * ratio) || canvas.height !== Math.round(h * ratio)) { canvas.width = Math.round(w * ratio); canvas.height = Math.round(h * ratio); }
+  const g = canvas.getContext("2d"); g.setTransform(ratio, 0, 0, ratio, 0, 0); g.clearRect(0, 0, w, h);
+  g.font = "12px Inter, ui-sans-serif, system-ui, sans-serif"; g.lineJoin = "round"; g.lineCap = "round";
+  return [g, w, h];
+}
+function mix(a, b, t) {                              // between two colors written as #rrggbb
+  const p = c => [1, 3, 5].map(i => parseInt(c.slice(i, i + 2), 16)), A = p(a), B = p(b);
+  return "rgb(" + A.map((x, i) => Math.round(x + (B[i] - x) * t)).join(",") + ")";
+}
+
+// The view. The surface is seen from above the corner of large volume and low temperature, where no part of
+// it hides another part.
+let turn = 38, tilt = 27;                           // degrees
+function drawSurface() {
+  const [g, w, h] = prepare($("surface"));
+  const a = turn * Math.PI / 180, e = tilt * Math.PI / 180;
+  const flat = (v, t, p) => {                        // volume, temperature, pressure -> right, up, depth (box of size 1)
+    const x = (v - V_MIN) / (V_MAX - V_MIN) - 0.5, y = t / T_MAX - 0.5, z = Math.min(p, P_MAX) / P_MAX * 0.8 - 0.4;
+    const xr = x * Math.cos(a) + y * Math.sin(a), yr = -x * Math.sin(a) + y * Math.cos(a);
+    return [xr, z * Math.cos(e) + yr * Math.sin(e), yr * Math.cos(e) - z * Math.sin(e)];
+  };
+  // Scale and place the box so that it fills the picture and leaves room for the labels of the axes.
+  const box = [];
+  for (const v of [V_MIN, V_MAX]) for (const t of [0, T_MAX]) for (const p of [0, P_MAX]) box.push(flat(v, t, p));
+  const xs = box.map(c => c[0]), ys = box.map(c => c[1]), room = { left: 34, right: 40, top: 30, bottom: 48 };
+  const S = Math.min((w - room.left - room.right) / (Math.max(...xs) - Math.min(...xs)), (h - room.top - room.bottom) / (Math.max(...ys) - Math.min(...ys)));
+  const cx = room.left + (w - room.left - room.right) / 2 - S * (Math.max(...xs) + Math.min(...xs)) / 2;
+  const cy = room.top + (h - room.top - room.bottom) / 2 + S * (Math.max(...ys) + Math.min(...ys)) / 2;
+  const point = (v, t, p) => { const c = flat(v, t, p); return [cx + S * c[0], cy - S * c[1], c[2]]; };
+  const P = (v, t) => R * t / v;
+  const line = (points, stroke, width, dash) => {
+    g.strokeStyle = stroke; g.lineWidth = width; g.setLineDash(dash || []); g.beginPath();
+    points.forEach(([x, y], k) => (k ? g.lineTo(x, y) : g.moveTo(x, y))); g.stroke(); g.setLineDash([]);
+  };
+  const along = (f, from, to, n = 60) => Array.from({ length: n + 1 }, (_, k) => f(from + (to - from) * k / n));
+
+  // floor and axes
+  const floor = [[V_MIN, 0], [V_MAX, 0], [V_MAX, T_MAX], [V_MIN, T_MAX]].map(([v, t]) => point(v, t, 0));
+  g.fillStyle = mix(color.ground, color.fill, 0.5); g.beginPath(); floor.forEach(([x, y], k) => (k ? g.lineTo(x, y) : g.moveTo(x, y))); g.closePath(); g.fill();
+  line([...floor, floor[0]], color.border, 1);
+  line([point(V_MAX, T_MAX, 0), point(V_MAX, T_MAX, P(V_MAX, T_MAX))], color.border, 1);
+
+  // the surface, in small patches from the back to the front, shaded by its slope
+  const nv = 45, nt = 24, patches = [];
+  for (let i = 0; i < nv; i++) for (let j = 0; j < nt; j++) {
+    const v0 = V_MIN + (V_MAX - V_MIN) * i / nv, v1 = V_MIN + (V_MAX - V_MIN) * (i + 1) / nv, t0 = T_MAX * j / nt, t1 = T_MAX * (j + 1) / nt;
+    const corners = [point(v0, t0, P(v0, t0)), point(v1, t0, P(v1, t0)), point(v1, t1, P(v1, t1)), point(v0, t1, P(v0, t1))];
+    const steep = Math.min(1, (P(v0, t1) - P(v1, t0)) / P_MAX * 9);
+    patches.push([corners.reduce((s, c) => s + c[2], 0), corners, steep]);
+  }
+  patches.sort((p, q) => q[0] - p[0]);
+  for (const [, corners, steep] of patches) {
+    g.fillStyle = g.strokeStyle = mix(color.fill, color.shade, 0.15 + 0.85 * steep); g.lineWidth = 0.6;
+    g.beginPath(); corners.forEach(([x, y], k) => (k ? g.lineTo(x, y) : g.moveTo(x, y))); g.closePath(); g.fill(); g.stroke();
+  }
+  // mesh: lines of constant volume and of constant temperature
+  for (let v = V_MIN; v <= V_MAX; v += 5) line(along(t => point(v, t, P(v, t)), 0, T_MAX, 24), color.border, 1);
+  for (let t = 0; t <= T_MAX; t += 100) line(along(v => point(v, t, P(v, t)), V_MIN, V_MAX), color.border, 1);
+
+  // axes: ticks and names. The volume axis is the front edge on the left, the temperature axis is the front
+  // edge on the right, and the pressure axis stands on the left corner, where the surface meets the floor.
+  g.fillStyle = color.muted; g.textBaseline = "middle";
+  const out = (from, to, d) => { const dx = to[0] - from[0], dy = to[1] - from[1], n = Math.hypot(dx, dy) || 1; return [to[0] + dx / n * d, to[1] + dy / n * d]; };
+  const name = (symbol, unit, x, y, align) => {       // an italic symbol and its unit; align is 0 (left), 0.5, or 1 (right)
+    const plain = g.font;
+    g.font = "italic " + plain; const ws = g.measureText(symbol).width; g.font = plain; const wu = g.measureText(" " + unit).width;
+    x -= (ws + wu) * align; g.fillStyle = color.text; g.textAlign = "left";
+    g.font = "italic " + plain; g.fillText(symbol, x, y); g.font = plain; g.fillText(" " + unit, x + ws, y);
+  };
+  g.textAlign = "right";
+  for (const v of [10, 20, 30, 40, 50]) { const at = point(v, 0, 0), inside = point(v, 60, 0), o = out(inside, at, 8); line([at, out(inside, at, 4)], color.muted, 1); g.fillText(String(v), o[0], o[1] + 5); }
+  g.textAlign = "left";
+  for (const t of [0, 200, 400, 600]) { const at = point(V_MAX, t, 0), inside = point(V_MAX - 5, t, 0), o = out(inside, at, 8); line([at, out(inside, at, 4)], color.muted, 1); g.fillText(String(t), o[0], o[1] + 5); }
+  const foot = point(V_MIN, 0, 0), head = point(V_MIN, 0, P_MAX);
+  line([foot, head], color.muted, 1);
+  g.textAlign = "right"; g.fillStyle = color.muted;
+  for (const p of [5, 10]) { const at = point(V_MIN, 0, p); line([at, [at[0] - 4, at[1]]], color.muted, 1); g.fillText(String(p), at[0] - 8, at[1]); }
+  // The names stand between two ticks and farther out than the numbers.
+  let o = out(point(25, 60, 0), point(25, 0, 0), 38); name("V", "(L)", o[0], o[1] + 5, 1);
+  o = out(point(V_MAX - 5, 300, 0), point(V_MAX, 300, 0), 42); name("T", "(K)", o[0], o[1] + 5, 0);
+  name("P", "(bar)", head[0], head[1] - 14, 0.5);
+
+  // the three cuts through the state, and the state
+  const p0 = pressure();
+  const cuts = {
+    T: [color.blue, along(v => point(v, T, P(v, T)), Math.max(V_MIN, R * T / P_MAX), V_MAX)],
+    P: [color.verm, along(t => point(R * t / p0, t, p0), p0 * V_MIN / R, Math.min(T_MAX, p0 * V_MAX / R))],
+    V: [color.green, along(t => point(V, t, P(V, t)), 0, Math.min(T_MAX, P_MAX * V / R))],
+  };
+  for (const name of ["T", "P", "V"].filter(n => n !== hold).concat(hold)) line(cuts[name][1], cuts[name][0], name === hold ? 3.4 : 1.6);
+  const at = point(V, T, p0), below = point(V, T, 0);
+  line([at, below], color.muted, 1, [3, 3]); line([point(V, 0, 0), below, point(V_MAX, T, 0)], color.muted, 1, [3, 3]);
+  g.fillStyle = color.text; g.strokeStyle = color.ground; g.lineWidth = 2; g.beginPath(); g.arc(at[0], at[1], 5.5, 0, 2 * Math.PI); g.fill(); g.stroke();
+}
+
+// One small plot: a cut through the state, on fixed axes.
+function drawCut(id, xmax, ymax, xname, yname, f, from, to, x0, y0, stroke) {
+  const [g, w, h] = prepare($(id));
+  const left = 44, right = w - 8, top = 8, bottom = h - 18;
+  const X = x => left + (right - left) * x / xmax, Y = y => bottom - (bottom - top) * Math.min(y, ymax) / ymax;
+  g.strokeStyle = color.muted; g.lineWidth = 1; g.beginPath(); g.moveTo(left + 0.5, top); g.lineTo(left + 0.5, bottom + 0.5); g.lineTo(right, bottom + 0.5); g.stroke();
+  g.fillStyle = color.muted; g.textBaseline = "top"; g.textAlign = "left"; g.fillText("0", left, bottom + 4); g.textAlign = "right"; g.fillText(xmax + " " + xname, right, bottom + 4);
+  g.textBaseline = "middle"; g.fillText(ymax + " " + yname, left - 5, top + 2); g.fillText("0", left - 5, bottom);
+  g.save(); g.beginPath(); g.rect(left, top - 2, right - left + 2, bottom - top + 2); g.clip();
+  g.strokeStyle = stroke; g.lineWidth = 2.2; g.beginPath();
+  for (let k = 0; k <= 80; k++) { const x = from + (to - from) * k / 80; if (k) g.lineTo(X(x), Y(f(x))); else g.moveTo(X(x), Y(f(x))); }
+  g.stroke(); g.restore();
+  g.fillStyle = color.text; g.strokeStyle = color.ground; g.lineWidth = 2; g.beginPath(); g.arc(X(x0), Y(y0), 4.5, 0, 2 * Math.PI); g.fill(); g.stroke();
+}
+
+function draw() {
+  const p0 = pressure();
+  drawSurface();
+  drawCut("c-T", V_MAX, P_MAX, "L", "bar", v => R * T / v, R * T / P_MAX, V_MAX, V, p0, color.blue);
+  drawCut("c-P", T_MAX, V_MAX, "K", "L", t => R * t / p0, 0, T_MAX, T, V, color.verm);
+  drawCut("c-V", T_MAX, P_MAX, "K", "bar", t => R * t / V, 0, T_MAX, T, p0, color.green);
+}
+
+/* ---- controls ---- */
+function update() {
+  const p0 = pressure(), text = { P: p0.toFixed(2) + " bar", V: V.toFixed(1) + " L", T: T.toFixed(0) + " K" };
+  $("s-P").value = p0; $("s-V").value = V; $("s-T").value = T;
+  for (const name of ["P", "V", "T"]) {
+    $("o-" + name).textContent = text[name] + (name === hold ? " (held)" : "");
+    $("s-" + name).disabled = name === hold; $("l-" + name).classList.toggle("held", name === hold);
+    $("r-" + name.toLowerCase()).textContent = text[name];
+  }
+  document.querySelectorAll(".law").forEach(card => card.classList.toggle("on", card.dataset.hold === hold));
+  $("hold").querySelectorAll("button").forEach(b => b.setAttribute("aria-pressed", b.dataset.hold === hold ? "true" : "false"));
+  draw();
+}
+for (const name of ["P", "V", "T"]) $("s-" + name).addEventListener("input", e => move(name, +e.target.value));
+$("hold").addEventListener("click", e => {
+  const b = e.target.closest("button"); if (!b) return;
+  heldP = R * T / V; hold = b.dataset.hold; update();
+});
+
+// Turning the surface: drag sideways, or the arrow keys while the picture has the focus.
+const surface = $("surface");
+let grab = null;
+surface.addEventListener("pointerdown", e => { grab = [e.clientX, turn]; surface.setPointerCapture(e.pointerId); });
+surface.addEventListener("pointermove", e => { if (grab) { turn = clamp(grab[1] + (e.clientX - grab[0]) * 0.25, 24, 52); draw(); } });
+for (const type of ["pointerup", "pointercancel"]) surface.addEventListener(type, () => { grab = null; });
+surface.addEventListener("keydown", e => {
+  if (e.key !== "ArrowLeft" && e.key !== "ArrowRight") return;
+  turn = clamp(turn + (e.key === "ArrowRight" ? 4 : -4), 24, 52); draw(); e.preventDefault();
+});
+
+/* ---- run ---- */
+theme(); update();
+if (host) new MutationObserver(theme).observe(host, { attributes: true, attributeFilter: ["class"] });
+else { try { window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", theme); } catch (e) {} }
+try { new ResizeObserver(() => { fit(); draw(); }).observe(document.body); } catch (e) {}
+window.addEventListener("load", fit);
+</script>
+</body>
+</html>
