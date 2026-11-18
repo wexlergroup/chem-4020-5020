@@ -7,7 +7,7 @@
   On its own page it follows the system, or ?theme=light or ?theme=dark.
   With ?static=1 it shows only the panels, for the still picture that the PDF of the notes uses.
 */
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useId, useRef, useState } from 'react';
 import { flushSync } from 'react-dom';
 import './kit.css';
 
@@ -129,11 +129,21 @@ export function Panel({ letter, title, children }) {
   );
 }
 
+// What a screen reader says for a value on the page: the text as shown, with "10 to the power 3" for a power of ten.
+function spoken(node) {
+  let text = '';
+  for (const part of node.childNodes) text += part.nodeName === 'SUP' && /10$/.test(text) ? ' to the power ' + part.textContent : part.textContent;
+  return text;
+}
+
+// For a screen reader the slider is named by its label, and its value is read as it is shown, with the unit.
 export function Slider({ label, value, show, min, max, step, onChange, disabled }) {
+  const name = useId(), shown = useRef(null), input = useRef(null);
+  useEffect(() => { input.current.setAttribute('aria-valuetext', spoken(shown.current)); });
   return (
     <label className={disabled ? 'off' : undefined}>
-      {label} <output>{show}</output>
-      <input type="range" min={min} max={max} step={step} value={value} disabled={disabled} onChange={(e) => onChange(parseFloat(e.target.value))} />
+      <span id={name}>{label}</span> <output ref={shown}>{show}</output>
+      <input ref={input} aria-labelledby={name} type="range" min={min} max={max} step={step} value={value} disabled={disabled} onChange={(e) => onChange(parseFloat(e.target.value))} />
     </label>
   );
 }
