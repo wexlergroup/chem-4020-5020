@@ -138,7 +138,7 @@ The van der Waals equation of state is among the simplest real-gas models (and w
 :header-rows: 1
 :name: van-der-waals-forms
 
-* - 
+* - Parameters
   - Extensive Volume
   - Intensive Volume
 * - Per Particle
