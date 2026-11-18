@@ -14,6 +14,7 @@ project:
     - file: intro.md
     - file: notation.md
     - file: studios.md
+    - file: code.md
     - title: Module 1. Equations of State
       children:
         - file: chapter-01/section-01.md
