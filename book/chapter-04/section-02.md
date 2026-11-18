@@ -19,6 +19,8 @@ numbering:
 
 See also: [Course-wide Conventions & Notation](../notation.md)
 
+Run the code: [Notebook for Section 4.2](https://wexlergroup.github.io/chem-4020-5020/lite/notebooks/index.html?path=chapter-04/section-02.ipynb), in which you can change and rerun the Python cells of this section in your browser.
+
 ## Overview and Learning Objectives
 
 The Carnot cycle is a fully reversible heat-engine cycle that sets the maximum efficiency any engine can achieve between two reservoir temperatures. Using the entropy definition $dS=\delta q_{\mathrm{rev}}/T$, the cycle relates heat flows to temperature and establishes $\eta_{\mathrm{Carnot}}=1-T_{\mathrm{cold}}/T_{\mathrm{hot}}$. The same reasoning yields a second-law statement about the direction of spontaneous heat flow.
