@@ -19,6 +19,8 @@ numbering:
 
 See also: [Course-wide Conventions & Notation](../notation.md)
 
+Run the code: [Notebook for Section 3.2](https://wexlergroup.github.io/chem-4020-5020/lite/notebooks/index.html?path=chapter-03/section-02.ipynb), in which you can change and rerun the Python cells of this section in your browser.
+
 ## Overview and Learning Objectives
 
 If you heat a gas in a sealed rigid container versus a piston open to the atmosphere, the temperature changes will differ—even for the same amount of heat. Why? The answer lies in how constraints (constant $V$ vs. constant $P$) redirect energy between heat and work. This section develops a systematic workflow for applying the First Law under different process constraints, then illustrates it with common ideal-gas cases and a microscopic interpretation.
