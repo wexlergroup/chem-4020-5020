@@ -38,6 +38,8 @@ Learning objectives:
 
 [](#fig:oscillator-levels) shows the potential energy, the first four energy levels, and the corresponding wavefunctions of the one-dimensional harmonic oscillator that is reviewed in this subsection.
 
+% Try this: Draw the probability density in place of the wavefunction: replace `0.57 * oscillator_wavefunction(n, x)` by `0.57 * oscillator_wavefunction(n, x)**2`. How far beyond the ends of the gray lines, the classical turning points, does the density reach? (The labels still read $\psi_n$.)
+
 ```{code-cell} ipython3
 :label: fig:oscillator-levels
 :caption: Potential energy $V(x)$ (thin curve), energy levels $E_n$ (gray lines), and wavefunctions $\psi_n$ (blue curves) of a one-dimensional harmonic oscillator. Each wavefunction is drawn on its energy level, and the levels are equally spaced by $\hbar\omega$.
@@ -203,6 +205,8 @@ Using $\beta \hbar \omega = \Theta_{\mathrm{vib}}/T$, the internal energy can be
 U = \frac{\hbar \omega}{2} + \frac{\hbar \omega}{e^{\Theta_{\mathrm{vib}} / T} - 1}
 = k_{\mathrm B}\Theta_{\mathrm{vib}}\left[\frac{1}{2}+\frac{1}{e^{\Theta_{\mathrm{vib}}/T}-1}\right].
 ```
+
+% Try this: Change `Theta_vib` from `805` (Cl$_2$) to `3122` (CO). The temperatures still run from 10 K to 1000 K. How much of the high-temperature heat capacity has the vibration of CO reached at 1000 K?
 
 ```{code-cell} ipython3
 :label: fig:oscillator-energy
@@ -380,6 +384,8 @@ C_V = 3 N k_{\mathrm B} \left( \frac{\hbar \omega}{k_{\mathrm B} T} \right)^2 \f
 #### Dulong–Petit Law
 
 The **Dulong–Petit law** is the empirical observation that the molar heat capacity of many elemental solids at room temperature is close to $3R = 24.9\ \mathrm{J\,mol^{-1}\,K^{-1}}$, where $R$ is the gas constant. [](#fig:dulong-petit) compares the law with molar heat capacities measured at 25 °C. Elements whose heat capacity differs from $3R$ by more than $R$ are labeled.
+
+% Try this: Enlarge the region around the law: change `ylim=(0, 8)` to `ylim=(2, 4)`. Within what distance of $3R$ do most of the elements lie?
 
 ```{code-cell} ipython3
 :label: fig:dulong-petit
