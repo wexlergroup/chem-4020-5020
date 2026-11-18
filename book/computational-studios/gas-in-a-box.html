@@ -91,9 +91,9 @@
   </div>
 
   <div class="controls">
-    <label>Number of particles <i class="v">N</i> <output id="o-n"></output><input id="s-n" type="range" min="20" max="300" step="10" value="200"></label>
-    <label>Temperature <i class="v">T</i> <output id="o-t"></output><input id="s-t" type="range" min="100" max="1000" step="10" value="300"></label>
-    <label>Volume <i class="v">V</i> <output id="o-v"></output><input id="s-l" type="range" min="16" max="26" step="1" value="20"></label>
+    <label><span id="n-n">Number of particles <i class="v">N</i></span> <output id="o-n"></output><input id="s-n" aria-labelledby="n-n" type="range" min="20" max="300" step="10" value="200"></label>
+    <label><span id="n-t">Temperature <i class="v">T</i></span> <output id="o-t"></output><input id="s-t" aria-labelledby="n-t" type="range" min="100" max="1000" step="10" value="300"></label>
+    <label><span id="n-l">Volume <i class="v">V</i></span> <output id="o-v"></output><input id="s-l" aria-labelledby="n-l" type="range" min="16" max="26" step="1" value="20"></label>
     <div class="row">
       <span>Gas</span>
       <span class="seg" id="gas" role="group" aria-label="Gas">
@@ -370,6 +370,18 @@ if (fixed) {
 }
 try { new ResizeObserver(() => { fit(); if (fixed) draw(); }).observe(document.body); } catch (e) {}
 window.addEventListener("load", fit);
+/* ---- for screen readers: a slider is named by its label, and its value is read as it is shown, with the unit ---- */
+function spoken(node) {
+  let text = "";
+  for (const part of node.childNodes) text += part.nodeName === "SUP" && /10$/.test(text) ? " to the power " + part.textContent : part.textContent;
+  return text;
+}
+for (const input of document.querySelectorAll('input[type="range"]')) {
+  const shown = input.parentElement.querySelector("output");
+  const say = () => input.setAttribute("aria-valuetext", spoken(shown));
+  new MutationObserver(say).observe(shown, { childList: true, characterData: true, subtree: true });
+  say();
+}
 </script>
 </body>
 </html>

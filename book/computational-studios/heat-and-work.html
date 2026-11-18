@@ -99,8 +99,8 @@
         <button type="button" data-process="work" aria-pressed="false">Compress or expand without heat</button>
       </span>
     </div>
-    <label id="l-T">Temperature <i class="v">k</i><sub>B</sub><i class="v">T</i> <output id="o-T"></output><input id="s-T" type="range" min="0.6" max="16" step="0.05"></label>
-    <label id="l-L">Length of the box <i class="v">L</i> <output id="o-L"></output><input id="s-L" type="range" min="0.8" max="1.25" step="0.005"></label>
+    <label id="l-T"><span id="n-T">Temperature <i class="v">k</i><sub>B</sub><i class="v">T</i></span> <output id="o-T"></output><input id="s-T" aria-labelledby="n-T" type="range" min="0.6" max="16" step="0.05"></label>
+    <label id="l-L"><span id="n-L">Length of the box <i class="v">L</i></span> <output id="o-L"></output><input id="s-L" aria-labelledby="n-L" type="range" min="0.8" max="1.25" step="0.005"></label>
     <div class="wide end">
       <span class="readout"><i class="v">U</i> = <span id="r-U"></span> <i class="v">ε</i></span>
       <span class="spacer"></span>
@@ -358,6 +358,18 @@ function keepWidth(on) {                            // on paper the frame keeps 
 for (const [name, on] of [["beforeprint", true], ["afterprint", false]]) window.addEventListener(name, () => { keepWidth(on); printing = on; theme(); });
 try { new ResizeObserver(() => { fit(); drawAll(); }).observe(document.body); } catch (e) {}
 window.addEventListener("load", () => { fit(); drawAll(); });
+/* ---- for screen readers: a slider is named by its label, and its value is read as it is shown, with the unit ---- */
+function spoken(node) {
+  let text = "";
+  for (const part of node.childNodes) text += part.nodeName === "SUP" && /10$/.test(text) ? " to the power " + part.textContent : part.textContent;
+  return text;
+}
+for (const input of document.querySelectorAll('input[type="range"]')) {
+  const shown = input.parentElement.querySelector("output");
+  const say = () => input.setAttribute("aria-valuetext", spoken(shown));
+  new MutationObserver(say).observe(shown, { childList: true, characterData: true, subtree: true });
+  say();
+}
 </script>
 </body>
 </html>

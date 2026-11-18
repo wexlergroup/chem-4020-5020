@@ -85,8 +85,8 @@
       <canvas id="particles" role="img" aria-label="The particles of the system, each drawn in the color of its present state"></canvas>
       <div class="key"><b><span class="dot two"></span>state 2, energy <i class="v">ε</i></b><b><span class="dot one"></span>state 1, energy 0</b><b id="clock"></b></div>
       <div class="controls">
-        <label>Number of particles <i class="v">N</i> <output id="o-n"></output><input id="s-n" type="range" min="0" max="9" step="1" value="3"></label>
-        <label>Temperature <i class="v">T</i> <output id="o-t"></output><input id="s-t" type="range" min="50" max="1000" step="10" value="300"></label>
+        <label><span id="n-n">Number of particles <i class="v">N</i></span> <output id="o-n"></output><input id="s-n" aria-labelledby="n-n" type="range" min="0" max="9" step="1" value="3"></label>
+        <label><span id="n-t">Temperature <i class="v">T</i></span> <output id="o-t"></output><input id="s-t" aria-labelledby="n-t" type="range" min="50" max="1000" step="10" value="300"></label>
         <div class="row">
           <button type="button" id="again">Start the count again</button>
           <button type="button" id="pause" aria-pressed="false">Pause</button>
@@ -336,6 +336,18 @@ if (fixed) {
 }
 try { new ResizeObserver(() => { fit(); if (fixed) draw(); }).observe(document.body); } catch (e) {}
 window.addEventListener("load", fit);
+/* ---- for screen readers: a slider is named by its label, and its value is read as it is shown, with the unit ---- */
+function spoken(node) {
+  let text = "";
+  for (const part of node.childNodes) text += part.nodeName === "SUP" && /10$/.test(text) ? " to the power " + part.textContent : part.textContent;
+  return text;
+}
+for (const input of document.querySelectorAll('input[type="range"]')) {
+  const shown = input.parentElement.querySelector("output");
+  const say = () => input.setAttribute("aria-valuetext", spoken(shown));
+  new MutationObserver(say).observe(shown, { childList: true, characterData: true, subtree: true });
+  say();
+}
 </script>
 </body>
 </html>

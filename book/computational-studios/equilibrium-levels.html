@@ -92,8 +92,8 @@
   </div>
 
   <div class="controls">
-    <label>Temperature <i class="v">k</i><sub>B</sub><i class="v">T</i> <output id="o-t"></output><input id="s-t" type="range" min="0.3" max="8" step="0.05"></label>
-    <label>Lowest level of B above the lowest level of A <output id="o-d"></output><input id="s-d" type="range" min="0" max="6" step="0.1"></label>
+    <label><span id="n-t">Temperature <i class="v">k</i><sub>B</sub><i class="v">T</i></span> <output id="o-t"></output><input id="s-t" aria-labelledby="n-t" type="range" min="0.3" max="8" step="0.05"></label>
+    <label><span id="n-d">Lowest level of B above the lowest level of A</span> <output id="o-d"></output><input id="s-d" aria-labelledby="n-d" type="range" min="0" max="6" step="0.1"></label>
     <div class="row"><button type="button" id="reset">Reset</button></div>
   </div>
   <p class="hint">Energies are in units of an arbitrary energy <i class="v">ε</i>, and all levels are measured from the lowest level of A. The levels of A lie 2<i class="v">ε</i> apart, and those of B lie 0.5<i class="v">ε</i> apart. The length of a bar is the population of its level relative to the lowest level of A, which is the Boltzmann factor e<sup>−<i class="v">E</i>/<i class="v">k</i><sub>B</sub><i class="v">T</i></sup> (dashed curve). <i class="v">q</i><sub>A</sub> and <i class="v">q</i><sub>B</sub> are the sums of the bars of each form over all levels, including those above the range drawn.</p>
@@ -280,6 +280,18 @@ function keepWidth(on) {                            // on paper the frame keeps 
 for (const [name, on] of [["beforeprint", true], ["afterprint", false]]) window.addEventListener(name, () => { keepWidth(on); printing = on; theme(); });
 try { new ResizeObserver(() => { fit(); drawAll(); }).observe(document.body); } catch (e) {}
 window.addEventListener("load", () => { fit(); drawAll(); });
+/* ---- for screen readers: a slider is named by its label, and its value is read as it is shown, with the unit ---- */
+function spoken(node) {
+  let text = "";
+  for (const part of node.childNodes) text += part.nodeName === "SUP" && /10$/.test(text) ? " to the power " + part.textContent : part.textContent;
+  return text;
+}
+for (const input of document.querySelectorAll('input[type="range"]')) {
+  const shown = input.parentElement.querySelector("output");
+  const say = () => input.setAttribute("aria-valuetext", spoken(shown));
+  new MutationObserver(say).observe(shown, { childList: true, characterData: true, subtree: true });
+  say();
+}
 </script>
 </body>
 </html>
