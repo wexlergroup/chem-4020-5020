@@ -214,7 +214,7 @@ def draw_calorimeter(c):
     ax.add_patch(Rectangle((2.2, 0.5), 0.95, 0.7, fc=c.tint(c.vermilion, 0.75), ec=c.vermilion, lw=1.6))
     ax.text(2.675, 0.85, "sample", ha="center", va="center")
     fs.arrow(ax, (2.675, 1.28), (2.675, 2.05), c.vermilion, lw=1.8)
-    ax.text(2.82, 1.66, "$q_P$", color=c.vermilion, va="center")
+    ax.text(2.82, 1.66, "$q_P$", color=c.ink, va="center")
 
     # Thermometer and stirrer, which pass through the top wall
     ax.plot([0.95, 0.95], [1.9, 3.65], color=c.ink, lw=2.6, solid_capstyle="round")
