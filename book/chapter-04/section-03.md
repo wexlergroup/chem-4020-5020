@@ -19,6 +19,8 @@ numbering:
 
 See also: [Course-wide Conventions & Notation](../notation.md)
 
+Run the code: [Notebook for Section 4.3](https://wexlergroup.github.io/chem-4020-5020/lite/notebooks/index.html?path=chapter-04/section-03.ipynb), in which you can change and rerun the Python cells of this section in your browser.
+
 ## Overview and Learning Objectives
 
 [Section 4.1](section-01.md) and [Section 4.2](section-02.md) developed entropy entirely from macroscopic reasoning: a state function defined by $dS = \delta q_{\mathrm{rev}}/T$, used to derive engine efficiency limits and the direction of spontaneous heat flow. This section shifts to the **microscopic** side, connecting entropy to the statistical-mechanical framework from Module 2. The payoff is substantial: entropy becomes a measure of *how many ways* a system can realize a macrostate, and its connection to the partition function $Q$ provides a direct bridge between microscopic energy levels and macroscopic thermodynamic potentials.
