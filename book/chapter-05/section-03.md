@@ -68,11 +68,11 @@ These are consistent via $\Delta_r G^\circ = \Delta_r H^\circ - T\,\Delta_r S^\c
 
 Standard reaction quantities are computed from **tabulated species data**:
 
-1. Look up $\Delta_f H^\circ(298.15\ \mathrm{K})$ and $S^\circ(298.15\ \mathrm{K})$ for each species from a reference source (NIST WebBook, NIST-JANAF, ATcT).
+1. Look up $\Delta_f H^\circ(298.15\ \mathrm{K})$ and $S^\circ(298.15\ \mathrm{K})$ for each species from a reference source: the [NIST Chemistry WebBook](https://webbook.nist.gov/chemistry/), the [NIST-JANAF Thermochemical Tables](https://janaf.nist.gov/), or the [Active Thermochemical Tables](https://atct.anl.gov/) (ATcT). [Appendix D](../appendices/appendix-d.md) describes each of them.
 2. Compute $\Delta_r H^\circ$ and $\Delta_r S^\circ$ by stoichiometry (products minus reactants). The absolute entropies $S^\circ$ used here are third-law values of the type discussed in [Section 5.2](section-02.md).
 3. Combine via $\Delta_r G^\circ = \Delta_r H^\circ - T\,\Delta_r S^\circ$.
 
-<!-- A step-by-step workflow (including a worked ammonia example) is given in Section 7.1.7 and the main data sources are collected in Appendix Y. -->
+<!-- A step-by-step workflow (including a worked ammonia example) is given in Section 7.1.7 and the main data sources are collected in Appendix D. -->
 :::
 
 :::{admonition} Key Idea
@@ -302,7 +302,7 @@ Because $\Delta\nu < 0$, increasing pressure favors the side with fewer gas mole
 
 ```{code-cell} ipython3
 :label: fig:ammonia-synthesis
-:caption: Ammonia synthesis as a function of temperature. (a) $\Delta_r G^\circ$ at 1 bar from the constant-$C_P$ model of this section (solid line) and from the Shomate heat-capacity equations of the NIST Chemistry WebBook (dashed line). Both change sign at 456 K (183 °C). (b) The pressure at which $\Delta_r G = 0$ when each species is at the pressure $P$, from Eq. [](#eq:P-crossover); the points mark the estimates of this section at 400 °C and 500 °C. The shaded areas mark the operating range of the Haber–Bosch process.
+:caption: Ammonia synthesis as a function of temperature. (a) $\Delta_r G^\circ$ at 1 bar from the constant-$C_P$ model of this section (solid line) and from the Shomate heat-capacity equations of the NIST Chemistry WebBook [@chase1998] (dashed line). Both change sign at 456 K (183 °C). (b) The pressure at which $\Delta_r G = 0$ when each species is at the pressure $P$, from Eq. [](#eq:P-crossover); the points mark the estimates of this section at 400 °C and 500 °C. The shaded areas mark the operating range of the Haber–Bosch process.
 :tags: [hide-input]
 
 import sys
