@@ -145,6 +145,8 @@ U_{\text{two-state}}
 
 [](#fig:two-state-energy) shows $U_{\text{two-state}}$, measured from $E_1$, as a function of temperature for an energy gap of $0.01\ \mathrm{eV}$, together with the heat capacity at constant volume, which the next subsection defines.
 
+% Try this: Halve the energy gap: change `E2` from `0.01` to `0.005`. Where does the maximum of the heat capacity move, and does its height change?
+
 ```{code-cell} ipython3
 :label: fig:two-state-energy
 :caption: Two-state system with an energy gap $E_2 - E_1 = 0.01\ \mathrm{eV}$ ($10\ \mathrm{meV}$) as a function of temperature. (a) Internal energy measured from $E_1$. The dashed line is its high-temperature limit, $(E_2 - E_1)/2$. (b) Heat capacity at constant volume in units of $k_{\mathrm{B}}$.
@@ -313,6 +315,8 @@ U = N \varepsilon\, p_2,
 ```
 
 The energy of 10 particles is spread over a wide range around $U$. For one mole of particles, $\sigma_E/U$ is about $10^{-12}$. The energy of a macroscopic system in contact with a heat bath never stops fluctuating, but the fluctuations are far too small to measure, and this is why thermodynamics can speak of *the* internal energy of the system.
+
+% Try this: Change `T_room` from `300` to `600`. How do the mean energy per particle $U/N$ and the widths of the three distributions change?
 
 ```{code-cell} ipython3
 :label: fig:energy-fluctuations
