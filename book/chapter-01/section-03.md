@@ -38,6 +38,8 @@ Learning objectives:
 (section:gas-laws)=
 ### Gas Laws
 
+% Try this: Change `T0` from `290.0` to `145.0`. Which of the four panels change, and by what factor?
+
 ```{code-cell} ipython3
 :label: fig:gas-laws
 :caption: The four classical gas laws in chronological order: (a) Boyle's law ([Boyle's original data](https://web.lemoyne.edu/~giunta/classicalcs/boyleform.html)), (b) Charles's law, (c) Gay–Lussac's law, and (d) Avogadro's law. Each curve is calculated for an ideal gas with the two named variables held constant.
@@ -255,6 +257,8 @@ This expression shows that increasing temperature or reducing pressure *increase
 
 [](#fig:gas-to-scale) shows this spacing to scale for nitrogen at $300\ \mathrm{K}$ and $1\ \mathrm{bar}$, where Eq. {eq}`average-distance-between-particles` gives $\langle d \rangle = 3.46\ \mathrm{nm}$ (see the worked example below). The molecules are about ten molecular diameters apart, which is why their own volume and their interactions can be neglected. In the liquid, the same molecules touch.
 
+% Try this: Change `T_gas` from `300` to `600`. How do the mean spacing $\langle d\rangle$ and the number of molecules in the slice change?
+
 ```{code-cell} ipython3
 :label: fig:gas-to-scale
 :caption: Nitrogen molecules drawn to scale as discs with a diameter of 0.36 nm, in slices 10 nm wide. (a) The gas at 300 K and 1 bar, in a slice that is one mean spacing thick. The bar shows the mean spacing $\langle d \rangle$. (b) The liquid at its boiling point, in a slice that is one molecule thick.
@@ -315,6 +319,8 @@ fs.show(draw_to_scale,
 ```
 
 ### Absolute Temperature Scale
+
+% Try this: Fit the line to the measurements at or below 50 °C only: replace `np.polyfit(V_m, T_C, 1)` by `np.polyfit(V_m[T_C <= 50], T_C[T_C <= 50], 1)`. By how much does the intercept move?
 
 ```{code-cell} ipython3
 :label: fig:absolute-zero
