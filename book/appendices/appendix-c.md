@@ -14,7 +14,7 @@ numbering:
   enumerator: C.%s
 ---
 
-# Appendix B. Thermal Energy
+# Appendix C. Thermal Energy
 
 ```{code-cell} ipython3
 :tags: [hide-input]
