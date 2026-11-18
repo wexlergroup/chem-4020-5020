@@ -392,6 +392,7 @@ How does the path affect the work? [](#fig:isothermal-adiabatic) compares a reve
 :tags: [hide-input]
 
 import sys
+from fractions import Fraction
 
 import matplotlib.pyplot as plt
 import numpy as np
@@ -438,7 +439,8 @@ def draw(c):
 
     # Curves, each labeled at its final state
     for P_bar, color, name, w in [(P_iso_bar, c.blue, f"isothermal ($T = {T1}$ K)", w_iso),
-                                  (P_adi_bar, c.vermilion, r"adiabatic ($\gamma = 5/3$)", w_adi)]:
+                                  (P_adi_bar, c.vermilion,
+                                   rf"adiabatic ($\gamma = {Fraction(gamma).limit_denominator(9)}$)", w_adi)]:
         ax.plot(V_L, P_bar, color=color)
         ax.plot(V_L[-1], P_bar[-1], "o", color=color, ms=6.5, zorder=5, clip_on=False)
         ax.text(V_L[-1] + 0.5, P_bar[-1], f"{name}\n$w = {w / 1e3:.2f}$ kJ".replace("-", "−"), color=color,
