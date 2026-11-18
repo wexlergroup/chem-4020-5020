@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
-import { ComposedChart, Scatter, Line, XAxis, YAxis, Tooltip, ResponsiveContainer, ReferenceLine } from 'recharts';
+import React, { useId, useState } from 'react';
+import { ComposedChart, Scatter, XAxis, YAxis, Tooltip, ResponsiveContainer, ReferenceLine, usePlotArea, useXAxisDomain,
+         useYAxisDomain } from 'recharts';
 import { useBook, Studio, Panel, Slider, Select, V, axis, LINE, DASH } from '../../studio-kit/kit.jsx';
 import { LIQUIDS } from './data.js';
 import { fit, referenceAt } from './fit.js';
@@ -34,7 +35,7 @@ function Dot({ cx, cy, payload, color }) {            // filled when the point i
 function Tip({ active, payload }) {
   if (!active || !payload || !payload.length) return null;
   const p = payload[0].payload;
-  if (p.t == null) return null;
+  if (!p || p.T == null) return null;
   return (
     <div className="tip">
       <div>{String(p.t).replace('-', '−')} °C, <V>T</V> = {p.T.toFixed(2)} K</div>
@@ -42,6 +43,23 @@ function Tip({ active, payload }) {
       <div>ln(<V sub="sat">P</V>/1 bar) = {p.y.toFixed(3)}</div>
       <div>Residual = {p.residual >= 0 ? '+' : '−'}{Math.abs(p.residual).toFixed(4)}</div>
     </div>
+  );
+}
+
+// The fitted line. It is drawn on the axes of the chart, clipped to the plot area, and is not part of the data of
+// the chart, so that the tooltip and the arrow keys read the measured points only.
+function Fitted({ points, stroke }) {
+  const area = usePlotArea(), xDomain = useXAxisDomain(), yDomain = useYAxisDomain();
+  const clip = 'fit' + useId().replace(/[^A-Za-z0-9_-]/g, '');
+  if (!area || !xDomain || !yDomain) return null;
+  const px = (v) => area.x + (v - xDomain[0]) / (xDomain[1] - xDomain[0]) * area.width;
+  const py = (v) => area.y + area.height - (v - yDomain[0]) / (yDomain[1] - yDomain[0]) * area.height;
+  return (
+    <>
+      <clipPath id={clip}><rect x={area.x} y={area.y} width={area.width} height={area.height} /></clipPath>
+      <polyline points={points.map(([x, y]) => `${px(x)},${py(y)}`).join(' ')} clipPath={`url(#${clip})`} fill="none"
+                stroke={stroke} strokeWidth={LINE} />
+    </>
   );
 }
 
@@ -66,13 +84,13 @@ export default function ClausiusClapeyron() {
   const curve = [];
   for (let i = 0; i <= 60; i++) {
     const t = points[from].t + (points[to].t - points[from].t) * i / 60;
-    curve.push({ t, fitP: 100 * Math.exp(f.slope / (t + 273.15) + f.intercept) });
+    curve.push([t, 100 * Math.exp(f.slope / (t + 273.15) + f.intercept)]);
   }
   // (b) ln P against 1000/T; (c) the residuals
   const xs = points.map((p) => p.inv), ys = points.map((p) => p.y);
   const xTicks = ticksBetween(Math.min(...xs), Math.max(...xs), 5);
   const yTicks = ticksBetween(Math.min(...ys), Math.max(...ys), 5);
-  const line = [points[to], points[from]].map((p) => ({ inv: p.inv, fitY: f.slope * p.x + f.intercept }));
+  const line = [points[to], points[from]].map((p) => [p.inv, f.slope * p.x + f.intercept]);
   const big = Math.max(...points.map((p) => Math.abs(p.residual)), 1e-4);
   const rTicks = ticksBetween(-big, big, 4);
   const xStep = xTicks[1] - xTicks[0], yStep = yTicks[1] - yTicks[0], rStep = rTicks[1] - rTicks[0];
@@ -110,7 +128,7 @@ export default function ClausiusClapeyron() {
                        tickFormatter={(v) => String(v).replace('-', '−')} {...axis(color)} />
                 <YAxis type="number" domain={[0, pTicks[pTicks.length - 1]]} ticks={pTicks} width={48} allowDataOverflow {...axis(color)} />
                 <Tooltip content={<Tip />} isAnimationActive={false} cursor={false} />
-                <Line data={curve} dataKey="fitP" stroke={color.vermilion} strokeWidth={LINE} dot={false} activeDot={false} isAnimationActive={false} />
+                <Fitted points={curve} stroke={color.vermilion} />
                 {scatter('P')}
               </ComposedChart>
             </ResponsiveContainer>
@@ -126,7 +144,7 @@ export default function ClausiusClapeyron() {
                 <YAxis type="number" domain={[yTicks[0], yTicks[yTicks.length - 1]]} ticks={yTicks} width={48} allowDataOverflow
                        tickFormatter={(v) => v.toFixed(fixed(yStep)).replace('-', '−')} {...axis(color)} />
                 <Tooltip content={<Tip />} isAnimationActive={false} cursor={false} />
-                <Line data={line} dataKey="fitY" stroke={color.vermilion} strokeWidth={LINE} dot={false} activeDot={false} isAnimationActive={false} />
+                <Fitted points={line} stroke={color.vermilion} />
                 {scatter('y')}
               </ComposedChart>
             </ResponsiveContainer>
