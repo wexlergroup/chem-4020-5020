@@ -19,6 +19,8 @@ numbering:
 
 See also: [Course-wide Conventions & Notation](../notation.md)
 
+Run the code: [Notebook for Section 2.3](https://wexlergroup.github.io/chem-4020-5020/lite/notebooks/index.html?path=chapter-02/section-03.ipynb), in which you can change and rerun the Python cells of this section in your browser.
+
 ## Overview and Learning Objectives
 
 Once microstate probabilities are known, thermodynamic properties follow as ensemble averages. This section derives canonical expressions for internal energy, heat capacity, and pressure in terms of derivatives of $\ln Q$. A recurring theme is that fluctuations are not a nuisance—they encode response functions such as $C_V$. A **response function** measures how strongly a property of the system changes when a controlled variable changes; $C_V$ is the response of $U$ to a change in $T$.
