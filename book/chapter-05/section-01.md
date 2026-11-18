@@ -407,6 +407,8 @@ Panel (b) of [](#fig:helmholtz-piston) shows this function for $1\ \mathrm{mol}$
 
 so the minimum lies where the two pressures are equal, which for these amounts is $V_1 = V/3$. From any other position, the piston moves toward the side with the lower pressure, and $A$ decreases until the minimum is reached.
 
+% Try this: Change `n1, n2 = 1.0, 2.0` to `n1, n2 = 1.0, 3.0`. Where does the minimum of $A$ lie now, and how does its position follow from the amounts of the two gases?
+
 ```{code-cell} ipython3
 :label: fig:helmholtz-piston
 :caption: Two ideal gases in a rigid box at fixed temperature, separated by a movable piston. (a) The system, drawn with the piston at $V_1 = 0.6\,V$, where $P_2 > P_1$. (b) The Helmholtz free energy relative to its minimum as a function of $V_1/V$, for $1\ \mathrm{mol}$ of gas 1 and $2\ \mathrm{mol}$ of gas 2 at $298.15\ \mathrm{K}$. The open circle marks the position drawn in (a) and the filled circle marks equilibrium, where $P_1 = P_2$.
@@ -534,6 +536,8 @@ The standard-state water-splitting reaction at room temperature is
 Because $\Delta G^\circ > 0$, the reaction is non-spontaneous under standard conditions. It must be driven by supplying non-$PV$ work — in this case, electrical work in an electrolyzer. In the reversible limit, the minimum electrical work required per mole equals $\Delta G^\circ$.
 
 The enthalpy change of the reaction, $\Delta H^\circ = +285.8\ \mathrm{kJ\,mol^{-1}}$, is larger than $\Delta G^\circ$. At constant $T$ and $P$, $\Delta H = q + w_{\text{non-}PV}$, and in the reversible limit $q = T\,\Delta S^\circ = +48.7\ \mathrm{kJ\,mol^{-1}}$. The electrolyzer therefore supplies $237.1\ \mathrm{kJ\,mol^{-1}}$ as electrical work, and the remaining $48.7\ \mathrm{kJ\,mol^{-1}}$ is absorbed as heat from the surroundings ([](#fig:electrolysis-energy)).
+
+% Try this: Change `T` from `298.15` to `350`, with $\Delta H^\circ$ and $\Delta S^\circ$ kept at their values at 298.15 K as an approximation. Does the minimum electrical work rise or fall, and where does the rest of the energy come from?
 
 ```{code-cell} ipython3
 :label: fig:electrolysis-energy
