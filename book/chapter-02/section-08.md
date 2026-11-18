@@ -280,6 +280,8 @@ Because $q$ is a product of factors, $\ln q$ is a sum, and the heat capacity of 
 
 Translation contributes $\tfrac{3}{2}R$ at all temperatures in the figure ([Section 2.5](section-05.md)). Rotation adds $R$ when $T$ exceeds $\Theta_{\mathrm{rot}}$, and vibration adds up to $R$ more when $T$ approaches and exceeds $\Theta_{\mathrm{vib}}$. At $300\ \mathrm{K}$, which lies far above $\Theta_{\mathrm{rot}}$ and far below $\Theta_{\mathrm{vib}}$, $C_{V,m} = 2.50\,R$. The figure leaves out the electronic contribution, which is negligible for $\mathrm{CO}$ below several thousand kelvin.
 
+% Try this: Change `theta_rot, theta_vib = 2.779, 3122.0` to the values of HCl in Sections 2.6 and 2.7, `15.24, 4303.0`. Which step moves more on the logarithmic axis, and does the heat capacity at 300 K change?
+
 ```{code-cell} ipython3
 :label: fig:heat-capacity-steps
 :caption: Molar heat capacity at constant volume of a gas of $\mathrm{CO}$ molecules as a function of temperature on a logarithmic axis, calculated as the sum of a translational contribution ($\tfrac{3}{2}R$), the rotational contribution of a rigid rotor with $\Theta_{\mathrm{rot}} = 2.779\ \mathrm{K}$ (sum over the levels $J$), and the vibrational contribution of a harmonic oscillator with $\Theta_{\mathrm{vib}} = 3122\ \mathrm{K}$. The dashed lines mark the two characteristic temperatures, and the open point marks $300\ \mathrm{K}$. The models are applied at all temperatures, although $\mathrm{CO}$ condenses at $82\ \mathrm{K}$ at a pressure of 1 atm, and at the highest temperatures anharmonic vibration, excited electronic levels, and dissociation change the heat capacity of the real gas.
