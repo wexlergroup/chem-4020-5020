@@ -14,7 +14,7 @@ numbering:
   enumerator: B.%s
 ---
 
-# Appendix B: Roots of Polynomials
+# Appendix B. Roots of Polynomials
 
 Let
 
@@ -28,7 +28,7 @@ This appendix summarizes (i) the *structure* of analytic formulas for $n\le 4$, 
 
 ---
 
-## A.1 Analytical solutions for degrees $\boldsymbol{n\le 4}$: structure and limitations
+## B.1 Analytical solutions for degrees $\boldsymbol{n\le 4}$: structure and limitations
 
 ### Linear ($n=1$)
 
@@ -101,7 +101,7 @@ Quartic formulas are long and can be numerically unstable due to cancellation an
 
 <!-- ---
 
-## A.2 Why numerical methods become necessary for higher degrees
+## B.2 Why numerical methods become necessary for higher degrees
 
 1. **No general radical formula for $n\ge 5$.** No formula in radicals solves all quintics (and higher) in terms of the coefficients. Specific families can be solvable, but a general-purpose method must be numerical.
 
@@ -117,7 +117,7 @@ Quartic formulas are long and can be numerically unstable due to cancellation an
 
 ---
 
-## A.3 Core numerical strategies
+## B.3 Core numerical strategies
 
 A recurring theme: methods differ in (i) what they require (brackets? derivatives?), (ii) their convergence rate when they work, and (iii) how they fail.
 
@@ -142,7 +142,7 @@ then $p(z)=b_0$ and $p'(z)=c_1$.
 
 ---
 
-### A.3.1 Bracketing methods for **real** roots (robust, slower)
+### B.3.1 Bracketing methods for **real** roots (robust, slower)
 
 Assume $p:\mathbb{R}\to\mathbb{R}$ is continuous. If you find an interval $[a,b]$ with a sign change,
 
@@ -177,7 +177,7 @@ Regula falsi uses the secant line on $[a,b]$ but maintains a bracket. Pure regul
 
 ---
 
-### A.3.2 Newton–Raphson (fast locally; sensitive globally)
+### B.3.2 Newton–Raphson (fast locally; sensitive globally)
 
 Newton iteration:
 
@@ -218,7 +218,7 @@ e_{k+1}\approx C e_k^2,\qquad e_k=z_k-r.
 
 ---
 
-### A.3.3 Secant method (derivative-free, superlinear, less stable)
+### B.3.3 Secant method (derivative-free, superlinear, less stable)
 
 Secant iteration uses two previous points:
 
@@ -236,7 +236,7 @@ z_{k+1} = z_k - p(z_k)\,\frac{z_k-z_{k-1}}{p(z_k)-p(z_{k-1})}.
 
 ---
 
-### A.3.4 Companion-matrix/eigenvalue approach (all roots at once)
+### B.3.4 Companion-matrix/eigenvalue approach (all roots at once)
 
 For polynomials, a powerful global approach is to convert root finding into an eigenvalue problem.
 
@@ -286,7 +286,7 @@ Then the eigenvalues of $C$ are exactly the roots of $p$.
 
 ---
 
-## A.4 Summary comparison (what to choose and why)
+## B.4 Summary comparison (what to choose and why)
 
 | Method            |                                 Needs |  Typical convergence (simple root) | Strength                      | Common failure mode                                                          |
 | ----------------- | ------------------------------------: | ---------------------------------: | ----------------------------- | ---------------------------------------------------------------------------- |
@@ -298,7 +298,7 @@ Then the eigenvalues of $C$ are exactly the roots of $p$.
 
 ---
 
-## A.5 Key caveats that matter in practice
+## B.5 Key caveats that matter in practice
 
 ### 1. Multiple roots and near-multiple roots
 
@@ -337,7 +337,7 @@ This gives a disk containing all complex roots; for real-root searches, it can g
 
 ---
 
-## A.6 Practical workflow recommendations (physical-science setting)
+## B.6 Practical workflow recommendations (physical-science setting)
 
 1. **Preprocess**
 
