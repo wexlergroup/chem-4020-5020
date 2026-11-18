@@ -633,3 +633,17 @@ Treat one free ion at $T=300\ \mathrm{K}$ as the system, so that $Q$ is a sum ov
 
 **Result.** $S=2.303\,k_{\mathrm B}$ for ten states of equal energy. With the spin–orbit splitting, $Q=4.960$, $p_a=0.2016$, $p_b=0.03226$, and $S=1.956\,k_{\mathrm B}$ at $300\ \mathrm{K}$ by both routes.
 ````
+
+## 4. Further Reading
+
+**Textbooks**
+
+- @mcquarrie1997, Chapter 20 (entropy and the second law of thermodynamics).
+- @dill2011, Chapter 5 (entropy and the Boltzmann law) and Chapter 6 (thermodynamic driving forces).
+- @hill1986, Chapter 2 (the second and third laws in terms of ensembles).
+
+**Original papers**
+
+- @carnot1824 analyzes the ideal heat engine of [Section 4.2](section-02.md) and shows that its efficiency depends only on the temperatures of the two reservoirs. The English translation by R. H. Thurston is *Reflections on the Motive Power of Heat* (Wiley, New York, 1897).
+- @clausius1865 introduces the word entropy for the state function of [Section 4.1](section-01.md).
+- @sharp2015 translate into English the paper of 1877 in which Boltzmann relates the entropy to the number of ways of distributing the energy among the molecules ([Section 4.3](section-03.md)).
