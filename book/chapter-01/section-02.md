@@ -377,6 +377,25 @@ fs.show(draw, alt="Maxwell–Boltzmann distributions of molecular speeds from 0 
                   "peak near 1100 meters per second.")
 ```
 
+### Gas in a Box
+
+The simulation in [](#fig:gas-in-a-box) brings the results of this section together. Two hundred particles move in a cubic box and collide elastically with the walls and with one another. The pressure is calculated from the momentum that the particles deliver to the six walls, as in the derivation of Eq. {eq}`pressure-kinetic-theory`, and it is shown beside the ideal-gas value $N k_{\mathrm{B}} T / V$. The histogram of the particle speeds is drawn with the Maxwell–Boltzmann distribution of Eq. {eq}`maxwell-boltzmann-speed-distribution-eq`.
+
+```{iframe} https://wexlergroup.github.io/chem-4020-5020/computational-studios/gas-in-a-box.html
+:label: fig:gas-in-a-box
+:width: 100%
+:title: Gas in a box: an interactive simulation of particles in a cubic box
+:placeholder: ../_static/gas-in-a-box/gas-in-a-box.png
+
+Particles of a gas in a cubic box, seen from one side. The pressure from the collisions with the walls is shown beside the ideal-gas value $N k_{\mathrm{B}} T / V$, as an average and for successive intervals of 10 ps. The bars are the speeds of the particles, and the curve is the Maxwell–Boltzmann distribution of Eq. [](#maxwell-boltzmann-speed-distribution-eq).
+```
+
+Three things to try:
+
+1. Reduce the number of particles to 20, and compare the pressure in successive intervals with the pressure at 300 particles.
+2. Give every particle the same speed, and watch how the histogram of the speeds changes with time.
+3. Change the gas from N$_2$ to He at the same temperature, and compare the pressure and the speeds before and after the change.
+
 ## Worked Example
 
 ### Root-mean-square speed at room temperature
