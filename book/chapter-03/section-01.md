@@ -285,6 +285,8 @@ Calculate the work when an ideal gas expands from $20\,\mathrm{L}$ to $85\,\math
 
 [](#fig:work-constant-pressure) shows this process on a $P$–$V$ diagram. The magnitude of the work $|w|$ equals the shaded area under the constant-pressure line.
 
+% Try this: Change `P_ext` from `2.5` to `1.5`. By what factor does the work change, and what is $w$ in kJ now?
+
 ```{code-cell} ipython3
 :label: fig:work-constant-pressure
 :caption: Expansion of a gas from $V_i = 20\,\mathrm{L}$ to $V_f = 85\,\mathrm{L}$ against a constant external pressure $P_{\mathrm{ext}} = 2.5\,\mathrm{bar}$ (Example 1). The magnitude of the work, $|w| = P_{\mathrm{ext}}\,\Delta V$, is the shaded area under the line.
