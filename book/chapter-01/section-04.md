@@ -58,6 +58,7 @@ import figstyle as fs
 water = pd.read_csv("../_static/section-04/isothermal-properties-for-water-Tr=1.2.csv")
 P_water = water["Pressure (bar)"].to_numpy()
 Z_water = P_water * 1e5 * water["Volume (m3/mol)"].to_numpy() / (R * water["Temperature (K)"].to_numpy())
+T_water = water["Temperature (K)"].iloc[0]                 # temperature of the isotherm (K), for the label
 
 
 def draw(c):
@@ -67,7 +68,7 @@ def draw(c):
     ax.axhline(1, color=c.gray, ls="--", lw=1.4)
     ax.plot(P_water, Z_water, color=c.ink)
     ax.text(3950, 0.97, "ideal gas, $Z = 1$", color=c.gray, ha="right", va="top")
-    ax.text(1000, 0.47, "water at 776 K", color=c.ink, ha="left", va="top")
+    ax.text(1000, 0.47, f"water at {T_water:.0f} K", color=c.ink, ha="left", va="top")
     P_cross = np.interp(1, Z_water[Z_water.argmin():], P_water[Z_water.argmin():])
     ax.plot(P_cross, 1, "o", mfc=c.ground, mec=c.ink, mew=1.5, ms=6, zorder=5)
     ax.annotate("coincidentally ideal", xy=(P_cross, 1), xytext=(2000, 1.20), ha="center", va="center",
@@ -296,13 +297,14 @@ dome_V_vap = np.array([V[2] for _, V in ties] + [1.0]) * Vc_vdW
 dome_V = np.concatenate([dome_V_liq, dome_V_vap[::-1]])
 dome = np.concatenate([dome_P, dome_P[::-1]])
 
-Pr_tie, (Vr_liq, Vr_mid, Vr_vap) = maxwell(0.9)
+Tr_loop = 0.9                              # reduced temperature of the isotherm with the loop (below 1)
+Pr_tie, (Vr_liq, Vr_mid, Vr_vap) = maxwell(Tr_loop)
 P_tie, V_liq, V_mid, V_vap = Pr_tie * Pc_vdW, Vr_liq * Vc_vdW, Vr_mid * Vc_vdW, Vr_vap * Vc_vdW
 
 
 def draw(c):
     V = np.linspace(1.02 * b_m, 0.5, 1500)
-    P_cold, P_crit = vdw_reduced(0.9, V / Vc_vdW) * Pc_vdW, vdw_reduced(1.0, V / Vc_vdW) * Pc_vdW
+    P_cold, P_crit = vdw_reduced(Tr_loop, V / Vc_vdW) * Pc_vdW, vdw_reduced(1.0, V / Vc_vdW) * Pc_vdW
     fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(fs.WIDTH, 3.7), constrained_layout=True, sharex=True, sharey=True)
 
     # (a) The loop, the tie line, and the two equal areas
@@ -320,7 +322,7 @@ def draw(c):
     ax1.text(0.012, Pc_vdW + 0.8, "$P_c$", color=c.gray, va="bottom")
     ax1.text(Vc_vdW + 0.008, 31, r"$V_{\mathrm{m},c}$", color=c.gray, va="bottom")
     ax1.text(0.30, 68.5, r"$T = T_c$", color=c.gray, va="bottom")
-    ax1.text(0.295, 33.6, r"$T = 0.9\,T_c$", color=c.blue, va="center")
+    ax1.text(0.295, 33.6, rf"$T = {Tr_loop:g}\,T_c$", color=c.blue, va="center")
     ax1.annotate("equal areas", xy=(0.5 * (V_liq + V_mid), P_tie - 4.5), xytext=(0.215, 38), color=c.ink,
                  ha="center", va="center", arrowprops=dict(arrowstyle="-", color=c.muted, lw=0.9, shrinkB=2))
     ax1.annotate("", xy=(0.5 * (V_mid + V_vap) - 0.02, P_tie + 1.2), xytext=(0.225, 39.5),
