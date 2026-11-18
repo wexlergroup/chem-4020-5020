@@ -297,7 +297,7 @@ Consider the equilibrium
 
 #### Thermodynamics and $K$ at 298.15 K
 
-At $298.15\,\mathrm{K}$, the NIST-JANAF tables (see [Computing $K$ from Tabulated Thermochemistry](#section:k-from-tables)) give
+At $298.15\,\mathrm{K}$, the [NIST-JANAF Thermochemical Tables](https://janaf.nist.gov/) (see [Computing $K$ from Tabulated Thermochemistry](#section:k-from-tables)) give
 
 ```{math}
 \begin{aligned}
@@ -576,9 +576,11 @@ For each species $i$ in the balanced equation, collect either:
 
 Where to get the data:
 
-- **NIST Chemistry WebBook**: fast way to grab $\Delta_f H^\circ(298.15\ \mathrm{K})$ and $S^\circ(298.15\ \mathrm{K})$ for many species (check the phase!).
-- **NIST–JANAF Thermochemical Tables**: best when you need $H^\circ(T)$ and $S^\circ(T)$ over a range of temperatures (not just 298.15 K).
-- **ATcT (Active Thermochemical Tables)**: best when you care about high-accuracy formation thermochemistry (often includes uncertainties). In practice, many workflows use **ATcT for $\Delta_f H^\circ$** and **JANAF for $S^\circ(T)$**.
+- **[NIST Chemistry WebBook](https://webbook.nist.gov/chemistry/)**: fast way to grab $\Delta_f H^\circ(298.15\ \mathrm{K})$ and $S^\circ(298.15\ \mathrm{K})$ for many species (check the phase!).
+- **[NIST-JANAF Thermochemical Tables](https://janaf.nist.gov/)**: best when you need $H^\circ(T)$ and $S^\circ(T)$ over a range of temperatures (not just 298.15 K).
+- **[Active Thermochemical Tables](https://atct.anl.gov/) (ATcT)**: best when you care about high-accuracy formation thermochemistry (often includes uncertainties). In practice, many workflows use **ATcT for $\Delta_f H^\circ$** and **NIST-JANAF for $S^\circ(T)$**.
+
+[Appendix D](../appendices/appendix-d.md) describes what each source tabulates, its conventions, and how to cite it.
 
 #### Step 2: Convert Species Data into Reaction Values
 
@@ -687,4 +689,4 @@ K(298.15\ \mathrm{K}) = \exp\!\left(-\frac{-33{,}000}{(8.314)(298.15)}\right)
 - For ideal gases, $\Delta_r G = \Delta_r G^\circ + RT\ln Q_p$ and $\Delta_r G^\circ = -RT\ln K$.
 - The sign of $\Delta_r G$ (equivalently the comparison $Q_p$ vs $K$) determines spontaneous direction.
 - The temperature dependence of $K$ is governed by van't Hoff: $\partial\ln K/\partial T = \Delta_r H^\circ/(RT^2)$.
-- Thermochemical tables (NIST WebBook, JANAF, ATcT) provide the $\Delta_f H^\circ$ and $S^\circ$ values needed to compute $\Delta_r G^\circ$ and hence $K$.
+- Thermochemical tables (NIST Chemistry WebBook, NIST-JANAF, ATcT) provide the $\Delta_f H^\circ$ and $S^\circ$ values needed to compute $\Delta_r G^\circ$ and hence $K$.
