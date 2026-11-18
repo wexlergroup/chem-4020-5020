@@ -19,6 +19,8 @@ numbering:
 
 See also: [Course-wide Conventions & Notation](../notation.md)
 
+Run the code: [Notebook for Section 2.7](https://wexlergroup.github.io/chem-4020-5020/lite/notebooks/index.html?path=chapter-02/section-07.ipynb), in which you can change and rerun the Python cells of this section in your browser.
+
 ## Overview and Learning Objectives
 
 The linear rigid rotor models molecular rotation (especially for diatomics) and provides the rotational partition function used in molecular thermodynamics. We derive the quantized rotational levels and their degeneracies, develop the high-$T$ approximation $q_{\mathrm{rot}}\approx T/(\sigma\Theta_{\mathrm{rot}})$, and obtain the corresponding rotational contributions to the internal energy and heat capacity.
