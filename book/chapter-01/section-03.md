@@ -208,6 +208,24 @@ PV \;=\; N k_{\mathrm{B}} T \;=\; nRT,
 
 where $n = N / N_{\mathrm{A}}$ is the number of moles and $R = k_{\mathrm{B}} N_{\mathrm{A}}$ is the [molar gas constant](https://physics.nist.gov/cgi-bin/cuu/Value?r) ($R = 8.314\,\mathrm{J\,mol^{-1}\,K^{-1}}$).
 
+### The $P$–$V$–$T$ Surface
+
+For a fixed number of particles, Eq. {eq}`ideal-gas-equation-of-state` assigns one pressure to every pair of volume and temperature, so the states of an ideal gas form a surface. Each gas law of [](#fig:gas-laws) that holds $N$ constant is a cut through this surface: Boyle's law at constant $T$, Charles's law at constant $P$, and Gay–Lussac's law at constant $V$. In [](#fig:pvt-surface), choose the variable to hold constant, and move the state along the corresponding cut.
+
+```{iframe} https://wexlergroup.github.io/chem-4020-5020/computational-studios/pvt-surface.html
+:label: fig:pvt-surface
+:width: 100%
+:title: The P-V-T surface of an ideal gas, with the gas laws as cuts through it
+:placeholder: ../_static/pvt-surface/pvt-surface.png
+
+The pressure of one mole of an ideal gas as a surface over the volume and the temperature, from Eq. [](#ideal-gas-equation-of-state). The three curves through the chosen state are the cuts at constant $T$ (Boyle), at constant $P$ (Charles), and at constant $V$ (Gay–Lussac), and the small plots show the same curves in two dimensions.
+```
+
+Two things to try:
+
+1. Hold the temperature constant, and halve the volume. Then hold the pressure constant, and halve the volume again. Compare how the state moves on the surface in the two cases.
+2. Bring the gas to 2.00 bar and 10.0 L along two different routes, and compare the temperatures that you reach.
+
 ---
 
 ### Ideal-Gas Assumptions
