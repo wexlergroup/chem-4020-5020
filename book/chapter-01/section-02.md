@@ -343,6 +343,8 @@ The Maxwell–Boltzmann curves below illustrate two trends:
 - **Lighter gases** (smaller $m$) have distributions that are shifted to higher speeds and are broader.
 - **Higher temperatures** shift the distribution to higher speeds and make it broader.
 
+% Try this: In the list `cases`, change the temperature of the dashed N$_2$ curve from `600` to `1200`, and its label to match. How do the position and the height of the maximum compare with those of the curve at 300 K?
+
 ```{code-cell} ipython3
 :label: fig:maxwell-boltzmann
 :caption: Maxwell–Boltzmann speed distributions of three gases at 300 K (solid) and of N$_2$ at 600 K (dashed).
