@@ -270,6 +270,78 @@ q_{\mathrm{trans}}
 
 is called the translational partition function. It underpins the classical description of dilute gases when $\Lambda \ll (V/N)^{1/3}$, the mean spacing between particles, so quantum effects are negligible at ordinary densities and temperatures.
 
+[](#fig:thermal-wavelength) draws the two lengths to scale for helium. In the gas at $300\ \mathrm{K}$ and $1\ \mathrm{bar}$, the conditions of the worked example below, the mean spacing is about 69 times $\Lambda$. In liquid helium at its normal boiling point of $4.22\ \mathrm{K}$, $\Lambda$ is larger than the mean spacing, which is the case that requires the full quantum treatment of identical particles.
+
+```{code-cell} ipython3
+:label: fig:thermal-wavelength
+:caption: Thermal de Broglie wavelength $\Lambda$ and mean spacing $(V/N)^{1/3}$ of helium atoms, drawn to scale. The atoms are placed on a square grid at the mean spacing, and each disc has the diameter $\Lambda$. The two panels have different scales. (a) Gas at $300\ \mathrm{K}$ and $1\ \mathrm{bar}$, where the mean spacing is 69 times $\Lambda$. Each disc is a barely visible dot, and a gray ring marks its place. (b) Liquid at its normal boiling point of $4.22\ \mathrm{K}$, with a density of $125\ \mathrm{kg\,m^{-3}}$, where $\Lambda$ is 1.13 times the mean spacing and the discs overlap.
+:tags: [hide-input]
+
+from matplotlib.patches import Circle
+from scipy.constants import h, k, u
+
+m_He = 4.002602 * u              # mass of a helium-4 atom in kg
+
+
+def thermal_wavelength(T):
+    """Thermal de Broglie wavelength of a helium atom in m."""
+    return h / np.sqrt(2 * np.pi * m_He * k * T)
+
+
+T_gas, P_gas = 300, 1.00e5                         # K, Pa
+spacing_gas = (k * T_gas / P_gas) ** (1 / 3)       # (V/N)^(1/3) of an ideal gas in m
+
+T_liquid, density_liquid = 4.22, 125               # K, kg/m^3 (liquid helium at its normal boiling point)
+spacing_liquid = (m_He / density_liquid) ** (1 / 3)
+
+
+def draw_atoms(ax, c, spacing, wavelength):
+    """Atoms on a grid at the mean spacing, each with a disc of diameter Lambda. Lengths are in units of the spacing."""
+    radius = wavelength / (2 * spacing)
+    for i in range(4):
+        for j in range(3):
+            if radius > 0.1:
+                ax.add_patch(Circle((i, j), radius, fc=c.tint(c.blue, 0.72), ec=c.blue, lw=1.0, alpha=0.85))
+            else:                                  # no outline, which would make the dot larger than Lambda
+                ax.add_patch(Circle((i, j), radius, fc=c.blue, ec="none"))
+                ax.add_patch(Circle((i, j), 0.11, fc="none", ec=c.muted, lw=0.8))     # a ring to find the dot
+    # the mean spacing, between the centers of two neighbors
+    for x in (0, 1):
+        ax.plot([x, x], [-0.68, -0.92], color=c.muted, lw=0.9)
+    ax.annotate("", xy=(0, -0.8), xytext=(1, -0.8),
+                arrowprops=dict(arrowstyle="<|-|>", color=c.ink, lw=1.2, mutation_scale=9, shrinkA=0, shrinkB=0))
+    ax.text(1.18, -0.8, f"$(V/N)^{{1/3}}$ = {1e9 * spacing:.3g} nm", ha="left", va="center")
+    # the thermal wavelength: a dimension line where the disc is large enough, and a leader where it is a dot
+    label = f"$\\Lambda$ = {1e9 * wavelength:.3f} nm"
+    if radius > 0.1:
+        for x in (-radius, radius):
+            ax.plot([x, x], [2.68, 2.92], color=c.muted, lw=0.9)
+        ax.annotate("", xy=(-radius, 2.8), xytext=(radius, 2.8),
+                    arrowprops=dict(arrowstyle="<|-|>", color=c.ink, lw=1.2, mutation_scale=9, shrinkA=0, shrinkB=0))
+        ax.text(radius + 0.18, 2.8, label, ha="left", va="center")
+    else:
+        ax.plot([0.015, 0.3], [2.03, 2.62], color=c.muted, lw=0.9)
+        ax.text(0.22, 2.8, label, ha="left", va="center")
+    ax.set(xlim=(-0.85, 3.85), ylim=(-1.05, 3.05), aspect="equal")
+    ax.axis("off")
+
+
+def draw(c):
+    fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(fs.WIDTH, 3.35), constrained_layout=True)
+    draw_atoms(ax1, c, spacing_gas, thermal_wavelength(T_gas))
+    draw_atoms(ax2, c, spacing_liquid, thermal_wavelength(T_liquid))
+    fs.panel(ax1, "a", "Helium gas at 300 K and 1 bar")
+    fs.panel(ax2, "b", "Liquid helium at 4.22 K")
+    return fig
+
+
+fs.show(draw, alt="Two panels, each with twelve helium atoms on a square grid at the mean spacing. In panel a, the gas "
+                  "at 300 K and 1 bar, the mean spacing is 3.46 nanometers and the thermal wavelength is 0.050 "
+                  "nanometers, so the disc around each atom is a barely visible dot inside a gray ring that marks its place. In panel b, the liquid at 4.22 K, "
+                  "the mean spacing is 0.376 nanometers and the thermal wavelength is 0.425 nanometers, so the discs "
+                  "of neighboring atoms overlap.")
+```
+
 ### Computational Studio: Ideal Gas
 
 In [](#fig:ideal-gas-studio), you can change the number of atoms $N$, the volume $V$, and the temperature $T$ of a small sample of a noble gas and follow the quantities that its partition function gives.
