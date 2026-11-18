@@ -606,3 +606,15 @@ Use $R=8.3145\ \mathrm{J\,mol^{-1}\,K^{-1}}$, $\Delta_f H^\circ(\mathrm{CO_2},g)
 
 **Result.** $C_{\mathrm{cal}}=10.00\ \mathrm{kJ\,K^{-1}}$. For the combustion of urea, $\Delta U=-633.3\ \mathrm{kJ\,mol^{-1}}$ and $\Delta H=-632.1\ \mathrm{kJ\,mol^{-1}}$, which gives $\Delta_f H^\circ(\text{urea})=-333.1\ \mathrm{kJ\,mol^{-1}}$.
 ````
+
+## 4. Further Reading
+
+**Textbooks**
+
+- @mcquarrie1997, Chapter 19 (the first law of thermodynamics).
+- @dill2011, Chapter 3 (heat, work, and energy) and Chapter 7 (the logic of thermodynamics).
+
+**Original papers**
+
+- @joule1850 reports the paddle-wheel experiments of [Section 3.1](section-01.md) and the mechanical equivalent of heat obtained from them.
+- @hess1840 states that the heat of a chemical change is the same whether the change occurs in one step or in several, which is Hess's law of [Section 3.3](section-03.md).
