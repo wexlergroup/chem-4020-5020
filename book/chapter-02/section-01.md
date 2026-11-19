@@ -210,7 +210,7 @@ def draw_ensemble(ax, c, fixed, bath=None, energy=False, matter=False):
     if bath:
         ax.add_patch(FancyBboxPatch((0.05, 0.17), 0.90, 0.72, boxstyle="round,pad=0.03,rounding_size=0.06",
                                     fc=c.fill, ec="none"))
-    ax.text(0.5, 0.83, bath or "Surroundings", ha="center", va="center", color=c.muted)
+    ax.text(0.5, 0.83, bath or "Surroundings", ha="center", va="center", color=c.note)
     ax.add_patch(FancyBboxPatch((0.36, 0.34), 0.28, 0.32, boxstyle="round,pad=0.03,rounding_size=0.06",
                                 fc=c.ground, ec=c.ink, lw=1.6))
     ax.text(0.5, 0.59, "System", ha="center", va="center")
