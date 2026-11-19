@@ -254,7 +254,7 @@ X_FIRST, X_SECOND, X_SINGLE = 1.05, 4.75, 10.55         # left edges of the thre
 
 def draw_microstate(ax, c, x, y, numeral, particles):
     """One N-particle microstate: four one-particle microstates in a row; particles = {position: (label, color)}."""
-    ax.text(x - 0.22, y, numeral, ha="right", va="center", color=c.muted)
+    ax.text(x - 0.22, y, numeral, ha="right", va="center", color=c.note)
     for i in range(M):
         ax.add_patch(Rectangle((x + i * CELL, y - CELL / 2), CELL, CELL, fc=c.ground, ec=c.ink, lw=1.0, zorder=2))
     for i, (label, color) in particles.items():
