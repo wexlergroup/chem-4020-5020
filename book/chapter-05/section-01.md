@@ -245,7 +245,7 @@ def draw(c):
                                     fc=c.fill, ec="none"))
         ax.text(x, y + 0.10, symbol, ha="center", va="center", fontsize=fs.BASE + 5)
         ax.text(x, y - 0.045, name, ha="center", va="center")
-        ax.text(x, y - 0.145, fixed, ha="center", va="center", fontsize=fs.BASE - 0.5, color=c.muted)
+        ax.text(x, y - 0.145, fixed, ha="center", va="center", fontsize=fs.BASE - 0.5, color=c.note)
 
     # Horizontal transforms replace V by P; vertical transforms replace S by T
     for y in (1.0, 0.0):
