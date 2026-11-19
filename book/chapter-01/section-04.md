@@ -75,8 +75,8 @@ def draw(c):
     ax.plot(P_cross, 1, "o", mfc=c.ground, mec=c.ink, mew=1.5, ms=6, zorder=5)
     ax.annotate("coincidentally ideal", xy=(P_cross, 1), xytext=(2000, 1.20), ha="center", va="center",
                 arrowprops=dict(arrowstyle="-", color=c.muted, lw=0.9, shrinkB=5))
-    ax.text(1050, 0.86, "attraction dominates\n$Z < 1$", color=c.blue, ha="center", va="center")
-    ax.text(3500, 1.36, "repulsion dominates\n$Z > 1$", color=c.vermilion, ha="right", va="center")
+    ax.text(1050, 0.86, "attraction dominates\n$Z < 1$", color=c.ink, ha="center", va="center")
+    ax.text(3500, 1.36, "repulsion dominates\n$Z > 1$", color=c.ink, ha="right", va="center")
     ax.set(xlabel="Pressure $P$ (bar)", ylabel="Compressibility factor $Z$", xlim=(0, 4000), ylim=(0.3, 1.5))
     return fig
 
@@ -328,7 +328,7 @@ def draw(c):
     ax1.plot([0, Vc_vdW], [Pc_vdW, Pc_vdW], color=c.gray, lw=0.9, ls=":")
     ax1.plot([Vc_vdW, Vc_vdW], [30, Pc_vdW], color=c.gray, lw=0.9, ls=":")
     ax1.text(0.012, Pc_vdW + 0.8, "$P_c$", color=c.gray, va="bottom")
-    ax1.text(Vc_vdW + 0.008, 31, r"$V_{\mathrm{m},c}$", color=c.gray, va="bottom")
+    ax1.text(Vc_vdW + 0.008, 31, r"$V_{\mathrm{m},c}$", color=c.note, va="bottom")
     ax1.text(0.30, 68.5, r"$T = T_c$", color=c.gray, va="bottom")
     ax1.text(0.295, 33.6, rf"$T = {Tr_loop:g}\,T_c$", color=c.blue, va="center")
     ax1.annotate("equal areas", xy=(0.5 * (V_liq + V_mid), P_tie - 4.5), xytext=(0.215, 38), color=c.ink,
