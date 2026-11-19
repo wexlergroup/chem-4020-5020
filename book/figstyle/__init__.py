@@ -18,8 +18,9 @@ site of the course), ``show`` displays the light version alone, on a white groun
 
 Colors are named by role and belong to the argument ``c``: ``c.blue``, ``c.vermilion``, ``c.green`` and ``c.purple`` for
 data series (in that order of use), ``c.gray`` for reference curves, ``c.ink`` for text and annotations, ``c.muted``
-for secondary text and axes, ``c.fill`` for quiet boxes, ``c.ground`` for the page behind the figure, and
-``c.solid``, ``c.liquid``, ``c.gas``, ``c.carbon``, ``c.oxygen`` for phases and atoms. The series colors are the
+for secondary text and axes, ``c.fill`` for quiet boxes, ``c.note`` for secondary text inside a quiet box,
+``c.ground`` for the page behind the figure, and ``c.solid``, ``c.liquid``, ``c.gas``, ``c.carbon``, ``c.oxygen``
+for phases and atoms. Text on a colored fill takes ``fs.on(fill)``. The series colors are the
 Okabe-Ito colors, which remain distinguishable with color-vision deficiency. The typeface is Inter (SIL Open
 Font License, files in ``fonts/``).
 """
@@ -35,7 +36,7 @@ import matplotlib.pyplot as plt
 from matplotlib import font_manager
 from matplotlib.patches import FancyArrowPatch
 
-__all__ = ["LIGHT", "DARK", "WIDTH", "BASE", "LINE", "show", "panel", "arrow", "mix", "on"]
+__all__ = ["LIGHT", "DARK", "WIDTH", "BASE", "LINE", "show", "panel", "arrow", "mix", "on", "contrast"]
 
 FONT = "Inter"
 for _file in sorted((Path(__file__).resolve().parent / "fonts").glob("*.otf")):
@@ -54,10 +55,21 @@ def mix(color1, color2, t):
     return mcolors.to_hex([x + (y - x) * t for x, y in zip(a, b)])
 
 
+def _luminance(color):
+    """Relative luminance of a color, as the contrast ratio of the accessibility guidelines (WCAG) defines it."""
+    r, g, b = (v / 12.92 if v <= 0.03928 else ((v + 0.055) / 1.055) ** 2.4 for v in mcolors.to_rgb(color))
+    return 0.2126 * r + 0.7152 * g + 0.0722 * b
+
+
+def contrast(color1, color2):
+    """Contrast ratio of two colors, from 1 to 21. Text needs 4.5 against the ground behind it."""
+    a, b = sorted((_luminance(color1), _luminance(color2)))
+    return (b + 0.05) / (a + 0.05)
+
+
 def on(color):
-    """Near-black or white, whichever is easier to read on the given fill."""
-    r, g, b = mcolors.to_rgb(color)
-    return "#111111" if 0.2126 * r + 0.7152 * g + 0.0722 * b > 0.55 else "#ffffff"
+    """Near-black or white, whichever has the higher contrast with the given fill."""
+    return max("#111111", "#ffffff", key=lambda text: contrast(text, color))
 
 
 @dataclass(frozen=True)
@@ -66,6 +78,7 @@ class Theme:
     ground: str
     ink: str
     muted: str
+    note: str
     rule: str
     fill: str
     blue: str
@@ -111,9 +124,11 @@ class Theme:
         }
 
 
-LIGHT = Theme("light", ground="#ffffff", ink="#1c1917", muted="#78716c", rule="#e7e5e4", fill="#f1f0ee",
+# ``note`` is ``muted`` made dark enough for the quiet box of the light page. Its contrast with ``fill`` is 4.7,
+# where ``muted`` has 4.2 and text needs 4.5.
+LIGHT = Theme("light", ground="#ffffff", ink="#1c1917", muted="#78716c", note="#716a65", rule="#e7e5e4", fill="#f1f0ee",
               blue="#0072B2", vermilion="#D55E00", green="#009E73", purple="#AA4499", gray="#78716c", carbon="#57534e")
-DARK = Theme("dark", ground="#1c1917", ink="#f5f5f4", muted="#a8a29e", rule="#3a3531", fill="#2a2623",
+DARK = Theme("dark", ground="#1c1917", ink="#f5f5f4", muted="#a8a29e", note="#a8a29e", rule="#3a3531", fill="#2a2623",
              blue="#56B4E9", vermilion="#F4915A", green="#3FCF9F", purple="#E29AD0", gray="#a8a29e", carbon="#a8a29e")
 
 
